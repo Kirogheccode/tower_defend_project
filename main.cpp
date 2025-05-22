@@ -3,23 +3,6 @@
 
 int main()
 {
-    /* sf::RenderWindow window(sf::VideoMode({ 200, 200 }), "SFML works!");
-     sf::CircleShape shape(100.f);
-     shape.setFillColor(sf::Color::Green);
-
-     while (window.isOpen())
-     {
-         sf::Event event;
-         while (window.pollEvent(event))
-         {
-             if (event.type == event.Closed)
-                 window.close();
-         }
-
-         window.clear();
-         window.draw(shape);
-         window.display();
-     }*/
     sf::RenderWindow window(sf::VideoMode(1024, 576), "Tower Defense - SFML 2.6.2", sf::Style::Default);
 
     //access to image and font
