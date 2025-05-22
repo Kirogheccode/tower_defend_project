@@ -35,7 +35,6 @@ int main()
     sf::Sprite mainMenuSprite(mainMenu_texture);
 
 
-
     sf::Texture settingsMenu_Texture;
     if (!settingsMenu_Texture.loadFromFile("IMGS\\background.png")) {
         std::cerr << "no setting background.\n";
