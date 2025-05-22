@@ -26,11 +26,10 @@ int main()
             }
         }
 
-
-
         menu.draw(0, 0, window);
-        play_button.draw(40, 40, window);
-
+        play_button.draw(600, 150, window);
+        setting_button.draw(600, 300, window);
+        exit_button.draw(600, 450, window);
         window.display();
     }
 
