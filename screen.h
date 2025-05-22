@@ -10,11 +10,13 @@ class Screen
 {
 private:
 	Texture texture;
+	float width;
+	float height;
 
 public:
 	Screen(float width, float height, string filepath);
 
-	void draw(RenderWindow& window);
+	void draw(float x, float y, RenderWindow& window);
 
 	~Screen();
 };

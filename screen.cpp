@@ -6,14 +6,18 @@
 using namespace std;
 using namespace sf;
 
-Screen::Screen(float x, float y, string filepath)
+Screen::Screen(float width, float height, string filepath)
 {
+	this->width = width;
+	this->height = height;
+
 	texture.loadFromFile(filepath);
 }
 
-void Screen::draw(RenderWindow& window)
+void Screen::draw(float x, float y, RenderWindow& window)
 {
 	Sprite sprite;
+	sprite.setPosition(x, y);
 	sprite.setTexture(texture);
 
 	window.draw(sprite);
