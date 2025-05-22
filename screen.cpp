@@ -6,6 +6,7 @@
 using namespace std;
 using namespace sf;
 
+//Screen
 Screen::Screen(float width, float height, string filepath)
 {
 	this->width = width;
@@ -24,3 +25,13 @@ void Screen::draw(float x, float y, RenderWindow& window)
 }
 
 Screen::~Screen() {}
+
+//Button
+void Button::handleinputback(RenderWindow& window)
+{
+}
+
+
+void Button::handleinputdraw(RenderWindow& window, Screen& new_screen)
+{
+}

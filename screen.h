@@ -20,3 +20,10 @@ public:
 
 	~Screen();
 };
+
+class Button : public::Screen
+{
+public:
+	void handleinputdraw(RenderWindow& window, Screen& new_screen);
+	void handleinputback(RenderWindow& window);
+};

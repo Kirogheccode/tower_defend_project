@@ -26,6 +26,8 @@ int main()
             }
         }
 
+
+
         menu.draw(0, 0, window);
         play_button.draw(40, 40, window);
 
