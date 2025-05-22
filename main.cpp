@@ -12,6 +12,8 @@ int main()
 
     Screen menu(1024, 576, "IMGS/Menu_Screen_Temp.png");
     Screen play_button(300, 80, "IMGS/play.png");
+    Screen setting_button(300, 80, "IMGS/setting.png");
+    Screen exit_button(300, 80, "IMGS/exit.png");
     
     while (window.isOpen())
     {
@@ -25,7 +27,7 @@ int main()
         }
 
         menu.draw(0, 0, window);
-        play_button.draw(10, 0, window);
+        play_button.draw(40, 40, window);
 
         window.display();
     }
