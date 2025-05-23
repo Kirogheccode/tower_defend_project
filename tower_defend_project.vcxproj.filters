@@ -25,4 +25,219 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="IMGS\back.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Buttons.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\menu.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\exit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Menu_Screen_Temp.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\play.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\setting.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\setting_menu.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\slime-Sheet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-die-0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-die-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-die-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-die-3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-hurt-0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-hurt-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-hurt-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-hurt-3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-idle-0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-idle-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-idle-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-idle-3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Attack1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Attack2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Die.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Hurt.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Idle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Walk.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Attack1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Attack2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Die.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Hurt.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Idle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Walk.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Attack1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Attack2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Die.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Hurt.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Idle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Walk.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Attack1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Attack2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Die.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Hurt.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Idle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Walk.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_mushroom_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_mushroom_02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_rock_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_rock_02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_rock_03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_tree_01_autumn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_tree_01_cherry_blossom.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_tree_01_normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_tree_02_autumn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_tree_02_normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Decoration\spr_tree_02_spruce.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Grass\spr_grass_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Grass\spr_grass_02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Grass\spr_grass_03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Tile Set\spr_tile_set_ground.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="IMGS\Map\Tile Set\spr_tile_set_stone.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

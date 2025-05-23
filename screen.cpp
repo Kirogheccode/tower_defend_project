@@ -11,7 +11,7 @@ Screen::Screen(float width, float height, string filepath)
 {
 	this->width = width;
 	this->height = height;
-
+   
 	texture.loadFromFile(filepath);
 }
 
