@@ -7,42 +7,76 @@ using namespace std;
 using namespace sf;
 
 //Screen
-Screen::Screen(float width, float height, string filepath)
+Screen::Screen(string filepath) 
 {
-	this->width = width;
-	this->height = height;
+    width = 0;
+    height = 0;
 
-	texture.loadFromFile(filepath);
+    if (!texture.loadFromFile(filepath))
+    {
+        cout << "Failed to load screen png" << endl;
+        return;
+    }
+
+    this->width = texture.getSize().x;
+    this->height = texture.getSize().y;
+
+    sprite.setTexture(texture);
+}
+
+void Screen::setSize(float width, float height)
+{
+    this->width = width;
+    this->height = height;
 }
 
 void Screen::setSpriteRect(float frame_width, float frame_height, int column, int row)
 {
-    sprite.setTextureRect(sf::IntRect(column * frame_width, row * frame_height, frame_width, frame_height));
+    sprite.setTextureRect(IntRect(
+        static_cast<int>(column * frame_width),
+        static_cast<int>(row * frame_height),
+        static_cast<int>(frame_width),
+        static_cast<int>(frame_height)
+    ));
 }
 
 void Screen::draw(float x, float y, RenderWindow& window)
 {
 	sprite.setPosition(x, y);
-	sprite.setTexture(texture);
 
 	float scaleX = window.getSize().x / width;
 	float scaleY = window.getSize().y / height;
 
-	sprite.scale(scaleX, scaleY);
+	sprite.setScale(scaleX, scaleY);
 
-	window.draw(sprite);
+	window.draw(sprite);    
 }
 
 Screen::~Screen() {}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Button
-Button::Button(float width, float height, string filepath, string hower_filepath)
+Button::Button(string filepath, string hower_filepath) 
 {
-	this->width = width;
-	this->height = height;
+    width = 0;
+    height = 0;
 
-	texture.loadFromFile(filepath);
-	hower_texture.loadFromFile(hower_filepath);
+    if (!texture.loadFromFile(filepath))
+    {
+        cout << "Failed to load screen png" << endl;
+        return;
+    }
+
+    if (!hower_texture.loadFromFile(hower_filepath))
+    {
+        cout << "Failed to load screen png" << endl;
+        return;
+    }
+
+    this->width = texture.getSize().x;
+    this->height = texture.getSize().y;
+
+    sprite.setTexture(texture);
 }
 
 bool Button::handleinput(Vector2f& mousePos)
@@ -72,10 +106,22 @@ bool Button::handleinput(Vector2f& mousePos)
 	return false;
 }
 
+void Button::setSize(float width, float height)
+{
+    this->width = width;
+    this->height = height;
+}
+
+void Button::setSpriteRect(float frame_width, float frame_height, int column, int row)
+{
+    sprite.setTextureRect(sf::IntRect(column * frame_width, row * frame_height, frame_width, frame_height));
+}
+
 void Button::draw(float x, float y, RenderWindow& window)
 {
 	sprite.setPosition(x, y);
-	sprite.setTexture(texture);
 
 	window.draw(sprite);
 }
+
+Button::~Button() {}

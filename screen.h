@@ -18,9 +18,11 @@ private:
 	float height;
 
 public:
-	Screen(float width, float height, string filepath);
+	Screen(string filepath);
 
-	void setSpriteRect(float frame_width, float frame_height, int column, int row);
+	void setSize(float width, float height);
+
+	void setSpriteRect(float frame_width, float frame_height, int column, int row); //Dung de extract png trong sheet
 
 	void draw(float x, float y, RenderWindow& window);
 
@@ -41,9 +43,15 @@ private:
 	bool isHovered = false;
 
 public:
-	Button(float width, float height, string filepath, string hower_filepath);
+	Button(string filepath, string hower_filepath);
 
 	bool handleinput(Vector2f& mousePos);
 
+	void setSize(float width, float height);
+
+	void setSpriteRect(float frame_width, float frame_height, int column, int row); //Dung de extract png trong sheet
+
 	void draw(float x, float y, RenderWindow& window);
+
+	~Button();
 };
