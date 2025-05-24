@@ -2,56 +2,54 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <functional>
 
 using namespace std;
 using namespace sf;
 
 class Screen
 {
-private:
-	Texture texture;
-	Font font;
-
-	Sprite sprite;
-
-	float width;
-	float height;
-
 public:
-	Screen(string filepath);
+	Sprite sprite;
+	Texture texture;
 
-	void setSize(float width, float height);
+	Screen(const string& filepath);
 
-	void setSpriteRect(float frame_width, float frame_height, int column, int row); //Dung de extract png trong sheet
+	virtual void setRect(float frame_width, float frame_height, int column, int row);
 
-	void draw(float x, float y, RenderWindow& window);
-
-	~Screen();
+	virtual void draw(float x, float y, RenderWindow& window);
 };
 
-class Button
+class Button : public::Screen
 {
 private:
-	Texture texture;
-	Texture hower_texture;
-
-	Sprite sprite;
-
-	float width;
-	float height;
-
 	bool isHovered = false;
+	function<void()> onClick = nullptr;
 
 public:
-	Button(string filepath, string hower_filepath);
-
-	bool handleinput(Vector2f& mousePos);
-
-	void setSize(float width, float height);
-
-	void setSpriteRect(float frame_width, float frame_height, int column, int row); //Dung de extract png trong sheet
+	Button(const string& filepath);
 
 	void draw(float x, float y, RenderWindow& window);
 
-	~Button();
+	void setAction(std::function<void()> action);
+
+	void handleinput(Vector2f& mousePos,const Event& event);
+};
+
+class MainMenu : public::Screen
+{
+private:
+	RenderWindow& window;
+
+	Screen background;
+
+	Button playButton;
+	Button settingsButton;
+	Button exitButton;
+public:
+	MainMenu(RenderWindow &window, function<void()> goToSettings, function<void()> onPlay, function<void()> onExit);
+
+	void update(Vector2f& mousePos, const Event& event);
+
+	void draw(float x, float y, RenderWindow& window) override;
 };
