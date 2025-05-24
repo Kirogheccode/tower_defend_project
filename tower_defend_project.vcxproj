@@ -70,6 +70,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)Dependencies\SFML\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Dependencies\SFML\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)Dependencies\SFML\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Dependencies\SFML\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -102,16 +110,17 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-window-d.lib;sfml-graphics-d.lib;sfml-system-d.lib;sfml-network-d.lib;sfml-audio-d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-s-d.lib	;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-audio-s-d.lib	;sfml-network-s-d.lib	;opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -120,24 +129,98 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-window.lib;sfml-graphics.lib;sfml-system.lib;sfml-network.lib;sfml-audio.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-s.lib	;sfml-window-s.lib;sfml-system-s.lib;sfml-audio-s.lib	;sfml-network-s.lib	;opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="screen.cpp" />
     <ClCompile Include="screen.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="IMGS\back.png" />
+    <Image Include="IMGS\background.png" />
+    <Image Include="IMGS\Buttons.png" />
+    <Image Include="IMGS\exit.png" />
+    <Image Include="IMGS\Map\Decoration\spr_mushroom_01.png" />
+    <Image Include="IMGS\Map\Decoration\spr_mushroom_02.png" />
+    <Image Include="IMGS\Map\Decoration\spr_rock_01.png" />
+    <Image Include="IMGS\Map\Decoration\spr_rock_02.png" />
+    <Image Include="IMGS\Map\Decoration\spr_rock_03.png" />
+    <Image Include="IMGS\Map\Decoration\spr_tree_01_autumn.png" />
+    <Image Include="IMGS\Map\Decoration\spr_tree_01_cherry_blossom.png" />
+    <Image Include="IMGS\Map\Decoration\spr_tree_01_normal.png" />
+    <Image Include="IMGS\Map\Decoration\spr_tree_02_autumn.png" />
+    <Image Include="IMGS\Map\Decoration\spr_tree_02_normal.png" />
+    <Image Include="IMGS\Map\Decoration\spr_tree_02_spruce.png" />
+    <Image Include="IMGS\Map\Grass\spr_grass_01.png" />
+    <Image Include="IMGS\Map\Grass\spr_grass_02.png" />
+    <Image Include="IMGS\Map\Grass\spr_grass_03.png" />
+    <Image Include="IMGS\Map\Tile Set\spr_tile_set_ground.png" />
+    <Image Include="IMGS\Map\Tile Set\spr_tile_set_stone.png" />
+    <Image Include="IMGS\menu.png" />
+    <Image Include="IMGS\Menu_Screen_Temp.png" />
+    <Image Include="IMGS\play.png" />
+    <Image Include="IMGS\setting.png" />
+    <Image Include="IMGS\setting_menu.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Attack1.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Attack2.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Die.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Hurt.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Idle.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Walk.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Attack1.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Attack2.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Die.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Hurt.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Idle.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFX\Skeleton_01_White_Walk.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Attack1.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Attack2.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Die.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Hurt.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Idle.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_Without_VFX\Skeleton_01_Yellow_Walk.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Attack1.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Attack2.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Die.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Hurt.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Idle.png" />
+    <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_Yellow\Skeleton_With_VFX\Skeleton_01_Yellow_Walk.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-0.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-1.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-2.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-3.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-attack-4.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-die-0.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-die-1.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-die-2.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-die-3.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-hurt-0.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-hurt-1.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-hurt-2.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-hurt-3.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-idle-0.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-idle-1.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-idle-2.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-idle-3.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-0.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-1.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-2.png" />
+    <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-3.png" />
+    <Image Include="IMGS\Slime 32x25\slime-Sheet.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
