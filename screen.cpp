@@ -1,111 +1,55 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
-
 #include "screen.h"
 
-using namespace std;
 using namespace sf;
 
-// ==================== [SCREEN] ====================
-
-Screen::Screen(const string& filepath)
+// ==== Screen ====
+Screen::Screen(float width, float height, const std::string& filepath)
+    : width(width), height(height)
 {
-    if (!texture.loadFromFile(filepath))
-    {
-        std::cout << "Failed to load screen texture: " << filepath << std::endl;
-        return;
-    }
-
-    sprite.setTexture(texture);
-}
-
-void Screen::setRect(float frame_width, float frame_height, int column, int row)
-{
-    sprite.setTextureRect(IntRect(
-        static_cast<int>(column * frame_width),
-        static_cast<int>(row * frame_height),
-        static_cast<int>(frame_width),
-        static_cast<int>(frame_height)
-    ));
+    texture.loadFromFile(filepath);
 }
 
 void Screen::draw(float x, float y, RenderWindow& window)
 {
+    Sprite sprite;
     sprite.setPosition(x, y);
-
+    sprite.setTexture(texture);
     window.draw(sprite);
 }
 
-
-// ==================== [Button] ====================
-
-Button::Button(const string& filepath)
-    :Screen("")
+// ==== Button ====
+Button::Button(const std::string& imagePath, float x, float y)
 {
-    if (!texture.loadFromFile(filepath))
-    {
-        cout << "Failed to load screen png" << endl;
-        return;
-    }
-
+    texture.loadFromFile(imagePath);
     sprite.setTexture(texture);
+    sprite.setPosition(x, y);
 }
 
-void Button::draw(float x, float y, RenderWindow& window)
+void Button::draw(RenderWindow& window)
 {
-	sprite.setPosition(x, y);
-
-	window.draw(sprite);
+    window.draw(sprite);
 }
 
-void Button::setAction(std::function<void()> action) {
-    onClick = action;
-}
-
-void Button::handleinput(Vector2f& mousePos, const Event& event)
+void Button::update(RenderWindow& window)
 {
-    if (sprite.getGlobalBounds().contains(mousePos)) {
-        sprite.setColor(sf::Color(200, 200, 200));
-        sprite.setScale(1.05f, 1.05f);
-
-        if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
-        {
-            onClick();
-        }
+    if (sprite.getGlobalBounds().contains(Vector2f(Mouse::getPosition(window)))) {
+        sprite.setColor(Color(200, 200, 200)); // Hover effect
     }
     else {
-        sprite.setColor(sf::Color::White);
-        sprite.setScale(1.f, 1.f);
+        sprite.setColor(Color(255, 255, 255));
     }
 }
 
-
-// ==================== [MainMenu] ====================
-
-MainMenu::MainMenu(RenderWindow& window, function<void()> goToSettings, function<void()> onPlay, function<void()> onExit)
-    :Screen(""),
-    window(window),
-    background("IMGS/Menu_Screen_Temp.png"),
-    playButton("IMGS/play.png"),
-    settingsButton("IMGS/setting.png"),
-    exitButton("IMGS/exit.png")
+bool Button::isClicked(RenderWindow& window, Event& event)
 {
-    playButton.setAction(onPlay);
-    settingsButton.setAction(goToSettings);
-    exitButton.setAction(onExit);
+    if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
+        Vector2f mousePos = Vector2f(Mouse::getPosition(window));
+        return sprite.getGlobalBounds().contains(mousePos);
+    }
+    return false;
 }
 
-void MainMenu::update(Vector2f& mousePos, const Event& event)
+void Button::setScale(float scaleX, float scaleY)
 {
-    playButton.handleinput(mousePos, event);
-    settingsButton.handleinput(mousePos, event);
-    exitButton.handleinput(mousePos, event);
-}
-
-void MainMenu::draw(float x, float y, RenderWindow& window)
-{
-    background.draw(0, 0, window);
-    playButton.draw(580, 150, window);
-    settingsButton.draw(580, 300, window);
-    exitButton.draw(580, 450, window);
+    sprite.setScale(scaleX, scaleY);
 }

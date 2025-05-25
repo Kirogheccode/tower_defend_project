@@ -1,55 +1,28 @@
-#pragma once
+#ifndef SCREEN_H
+#define SCREEN_H
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
-#include <functional>
 
-using namespace std;
-using namespace sf;
-
-class Screen
-{
+class Screen {
 public:
-	Sprite sprite;
-	Texture texture;
-
-	Screen(const string& filepath);
-
-	virtual void setRect(float frame_width, float frame_height, int column, int row);
-
-	virtual void draw(float x, float y, RenderWindow& window);
-};
-
-class Button : public::Screen
-{
+    Screen(float width, float height, const std::string& filepath);
+    void draw(float x, float y, sf::RenderWindow& window);
 private:
-	bool isHovered = false;
-	function<void()> onClick = nullptr;
-
-public:
-	Button(const string& filepath);
-
-	void draw(float x, float y, RenderWindow& window);
-
-	void setAction(std::function<void()> action);
-
-	void handleinput(Vector2f& mousePos,const Event& event);
+    float width;
+    float height;
+    sf::Texture texture;
 };
 
-class MainMenu : public::Screen
-{
+class Button {
+public:
+    Button(const std::string& imagePath, float x, float y);
+    void draw(sf::RenderWindow& window);
+    void update(sf::RenderWindow& window);
+    bool isClicked(sf::RenderWindow& window, sf::Event& event);
+    void setScale(float scaleX, float scaleY);
 private:
-	RenderWindow& window;
-
-	Screen background;
-
-	Button playButton;
-	Button settingsButton;
-	Button exitButton;
-public:
-	MainMenu(RenderWindow &window, function<void()> goToSettings, function<void()> onPlay, function<void()> onExit);
-
-	void update(Vector2f& mousePos, const Event& event);
-
-	void draw(float x, float y, RenderWindow& window) override;
+    sf::Texture texture;
+    sf::Sprite sprite;
 };
+
+#endif
