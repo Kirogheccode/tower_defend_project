@@ -145,8 +145,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="button.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="main1.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="screen.cpp" />
     <ClCompile Include="screen.h" />
     <ClCompile Include="sound.cpp" />
@@ -155,7 +159,10 @@
     <Image Include="IMGS\back.png" />
     <Image Include="IMGS\background.png" />
     <Image Include="IMGS\Buttons.png" />
+    <Image Include="IMGS\Coin.png" />
+    <Image Include="IMGS\enter.png" />
     <Image Include="IMGS\exit.png" />
+    <Image Include="IMGS\Heart.png" />
     <Image Include="IMGS\Map\Decoration\spr_mushroom_01.png" />
     <Image Include="IMGS\Map\Decoration\spr_mushroom_02.png" />
     <Image Include="IMGS\Map\Decoration\spr_rock_01.png" />
@@ -167,6 +174,7 @@
     <Image Include="IMGS\Map\Decoration\spr_tree_02_autumn.png" />
     <Image Include="IMGS\Map\Decoration\spr_tree_02_normal.png" />
     <Image Include="IMGS\Map\Decoration\spr_tree_02_spruce.png" />
+    <Image Include="IMGS\Map\Grass\GrassTileSet.png" />
     <Image Include="IMGS\Map\Grass\spr_grass_01.png" />
     <Image Include="IMGS\Map\Grass\spr_grass_02.png" />
     <Image Include="IMGS\Map\Grass\spr_grass_03.png" />
@@ -225,8 +233,15 @@
     <Image Include="IMGS\Slime 32x25\slime-Sheet.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="button.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="sound.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="playername.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
