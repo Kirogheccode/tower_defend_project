@@ -6,11 +6,17 @@
 
 class Screen {
 public:
-    Screen(float width, float height, const std::string& filepath);
+    Screen(const std::string& filepath);
+
     void draw(float x, float y, sf::RenderWindow& window);
+
+    void setScale(sf::RenderWindow& window);
+
 private:
     float width;
     float height;
+
     sf::Texture texture;
+    sf::Sprite sprite;
 };
 #endif

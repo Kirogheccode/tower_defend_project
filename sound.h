@@ -5,23 +5,26 @@
 #include <string>
 #include <unordered_map>
 
+using namespace std;
+using namespace sf;
+
 class SoundManager {
 public:
     SoundManager();
 
-    void loadSound(const std::string& name, const std::string& filepath);
-    void playSound(const std::string& name);
+    void loadSound(const string& name, const string& filepath);
+    void playSound(const string& name);
 
-    void playMusic(const std::string& filepath, bool loop = true);
+    void playMusic(const string& filepath, bool loop = true);
     void stopMusic();
     void setMusicVolume(float volume);
-    void toggleMusic(); // bat/tat nhac nen
+    void toggleMusic(); 
 
 private:
-    std::unordered_map<std::string, sf::SoundBuffer> soundBuffers;
-    std::unordered_map<std::string, sf::Sound> sounds;
+    unordered_map<string, SoundBuffer> soundBuffers;
+    unordered_map<string, Sound> sounds;
 
-    sf::Music backgroundMusic;
+    Music backgroundMusic;
     bool musicOn;
 };
 

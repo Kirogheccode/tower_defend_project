@@ -22,9 +22,9 @@ int main() {
     soundManager.playMusic("SOUNDS/bgmusic.wav");  // bat dau phat nhac nen
 
     // Backgrounds
-    Screen mainBg(1024, 576, "IMGS/Menu_Screen_Temp.png");
-    Screen settingBg(1024, 576, "IMGS/background.png");
-    Screen playBg(1024, 576, "IMGS/Menu_Screen_Temp.png");
+    Screen mainBg("IMGS/mainmenu_background.png");
+    Screen settingBg("IMGS/background.png");
+    Screen playBg("IMGS/mainmenu_background.png");
 
     // Buttons for main menu
     Button playButton("IMGS/play.png", 600, 150);
@@ -65,43 +65,45 @@ int main() {
             if (event.type == Event::Closed)
                 window.close();
 
+            sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+
             if (state == AppState::MainMenu) {
-                if (playButton.isClicked(window, event)) {
+                if (playButton.isClicked(mousePos, event)) {
                     soundManager.playSound("click");
                     state = AppState::PlayMenu;
                 }
-                else if (settingButton.isClicked(window, event)) {
+                else if (settingButton.isClicked(mousePos, event)) {
                     soundManager.playSound("click");
                     state = AppState::SettingsMenu;
                 }
-                else if (exitButton.isClicked(window, event)) {
+                else if (exitButton.isClicked(mousePos, event)) {
                     soundManager.playSound("click");
                     window.close();
                 }
             }
             else if (state == AppState::SettingsMenu) {
-                if (backButton.isClicked(window, event)) {
+                if (backButton.isClicked(mousePos, event)) {
                     soundManager.playSound("click");
                     state = AppState::MainMenu;
                 }
             }
             else if (state == AppState::PlayMenu) {
-                if (backButton.isClicked(window, event)) {
+                if (backButton.isClicked(mousePos, event)) {
                     soundManager.playSound("click");
                     state = AppState::MainMenu;
                     enteringName = false;
                     playerName.clear();
                 }
-                else if (loadGameButton.isClicked(window, event)) {
+                else if (loadGameButton.isClicked(mousePos, event)) {
                     soundManager.playSound("click");
                     // TODO: Load game logic
                 }
-                else if (newGameButton.isClicked(window, event)) {
+                else if (newGameButton.isClicked(mousePos, event)) {
                     soundManager.playSound("click");
                     enteringName = true;
                     playerName.clear();
                 }
-                else if (enteringName && enterNameButton.isClicked(window, event)) {
+                else if (enteringName && enterNameButton.isClicked(mousePos, event)) {
                     soundManager.playSound("click");
                     std::ofstream outFile("playername.txt");
                     if (outFile.is_open()) {
