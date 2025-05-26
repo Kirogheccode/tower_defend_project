@@ -18,6 +18,17 @@ namespace MathSupport
          sf::Vector2f vUnit(vec.x / fLength, vec.y / fLength);
          return vUnit;
     }
+
+   sf::Vector2f GetPosition(sf::Sprite sprite)
+   {
+       return sprite.getPosition();
+   }
+
+   sf::Vector2i BoardCoordinates(sf::Sprite sprite)
+   {
+       return sf::Vector2i(GetPosition(sprite).x / 160, GetPosition(sprite).y / 160);
+   }
+
 }
 
 

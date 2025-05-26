@@ -170,4 +170,3 @@ private:
 	sf::Sprite m_Sprite;
 	PhysicsData m_PhysicsData;
 };
-
