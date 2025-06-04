@@ -22,10 +22,9 @@ void Button::update(sf::RenderWindow& window)
     }
 }
 
-bool Button::isClicked(sf::RenderWindow& window, sf::Event& event)
+bool Button::isClicked(sf::Vector2f mousePos, sf::Event& event)
 {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-        sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
         return sprite.getGlobalBounds().contains(mousePos);
     }
     return false;

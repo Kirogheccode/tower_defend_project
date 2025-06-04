@@ -1,22 +1,27 @@
 #include "Map.h"
 #include <iostream>
+
 void Map::printInfo()
 {
 	cout << "Width: " << Width << endl;
 	cout << "Height: " << Height << endl;
+
 	for (int i = 0;i < Width * Height;i++)
 	{
 		if (i % Width == 0)
 			cout << endl;
+
 		cout << indexTexture[i] << " ";
 	}
 }
+
 int Map::Ceiling(int x, int y) //Ceiling(x/y)
 {
 	if (x % y != 0)
 		return x / y + 1;
 	return x / y;
 }
+
 void Map::InitializeMap()
 {
 	//Loading texture
@@ -25,15 +30,19 @@ void Map::InitializeMap()
 		cout << "Failed to load map" << endl;
 		return;
 	}
+
     //How many neccessary tiles in row (Width) and column (Height) to cover the map
-	Width = Ceiling(mapWidth,tileSize.x);
+	Width = Ceiling(mapWidth, tileSize.x);
 	Height = Ceiling(mapHeight, tileSize.y);
+
 	// Set 1D Dimension array for the map
 	indexTexture.resize(Width * Height);
 	fill(indexTexture.begin(), indexTexture.end(), 0);
+
 	//Set Path for 1D Dimesion array (Index[i] = 1);
 	int Y = Width;//Set Vertical Path
 	int X = Height;//Set Horizontal Path
+
 	// Path is intersection in the middle of the map
 	while (Y <= Width * Height)
 	{
@@ -47,17 +56,19 @@ void Map::InitializeMap()
 		indexTexture[(((X - 1) / 2) * Width)+i] = 1;
 	}
 	//Set vertex for to draw
+
 	m_vertices.setPrimitiveType(Triangles);
 	m_vertices.resize(Width * Height * 6);
 	// Therefore, we need 6 vertices per tile, we also have width * height needed tiles 
     // Draw map based on triagles (1 triangle = 3 vertices, we need 2 combining triangles to draw 1 tile)
 	//  => The total vertices: Width * Height * 6
 }
+
 void Map::LoadMap()
 {
-	for (int i = 0;i < Width;i++)
+	for (int i = 0 ; i < Width ; i++)
 	{
-		for (int j = 0;j < Height;j++)
+		for (int j = 0 ; j < Height ; j++)
 		{
 			//Get current tile number
 			int tileNumber = indexTexture[i + j * Width];
@@ -86,7 +97,6 @@ void Map::LoadMap()
 			triangles[3].texCoords = Vector2f((float)tu * tileSize.x, (float)(tv + 1) * tileSize.y);
 			triangles[4].texCoords = Vector2f((float)(tu + 1) * tileSize.x, (float)tv * tileSize.y);
 			triangles[5].texCoords = Vector2f((float)(tu + 1) * tileSize.x, (float)(tv + 1) * tileSize.y);
-			
 		}
 	}
 }
