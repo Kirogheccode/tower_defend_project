@@ -17,7 +17,10 @@ class Bullet
 	Enemy* targetEnemy = nullptr;
 	Vector2f position;
 
-	float speed = 600.0f;
+	float speed = 300.0f;
+	int index = 0;
+
+	bool avalible = false;
 
 	int damage = 10;
 

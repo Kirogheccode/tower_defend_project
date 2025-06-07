@@ -32,7 +32,7 @@ Enemy* Bullet::GetTargetEnemy()
 bool Bullet::Collide(float& deltaTime)
 {
 	if (targetEnemy == nullptr)
-		return true;
+		return false;
 
 	Vector2f direction = targetEnemy->GetPosition() - position;
 	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);

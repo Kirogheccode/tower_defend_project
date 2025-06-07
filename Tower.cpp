@@ -42,25 +42,6 @@ void Tower::setPosition(Vector2f& mousePos)
 
 void Tower::HasEnemy(float& deltaTime, vector<Enemy>& Enemies, vector<Bullet>& spawned_bullet)
 {
-    spawned_bullet.erase(
-        std::remove_if(spawned_bullet.begin(), spawned_bullet.end(),
-            [&](Bullet& b) {
-                bool hit = b.Collide(deltaTime);
-                if (hit)
-                {
-                    for (Enemy& enemy : Enemies)
-                    {
-                        if (&enemy == b.GetTargetEnemy()) {
-                            enemy.SetHealth(enemy.GetHealth() - b.GetDamage());
-                            break;
-                        }
-                    }
-                    return true;
-                }
-                return false;
-            }),
-        spawned_bullet.end());
-
     delayTime += deltaTime;
 
     if (delayTime >= 3)
