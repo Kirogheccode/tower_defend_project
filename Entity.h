@@ -15,6 +15,7 @@ class Entity
 	bool m_alive = true;
 
 public:
+	shared_ptr<CHealth> cHealth;
 	shared_ptr<CMovement> cMovement;
 	shared_ptr<CSet> cSet;
 
