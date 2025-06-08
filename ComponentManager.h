@@ -73,6 +73,23 @@ struct CSet
 	int row = 0;
 
 	CSet() {}
+
+	CSet(const string& filepath) //For static class (background,...)
+	{
+		if (!texture.loadFromFile(filepath))
+		{
+			cout << "Error! Can't load filepath" << endl;
+			return;
+		}
+
+		sprite.setTexture(texture);
+		if (sprite.getTextureRect().width == 0 || sprite.getTextureRect().height == 0)
+		{
+			cout << "Error! Can't load filepath" << endl;
+			return;
+		}
+	}
+
 	CSet(const string& filepath, const Vector2u& ImgCount, float& switchTime, const int& row)
 	{
 		if (!texture.loadFromFile(filepath))
