@@ -149,12 +149,15 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="EntityManager.h" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="main1.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="screen.cpp" />
     <ClCompile Include="screen.h" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="SystemManager.h" />
     <ClCompile Include="Tower.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -238,7 +241,9 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="button.h" />
+    <ClInclude Include="ComponentManager.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="sound.h" />

@@ -6,6 +6,7 @@
 
 using namespace std;
 using namespace sf;
+
 class GameState
 {
 	const string HeartImg = "IMGS/Heart.png";
