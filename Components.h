@@ -74,7 +74,7 @@ struct CSet
 
 	CSet() {}
 
-	CSet(const string& filepath) //For static class (background,...)
+	CSet(const string& filepath) //For static entitiy (background,...)
 	{
 		if (!texture.loadFromFile(filepath))
 		{
@@ -90,7 +90,7 @@ struct CSet
 		}
 	}
 
-	CSet(const string& filepath, const Vector2u& ImgCount, float& switchTime, const int& row)
+	CSet(const string& filepath, const Vector2u& ImgCount, const float& switchTime, const int& row) //For dynamic entitiy
 	{
 		if (!texture.loadFromFile(filepath))
 		{
@@ -116,3 +116,5 @@ struct CSet
 		uvRect.height = texture.getSize().y / float(ImgCount.y);
 	}
 };
+
+struct CCollision {};

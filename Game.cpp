@@ -1,12 +1,51 @@
-#pragma once
+#include "Game.h"
 
-#include <SFML/Graphics.hpp>
-#include "Entity.h"
+Game::Game(const string& config)
+{
+	init(config);
+}
 
-#include <iostream>
+void Game::init(const string& path)
+{
+	ifstream readconfig(path);
 
-using namespace std;
-using namespace sf;
+	string window_name;
+	unsigned int width = 0;
+	unsigned int height = 0;
+	int frame_limits = 0;
+	bool fullscreen_mode = 0;
+
+	readconfig >> window_name >> width >> height >> frame_limits >> fullscreen_mode;
+
+	Uint32 style = fullscreen_mode ? Style::Fullscreen : Style::Default;
+
+	RenderWindow window(VideoMode(width, height), window_name, style);
+	window.setFramerateLimit(frame_limits);
+
+	//Continue reading config for enemy and bullet
+}
+
+void Game::run()
+{
+	while (m_running)
+	{
+		m_entities.update();
+
+		if (!m_paused)
+		{
+			sEnemySpawner();
+			sMovement();
+			sCollision();
+		}
+
+		sRender();
+
+		m_currentFrame++;
+	}
+}
+
+//void Game::spawnEnemy();
+
 
 void sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
 {
@@ -87,11 +126,9 @@ void sDraw(vector<shared_ptr<Entity>>& entities, RenderWindow& window)
 	}
 }
 
-void sUpdate(vector<shared_ptr<Entity>>& entities, RenderWindow& window, float& DeltaTime, const int& mapIndex)
+void sUpdate(vector<std::shared_ptr<Entity>>& entities, RenderWindow& window, float& DeltaTime, const int& mapIndex)
 {
 	sMovement(entities, DeltaTime, mapIndex);
 	sDraw(entities, window);
 }
 
-void sDestory();
-void sCollide();

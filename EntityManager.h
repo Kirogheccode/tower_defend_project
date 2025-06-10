@@ -1,10 +1,10 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "Entity.h"
-
 #include <iostream>
 #include <vector>
+
+#include "Entity.h"
 
 using namespace std;
 using namespace sf;
@@ -17,7 +17,7 @@ class EntityManager
 	EntityVec m_entities;
 	EntityVec m_toAdd;
 	EntityMap m_entityMap;
-	unsigned int m_totalEntites = 0;
+	size_t m_totalEntites = 0;
 
 public: 
 	EntityManager();
