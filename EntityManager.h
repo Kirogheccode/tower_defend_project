@@ -3,8 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <vector>
+#include <map>
+#include <memory>
 
-#include "Entity.h"
+class Entity;
 
 using namespace std;
 using namespace sf;

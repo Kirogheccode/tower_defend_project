@@ -12,7 +12,10 @@ void EntityManager::update()
 
 	for (auto& e : m_entities)
 	{
-		//remove if m_alive = false
+		if (!e->isActive())
+		{
+			e->destroy();
+		}
 	}
 
 	m_toAdd.clear();

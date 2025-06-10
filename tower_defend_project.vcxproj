@@ -155,6 +155,7 @@
   <ItemGroup>
     <Image Include="IMGS\back.png" />
     <Image Include="IMGS\background.png" />
+    <Image Include="IMGS\bullet.png" />
     <Image Include="IMGS\Buttons.png" />
     <Image Include="IMGS\Coin.png" />
     <Image Include="IMGS\enter.png" />

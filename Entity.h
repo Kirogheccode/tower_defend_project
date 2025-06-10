@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 
+#include "EntityManager.h"
 #include "Components.h"
 
 using namespace std;
@@ -18,6 +19,8 @@ class Entity
 	size_t m_id = 0;
 	string m_tag = "Default";
 	bool m_active = true;
+
+	friend class EntityManager;
 
 	Entity(const string& tag, const size_t& id); //Make private so only Entity Manager can call it
 

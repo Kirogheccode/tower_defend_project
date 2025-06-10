@@ -10,10 +10,13 @@
 using namespace std;
 using namespace sf;
 
-struct BulletConfig { int damage; float speed; }; //Damage, 
-struct EnemyType1Config { int HP; float speed; }; //Health, speed, 
-struct EnemyType2Config { int HP; float speed; }; //Health, speed,
-struct EnemyType3Config { int HP; float speed; }; //Health, speed,
+struct BulletConfig { string filepath; int damage; float speed; };			//Damage, 
+struct EnemyType1Config { string filepath; int hp; float speed; };			//Health, speed, 
+struct EnemyType2Config { string filepath; int hp; float speed; };			//Health, speed,
+struct EnemyType3Config { string filepath;  int hp; float speed; };			//Health, speed,
+struct TowerType1Config {};
+struct TowerType3Config {};
+struct TowerType2Config {};
 
 class Game
 {
@@ -24,6 +27,9 @@ class Game
 	EnemyType1Config m_enemyType1Config;
 	EnemyType2Config m_enemyType2Config;
 	EnemyType3Config m_enemyType3Config;
+	TowerType1Config m_towerType1Config;
+	TowerType2Config m_towerType2Config;
+	TowerType3Config m_towerType3Config;
 
 	int m_score = 0;
 	int m_currentFrame = 0;
@@ -35,15 +41,20 @@ class Game
 	void init(const string& config);
 	void setPause(bool paused);
 
-	void sMovement(); //System: Movement update
-	void sRender(); //System:: Render / Drawing
-	void sEnemySpawner(); //System:: Spawns Enemies;
-	void sCollision(); //System:: Collisions
+	//void sMovement(int mapIndex, float& deltaTime);										//System: Movement update
+	void sRenderMenu();																		//System: Render / Drawing menus
+	void sRenderEnemy();																	//System: Render / Drawing enemies
+	//void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						//System: Animation
+	void sEnemyType1Spawner();																//System: Spawn Enemey Type 1
+	void sEnemyType2Spawner();																//System: Spawn Enemey Type 2
+	void sEnemyType3Spawner();																//System: Spawn Enemey Type 3																
+	void sUserInput();																		//System: User input
+	void sCollision();																		//System: Collisions
 
-	void run();
-	void spawnEnemy();
+	void spawnEnemy();															
 	void spawnBullet(shared_ptr<Entity> entity, const Vector2f& enemy_pos);
 
 public:
 	Game(const string& config);
+	void run();
 };

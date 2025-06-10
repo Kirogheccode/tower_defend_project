@@ -260,6 +260,9 @@
     <Image Include="IMGS\enter.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="IMGS\bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components.h">

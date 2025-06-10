@@ -9,6 +9,7 @@ void Game::init(const string& path)
 {
 	ifstream readconfig(path);
 
+	//Reading window info
 	string window_name;
 	unsigned int width = 0;
 	unsigned int height = 0;
@@ -19,116 +20,164 @@ void Game::init(const string& path)
 
 	Uint32 style = fullscreen_mode ? Style::Fullscreen : Style::Default;
 
-	RenderWindow window(VideoMode(width, height), window_name, style);
-	window.setFramerateLimit(frame_limits);
+	m_window.create(VideoMode(width, height), window_name, style);
+	m_window.setFramerateLimit(frame_limits);
 
-	//Continue reading config for enemy and bullet
+	//Reading bullet info
+	readconfig >> m_bulletConfig.filepath >> m_bulletConfig.damage >> m_bulletConfig.speed;
+
+	//Reading Enemy type 1
+	readconfig >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed;
+
+	//Reading Enemy type 2
+	readconfig >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed;
+
+	//Reading Enemy type 2
+	readconfig >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed;
+
+	auto entity = m_entities.addEntity("MainMenu");
+	entity->cSet = make_shared<CSet>("main_menu.png");
 }
 
 void Game::run()
 {
 	while (m_running)
 	{
-		m_entities.update();
-
-		if (!m_paused)
-		{
-			sEnemySpawner();
-			sMovement();
-			sCollision();
-		}
-
-		sRender();
+		sRenderMenu();
 
 		m_currentFrame++;
 	}
 }
 
+void Game::setPause(bool paused)
+{
+	//
+}
+
 //void Game::spawnEnemy();
 
+//void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
+//{
+//	auto entities = m_entities.getEntites("Enemy");
+//
+//	entity->cSet->CurrImg.y = entity->cSet->row;
+//	entity->cSet->totalTime += deltaTime;
+//
+//	if (entity->cSet->totalTime >= entity->cSet->switchTime)
+//	{
+//		entity->cSet->totalTime -= entity->cSet->switchTime;
+//		entity->cSet->CurrImg.x++;
+//
+//		if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
+//			entity->cSet->CurrImg.x = 0;
+//	}
+//
+//	entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
+//	entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
+//}
+//
+//void Game::sMovement(int mapIndex, float& deltaTime)
+//{
+//auto entities = m_entities.getEntites("Enemy");
+//
+//	for (auto& entity : entities)
+//	{
+//		if (entity->cMovement->currentPathindex >= entity->cMovement->paths[mapIndex].size())
+//			return;
+//
+//		Vector2f target = entity->cMovement->paths[mapIndex][entity->cMovement->currentPathindex];
+//		Vector2f direction = target - entity->cMovement->position;
+//
+//		float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+//
+//		if (distance < 1.f) {
+//			entity->cMovement->currentPathindex++;
+//			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[mapIndex].size()) {
+//				// At the finish (minusHealth())
+//			}
+//
+//			target = entity->cMovement->paths[mapIndex][entity->cMovement->currentPathindex];
+//			direction = target - entity->cMovement->position;
+//			distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+//		}
+//
+//		Vector2f movement(0.f, 0.f);
+//
+//		if (distance > 0) {
+//			movement = direction / distance;
+//		}
+//
+//		entity->cMovement->position += movement * entity->cMovement->speed * deltaTime;
+//
+//		sAnimation(entity, deltaTime);
+//
+//		entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
+//
+//		entity->cSet->sprite.setPosition(entity->cMovement->position);
+//	}
+//}
 
-void sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
+void Game::sRenderMenu()
 {
-	if (entity->cSet)
+	auto entities = m_entities.getEntites("MainMenu");
+
+	for (auto& entity : entities) 
 	{
-		entity->cSet->CurrImg.y = entity->cSet->row;
-		entity->cSet->totalTime += deltaTime;
-
-		if (entity->cSet->totalTime >= entity->cSet->switchTime)
-		{
-			entity->cSet->totalTime -= entity->cSet->switchTime;
-			entity->cSet->CurrImg.x++;
-
-			if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
-				entity->cSet->CurrImg.x = 0;
-		}
-
-		entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
-		entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
-	}
-	else
-	{
-		cout << "Components are nullptr" << endl;
-	}
-}
-
-void sMovement(vector<shared_ptr<Entity>>& entities, float& deltaTime, const int& mapIndex)
-{
-	for (auto& entity : entities)
-	{
-		if (entity->cMovement && entity->cSet)
-		{
-			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[mapIndex].size())
-				return;
-
-			Vector2f target = entity->cMovement->paths[mapIndex][entity->cMovement->currentPathindex];
-			Vector2f direction = target - entity->cMovement->position;
-
-			float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-
-			if (distance < 1.f) {
-				entity->cMovement->currentPathindex++;
-				if (entity->cMovement->currentPathindex >= entity->cMovement->paths[mapIndex].size()) {
-					// At the finish (minusHealth())
-				}
-
-				target = entity->cMovement->paths[mapIndex][entity->cMovement->currentPathindex];
-				direction = target - entity->cMovement->position;
-				distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-			}
-
-			Vector2f movement(0.f, 0.f);
-
-			if (distance > 0) {
-				movement = direction / distance;
-			}
-
-			entity->cMovement->position += movement * entity->cMovement->speed * deltaTime;
-
-			sAnimation(entity, deltaTime);
-
-			entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
-
-			entity->cSet->sprite.setPosition(entity->cMovement->position);
-		}
-		else
-		{
-			cout << "Components are nullptr" << endl;
-		}
-	}
-}
-
-void sDraw(vector<shared_ptr<Entity>>& entities, RenderWindow& window)
-{
-	for (auto& entity : entities)
-	{
-		window.draw(entity->cSet->sprite);
+		m_window.draw(entity->cSet->sprite);
 	}
 }
 
-void sUpdate(vector<std::shared_ptr<Entity>>& entities, RenderWindow& window, float& DeltaTime, const int& mapIndex)
+void Game::sRenderEnemy()
 {
-	sMovement(entities, DeltaTime, mapIndex);
-	sDraw(entities, window);
+	//
 }
 
+void Game::sEnemyType1Spawner()
+{
+	auto entity = m_entities.addEntity("EnemyType1");
+	entity->cHealth = make_shared<CHealth>(m_enemyType1Config.hp);
+	entity->cMovement = make_shared<CMovement>(m_enemyType1Config.speed);
+	entity->cSet = make_shared<CSet>("Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
+
+	m_lastEnemySpawnTime = m_currentFrame;
+}
+
+void Game::sEnemyType2Spawner()
+{
+	auto entity = m_entities.addEntity("EnemyType3");
+	entity->cHealth = make_shared<CHealth>(m_enemyType2Config.hp);
+	entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
+	entity->cSet = make_shared<CSet>("Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
+
+	m_lastEnemySpawnTime = m_currentFrame;
+}
+
+void Game::sEnemyType3Spawner()
+{
+	auto entity = m_entities.addEntity("EnemyType3");
+	entity->cHealth = make_shared<CHealth>(m_enemyType3Config.hp);
+	entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
+	entity->cSet = make_shared<CSet>("Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
+
+	m_lastEnemySpawnTime = m_currentFrame;
+}
+
+void Game::sUserInput()
+{
+	//
+}
+
+void Game::sCollision()
+{
+	//
+}
+
+void Game::spawnEnemy()
+{
+	//
+}
+
+void Game::spawnBullet(shared_ptr<Entity> entity, const Vector2f& enemy_pos)
+{
+	//
+}

@@ -19,42 +19,47 @@ struct CHealth
 
 struct CMovement
 {
-	Vector2f position = { 0, 0 };
 	float speed = 0;
 	unsigned int currentPathindex = 0;
 
-	vector<vector<Vector2f>> paths = { {Vector2f(0.f, 500.f),     //Cordinate for map1
+	vector<Vector2f> position = { Vector2f(500.f, 500.f),         //Starting position for map 1
+								  Vector2f(500.f, 500.f),         //Starting position for map 2
+								  Vector2f(500.f, 500.f),         //Starting position for map 3
+								  Vector2f(500.f, 500.f)          //Starting position for map 4
+	};
+
+	vector<vector<Vector2f>> paths = { {Vector2f(0.f, 500.f),     //Cordination for map1
 										Vector2f(600.f, 500.f),
 										Vector2f(600.f, 700.f),
 										Vector2f(1200.f, 700.f),
 										Vector2f(1200.f, 400.f),
 										Vector2f(1920.f, 400.f)},
 
-										{Vector2f(0.f, 500.f),     //Cordinate for map2
+										{Vector2f(0.f, 500.f),     //Cordination for map2
 										Vector2f(600.f, 500.f),
 										Vector2f(600.f, 700.f),
 										Vector2f(1200.f, 700.f),
 										Vector2f(1200.f, 400.f),
 										Vector2f(1920.f, 400.f)},
 
-										{Vector2f(0.f, 500.f),     //Cordinate for map3
+										{Vector2f(0.f, 500.f),     //Cordination for map3
 										Vector2f(600.f, 500.f),
 										Vector2f(600.f, 700.f),
 										Vector2f(1200.f, 700.f),
 										Vector2f(1200.f, 400.f),
 										Vector2f(1920.f, 400.f)},
 
-										{Vector2f(0.f, 500.f),     //Cordinate for map4
+										{Vector2f(0.f, 500.f),     //Cordination for map4
 										Vector2f(600.f, 500.f),
 										Vector2f(600.f, 700.f),
 										Vector2f(1200.f, 700.f),
 										Vector2f(1200.f, 400.f),
-										Vector2f(1920.f, 400.f)}
+										Vector2f(1920.f, 400.f) }
 	};
 
 	CMovement() {}
-	CMovement(const Vector2f& p, const float& v)
-		: position(p), speed(v) {}
+	CMovement(const float& v)
+		: speed(v) {}
 };
 
 struct CSet
