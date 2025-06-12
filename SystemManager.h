@@ -2,96 +2,81 @@
 
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
-
+#include "System.h"
+#include "Components.h"
+#include "ComponentManager.h"
+#include <unordered_map>
 #include <iostream>
 
 using namespace std;
 using namespace sf;
 
-void sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
+class SystemManager
 {
-	if (entity->cSet)
+
+private:
+	// Map from system type string pointer to a signature
+	std::unordered_map<const char*, cmpAux::Signature> mSignatures{};
+
+	// Map from system type string pointer to a system pointer
+	std::unordered_map<const char*, std::shared_ptr<System>> mSystems{};
+
+public:
+	template<typename T>
+	std::shared_ptr<T> RegisterSystem()
 	{
-		entity->cSet->CurrImg.y = entity->cSet->row;
-		entity->cSet->totalTime += deltaTime;
+		const char* typeName = typeid(T).name();
 
-		if (entity->cSet->totalTime >= entity->cSet->switchTime)
+		assert(mSystems.find(typeName) == mSystems.end() && "Registering system more than once.");
+
+		// Create a pointer to the system and return it so it can be used externally
+		auto system = std::make_shared<T>();
+		mSystems.insert({ typeName, system });
+		return system;
+	}
+
+	template<typename T>
+	void SetSignature(cmpAux::Signature signature)
+	{
+		const char* typeName = typeid(T).name();
+
+		assert(mSystems.find(typeName) != mSystems.end() && "System used before registered.");
+
+		// Set the signature for this system
+		mSignatures.insert({ typeName, signature });
+	}
+
+	void EntityDestroyed(Entity entity)
+	{
+		// Erase a destroyed entity from all system lists
+		// mEntities is a set so no check needed
+		for (auto const& pair : mSystems)
 		{
-			entity->cSet->totalTime -= entity->cSet->switchTime;
-			entity->cSet->CurrImg.x++;
+			auto const& system = pair.second;
 
-			if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
-				entity->cSet->CurrImg.x = 0;
+			system->mEntities.erase(entity);
 		}
-
-		entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
-		entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
 	}
-	else
-	{
-		cout << "Components are nullptr" << endl;
-	}
-}
 
-void sMovement(vector<shared_ptr<Entity>>& entities, float& deltaTime, const int& mapIndex)
-{
-	for (auto& entity : entities)
+	void EntitySignatureChanged(Entity entity, Signature entitySignature)
 	{
-		if (entity->cMovement && entity->cSet)
+		// Notify each system that an entity's signature changed
+		for (auto const& pair : mSystems)
 		{
-			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[mapIndex].size())
-				return;
+			auto const& type = pair.first;
+			auto const& system = pair.second;
+			auto const& systemSignature = mSignatures[type];
 
-			Vector2f target = entity->cMovement->paths[mapIndex][entity->cMovement->currentPathindex];
-			Vector2f direction = target - entity->cMovement->position;
-
-			float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-
-			if (distance < 1.f) {
-				entity->cMovement->currentPathindex++;
-				if (entity->cMovement->currentPathindex >= entity->cMovement->paths[mapIndex].size()) {
-					// At the finish (minusHealth())
-				}
-
-				target = entity->cMovement->paths[mapIndex][entity->cMovement->currentPathindex];
-				direction = target - entity->cMovement->position;
-				distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+			// Entity signature matches system signature - insert into set
+			if ((entitySignature & systemSignature) == systemSignature)
+			{
+				system->mEntities.insert(entity);
 			}
-
-			Vector2f movement(0.f, 0.f);
-
-			if (distance > 0) {
-				movement = direction / distance;
+			// Entity signature does not match system signature - erase from set
+			else
+			{
+				system->mEntities.erase(entity);
 			}
-
-			entity->cMovement->position += movement * entity->cMovement->speed * deltaTime;
-
-			sAnimation(entity, deltaTime);
-
-			entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
-
-			entity->cSet->sprite.setPosition(entity->cMovement->position);
-		}
-		else
-		{
-			cout << "Components are nullptr" << endl;
 		}
 	}
-}
-
-void sDraw(vector<shared_ptr<Entity>>& entities, RenderWindow& window)
-{
-	for (auto& entity : entities)
-	{
-		window.draw(entity->cSet->sprite);
-	}
-}
-
-void sUpdate(vector<shared_ptr<Entity>>& entities, RenderWindow& window, float& DeltaTime, const int& mapIndex)
-{
-	sMovement(entities, DeltaTime, mapIndex);
-	sDraw(entities, window);
-}
-
-void sDestory();
-void sCollide();
+};

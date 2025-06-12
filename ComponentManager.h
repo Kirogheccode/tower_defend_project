@@ -2,19 +2,124 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-
+#include <map>
+#include <unordered_map>
 using namespace std;
 using namespace sf;
 
+
+class ComponentManager
+{
+
+private:
+	// Map from type string pointer to a component type
+	std::unordered_map<const char*, cmpAux::ComponentType> mComponentTypes{};
+
+	// Map from type string pointer to a component array
+	std::unordered_map<const char*, std::shared_ptr<IComponentArray>> mComponentArrays{};
+
+	// The component type to be assigned to the next registered component - starting at 0
+	cmpAux::ComponentType mNextComponentType{};
+
+	// Convenience function to get the statically casted pointer to the ComponentArray of type T.
+	template<typename T>
+	std::shared_ptr<ComponentArray<T>> GetComponentArray()
+	{
+		const char* typeName = typeid(T).name();
+
+		assert(mComponentTypes.find(typeName) != mComponentTypes.end() && "Component not registered before use.");
+
+		return std::static_pointer_cast<ComponentArray<T>>(mComponentArrays[typeName]);
+	}
+
+public:
+	template<typename T>
+	void RegisterComponent()
+	{
+		const char* typeName = typeid(T).name();
+
+		assert(mComponentTypes.find(typeName) == mComponentTypes.end() && "Registering component type more than once.");
+
+		// Add this component type to the component type map
+		mComponentTypes.insert({ typeName, mNextComponentType });
+
+		// Create a ComponentArray pointer and add it to the component arrays map
+		mComponentArrays.insert({ typeName, std::make_shared<ComponentArray<T>>() });
+
+		// Increment the value so that the next component registered will be different
+		++mNextComponentType;
+	}
+
+	template<typename T>
+	cmpAux::ComponentType GetComponentType()
+	{
+		const char* typeName = typeid(T).name();
+
+		assert(mComponentTypes.find(typeName) != mComponentTypes.end() && "Component not registered before use.");
+
+		// Return this component's type - used for creating signatures
+		return mComponentTypes[typeName];
+	}
+
+	template<typename T>
+	void AddComponent(Entity entity, T component)
+	{
+		// Add a component to the array for an entity
+		GetComponentArray<T>()->InsertData(entity, component);
+	}
+
+	template<typename T>
+	void RemoveComponent(Entity entity)
+	{
+		// Remove a component from the array for an entity
+		GetComponentArray<T>()->RemoveData(entity);
+	}
+
+	template<typename T>
+	T& GetComponent(Entity entity)
+	{
+		// Get a reference to a component from the array for an entity
+		return GetComponentArray<T>()->GetData(entity);
+	}
+
+	void EntityDestroyed(Entity entity)
+	{
+		// Notify each component array that an entity has been destroyed
+		// If it has a component for that entity, it will remove it
+		for (auto const& pair : mComponentArrays)
+		{
+			auto const& component = pair.second;
+
+			component->EntityDestroyed(entity);
+		}
+	}
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 struct CHealth
 {
-	int hp = 0;
+	int hp;
 
-	CHealth() {};
-	CHealth(const int& h)
-	{
-		hp = h;
-	}
+	CHealth() : hp(0) {};
+	CHealth(const int& h) : hp(h) {};
 };
 
 struct CMovement
@@ -99,3 +204,80 @@ struct CSet
 		uvRect.height = texture.getSize().y / float(ImgCount.y);
 	}
 };
+
+
+// ### for enemy 
+
+enum class EnemyType : uint8_t { None, TypeA, TypeB, TypeC };
+
+struct CEnemyBase 
+{
+	EnemyType type = EnemyType::None; // Default to None
+	float spawnTime = 0.0f;
+	int reward = 10;
+};
+
+
+class AbstractEnemyDescriptor 
+{
+public:
+	virtual void BuildComponents(Entity& entity) = 0;
+	virtual void ConfigureMovement(CMovement& movement) = 0;
+	virtual void ConfigureVisuals(CSet& visuals) = 0;
+};
+
+// Example implementation for TypeA
+class TypeAEnemyDescriptor : public AbstractEnemyDescriptor {
+public:
+	void BuildComponents(Entity& entity) override 
+	{
+		entity.addComponent<CEnemyBase> (EnemyType::TypeA, GetCurrentTime(), 25);
+        // Fix for E0254: type name is not allowed  
+        // Add a constructor to CEnemyBase to allow initialization with parameters.  
+        struct CEnemyBase  
+        {  
+									EnemyType type = EnemyType::None; // Default to None  
+									float spawnTime = 0.0f;  
+									int reward = 10;  
+
+									CEnemyBase() {}  
+									CEnemyBase(EnemyType t, float sTime, int r) : type(t), spawnTime(sTime), reward(r) {}  
+        };  
+
+        // Fix for E0020: identifier "GetCurrentTime" is undefined  
+        // Add a function to retrieve the current time.  
+        inline float GetCurrentTime()  
+        {  
+									// Example implementation: return elapsed time in seconds.  
+									// Replace with your actual time retrieval logic if needed.  
+									return static_cast<float>(clock()) / CLOCKS_PER_SEC;  
+        }
+		//entity.AddComponent<CSpecialAbility>(); 
+	}
+
+	void ConfigureMovement(CMovement& movement) override {
+		movement.speed = 150.f;
+		movement.paths = { /* TypeA-specific paths */ };
+	}
+
+	void ConfigureVisuals(CSet& visuals) override {
+		visuals.texture.loadFromFile("typeA_enemy.png");
+		visuals.ImgCount = Vector2u(6, 2);
+	}
+};
+
+
+class EnemyFactory {
+public:
+	static Entity CreateEnemy(const AbstractEnemyDescriptor& descriptor) {
+		Entity enemy("Enemy", GenerateID());
+
+		// Apply descriptor-defined configuration
+		descriptor.BuildComponents(enemy);
+		descriptor.ConfigureMovement(*enemy.cMovement);
+		descriptor.ConfigureVisuals(*enemy.cSet);
+
+		return enemy;
+	}
+};
+

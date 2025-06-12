@@ -145,20 +145,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="button.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="ComponentsArray.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="EntityManager.h" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="EventManager.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="main1.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="screen.cpp" />
     <ClCompile Include="screen.h" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="System.cpp" />
     <ClCompile Include="SystemManager.h" />
-    <ClCompile Include="Tower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="IMGS\back.png" />
@@ -239,18 +241,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="ComponentManager.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Components.h" />
+    <ClInclude Include="ComponentsArray.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventManager.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameState.h" />
-    <ClInclude Include="Map.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="sound.h" />
-    <ClInclude Include="Tower.h" />
+    <ClInclude Include="System.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="playername.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="tower_defend_project.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
