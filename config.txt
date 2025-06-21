@@ -1,2 +1,25 @@
+# Load window format: <Name> <Width> <Height> <FPS> <FullScreen>
+
 TowerDenfense 1920 1080 60 0
+
+
+# Load bullet format: <Filepath> <Damage> <Speed>
+
 bullet.png 50 100
+
+
+# Load enemy format: <Filepath> <HP> <Speed> <Money>
+
+IMGS/Skeleton_01_White_Walk.png 100 80 100
+
+IMGS/Skeleton_01_White_Walk.png 100 80 100
+
+IMGS/Skeleton_01_White_Walk.png 100 80 100
+
+
+# Wave format: <WaveNumber> <MapIndex> <EnemyType1> <EnemyType2> <EnemyType3>
+
+WAVE 1 0 10 5 0
+WAVE 2 0 15 10 3
+WAVE 1 1 20 0 0
+WAVE 2 1 10 10 10

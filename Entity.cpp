@@ -21,7 +21,12 @@ const size_t& Entity::id() const
 	return m_id;
 }
 
+void Entity::active(const bool& A)
+{
+	m_active = A;
+}
+
 void Entity::destroy()
 {
-	//
+	m_active = false;
 }

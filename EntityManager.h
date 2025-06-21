@@ -25,7 +25,12 @@ class EntityManager
 public: 
 	EntityManager();
 	void update();
+
+	void removeDeadEntites(EntityVec& Vec);
+
 	shared_ptr<Entity> addEntity(const string& tag);
+
 	EntityVec& getEntites();
+
 	EntityVec& getEntites(const string& tag);
 };

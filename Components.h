@@ -22,10 +22,10 @@ struct CMovement
 	float speed = 0;
 	unsigned int currentPathindex = 0;
 
-	vector<Vector2f> position = { Vector2f(500.f, 500.f),         //Starting position for map 1
-								  Vector2f(500.f, 500.f),         //Starting position for map 2
-								  Vector2f(500.f, 500.f),         //Starting position for map 3
-								  Vector2f(500.f, 500.f)          //Starting position for map 4
+	vector<Vector2f> starting_pos = { Vector2f(500.f, 500.f),           //Starting position for map 1
+								  Vector2f(500.f, 500.f),			    //Starting position for map 2
+								  Vector2f(500.f, 500.f),			    //Starting position for map 3
+								  Vector2f(500.f, 500.f)			    //Starting position for map 4
 	};
 
 	vector<vector<Vector2f>> paths = { {Vector2f(0.f, 500.f),     //Cordination for map1
@@ -62,6 +62,14 @@ struct CMovement
 		: speed(v) {}
 };
 
+struct CPosition
+{
+	Vector2f postion;
+
+	CPosition() {}
+	CPosition(const Vector2f& A) : postion(A) {}
+};
+
 struct CSet
 {
 	Texture texture;
@@ -90,7 +98,7 @@ struct CSet
 		sprite.setTexture(texture);
 		if (sprite.getTextureRect().width == 0 || sprite.getTextureRect().height == 0)
 		{
-			cout << "Error! Can't load filepath" << endl;
+			cout << "Error! Can't load sprite" << endl;
 			return;
 		}
 	}
@@ -106,7 +114,7 @@ struct CSet
 		sprite.setTexture(texture);
 		if (sprite.getTextureRect().width == 0 || sprite.getTextureRect().height == 0)
 		{
-			cout << "Error! Can't load filepath" << endl;
+			cout << "Error! Can't load sprite" << endl;
 			return;
 		}
 

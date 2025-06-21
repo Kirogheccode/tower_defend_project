@@ -1,4 +1,5 @@
 #include "EntityManager.h"
+#include "Entity.h"
 
 EntityManager::EntityManager() {};
 
@@ -9,15 +10,7 @@ void EntityManager::update()
 		m_entities.push_back(e);
 		m_entityMap[e->tag()].push_back(e);
 	}
-
-	for (auto& e : m_entities)
-	{
-		if (!e->isActive())
-		{
-			e->destroy();
-		}
-	}
-
+	
 	m_toAdd.clear();
 }
 
@@ -37,3 +30,4 @@ EntityVec& EntityManager::getEntites(const string& tag)
 {
 	return m_entityMap[tag];
 }
+

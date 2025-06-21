@@ -8,42 +8,68 @@ Game::Game(const string& config)
 void Game::init(const string& path)
 {
 	ifstream readconfig(path);
+	string line;
 
-	//Reading window info
-	string window_name;
-	unsigned int width = 0;
-	unsigned int height = 0;
-	int frame_limits = 0;
-	bool fullscreen_mode = 0;
+	while (getline(readconfig, line)) {
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		string window_name;
+		unsigned int width, height;
+		int fps, fullscreen;
+		iss >> window_name >> width >> height >> fps >> fullscreen;
+		Uint32 style = fullscreen ? Style::Fullscreen : Style::Default;
+		m_window.create(VideoMode(width, height), window_name, style);
+		m_window.setFramerateLimit(fps);
+		break;
+	}
 
-	readconfig >> window_name >> width >> height >> frame_limits >> fullscreen_mode;
+	while (getline(readconfig, line)) {
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		iss >> m_bulletConfig.filepath >> m_bulletConfig.damage >> m_bulletConfig.speed;
+		break;
+	}
 
-	Uint32 style = fullscreen_mode ? Style::Fullscreen : Style::Default;
 
-	m_window.create(VideoMode(width, height), window_name, style);
-	m_window.setFramerateLimit(frame_limits);
+	while (getline(readconfig, line)) {
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		iss >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed >> m_enemyType1Config.money;
+		break;
+	}
 
-	//Reading bullet info
-	readconfig >> m_bulletConfig.filepath >> m_bulletConfig.damage >> m_bulletConfig.speed;
+	while (getline(readconfig, line)) {
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		iss >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money;
+		break;
+	}
 
-	//Reading Enemy type 1
-	readconfig >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed;
+	while (getline(readconfig, line)) {
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		iss >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money;
+		break;
+	}
 
-	//Reading Enemy type 2
-	readconfig >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed;
+	auto entity = m_scenes[AppState::MainMenu].addEntity("MainMenu");
+	entity->cSet = make_shared<CSet>("IMGS/mainMenu.png");
 
-	//Reading Enemy type 2
-	readconfig >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed;
-
-	auto entity = m_entities.addEntity("MainMenu");
-	entity->cSet = make_shared<CSet>("main_menu.png");
+	entity = m_scenes[AppState::MainMenu].addEntity("PlayButton");
+	entity->cSet = make_shared<CSet>("IMGS/play.png");
+	entity->cPosition = make_shared<CPosition>(Vector2f(1100, 500));
 }
 
 void Game::run()
 {
+	Clock clock;
+
 	while (m_running)
 	{
-		sRenderMenu();
+		float dt = clock.restart().asSeconds();
+
+		sRender();
+		sUserInput();
 
 		m_currentFrame++;
 	}
@@ -107,7 +133,7 @@ void Game::setPause(bool paused)
 //			movement = direction / distance;
 //		}
 //
-//		entity->cMovement->position += movement * entity->cMovement->speed * deltaTime;
+//		entity->cMovement->position[mapIndex] += movement * entity->cMovement->speed * deltaTime;
 //
 //		sAnimation(entity, deltaTime);
 //
@@ -117,54 +143,69 @@ void Game::setPause(bool paused)
 //	}
 //}
 
-void Game::sRenderMenu()
+void Game::sRender()
 {
-	auto entities = m_entities.getEntites("MainMenu");
+	m_window.clear();
 
-	for (auto& entity : entities) 
+	for (auto& e : m_scenes[m_state].getEntites())
 	{
-		m_window.draw(entity->cSet->sprite);
-	}
-}
+		if (e->cSet && e->cPosition)
+			e->cSet->sprite.setPosition(e->cPosition->postion);
 
-void Game::sRenderEnemy()
-{
-	//
+		m_window.draw(e->cSet->sprite);
+	}
+
+	m_window.display();
 }
 
 void Game::sEnemyType1Spawner()
 {
-	auto entity = m_entities.addEntity("EnemyType1");
+	auto entity = m_scenes[AppState::Game].addEntity("EnemyType1");
 	entity->cHealth = make_shared<CHealth>(m_enemyType1Config.hp);
 	entity->cMovement = make_shared<CMovement>(m_enemyType1Config.speed);
-	entity->cSet = make_shared<CSet>("Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
+	entity->cSet = make_shared<CSet>("IMGS/Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
 
 	m_lastEnemySpawnTime = m_currentFrame;
 }
 
 void Game::sEnemyType2Spawner()
 {
-	auto entity = m_entities.addEntity("EnemyType3");
+	auto entity = m_scenes[AppState::Game].addEntity("EnemyType3");
 	entity->cHealth = make_shared<CHealth>(m_enemyType2Config.hp);
 	entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
-	entity->cSet = make_shared<CSet>("Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
+	entity->cSet = make_shared<CSet>("IMGS/Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
 
 	m_lastEnemySpawnTime = m_currentFrame;
 }
 
 void Game::sEnemyType3Spawner()
 {
-	auto entity = m_entities.addEntity("EnemyType3");
+	auto entity = m_scenes[AppState::Game].addEntity("EnemyType3");
 	entity->cHealth = make_shared<CHealth>(m_enemyType3Config.hp);
 	entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
-	entity->cSet = make_shared<CSet>("Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
+	entity->cSet = make_shared<CSet>("IMGS/Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
 
 	m_lastEnemySpawnTime = m_currentFrame;
 }
 
 void Game::sUserInput()
 {
-	//
+	Event event;
+
+	while (m_window.pollEvent(event))
+	{
+		Vector2f mousePos = Vector2f(sf::Mouse::getPosition(m_window));
+
+		if (event.type == Event::Closed)
+		{
+			m_running = false;
+		}
+
+		for (auto& state : m_scenes)
+		{
+			state.second.update();
+		}
+	}
 }
 
 void Game::sCollision()
