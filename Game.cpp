@@ -30,7 +30,6 @@ void Game::init(const string& path)
 		break;
 	}
 
-
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
@@ -79,69 +78,6 @@ void Game::setPause(bool paused)
 {
 	//
 }
-
-//void Game::spawnEnemy();
-
-//void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
-//{
-//	auto entities = m_entities.getEntites("Enemy");
-//
-//	entity->cSet->CurrImg.y = entity->cSet->row;
-//	entity->cSet->totalTime += deltaTime;
-//
-//	if (entity->cSet->totalTime >= entity->cSet->switchTime)
-//	{
-//		entity->cSet->totalTime -= entity->cSet->switchTime;
-//		entity->cSet->CurrImg.x++;
-//
-//		if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
-//			entity->cSet->CurrImg.x = 0;
-//	}
-//
-//	entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
-//	entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
-//}
-//
-//void Game::sMovement(int mapIndex, float& deltaTime)
-//{
-//auto entities = m_entities.getEntites("Enemy");
-//
-//	for (auto& entity : entities)
-//	{
-//		if (entity->cMovement->currentPathindex >= entity->cMovement->paths[mapIndex].size())
-//			return;
-//
-//		Vector2f target = entity->cMovement->paths[mapIndex][entity->cMovement->currentPathindex];
-//		Vector2f direction = target - entity->cMovement->position;
-//
-//		float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-//
-//		if (distance < 1.f) {
-//			entity->cMovement->currentPathindex++;
-//			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[mapIndex].size()) {
-//				// At the finish (minusHealth())
-//			}
-//
-//			target = entity->cMovement->paths[mapIndex][entity->cMovement->currentPathindex];
-//			direction = target - entity->cMovement->position;
-//			distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-//		}
-//
-//		Vector2f movement(0.f, 0.f);
-//
-//		if (distance > 0) {
-//			movement = direction / distance;
-//		}
-//
-//		entity->cMovement->position[mapIndex] += movement * entity->cMovement->speed * deltaTime;
-//
-//		sAnimation(entity, deltaTime);
-//
-//		entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
-//
-//		entity->cSet->sprite.setPosition(entity->cMovement->position);
-//	}
-//}
 
 void Game::sRender()
 {
@@ -192,19 +128,17 @@ void Game::sUserInput()
 {
 	Event event;
 
-	while (m_window.pollEvent(event))
+
+	Vector2f mousePos = Vector2f(sf::Mouse::getPosition(m_window));
+
+	if (event.type == Event::Closed)
 	{
-		Vector2f mousePos = Vector2f(sf::Mouse::getPosition(m_window));
+		m_running = false;
+	}
 
-		if (event.type == Event::Closed)
-		{
-			m_running = false;
-		}
-
-		for (auto& state : m_scenes)
-		{
-			state.second.update();
-		}
+	for (auto& state : m_scenes)
+	{
+		state.second.update();
 	}
 }
 
