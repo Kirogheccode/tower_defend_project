@@ -10,11 +10,11 @@ bullet.png 50 100
 
 # Load enemy format: <Tag> <Filepath> <HP> <Speed> <Money> <Amount>
 
-EnemyType1 IMGS/Skeleton_01_White_Walk.png 100 80 100 1000
+EnemyType1 IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFXSkeleton_01_White_Walk.png 100 80 100 1000
 
-EnemyType2 IMGS/Skeleton_01_White_Walk.png 100 80 100 1000
+EnemyType2 IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFXSkeleton_01_White_Walk.png 100 80 100 1000
 
-EnemyType3 IMGS/Skeleton_01_White_Walk.png 100 80 100 1000
+EnemyType3 IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_With_VFXSkeleton_01_White_Walk.png 100 80 100 1000
 
 
 # Wave format: <WaveNumber> <MapIndex> <EnemyType1> <EnemyType2> <EnemyType3>

@@ -45,7 +45,7 @@ class Game
 	map<AppState, EntityManager> m_scenes;
 	AppState m_state = AppState::MainMenu;
 
-	EntityManager m_entites;
+	EntityManager m_entities;
 
 	int m_currentWave = 0;                                                                  // Keep track of current wave
 	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
@@ -60,9 +60,9 @@ class Game
 	void init(const string& config);
 	void setPause(bool paused); 
 
-	//void sMovement(int mapIndex, float& deltaTime);										//System: Movement update
+	void sMovement(float& deltaTime);										                //System: Movement update
 	void sRender();																			//System: Render / Drawing enemies and menus		
-	//void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						//System: Animation
+	void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						    //System: Animation
 	void sEnemyType1Spawner();																//System: Spawn Enemey Type 1
 	void sEnemyType2Spawner();																//System: Spawn Enemey Type 2
 	void sEnemyType3Spawner();																//System: Spawn Enemey Type 3																
@@ -70,7 +70,6 @@ class Game
 	void sCollision();																		//System: Collision
 
 	void spawnWave();															
-	void spawnBullet(shared_ptr<Entity> entity, const Vector2f& enemy_pos);
 
 public:
 	Game(const string& config);
