@@ -31,6 +31,7 @@ public:
 	shared_ptr<CSet> cSet;
 	shared_ptr<CCollision> cCollision;
 	shared_ptr<CPosition> cPosition;
+	shared_ptr<CInput> cInput;
 
 	bool isActive() const;
 	const string& tag() const;

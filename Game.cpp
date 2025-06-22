@@ -57,6 +57,19 @@ void Game::init(const string& path)
 	entity = m_scenes[AppState::MainMenu].addEntity("PlayButton");
 	entity->cSet = make_shared<CSet>("IMGS/play.png");
 	entity->cPosition = make_shared<CPosition>(Vector2f(1100, 500));
+	entity->cInput = make_shared<CInput>([this]()
+		{
+			m_state = AppState::Game;
+		},
+		[entity]()
+		{
+			entity->cSet->sprite.setColor(sf::Color(200, 200, 200));
+		},
+		[entity]()
+		{
+			entity->cSet->sprite.setColor(sf::Color(255, 255, 255));
+		}
+	);
 }
 
 void Game::run()
@@ -96,51 +109,77 @@ void Game::sRender()
 
 void Game::sEnemyType1Spawner()
 {
-	auto entity = m_scenes[AppState::Game].addEntity("EnemyType1");
-	entity->cHealth = make_shared<CHealth>(m_enemyType1Config.hp);
-	entity->cMovement = make_shared<CMovement>(m_enemyType1Config.speed);
-	entity->cSet = make_shared<CSet>("IMGS/Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
-
-	m_lastEnemySpawnTime = m_currentFrame;
+//
 }
 
 void Game::sEnemyType2Spawner()
 {
-	auto entity = m_scenes[AppState::Game].addEntity("EnemyType3");
-	entity->cHealth = make_shared<CHealth>(m_enemyType2Config.hp);
-	entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
-	entity->cSet = make_shared<CSet>("IMGS/Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
-
-	m_lastEnemySpawnTime = m_currentFrame;
+//
 }
 
 void Game::sEnemyType3Spawner()
 {
-	auto entity = m_scenes[AppState::Game].addEntity("EnemyType3");
-	entity->cHealth = make_shared<CHealth>(m_enemyType3Config.hp);
-	entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
-	entity->cSet = make_shared<CSet>("IMGS/Skeleton_01_White_Walk.png", Vector2u(10, 1), 0.3f, 0);
-
-	m_lastEnemySpawnTime = m_currentFrame;
+//
 }
 
 void Game::sUserInput()
 {
 	Event event;
 
+	Vector2f mousePos = Vector2f(Mouse::getPosition(m_window));
 
-	Vector2f mousePos = Vector2f(sf::Mouse::getPosition(m_window));
-
-	if (event.type == Event::Closed)
+	while (m_window.pollEvent(event))
 	{
-		m_running = false;
+		if (event.type == Event::Closed)
+		{
+			m_running = false;
+		}
+
+		// Check if left mouse is pressed
+		if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+		{
+			for (auto& e : m_scenes[m_state].getEntites())
+			{
+				if (e->cSet && e->cInput)
+				{
+					FloatRect bounds = e->cSet->sprite.getGlobalBounds();
+					if (bounds.contains(mousePos))
+					{
+						e->cInput->onClick();
+					}
+				}
+			}
+		}
 	}
 
+	// Hover detection
+	for (auto& e : m_scenes[m_state].getEntites())
+	{
+		if (e->cSet && e->cInput)
+		{
+			FloatRect bounds = e->cSet->sprite.getGlobalBounds();
+			bool Hovering = bounds.contains(mousePos);
+
+			if (Hovering && !e->cInput->isHovered && e->cInput->onHover)
+			{
+				e->cInput->onHover();
+			}
+			else if (!Hovering && e->cInput->isHovered && e->cInput->offHover)
+			{
+				e->cInput->offHover();
+			}
+
+			e->cInput->isHovered = Hovering;
+		}
+	}
+
+	// Update all entites
 	for (auto& state : m_scenes)
 	{
 		state.second.update();
 	}
 }
+
 
 void Game::sCollision()
 {

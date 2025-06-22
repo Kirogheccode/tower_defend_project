@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <functional>
 
 using namespace std;
 using namespace sf;
@@ -131,3 +132,19 @@ struct CSet
 };
 
 struct CCollision {};
+
+struct CInput
+{
+	function<void()> onClick;
+	function<void()> onHover;
+	function<void()> offHover;
+
+	bool isHovered = false;
+
+	CInput() = default;
+	CInput(function<void()> clickFunc,
+		function<void()> hoverFunc = nullptr,
+		function<void()> unhoverFunc = nullptr)
+		: onClick(clickFunc), onHover(hoverFunc), offHover(unhoverFunc) {
+	}
+};
