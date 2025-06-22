@@ -32,6 +32,7 @@ public:
 	shared_ptr<CCollision> cCollision;
 	shared_ptr<CPosition> cPosition;
 	shared_ptr<CInput> cInput;
+	shared_ptr<CMoney> cMoney;
 
 	bool isActive() const;
 	const string& tag() const;

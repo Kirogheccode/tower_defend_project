@@ -10,14 +10,23 @@
 using namespace std;
 using namespace sf;
 
-enum class AppState { MainMenu, SettingsMenu, Game};
-struct BulletConfig { string filepath; int damage; float speed; };						//Damage, 
-struct EnemyType1Config { string filepath; int hp; float speed; int money; };			//Health, speed, money
-struct EnemyType2Config { string filepath; int hp; float speed; int money; };			//Health, speed, money
-struct EnemyType3Config { string filepath; int hp; float speed; int money; };			//Health, speed, money
+enum class AppState { MainMenu, SettingsMenu, Map1, Map2, Map3};
+
+struct BulletConfig { string filepath; int damage; float speed; };				
+
+struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; };			
+struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; };			
+struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; };
+
 struct TowerType1Config {};
 struct TowerType3Config {};
 struct TowerType2Config {};
+
+struct WaveConfig {
+	int enemyType1Count = 0;
+	int enemyType2Count = 0;
+	int enemyType3Count = 0;
+};
 
 class Game
 {
@@ -31,18 +40,25 @@ class Game
 	TowerType2Config m_towerType2Config;
 	TowerType3Config m_towerType3Config;
 
+	map<int, map<int, WaveConfig>> m_waveConfigs;                                           //m_waveConfigs[map index][wave] = { type1, type2, type3 };
+
 	map<AppState, EntityManager> m_scenes;
 	AppState m_state = AppState::MainMenu;
 
+	EntityManager m_entites;
+
+	int m_currentWave = 0;                                                                  // Keep track of current wave
+	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
 	int m_score = 0;
 	int m_currentFrame = 0;
 	int m_lastEnemySpawnTime = 0;
 
 	bool m_paused = false;
 	bool m_running = true;
+	bool m_finishWave = true;                                                               // If all enemies die -> finishWave = true -> spawnWave() -> finishWave = false -> if all enemies die -> ... 
 
 	void init(const string& config);
-	void setPause(bool paused);
+	void setPause(bool paused); 
 
 	//void sMovement(int mapIndex, float& deltaTime);										//System: Movement update
 	void sRender();																			//System: Render / Drawing enemies and menus		
@@ -53,7 +69,7 @@ class Game
 	void sUserInput();																		//System: User input
 	void sCollision();																		//System: Collision
 
-	void spawnEnemy();															
+	void spawnWave();															
 	void spawnBullet(shared_ptr<Entity> entity, const Vector2f& enemy_pos);
 
 public:

@@ -10,6 +10,7 @@ void Game::init(const string& path)
 	ifstream readconfig(path);
 	string line;
 
+	// Reading window config
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
@@ -23,6 +24,7 @@ void Game::init(const string& path)
 		break;
 	}
 
+	// Reading bullet config
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
@@ -30,36 +32,85 @@ void Game::init(const string& path)
 		break;
 	}
 
+	// Rading enemy config && Pre-loaded enemies
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed >> m_enemyType1Config.money;
+		iss >> m_enemyType1Config.tag >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed >> m_enemyType1Config.money;
+
+		int amount;
+		iss >> amount;
+
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entites.addEntity(m_enemyType1Config.tag);
+			entity->cHealth = make_shared<CHealth>(m_enemyType1Config.hp);
+			entity->cMovement = make_shared<CMovement>(m_enemyType1Config.speed);
+			entity->cMoney = make_shared<CMoney>(m_enemyType1Config.hp);
+		}
+
 		break;
 	}
 
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money;
+		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money;
 		break;
+
+		int amount;
+		iss >> amount;
+
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entites.addEntity(m_enemyType2Config.tag);
+			entity->cHealth = make_shared<CHealth>(m_enemyType2Config.hp);
+			entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
+			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.hp);
+		}
 	}
 
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money;
+		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money;
 		break;
+
+		int amount;
+		iss >> amount;
+
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entites.addEntity(m_enemyType3Config.tag);
+			entity->cHealth = make_shared<CHealth>(m_enemyType3Config.hp);
+			entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
+			entity->cMoney = make_shared<CMoney>(m_enemyType3Config.hp);
+		}
 	}
 
+	while (getline(readconfig, line)) {
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		int wave, mapIndex, type1, type2, type3;
+
+		iss >> wave >> mapIndex >> type1 >> type2 >> type3;
+
+		m_waveConfigs[mapIndex][wave - 1] = { type1 , type2 , type3 };
+	}
+
+	// Pre-loaded backgrounds and buttons
 	auto entity = m_scenes[AppState::MainMenu].addEntity("MainMenu");
 	entity->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+
+	entity = m_scenes[AppState::Map1].addEntity("Map1");
+	entity->cSet = make_shared<CSet>("IMGS/map1.png");
 
 	entity = m_scenes[AppState::MainMenu].addEntity("PlayButton");
 	entity->cSet = make_shared<CSet>("IMGS/play.png");
 	entity->cPosition = make_shared<CPosition>(Vector2f(1100, 500));
 	entity->cInput = make_shared<CInput>([this]()
 		{
-			m_state = AppState::Game;
+			m_state = AppState::Map1;
 		},
 		[entity]()
 		{
@@ -70,6 +121,8 @@ void Game::init(const string& path)
 			entity->cSet->sprite.setColor(sf::Color(255, 255, 255));
 		}
 	);
+
+	
 }
 
 void Game::run()
@@ -105,21 +158,6 @@ void Game::sRender()
 	}
 
 	m_window.display();
-}
-
-void Game::sEnemyType1Spawner()
-{
-//
-}
-
-void Game::sEnemyType2Spawner()
-{
-//
-}
-
-void Game::sEnemyType3Spawner()
-{
-//
 }
 
 void Game::sUserInput()
@@ -186,9 +224,29 @@ void Game::sCollision()
 	//
 }
 
-void Game::spawnEnemy()
+void Game::spawnWave()
 {
-	//
+	if (m_finishWave == true)
+	{
+		WaveConfig& waveConfig = m_waveConfigs[m_mapindex][m_currentWave];
+
+		for (int i = 0; i < waveConfig.enemyType1Count; i++)
+		{
+			//
+		}
+
+		for (int i = 0; i < waveConfig.enemyType2Count; i++)
+		{
+			//
+		}
+
+		for (int i = 0; i < waveConfig.enemyType3Count; i++)
+		{
+			//
+		}
+	}
+
+	m_finishWave = false;
 }
 
 void Game::spawnBullet(shared_ptr<Entity> entity, const Vector2f& enemy_pos)

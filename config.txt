@@ -8,13 +8,13 @@ TowerDenfense 1920 1080 60 0
 bullet.png 50 100
 
 
-# Load enemy format: <Filepath> <HP> <Speed> <Money>
+# Load enemy format: <Tag> <Filepath> <HP> <Speed> <Money> <Amount>
 
-IMGS/Skeleton_01_White_Walk.png 100 80 100
+EnemyType1 IMGS/Skeleton_01_White_Walk.png 100 80 100 1000
 
-IMGS/Skeleton_01_White_Walk.png 100 80 100
+EnemyType2 IMGS/Skeleton_01_White_Walk.png 100 80 100 1000
 
-IMGS/Skeleton_01_White_Walk.png 100 80 100
+EnemyType3 IMGS/Skeleton_01_White_Walk.png 100 80 100 1000
 
 
 # Wave format: <WaveNumber> <MapIndex> <EnemyType1> <EnemyType2> <EnemyType3>

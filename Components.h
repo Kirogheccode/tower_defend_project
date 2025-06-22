@@ -7,6 +7,17 @@
 using namespace std;
 using namespace sf;
 
+struct CMoney
+{
+	int money = 0;
+
+	CMoney() {};
+	CMoney(const int& m)
+	{
+		money = m;
+	}
+};
+
 struct CHealth
 {
 	int hp = 0;
@@ -23,10 +34,10 @@ struct CMovement
 	float speed = 0;
 	unsigned int currentPathindex = 0;
 
-	vector<Vector2f> starting_pos = { Vector2f(500.f, 500.f),           //Starting position for map 1
-								  Vector2f(500.f, 500.f),			    //Starting position for map 2
-								  Vector2f(500.f, 500.f),			    //Starting position for map 3
-								  Vector2f(500.f, 500.f)			    //Starting position for map 4
+	vector<Vector2f> starting_pos = { Vector2f(500.f, 500.f),               //Starting position for map 1
+								      Vector2f(500.f, 500.f),			    //Starting position for map 2
+								      Vector2f(500.f, 500.f),			    //Starting position for map 3
+								      Vector2f(500.f, 500.f)			    //Starting position for map 4
 	};
 
 	vector<vector<Vector2f>> paths = { {Vector2f(0.f, 500.f),     //Cordination for map1
