@@ -275,7 +275,7 @@ void Game::spawnWave()
 {
 	if (m_finishWave == true)
 	{
-		WaveConfig& waveConfig = m_waveConfigs[m_mapindex][m_currentWave];
+		WaveConfig& waveConfig = m_waveConfigs[m_mapindex][m_currentWave++];
 
 		EntityVec& enemies1 = m_entities.getEntites(m_enemyType1Config.tag);
 		int spawned1 = 0;
