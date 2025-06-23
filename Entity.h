@@ -11,9 +11,6 @@
 using namespace std;
 using namespace sf;
 
-const size_t MaxEntities = 5000;
-const size_t MaxComponents = 32;
-
 class EntityManager;
 
 class Entity

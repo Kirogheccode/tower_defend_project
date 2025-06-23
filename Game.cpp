@@ -128,6 +128,24 @@ void Game::init(const string& path)
 			entity->cSet->sprite.setColor(sf::Color(255, 255, 255));
 		}
 	);
+
+	entity = m_scenes[AppState::MainMenu].addEntity("SettingButton");
+	entity->cSet = make_shared<CSet>("IMGS/exit.png");
+	entity->cPosition = make_shared<CPosition>(Vector2f(1100, 700));
+	entity->cInput = make_shared<CInput>([this]()
+		{
+			m_mapindex = 1;
+			m_state = AppState::Map2;
+		},
+		[entity]()
+		{
+			entity->cSet->sprite.setColor(sf::Color(200, 200, 200));
+		},
+		[entity]()
+		{
+			entity->cSet->sprite.setColor(sf::Color(255, 255, 255));
+		}
+	);
 }
 
 void Game::run()
@@ -144,7 +162,6 @@ void Game::run()
 
 		if (m_state == AppState::Map1 || m_state == AppState::Map2 || m_state == AppState::Map3)
 		{
-			cout << "Hi" << endl;
 			spawnWave();
 		}
 
@@ -202,6 +219,7 @@ void Game::sUserInput()
 				{
                     m_entities.update();
 					FloatRect bounds = e->cSet->sprite.getGlobalBounds();
+
 					if (bounds.contains(mousePos))
 					{
 						e->cInput->onClick();
