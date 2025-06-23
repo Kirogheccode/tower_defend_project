@@ -61,10 +61,7 @@ class Game
 
 	void sMovement(float& deltaTime);										                //System: Movement update
 	void sRender();																			//System: Render / Drawing enemies and menus		
-	void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						    //System: Animation
-	void sEnemyType1Spawner();																//System: Spawn Enemey Type 1
-	void sEnemyType2Spawner();																//System: Spawn Enemey Type 2
-	void sEnemyType3Spawner();																//System: Spawn Enemey Type 3																
+	void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						    //System: Animation													
 	void sUserInput();																		//System: User input
 	void sCollision();																		//System: Collision
 
