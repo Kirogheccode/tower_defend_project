@@ -72,6 +72,8 @@ void Game::init(const string& path)
 			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.hp);
 			entity->cPosition = make_shared<CPosition>(entity->cMovement->starting_pos[m_mapindex]);
 		}
+		 
+		break;
 	}
 
 	while (getline(readconfig, line)) {
@@ -92,6 +94,8 @@ void Game::init(const string& path)
 			entity->cMoney = make_shared<CMoney>(m_enemyType3Config.hp);
 			entity->cPosition = make_shared<CPosition>(entity->cMovement->starting_pos[m_mapindex]);
 		}
+
+		break;
 	}
 
 	while (getline(readconfig, line)) {
@@ -102,6 +106,8 @@ void Game::init(const string& path)
 		iss >> wave >> mapIndex >> type1 >> type2 >> type3;
 
 		m_waveConfigs[mapIndex][wave - 1] = { type1 , type2 , type3 };
+
+		break;
 	}
 
 	// Pre-loaded backgrounds and buttons

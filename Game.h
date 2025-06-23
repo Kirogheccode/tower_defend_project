@@ -54,7 +54,7 @@ class Game
 
 	bool m_paused = false;
 	bool m_running = true;
-	bool m_finishWave = true;                                                               // If all enemies die -> finishWave = true -> spawnWave() -> finishWave = false -> if all enemies die -> ... 
+	bool m_finishWave = true;                                                               // m_finishWave = true -> spawnWave() -> m_fnishWave = false -> If all enemies die -> finishWave = true -> spawnWave() -> finishWave = false -> if all enemies die -> ... 
 
 	void init(const string& config);
 	void setPause(bool paused); 
