@@ -229,6 +229,7 @@
     <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-2.png" />
     <Image Include="IMGS\Slime 32x25\Individual Sprites\slime-move-3.png" />
     <Image Include="IMGS\Slime 32x25\slime-Sheet.png" />
+    <Image Include="IMGS\TowerSelectButton.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components.h" />

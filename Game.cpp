@@ -109,13 +109,72 @@ void Game::init(const string& path)
 
 		break;
 	}
-
+	readconfig.close();
 	// Pre-loaded backgrounds and buttons
 	auto entity = m_scenes[AppState::MainMenu].addEntity("MainMenu");
 	entity->cSet = make_shared<CSet>("IMGS/mainMenu.png");
 
 	entity = m_scenes[AppState::Map1].addEntity("Map1");
 	entity->cSet = make_shared<CSet>("IMGS/map1.png");
+
+	entity = m_scenes[AppState::Map1].addEntity("SelectButton");
+	entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
+	entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
+	entity->cInput = make_shared<CInput>([this]()
+		{
+			
+			m_state1 = AppState::TowerSelect;
+		},
+		[entity]()
+		{
+			
+			entity->cSet->sprite.setColor(Color(200, 200, 200));
+		},
+		[entity]()
+		{
+			entity->cSet->sprite.setColor(Color(255, 255, 255));
+		}
+	);
+	entity = m_scenes[AppState::TowerSelect].addEntity("SelectingBar");
+	entity->cSet = make_shared<CSet>("IMGS/SelectingBar1.png");
+	entity->cPosition = make_shared<CPosition>(Vector2f(1720, 0));
+
+	entity = m_scenes[AppState::TowerSelect].addEntity("Tower1Button");
+	entity->cSet = make_shared<CSet>("IMGS/Tower1Button.png");
+	entity->cPosition = make_shared<CPosition>(Vector2f(1735, 30));
+	entity->cInput = make_shared<CInput>([this]()
+		{
+			m_state2 = AppState::TowerPlace;
+		},
+		[entity]()
+		{
+
+			entity->cSet->sprite.setColor(Color(200, 200, 200));
+		},
+		[entity]()
+		{
+			entity->cSet->sprite.setColor(Color(255, 255, 255));
+		}
+	);
+
+	entity = m_scenes[AppState::TowerSelect].addEntity("Tower2Button");
+	entity->cSet = make_shared<CSet>("IMGS/Tower2Button.png");
+	entity->cPosition = make_shared<CPosition>(Vector2f(1825, 30));
+	entity->cInput = make_shared<CInput>([this]()
+		{
+			m_state2 = AppState::TowerPlace;
+		},
+		[entity]()
+		{
+
+			entity->cSet->sprite.setColor(Color(200, 200, 200));
+		},
+		[entity]()
+		{
+			entity->cSet->sprite.setColor(Color(255, 255, 255));
+		}
+	);
+
 
 	entity = m_scenes[AppState::MainMenu].addEntity("PlayButton");
 	entity->cSet = make_shared<CSet>("IMGS/play.png");
@@ -127,11 +186,11 @@ void Game::init(const string& path)
 		},
 		[entity]()
 		{
-			entity->cSet->sprite.setColor(sf::Color(200, 200, 200));
+			entity->cSet->sprite.setColor(Color(200, 200, 200));
 		},
 		[entity]()
 		{
-			entity->cSet->sprite.setColor(sf::Color(255, 255, 255));
+			entity->cSet->sprite.setColor(Color(255, 255, 255));
 		}
 	);
 
@@ -145,11 +204,11 @@ void Game::init(const string& path)
 		},
 		[entity]()
 		{
-			entity->cSet->sprite.setColor(sf::Color(200, 200, 200));
+			entity->cSet->sprite.setColor(Color(200, 200, 200));
 		},
 		[entity]()
 		{
-			entity->cSet->sprite.setColor(sf::Color(255, 255, 255));
+			entity->cSet->sprite.setColor(Color(255, 255, 255));
 		}
 	);
 }
@@ -157,13 +216,19 @@ void Game::init(const string& path)
 void Game::run()
 {
 	Clock clock;
-
+	
 	while (m_running)
 	{
 		float dt = clock.restart().asSeconds();
-
+		for (auto& e : m_scenes[m_state].getEntites())
+		{
+			if (e->cSet->isDynamic)
+			{
+				e->cSet->Update(dt);
+			}
+		}
 		sRender();
-		sMovement(dt);
+		//sMovement(dt);
 		sUserInput();
 
 		if (m_state == AppState::Map1 || m_state == AppState::Map2 || m_state == AppState::Map3)
@@ -183,15 +248,6 @@ void Game::setPause(bool paused)
 void Game::sRender()
 {
 	m_window.clear();
-
-	for (auto& e : m_entities.getEntites())
-	{
-		if (e->isActive())
-		{
-			m_window.draw(e->cSet->sprite);
-		}
-	}
-
 	for (auto& e : m_scenes[m_state].getEntites())
 	{
 		if (e->cSet && e->cPosition)
@@ -199,7 +255,16 @@ void Game::sRender()
 
 		m_window.draw(e->cSet->sprite);
 	}
+	if (m_state1 == AppState::TowerSelect)
+	{
+		for (auto& e : m_scenes[m_state1].getEntites())
+		{
+			if (e->cSet && e->cPosition)
+				e->cSet->sprite.setPosition(e->cPosition->position);
 
+			m_window.draw(e->cSet->sprite);
+		}
+	}
 	m_window.display();
 }
 
@@ -207,61 +272,145 @@ void Game::sUserInput()
 {
 	Event event;
 
-	Vector2f mousePos = Vector2f(Mouse::getPosition(m_window));
-
+	/*Vector2f mousePos = Vector2f(Mouse::getPosition(m_window));*/
+	Vector2f mousePos = m_window.mapPixelToCoords(Mouse::getPosition(m_window));
 	while (m_window.pollEvent(event))
 	{
 		if (event.type == Event::Closed)
 		{
 			m_running = false;
 		}
-
 		// Check if left mouse is pressed
 		if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 		{
-			for (auto& e : m_scenes[m_state].getEntites())
+			if (m_state1 == AppState::Dummy)
 			{
-				if (e->cSet && e->cInput)
+				for (auto& e : m_scenes[m_state].getEntites())
 				{
-                    m_entities.update();
-					FloatRect bounds = e->cSet->sprite.getGlobalBounds();
-
-					if (bounds.contains(mousePos))
+					if (e->cSet && e->cInput)
 					{
-						e->cInput->onClick();
+						FloatRect bounds = e->cSet->sprite.getGlobalBounds();
+
+						if (bounds.contains(mousePos))
+						{
+							e->cInput->onClick();
+						}
 					}
+				}
+			}
+			else
+			{
+				if (m_state2 == AppState::TowerPlace)
+				{
+					for (auto& e : m_scenes[m_state2].getEntites())
+					{
+
+						if (!(e->isActive()))
+						{
+
+							if (e->tag() == "Tower1Button")
+							{
+								auto entity = m_scenes[m_state].addEntity("Tower1");
+								entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower1.png", Vector2u(11, 1), 0.3f, 0);
+								entity->cPosition = make_shared<CPosition>(mousePos);
+
+							}
+							else if (e->tag() == "Tower2Button")
+							{
+								auto entity = m_scenes[m_state].addEntity("Tower2");
+								entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower2.png", Vector2u(8, 1), 0.3f, 0);
+								entity->cPosition = make_shared<CPosition>(mousePos);
+							}
+							e->active(true);
+
+						}
+
+					}
+					m_state2 = AppState::Dummy;
+				}
+				else
+				{
+					bool isOutSide = true;
+					for (auto& e : m_scenes[m_state1].getEntites())
+					{
+						if (e->cSet)
+						{
+							FloatRect bounds = e->cSet->sprite.getGlobalBounds();
+
+							if (bounds.contains(mousePos))
+							{
+								if (e->cInput)
+								{
+									e->cInput->onClick();
+									string tag = e->tag();
+									auto entity = m_scenes[m_state2].addEntity(tag);
+								}
+
+								isOutSide = false;
+							}
+						}
+					}
+					if (isOutSide)
+						m_state1 = AppState::Dummy;
 				}
 			}
 		}
 	}
 
 	// Hover detection
-	for (auto& e : m_scenes[m_state].getEntites())
+	if (m_state1 == AppState::Dummy)
 	{
-		if (e->cSet && e->cInput)
+		for (auto& e : m_scenes[m_state].getEntites())
 		{
-			FloatRect bounds = e->cSet->sprite.getGlobalBounds();
-			bool Hovering = bounds.contains(mousePos);
-
-			if (Hovering && !e->cInput->isHovered && e->cInput->onHover)
+			if (e->cSet && e->cInput)
 			{
-				e->cInput->onHover();
-			}
-			else if (!Hovering && e->cInput->isHovered && e->cInput->offHover)
-			{
-				e->cInput->offHover();
-			}
+				FloatRect bounds = e->cSet->sprite.getGlobalBounds();
+				bool Hovering = bounds.contains(mousePos);
 
-			e->cInput->isHovered = Hovering;
+				if (Hovering && !e->cInput->isHovered && e->cInput->onHover)
+				{
+					e->cInput->onHover();
+				}
+				else if (!Hovering && e->cInput->isHovered && e->cInput->offHover)
+				{
+					e->cInput->offHover();
+				}
+
+				e->cInput->isHovered = Hovering;
+			}
 		}
 	}
+	else
+	{
+		if (m_state2 == AppState::Dummy)
+		{
+			for (auto& e : m_scenes[m_state1].getEntites())
+			{
+				if (e->cSet && e->cInput)
+				{
+					FloatRect bounds = e->cSet->sprite.getGlobalBounds();
+					bool Hovering = bounds.contains(mousePos);
 
+					if (Hovering && !e->cInput->isHovered && e->cInput->onHover)
+					{
+						e->cInput->onHover();
+					}
+					else if (!Hovering && e->cInput->isHovered && e->cInput->offHover)
+					{
+						e->cInput->offHover();
+					}
+
+					e->cInput->isHovered = Hovering;
+				}
+			}
+		}
+	}
 	// Update all entites
 	for (auto& state : m_scenes)
 	{
 		state.second.update();
 	}
-	
+
 	m_entities.update();
 }
 
@@ -304,66 +453,66 @@ void Game::spawnWave()
 	m_finishWave = false;
 }
 
-void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
-{
-	entity->cSet->CurrImg.y = entity->cSet->row;
-	entity->cSet->totalTime += deltaTime;
+//void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
+//{
+//	entity->cSet->CurrImg.y = entity->cSet->row;
+//	entity->cSet->totalTime += deltaTime;
+//
+//	if (entity->cSet->totalTime >= entity->cSet->switchTime)
+//	{
+//		entity->cSet->totalTime -= entity->cSet->switchTime;
+//		entity->cSet->CurrImg.x++;
+//
+//		if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
+//		entity->cSet->CurrImg.x = 0;
+//	}
+//
+//	entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
+//	entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
+//}
 
-	if (entity->cSet->totalTime >= entity->cSet->switchTime)
-	{
-		entity->cSet->totalTime -= entity->cSet->switchTime;
-		entity->cSet->CurrImg.x++;
-
-		if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
-		entity->cSet->CurrImg.x = 0;
-	}
-
-	entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
-	entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
-}
-
-void Game::sMovement(float& deltaTime)
-{
-	for (auto& entity : m_entities.getEntites())
-	{
-		if (entity->isActive())
-		{
-			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
-				return;
-
-				Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
-				Vector2f direction = target - entity->cPosition->position;
-
-				float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-
-				if (distance < 1.f)
-				{
-					entity->cMovement->currentPathindex++;
-
-					if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
-					{
-						// At the finish (minusHealth())
-					}
-
-					target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
-					direction = target - entity->cPosition->position;
-					distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-
-				}
-
-			Vector2f movement(0.f, 0.f);
-
-			if (distance > 0) {
-				movement = direction / distance;
-			}
-
-			entity->cPosition->position += movement * entity->cMovement->speed * deltaTime;
-
-			sAnimation(entity, deltaTime);
-
-			entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
-
-			entity->cSet->sprite.setPosition(entity->cPosition->position);
-		}
-	}
-}
+//void Game::sMovement(float& deltaTime)
+//{
+//	for (auto& entity : m_entities.getEntites())
+//	{
+//		if (entity->isActive())
+//		{
+//			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
+//				return;
+//
+//				Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
+//				Vector2f direction = target - entity->cPosition->position;
+//
+//				float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+//
+//				if (distance < 1.f)
+//				{
+//					entity->cMovement->currentPathindex++;
+//
+//					if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
+//					{
+//						// At the finish (minusHealth())
+//					}
+//
+//					target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
+//					direction = target - entity->cPosition->position;
+//					distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+//
+//				}
+//
+//			Vector2f movement(0.f, 0.f);
+//
+//			if (distance > 0) {
+//				movement = direction / distance;
+//			}
+//
+//			entity->cPosition->position += movement * entity->cMovement->speed * deltaTime;
+//
+//			sAnimation(entity, deltaTime);
+//
+//			entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
+//
+//			entity->cSet->sprite.setPosition(entity->cPosition->position);
+//		}
+//	}
+//}

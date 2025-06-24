@@ -81,7 +81,48 @@ struct CPosition
 	CPosition() {}
 	CPosition(const Vector2f& A) : position(A) {}
 };
+struct CAnimation
+{
+	Vector2u ImgCount;
+	Vector2u CurrImg;
 
+	float totalTime = 0.0f;
+	float switchTime = 0.0f;
+
+	IntRect uvRect;
+
+	CAnimation() {}
+	void setAnimation(Texture* texture, Vector2u ImgCount, float switchTime)
+	{
+		this->ImgCount = ImgCount;
+		this->switchTime = switchTime;
+
+		totalTime = 0.0f;
+		CurrImg.x = 0;
+
+		
+		uvRect.width = texture->getSize().x / float(ImgCount.x);
+		uvRect.height = texture->getSize().y / float(ImgCount.y);
+	}
+
+	void Update(int row, float deltaTime)
+	{
+		CurrImg.y = row;
+		totalTime += deltaTime;
+
+		if (totalTime >= switchTime)
+		{
+			totalTime -= switchTime;
+			CurrImg.x++;
+
+			if (CurrImg.x >= ImgCount.x)
+				CurrImg.x = 0;
+		}
+
+		uvRect.top = CurrImg.y * uvRect.height;
+		uvRect.left = CurrImg.x * uvRect.width;
+	}
+};
 struct CSet
 {
 	Texture texture;
@@ -90,10 +131,8 @@ struct CSet
 	Vector2u ImgCount;
 	Vector2u CurrImg;
 
-	float totalTime = 0.0f;
-	float switchTime = 0.0f;
-
-	IntRect uvRect;
+	CAnimation animation;
+	bool isDynamic = false;
 
 	int row = 0;
 
@@ -130,15 +169,16 @@ struct CSet
 			return;
 		}
 
-		this->ImgCount = ImgCount;
-		this->switchTime = switchTime;
+		animation.setAnimation(&texture, ImgCount, switchTime);
+		isDynamic = true;
 		this->row = row;
-
-		totalTime = 0.0f;
-		CurrImg.x = 0;
-
-		uvRect.width = texture.getSize().x / float(ImgCount.x);
-		uvRect.height = texture.getSize().y / float(ImgCount.y);
+		sprite.setOrigin( (texture.getSize().x / ImgCount.x) / 2.f, (texture.getSize().y / ImgCount.y) / 2.f);
+		 
+	}
+	void Update(float& deltaTime)
+	{
+		animation.Update(row, deltaTime);
+		sprite.setTextureRect(animation.uvRect);
 	}
 };
 

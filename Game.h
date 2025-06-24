@@ -10,7 +10,7 @@
 using namespace std;
 using namespace sf;
 
-enum class AppState { MainMenu, SettingsMenu, Map1, Map2, Map3};
+enum class AppState { Dummy, MainMenu, SettingsMenu, Map1, Map2, Map3, TowerSelect, TowerPlace};
 
 struct BulletConfig { string filepath; int damage; float speed; };				
 
@@ -44,6 +44,8 @@ class Game
 
 	map<AppState, EntityManager> m_scenes;
 	AppState m_state = AppState::MainMenu;
+	AppState m_state1 = AppState::Dummy; // For tower selecting
+	AppState m_state2 = AppState::Dummy; // For tower placing
 
 	EntityManager m_entities;
 
