@@ -53,12 +53,13 @@ void Game::init(const string& path)
 
 		break;
 	}
+	cout << m_enemyType1Config.tag <<" "<< m_enemyType1Config.filepath <<" " <<m_enemyType1Config.hp <<" "<< m_enemyType1Config.speed <<" "<< m_enemyType1Config.money<<endl;
 
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money;
-		break;
+		
 
 		int amount;
 		iss >> amount;
@@ -75,12 +76,13 @@ void Game::init(const string& path)
 		 
 		break;
 	}
+	cout << m_enemyType2Config.tag << " " << m_enemyType2Config.filepath << " " << m_enemyType2Config.hp << " " << m_enemyType2Config.speed << " " << m_enemyType2Config.money << endl;
 
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money;
-		break;
+		
 
 		int amount;
 		iss >> amount;
@@ -97,18 +99,22 @@ void Game::init(const string& path)
 
 		break;
 	}
+	cout << m_enemyType3Config.tag << " " << m_enemyType3Config.filepath << " " << m_enemyType3Config.hp << " " << m_enemyType3Config.speed << " " << m_enemyType3Config.money << endl;
+
 
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
+		string skip;
 		int wave, mapIndex, type1, type2, type3;
 
-		iss >> wave >> mapIndex >> type1 >> type2 >> type3;
+		iss >> skip >> wave >> mapIndex >> type1 >> type2 >> type3;
 
 		m_waveConfigs[mapIndex][wave - 1] = { type1 , type2 , type3 };
-
+		cout << skip << " " << wave << " " << mapIndex << " " << type1 << " " << type2 << " " << type3 << endl;
 		break;
 	}
+
 	readconfig.close();
 	// Pre-loaded backgrounds and buttons
 	auto entity = m_scenes[AppState::MainMenu].addEntity("MainMenu");
@@ -144,6 +150,7 @@ void Game::init(const string& path)
 	entity->cPosition = make_shared<CPosition>(Vector2f(1735, 30));
 	entity->cInput = make_shared<CInput>([this]()
 		{
+			m_selected = "Tower1";
 			m_state2 = AppState::TowerPlace;
 		},
 		[entity]()
@@ -162,6 +169,7 @@ void Game::init(const string& path)
 	entity->cPosition = make_shared<CPosition>(Vector2f(1825, 30));
 	entity->cInput = make_shared<CInput>([this]()
 		{
+			m_selected = "Tower2";
 			m_state2 = AppState::TowerPlace;
 		},
 		[entity]()
@@ -174,7 +182,6 @@ void Game::init(const string& path)
 			entity->cSet->sprite.setColor(Color(255, 255, 255));
 		}
 	);
-
 
 	entity = m_scenes[AppState::MainMenu].addEntity("PlayButton");
 	entity->cSet = make_shared<CSet>("IMGS/play.png");
@@ -224,11 +231,10 @@ void Game::run()
 		{
 			if (e->cSet->isDynamic)
 			{
-				e->cSet->Update(dt);
+				sAnimation(e,dt);
 			}
 		}
 		sRender();
-		//sMovement(dt);
 		sUserInput();
 
 		if (m_state == AppState::Map1 || m_state == AppState::Map2 || m_state == AppState::Map3)
@@ -248,6 +254,7 @@ void Game::setPause(bool paused)
 void Game::sRender()
 {
 	m_window.clear();
+	
 	for (auto& e : m_scenes[m_state].getEntites())
 	{
 		if (e->cSet && e->cPosition)
@@ -302,29 +309,17 @@ void Game::sUserInput()
 			{
 				if (m_state2 == AppState::TowerPlace)
 				{
-					for (auto& e : m_scenes[m_state2].getEntites())
+					if (m_selected == "Tower1")
 					{
-
-						if (!(e->isActive()))
-						{
-
-							if (e->tag() == "Tower1Button")
-							{
-								auto entity = m_scenes[m_state].addEntity("Tower1");
-								entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower1.png", Vector2u(11, 1), 0.3f, 0);
-								entity->cPosition = make_shared<CPosition>(mousePos);
-
-							}
-							else if (e->tag() == "Tower2Button")
-							{
-								auto entity = m_scenes[m_state].addEntity("Tower2");
-								entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower2.png", Vector2u(8, 1), 0.3f, 0);
-								entity->cPosition = make_shared<CPosition>(mousePos);
-							}
-							e->active(true);
-
-						}
-
+						auto entity = m_scenes[m_state].addEntity(m_selected);
+						entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower1.png", Vector2u(11, 1), 0.3f, 0);
+						entity->cPosition = make_shared<CPosition>(mousePos);
+					}
+					else if (m_selected == "Tower2")
+					{
+						auto entity = m_scenes[m_state].addEntity(m_selected);
+						entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower2.png", Vector2u(8, 1), 0.3f, 0);
+						entity->cPosition = make_shared<CPosition>(mousePos);
 					}
 					m_state2 = AppState::Dummy;
 				}
@@ -342,10 +337,7 @@ void Game::sUserInput()
 								if (e->cInput)
 								{
 									e->cInput->onClick();
-									string tag = e->tag();
-									auto entity = m_scenes[m_state2].addEntity(tag);
 								}
-
 								isOutSide = false;
 							}
 						}
@@ -453,23 +445,24 @@ void Game::spawnWave()
 	m_finishWave = false;
 }
 
-//void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
-//{
-//	entity->cSet->CurrImg.y = entity->cSet->row;
-//	entity->cSet->totalTime += deltaTime;
-//
-//	if (entity->cSet->totalTime >= entity->cSet->switchTime)
-//	{
-//		entity->cSet->totalTime -= entity->cSet->switchTime;
-//		entity->cSet->CurrImg.x++;
-//
-//		if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
-//		entity->cSet->CurrImg.x = 0;
-//	}
-//
-//	entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
-//	entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
-//}
+void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
+{
+	entity->cSet->CurrImg.y = entity->cSet->row;
+	entity->cSet->totalTime += deltaTime;
+
+	if (entity->cSet->totalTime >= entity->cSet->switchTime)
+	{
+		entity->cSet->totalTime -= entity->cSet->switchTime;
+		entity->cSet->CurrImg.x++;
+
+		if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
+		     entity->cSet->CurrImg.x = 0;
+	}
+
+	entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
+	entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
+	entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
+}
 
 //void Game::sMovement(float& deltaTime)
 //{
