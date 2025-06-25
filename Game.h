@@ -12,6 +12,14 @@ using namespace sf;
 
 enum class AppState { Dummy, MainMenu, SettingsMenu, Map1, Map2, Map3, TowerSelect, TowerPlace};
 
+enum class SpawnStage {
+	None,
+	Type1,
+	Type2,
+	Type3,
+	Done
+};
+
 struct BulletConfig { string filepath; int damage; float speed; };				
 
 struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; };			
@@ -42,6 +50,10 @@ class Game
 
 	map<int, map<int, WaveConfig>> m_waveConfigs;                                           //m_waveConfigs[map index][wave] = { type1, type2, type3 };
 
+	SpawnStage m_spawnStage = SpawnStage::None;
+	float m_spawnTimer = 0.f;
+	float m_spawnDelay = 5.f; // Delay gi?a các ??t spawn
+
 	map<AppState, EntityManager> m_scenes;
 	AppState m_state = AppState::MainMenu;
 	AppState m_state1 = AppState::Dummy; // For tower selecting
@@ -52,6 +64,7 @@ class Game
 	int m_currentWave = 0;                                                                  // Keep track of current wave
 	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
 	int m_score = 0;
+	int m_health = 1000;
 	int m_currentFrame = 0;
 
 	bool m_paused = false;
@@ -62,12 +75,14 @@ class Game
 	void setPause(bool paused); 
 
 	void sMovement(float& deltaTime);										                //System: Movement update
-	void sRender();																			//System: Render / Drawing enemies and menus		
+	void sRender(float& deltaTime);																			//System: Render / Drawing enemies and menus		
 	void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						    //System: Animation													
 	void sUserInput();																		//System: User input
 	void sCollision();																		//System: Collision
 
-	void spawnWave();															
+	void sSpawnWave(float& deltaTime);
+	void sCheckWaveFinished();
+	void spawnEnemyType(int type);
 
 public:
 	Game(const string& config);

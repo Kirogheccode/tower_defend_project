@@ -18,14 +18,11 @@ typedef map<string, EntityVec> EntityMap;
 class EntityManager
 {
 	EntityVec m_entities;
-	EntityVec m_toAdd;
 	EntityMap m_entityMap;
 	size_t m_totalEntites = 0;
 
 public: 
 	EntityManager();
-
-	void update();
 
 	shared_ptr<Entity> addEntity(const string& tag);
 

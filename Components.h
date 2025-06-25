@@ -34,10 +34,10 @@ struct CMovement
 	float speed = 0;
 	unsigned int currentPathindex = 0;
 
-	vector<Vector2f> starting_pos = { Vector2f(500.f, 500.f),               //Starting position for map 1
-								      Vector2f(500.f, 500.f),			    //Starting position for map 2
-								      Vector2f(500.f, 500.f),			    //Starting position for map 3
-								      Vector2f(500.f, 500.f)			    //Starting position for map 4
+	vector<Vector2f> starting_pos = { Vector2f(0.f, 500.f),					//Starting position for map 1
+								      Vector2f(0.f, 500.f),					//Starting position for map 2
+								      Vector2f(0.f, 500.f),					//Starting position for map 3
+								      Vector2f(0.f, 500.f)					//Starting position for map 4
 	};
 
 	vector<vector<Vector2f>> paths = { {Vector2f(0.f, 500.f),     //Cordination for map1
@@ -81,6 +81,7 @@ struct CPosition
 	CPosition() {}
 	CPosition(const Vector2f& A) : position(A) {}
 };
+
 struct CSet
 {
 	Texture texture;
@@ -143,7 +144,8 @@ struct CSet
 		isDynamic = true;
 		this->row = row;
 		sprite.setOrigin( (texture.getSize().x / ImgCount.x) / 2.f, (texture.getSize().y / ImgCount.y) / 2.f);
-		 
+
+		sprite.setTextureRect(uvRect);
 	}
 };
 
