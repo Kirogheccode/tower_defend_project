@@ -57,7 +57,7 @@ void Game::init(const string& path)
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money;
-		
+
 
 		int amount;
 		iss >> amount;
@@ -70,7 +70,7 @@ void Game::init(const string& path)
 			entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.hp);
 		}
-		 
+
 		break;
 	}
 
@@ -78,7 +78,7 @@ void Game::init(const string& path)
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money;
-		
+
 
 		int amount;
 		iss >> amount;
@@ -121,12 +121,12 @@ void Game::init(const string& path)
 	entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
 	entity->cInput = make_shared<CInput>([this]()
 		{
-			
+
 			m_state1 = AppState::TowerSelect;
 		},
 		[entity]()
 		{
-			
+
 			entity->cSet->sprite.setColor(Color(200, 200, 200));
 		},
 		[entity]()
@@ -216,7 +216,7 @@ void Game::init(const string& path)
 void Game::run()
 {
 	Clock clock;
-	
+
 	while (m_running)
 	{
 		float dt = clock.restart().asSeconds();
@@ -235,15 +235,10 @@ void Game::run()
 	}
 }
 
-void Game::setPause(bool paused)
-{
-	//
-}
-
 void Game::sRender(float& deltaTime)
 {
 	m_window.clear();
-	
+
 	for (auto& e : m_scenes[m_state].getEntites())
 	{
 		if (e->cSet && e->cPosition)
@@ -288,7 +283,6 @@ void Game::sUserInput()
 {
 	Event event;
 
-	/*Vector2f mousePos = Vector2f(Mouse::getPosition(m_window));*/
 	Vector2f mousePos = m_window.mapPixelToCoords(Mouse::getPosition(m_window));
 	while (m_window.pollEvent(event))
 	{
@@ -408,6 +402,68 @@ void Game::sUserInput()
 	}
 }
 
+void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
+{
+	entity->cSet->CurrImg.y = entity->cSet->row;
+	entity->cSet->totalTime += deltaTime;
+
+	if (entity->cSet->totalTime >= entity->cSet->switchTime)
+	{
+		entity->cSet->totalTime -= entity->cSet->switchTime;
+		entity->cSet->CurrImg.x++;
+
+		if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
+			entity->cSet->CurrImg.x = 0;
+	}
+
+	entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
+	entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
+	entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
+}
+
+void Game::sMovement(float& deltaTime)
+{
+	for (auto& entity : m_entities.getEntites())
+	{
+		if (entity->isActive())
+		{
+			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
+				continue;
+
+			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
+			Vector2f direction = target - entity->cPosition->position;
+
+			float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+
+			if (distance < 1.f)
+			{
+				entity->cMovement->currentPathindex++;
+
+				if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
+				{
+					m_health -= entity->cHealth->hp;
+					continue;
+				}
+
+				target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
+				direction = target - entity->cPosition->position;
+				distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+			}
+
+			Vector2f movement(0.f, 0.f);
+			if (distance > 0)
+				movement = direction / distance;
+
+			entity->cPosition->position += movement * entity->cMovement->speed * deltaTime;
+
+			sAnimation(entity, deltaTime);
+
+			entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
+			entity->cSet->sprite.setPosition(entity->cPosition->position);
+		}
+	}
+}
+
 void Game::sCollision()
 {
 	//
@@ -456,6 +512,10 @@ void Game::sCheckWaveFinished()
 
 void Game::sSpawnWave(float& deltaTime)
 {
+	bool Type1Finish = false;
+	bool Type2Finish = false;
+	bool Type3Finish = false;
+
 	if (m_spawnStage == SpawnStage::None && m_finishWave)
 	{
 		m_spawnStage = SpawnStage::Type1;
@@ -471,131 +531,105 @@ void Game::sSpawnWave(float& deltaTime)
 
 	m_spawnTimer += deltaTime;
 
-	if (m_spawnTimer < m_spawnDelay) return;
+	cout << m_spawnTimer << endl;
 
-	m_spawnTimer = 0.f;
+	if (m_spawnTimer < m_spawnDelay) return;
 
 	if (m_spawnStage == SpawnStage::Type1)
 	{
-		spawnEnemyType(1);
-		m_spawnStage = SpawnStage::Type2;
+		if (spawnEnemyType(1, deltaTime))
+		{
+			m_spawnStage = SpawnStage::Type2;
+			m_spawnTimer = 0;
+		}
 	}
 	else if (m_spawnStage == SpawnStage::Type2)
 	{
-		spawnEnemyType(2);
-		m_spawnStage = SpawnStage::Type3;
+		if (spawnEnemyType(2, deltaTime))
+		{
+			m_spawnStage = SpawnStage::Type3;
+			m_spawnTimer = 0;
+		}
 	}
 	else if (m_spawnStage == SpawnStage::Type3)
 	{
-		spawnEnemyType(3);
-		m_spawnStage = SpawnStage::Done;
-		m_currentWave++;
+		if (spawnEnemyType(3, deltaTime))
+		{
+			m_spawnStage = SpawnStage::Done;
+			m_currentWave++;
+			m_spawnTimer = 0;
+		}
 	}
 }
 
-void Game::spawnEnemyType(int type)
+bool Game::spawnEnemyType(int type, float& deltaTime)
 {
-	WaveConfig& waveConfig = m_waveConfigs[m_mapindex][m_currentWave];
+	WaveConfig& wave = m_waveConfigs[m_mapindex][m_currentWave];
+
+	m_spawningTimer += deltaTime;
 
 	if (type == 1)
 	{
-		int count = 0;
+		if (m_spawnedType1 >= wave.enemyType1Count) return true;
+
 		for (auto& e : m_entities.getEntites(m_enemyType1Config.tag))
 		{
 			if (!e->isActive())
 			{
+				if (m_spawningTimer < m_spawningDelay) return false;
+
+				m_spawningTimer = 0;
+
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
 				e->active(true);
-				if (++count >= waveConfig.enemyType1Count) break;
+				m_spawnedType1++;
+				break;
 			}
 		}
+		return m_spawnedType1 >= wave.enemyType1Count;
 	}
+
 	else if (type == 2)
 	{
-		int count = 0;
+		if (m_spawnedType2 >= wave.enemyType2Count) return true;
+
 		for (auto& e : m_entities.getEntites(m_enemyType2Config.tag))
 		{
 			if (!e->isActive())
 			{
+				if (m_spawningTimer < m_spawningDelay) return false;
+
+				m_spawningTimer = 0;
+
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
 				e->active(true);
-				if (++count >= waveConfig.enemyType2Count) break;
+				m_spawnedType2++;
+				break;
 			}
 		}
+		return m_spawnedType2 >= wave.enemyType2Count;
 	}
+
 	else if (type == 3)
 	{
-		int count = 0;
+		if (m_spawnedType3 >= wave.enemyType3Count) return true;
+
 		for (auto& e : m_entities.getEntites(m_enemyType3Config.tag))
 		{
 			if (!e->isActive())
 			{
+				if (m_spawningTimer < m_spawningDelay) return false;
+
+				m_spawningTimer = 0;
+
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
 				e->active(true);
-				if (++count >= waveConfig.enemyType3Count) break;
+				m_spawnedType3++;
+				break;
 			}
 		}
-	}
-}
-
-void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
-{
-	entity->cSet->CurrImg.y = entity->cSet->row;
-	entity->cSet->totalTime += deltaTime;
-
-	if (entity->cSet->totalTime >= entity->cSet->switchTime)
-	{
-		entity->cSet->totalTime -= entity->cSet->switchTime;
-		entity->cSet->CurrImg.x++;
-
-		if (entity->cSet->CurrImg.x >= entity->cSet->ImgCount.x)
-		     entity->cSet->CurrImg.x = 0;
+		return m_spawnedType3 >= wave.enemyType3Count;
 	}
 
-	entity->cSet->uvRect.top = entity->cSet->CurrImg.y * entity->cSet->uvRect.height;
-	entity->cSet->uvRect.left = entity->cSet->CurrImg.x * entity->cSet->uvRect.width;
-	entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
-}
-
-void Game::sMovement(float& deltaTime)
-{
-	for (auto& entity : m_entities.getEntites())
-	{
-		if (entity->isActive())
-		{
-			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
-				continue;
-
-			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
-			Vector2f direction = target - entity->cPosition->position;
-
-			float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-
-			if (distance < 1.f)
-			{
-				entity->cMovement->currentPathindex++;
-
-				if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
-				{
-					m_health -= entity->cHealth->hp;
-					continue; 
-				}
-
-				target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
-				direction = target - entity->cPosition->position;
-				distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-			}
-
-			Vector2f movement(0.f, 0.f);
-			if (distance > 0)
-				movement = direction / distance;
-
-			entity->cPosition->position += movement * entity->cMovement->speed * deltaTime;
-
-			sAnimation(entity, deltaTime);
-
-			entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
-			entity->cSet->sprite.setPosition(entity->cPosition->position);
-		}
-	}
+	return true;
 }
