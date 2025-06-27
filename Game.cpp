@@ -108,13 +108,42 @@ void Game::init(const string& path)
 	}
 
 	readconfig.close();
+	vector<Vector2f> towerPlace{
+		Vector2f(420,185),
+		Vector2f(120,538),
+		Vector2f(662,384),
+		Vector2f(963,420),
+		Vector2f(603,589),
+		Vector2f(1020,594),
+		Vector2f(1561,178),
+		Vector2f(1679,415),
+		Vector2f(385,508),
+		Vector2f(253,800),
+		Vector2f(177,181),
+		Vector2f(719,181),
+		Vector2f(1322,181),
+		Vector2f(479,809),
+		Vector2f(1261,924)
+	};
+
+
+
+
 
 	// Pre-loaded backgrounds and buttons
 	auto entity = m_scenes[AppState::MainMenu].addEntity("MainMenu");
 	entity->cSet = make_shared<CSet>("IMGS/mainMenu.png");
 
 	entity = m_scenes[AppState::Map1].addEntity("Map1");
-	entity->cSet = make_shared<CSet>("IMGS/map1.png");
+	entity->cSet = make_shared<CSet>("IMGS/map2.png");
+	for (int i = 0; i < 15; i++)
+	{
+		entity = m_scenes[AppState::Map1].addEntity("Base");
+		entity->cSet = make_shared<CSet>("IMGS/Base.png");
+		entity->cPosition = make_shared<CPosition>(towerPlace[i]);
+		entity->active(true);
+	}
+
 
 	entity = m_scenes[AppState::Map1].addEntity("SelectButton");
 	entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
@@ -248,8 +277,13 @@ void Game::sRender(float& deltaTime)
 		{
 			sAnimation(e, deltaTime);
 		}
-
-		m_window.draw(e->cSet->sprite);
+		if (e->tag() == "Base")
+		{
+			if (e->isActive())
+				m_window.draw(e->cSet->sprite);
+		}
+		else
+			m_window.draw(e->cSet->sprite);
 	}
 
 	if (m_state1 == AppState::TowerSelect)
@@ -258,7 +292,7 @@ void Game::sRender(float& deltaTime)
 		{
 			if (e->cSet && e->cPosition)
 				e->cSet->sprite.setPosition(e->cPosition->position);
-
+			
 			m_window.draw(e->cSet->sprite);
 		}
 	}
@@ -312,17 +346,34 @@ void Game::sUserInput()
 			{
 				if (m_state2 == AppState::TowerPlace)
 				{
-					if (m_selected == "Tower1")
+					bool isValid = false;
+					for (auto& e : m_scenes[m_state].getEntites())
 					{
-						auto entity = m_scenes[m_state].addEntity(m_selected);
-						entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower1.png", Vector2u(11, 1), 0.3f, 0);
-						entity->cPosition = make_shared<CPosition>(mousePos);
+						if (e->tag() == "Base" && e->isActive())
+						{
+							FloatRect bounds = e->cSet->sprite.getGlobalBounds();
+							if (bounds.contains(mousePos))
+							{
+								e->active(false);
+								isValid = true;
+								break;
+							}
+						}
 					}
-					else if (m_selected == "Tower2")
+					if (isValid)
 					{
-						auto entity = m_scenes[m_state].addEntity(m_selected);
-						entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower2.png", Vector2u(8, 1), 0.3f, 0);
-						entity->cPosition = make_shared<CPosition>(mousePos);
+						if (m_selected == "Tower1")
+						{
+							auto entity = m_scenes[m_state].addEntity(m_selected);
+							entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower1.png", Vector2u(11, 1), 0.3f, 0);
+							entity->cPosition = make_shared<CPosition>(mousePos);
+						}
+						else if (m_selected == "Tower2")
+						{
+							auto entity = m_scenes[m_state].addEntity(m_selected);
+							entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower2.png", Vector2u(8, 1), 0.3f, 0);
+							entity->cPosition = make_shared<CPosition>(mousePos);
+						}
 					}
 					m_state2 = AppState::Dummy;
 				}
