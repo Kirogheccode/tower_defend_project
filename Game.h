@@ -11,6 +11,7 @@ using namespace std;
 using namespace sf;
 
 enum class AppState { Dummy, MainMenu, SettingsMenu, Map1, Map2, Map3, TowerSelect, TowerPlace};
+class EntityManager; // Forward declaration
 
 enum class SpawnStage {
 	None,
@@ -20,7 +21,7 @@ enum class SpawnStage {
 	Done
 };
 
-struct BulletConfig { string filepath; int damage; float speed; };				
+struct BulletConfig { string tag; string filepath; int damage; float speed; };
 
 struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; };			
 struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; };			
@@ -52,7 +53,7 @@ class Game
 
 	SpawnStage m_spawnStage = SpawnStage::None;
 	float m_spawnTimer = 0.f;
-	float m_spawnDelay = 5.f; // Delay gi?a các ??t spawn
+	float m_spawnDelay = 5.f; // Delay between consecutive enemy spawn waves
 
 	map<AppState, EntityManager> m_scenes;
 	AppState m_state = AppState::MainMenu;
@@ -78,13 +79,18 @@ class Game
 	void sRender(float& deltaTime);																			//System: Render / Drawing enemies and menus		
 	void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						    //System: Animation													
 	void sUserInput();																		//System: User input
-	void sCollision();																		//System: Collision
+	//void sCollision();																		//System: Collision
 
 	void sSpawnWave(float& deltaTime);
 	void sCheckWaveFinished();
 	void spawnEnemyType(int type);
 
+	
+
+
 public:
 	Game(const string& config);
 	void run();
+	void TowerShoot(); //check for collision
+
 };

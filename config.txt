@@ -1,11 +1,20 @@
 # Load window format: <Name> <Width> <Height> <FPS> <FullScreen>
+TowerDefense 1920 1080 60 0
 
-TowerDenfense 1920 1080 60 0
-
-
-# Load bullet format: <Filepath> <Damage> <Speed>
-
-bullet.png 50 100
+# -------------------------------------------------------------------------------------------------------
+# Bullet format: BULLET <Tag> <Filepath> <Damage> <Speed> <AnimFrames> <AnimDuration> <FrameWidth> <FrameHeight>
+# <Tag>:           Unique name for this bullet type (e.g., "MachineGunBullet")
+# <Filepath>:      Path to the bullet's spritesheet
+# <Damage>:        Amount of damage it deals
+# <Speed>:         Movement speed in pixels per second
+# <AnimFrames>:    Number of frames in the animation
+# <AnimDuration>:  Time in seconds each frame is shown
+# <FrameWidth>:    Width of a single animation frame
+# <FrameHeight>:   Height of a single animation frame
+# -------------------------------------------------------------------------------------------------------
+BULLET MachineGunBullet imgs/bullet_fast.png   10  800   4 0.05 16 16
+BULLET CannonBall       imgs/bullet_slow.png   100 250   1 0    64 64
+BULLET FrostBolt        imgs/bullet_frost.png  5   400   8 0.1  32 32
 
 
 # Load enemy format: <Tag> <Filepath> <HP> <Speed> <Money> <Amount>

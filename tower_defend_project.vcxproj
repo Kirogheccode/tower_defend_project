@@ -151,6 +151,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game.h" />
+    <ClCompile Include="MathSupport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="IMGS\back.png" />
@@ -234,6 +235,7 @@
   <ItemGroup>
     <ClInclude Include="Components.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="MathSupport.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt" />

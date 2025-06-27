@@ -25,15 +25,26 @@ void Game::init(const string& path)
 	}
 
 	// Reading bullet config
-	while (getline(readconfig, line)) {
+	while (getline(readconfig, line)) 
+	{
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_bulletConfig.filepath >> m_bulletConfig.damage >> m_bulletConfig.speed;
+		int amount;
+		iss >> amount;
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entities.addEntity(m_bulletConfig.tag);
+			entity->cSet = make_shared<CSet>(m_bulletConfig.filepath, Vector2u(10, 1), 0.3f, 0);
+			entity->cMovement = make_shared<CMovement>(m_bulletConfig.speed);
+		}
+		
 		break;
 	}
 
 	// Rading enemy config && Pre-loaded enemies
-	while (getline(readconfig, line)) {
+	while (getline(readconfig, line)) 
+	{
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType1Config.tag >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed >> m_enemyType1Config.money;
@@ -53,7 +64,8 @@ void Game::init(const string& path)
 		break;
 	}
 
-	while (getline(readconfig, line)) {
+	while (getline(readconfig, line)) 
+	{
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money;
@@ -74,7 +86,8 @@ void Game::init(const string& path)
 		break;
 	}
 
-	while (getline(readconfig, line)) {
+	while (getline(readconfig, line)) 
+	{
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money;
@@ -408,10 +421,35 @@ void Game::sUserInput()
 	}
 }
 
-void Game::sCollision()
+
+
+void Game::TowerShoot()
 {
-	//
+	for (auto& curTower : m_entities.getEntites("Tower"))
+	{
+		if (curTower->isActive() && curTower->ReadyShoot())
+		{
+			for (auto& bullet : m_entities.getEntites("Bullet"))
+			{
+				if (!bullet->isActive())
+				{
+					bullet->cPosition = make_shared<CPosition>(curTower->cPosition->position);
+					bullet->cMovement = make_shared<CMovement>(m_bulletConfig.speed);
+					bullet->cSet = make_shared<CSet>(m_bulletConfig.filepath, Vector2u(10, 1), 0.3f, 0);
+					bullet->cSet->sprite.setPosition(bullet->cPosition->position);
+					bullet->active(true);
+
+					sf::Vector2f tour = curTower->cTarget->cPosition->position - curTower->cPosition->position;
+
+					// Set bullet velocity to fixed direction times speed
+					bullet->cMovement->speed = MathSupport::Length(tour) * m_bulletConfig.speed; 
+				}
+
+			}
+		}
+	}
 }
+
 
 void Game::sCheckWaveFinished()
 {
@@ -538,6 +576,7 @@ void Game::spawnEnemyType(int type)
 	}
 }
 
+
 void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
 {
 	entity->cSet->CurrImg.y = entity->cSet->row;
@@ -599,3 +638,5 @@ void Game::sMovement(float& deltaTime)
 		}
 	}
 }
+
+

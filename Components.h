@@ -11,7 +11,7 @@ struct CMoney
 {
 	int money = 0;
 
-	CMoney() {};
+	CMoney() {}
 	CMoney(const int& m)
 	{
 		money = m;
@@ -82,6 +82,13 @@ struct CPosition
 	CPosition(const Vector2f& A) : position(A) {}
 };
 
+struct CBound
+{
+	enum shapeType { Circle, Rectangle } shape = Rectangle; // Default shape is Rectangle
+	float radius = 0; // For Circle shape
+	FloatRect rect; // For Rectangle shape
+};
+
 struct CSet
 {
 	Texture texture;
@@ -149,8 +156,6 @@ struct CSet
 	}
 };
 
-struct CCollision {};
-
 struct CInput
 {
 	function<void()> onClick;
@@ -166,3 +171,38 @@ struct CInput
 		: onClick(clickFunc), onHover(hoverFunc), offHover(unhoverFunc) {
 	}
 };
+
+struct CState
+{
+	bool isActive = false;
+	CState() = default;
+};
+
+struct CDamage
+{
+	int damage;
+	CDamage() {};
+	CDamage(const int& d)
+	{
+		damage = d;
+	}
+};
+
+struct CCooldown
+{
+	sf::Time cooldownDuration; // The total time between shots
+	sf::Clock shootClock;      // A persistent clock to track the cooldown
+
+	// Constructor to set the cooldown
+	CCooldown(float seconds) : cooldownDuration(sf::seconds(seconds)) {}
+};
+
+//struct CTarget
+//{
+//	Entity* target = nullptr; // Pointer to the target entity
+//};
+//
+//struct CSourceTower
+//{
+//	Entity* source = nullptr; // Pointer to the entity that created this entity (e.g., a tower that spawned a bullet)
+//};

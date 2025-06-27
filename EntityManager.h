@@ -3,7 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-#include <vector>
 #include <map>
 #include <memory>
 
@@ -17,6 +16,8 @@ typedef map<string, EntityVec> EntityMap;
 
 class EntityManager
 {
+	friend class Game;
+
 	EntityVec m_entities;
 	EntityMap m_entityMap;
 	size_t m_totalEntites = 0;

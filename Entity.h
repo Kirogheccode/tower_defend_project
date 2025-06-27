@@ -7,6 +7,7 @@
 
 #include "EntityManager.h"
 #include "Components.h"
+#include "MathSupport.h"
 
 using namespace std;
 using namespace sf;
@@ -26,14 +27,28 @@ public:
 	shared_ptr<CHealth> cHealth;
 	shared_ptr<CMovement> cMovement;
 	shared_ptr<CSet> cSet;
-	shared_ptr<CCollision> cCollision;
 	shared_ptr<CPosition> cPosition;
 	shared_ptr<CInput> cInput;
 	shared_ptr<CMoney> cMoney;
+	shared_ptr<CBound> cBound;
+	shared_ptr<CDamage> cDamage;
+	shared_ptr<CCooldown> cCooldown;
+	shared_ptr<Entity> cTarget; //nearest enemies or leader enemy 
+	shared_ptr<Entity> cSource;
 
 	bool isActive() const;
 	const string& tag() const;
 	const size_t& id() const;
 	void active(const bool&);
 	void destroy();
+
+	sf::Vector2f GetPosition();
+	sf::Texture GetTexture();
+	sf::FloatRect GetRect();
+	float GetRadius();
+	
+	//static bool OnCollision(Entity&, Entity&);
+	void MotionProcess(Entity&, sf::Vector2f);
+	bool ReadyShoot();
 };
+
