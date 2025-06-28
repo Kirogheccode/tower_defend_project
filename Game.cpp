@@ -106,25 +106,11 @@ void Game::init(const string& path)
 		m_waveConfigs[mapIndex][wave - 1] = { type1 , type2 , type3 };
 		break;
 	}
+	
+	getline(readconfig, line);
+	getline(readconfig, line);
+	getline(readconfig, line);
 
-	readconfig.close();
-	vector<Vector2f> towerPlace{
-		Vector2f(420,185),
-		Vector2f(120,538),
-		Vector2f(662,384),
-		Vector2f(963,420),
-		Vector2f(603,589),
-		Vector2f(1020,594),
-		Vector2f(1561,178),
-		Vector2f(1679,415),
-		Vector2f(385,508),
-		Vector2f(253,800),
-		Vector2f(177,181),
-		Vector2f(719,181),
-		Vector2f(1322,181),
-		Vector2f(479,809),
-		Vector2f(1261,924)
-	};
 
 
 
@@ -136,14 +122,22 @@ void Game::init(const string& path)
 
 	entity = m_scenes[AppState::Map1].addEntity("Map1");
 	entity->cSet = make_shared<CSet>("IMGS/map2.png");
-	for (int i = 0; i < 15; i++)
+
+	Vector2f place;
+	while (getline(readconfig, line))
 	{
-		entity = m_scenes[AppState::Map1].addEntity("Base");
+		if (line.empty() || line[0] == '#') continue;
+		char tmp;
+		istringstream iss(line);
+		iss >> place.x;
+		iss >> tmp;
+		iss >> place.y;
+		auto entity = m_scenes[AppState::Map1].addEntity("Base");
 		entity->cSet = make_shared<CSet>("IMGS/Base.png");
-		entity->cPosition = make_shared<CPosition>(towerPlace[i]);
+		entity->cPosition = make_shared<CPosition>(place);
 		entity->active(true);
 	}
-
+	readconfig.close();
 
 	entity = m_scenes[AppState::Map1].addEntity("SelectButton");
 	entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
