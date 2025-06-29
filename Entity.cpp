@@ -86,22 +86,9 @@ void Entity::MotionProcess(Entity& entity, sf::Vector2f tour)
 
 bool Entity::ReadyShoot()
 {
-	// Guard clause: Ensure it's a tower with the necessary components
-	if (tag().find("Tower") == std::string::npos || !cTarget || !cCooldown)
-	{
-		return false;
-	}
 
-	// Check if the target is valid and active
-	if (!cTarget || !cTarget->isActive())
-	{
-		return false;
-	}
-
-	// THE FIX: Check the persistent clock from the CShooter component
 	if (cCooldown->shootClock.getElapsedTime() < cCooldown->cooldownDuration)
 	{
-		// Not enough time has passed, so it's still on cooldown
 		return false;
 	}
 

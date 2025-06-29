@@ -33,6 +33,7 @@ struct CMovement
 {
 	float speed = 0;
 	unsigned int currentPathindex = 0;
+	sf::Vector2f velocity = { 0.f, 0.f }; // Add this!
 
 	vector<Vector2f> starting_pos = { Vector2f(0.f, 500.f),					//Starting position for map 1
 								      Vector2f(0.f, 500.f),					//Starting position for map 2
@@ -87,6 +88,7 @@ struct CBound
 	enum shapeType { Circle, Rectangle } shape = Rectangle; // Default shape is Rectangle
 	float radius = 0; // For Circle shape
 	FloatRect rect; // For Rectangle shape
+	CBound(float r) : radius(r), shape(Circle) {} // Constructor for Circle shape (one parameter)
 };
 
 struct CSet
@@ -181,7 +183,7 @@ struct CState
 struct CDamage
 {
 	int damage;
-	CDamage() {};
+	CDamage() = default;
 	CDamage(const int& d)
 	{
 		damage = d;
@@ -197,12 +199,3 @@ struct CCooldown
 	CCooldown(float seconds) : cooldownDuration(sf::seconds(seconds)) {}
 };
 
-//struct CTarget
-//{
-//	Entity* target = nullptr; // Pointer to the target entity
-//};
-//
-//struct CSourceTower
-//{
-//	Entity* source = nullptr; // Pointer to the entity that created this entity (e.g., a tower that spawned a bullet)
-//};

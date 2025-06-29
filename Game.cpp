@@ -25,26 +25,24 @@ void Game::init(const string& path)
 	}
 
 	// Reading bullet config
-	while (getline(readconfig, line)) 
-	{
+	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_bulletConfig.filepath >> m_bulletConfig.damage >> m_bulletConfig.speed;
-		int amount;
-		iss >> amount;
-		for (int i = 0; i < amount; i++)
+		iss >>m_bulletConfig.tag >> m_bulletConfig.filepath >> m_bulletConfig.damage >> m_bulletConfig.speed;
+
+		for (int i = 0; i < 50; i++)
 		{
 			auto entity = m_entities.addEntity(m_bulletConfig.tag);
-			entity->cSet = make_shared<CSet>(m_bulletConfig.filepath, Vector2u(10, 1), 0.3f, 0);
 			entity->cMovement = make_shared<CMovement>(m_bulletConfig.speed);
+			entity->cSet = make_shared<CSet>(m_bulletConfig.filepath, Vector2u(1, 1), 0.3f, 0);
+			entity->cSet->isDynamic = true;
+			entity->cDamage = make_shared<CDamage>(m_bulletConfig.damage);
 		}
-		
 		break;
 	}
 
 	// Rading enemy config && Pre-loaded enemies
-	while (getline(readconfig, line)) 
-	{
+	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType1Config.tag >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed >> m_enemyType1Config.money;
@@ -64,8 +62,7 @@ void Game::init(const string& path)
 		break;
 	}
 
-	while (getline(readconfig, line)) 
-	{
+	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money;
@@ -86,8 +83,7 @@ void Game::init(const string& path)
 		break;
 	}
 
-	while (getline(readconfig, line)) 
-	{
+	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money;
@@ -139,10 +135,6 @@ void Game::init(const string& path)
 		Vector2f(1261,924)
 	};
 
-
-
-
-
 	// Pre-loaded backgrounds and buttons
 	auto entity = m_scenes[AppState::MainMenu].addEntity("MainMenu");
 	entity->cSet = make_shared<CSet>("IMGS/mainMenu.png");
@@ -190,7 +182,6 @@ void Game::init(const string& path)
 		},
 		[entity]()
 		{
-
 			entity->cSet->sprite.setColor(Color(200, 200, 200));
 		},
 		[entity]()
@@ -266,7 +257,8 @@ void Game::run()
 		sMovement(dt);
 		sRender(dt);
 		sUserInput();
-
+		TowerAttack();
+		sCollision();
 		if (m_state == AppState::Map1 || m_state == AppState::Map2 || m_state == AppState::Map3)
 		{
 			sCheckWaveFinished();
@@ -305,7 +297,7 @@ void Game::sRender(float& deltaTime)
 		{
 			if (e->cSet && e->cPosition)
 				e->cSet->sprite.setPosition(e->cPosition->position);
-			
+
 			m_window.draw(e->cSet->sprite);
 		}
 	}
@@ -379,13 +371,19 @@ void Game::sUserInput()
 						{
 							auto entity = m_scenes[m_state].addEntity(m_selected);
 							entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower1.png", Vector2u(11, 1), 0.3f, 0);
+							entity->cCooldown = make_shared<CCooldown>(1.0f);
+							entity->cBound = make_shared<CBound>(1000.0f);
 							entity->cPosition = make_shared<CPosition>(mousePos);
+							entity->active(true);
 						}
 						else if (m_selected == "Tower2")
 						{
 							auto entity = m_scenes[m_state].addEntity(m_selected);
 							entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/Tower2.png", Vector2u(8, 1), 0.3f, 0);
+							entity->cCooldown = make_shared<CCooldown>(1.0f);
+							entity->cBound = make_shared<CBound>(1000.0f);
 							entity->cPosition = make_shared<CPosition>(mousePos);
+							entity->active(true);
 						}
 					}
 					m_state2 = AppState::Dummy;
@@ -466,33 +464,6 @@ void Game::sUserInput()
 	}
 }
 
-
-
-void Game::TowerShoot()
-{
-	for (auto& curTower : m_entities.getEntites("Tower"))
-	{
-		if (curTower->isActive() && curTower->ReadyShoot())
-		{
-			for (auto& bullet : m_entities.getEntites("Bullet"))
-			{
-				if (!bullet->isActive())
-				{
-					bullet->cPosition = make_shared<CPosition>(curTower->cPosition->position);
-					bullet->cMovement = make_shared<CMovement>(m_bulletConfig.speed);
-					bullet->cSet = make_shared<CSet>(m_bulletConfig.filepath, Vector2u(10, 1), 0.3f, 0);
-					bullet->cSet->sprite.setPosition(bullet->cPosition->position);
-					bullet->active(true);
-
-					sf::Vector2f tour = curTower->cTarget->cPosition->position - curTower->cPosition->position;
-
-					// Set bullet velocity to fixed direction times speed
-					bullet->cMovement->speed = MathSupport::Length(tour) * m_bulletConfig.speed; 
-				}
-
-			}
-		}
-	}
 void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
 {
 	entity->cSet->CurrImg.y = entity->cSet->row;
@@ -516,49 +487,48 @@ void Game::sMovement(float& deltaTime)
 {
 	for (auto& entity : m_entities.getEntites())
 	{
-		if (entity->isActive())
+		if (!entity->isActive() || !entity->cMovement || !entity->cPosition) continue;
+
+		//Bullet Movement 
+		if (entity->tag() == "Bullet")
 		{
+			entity->cPosition->position += entity->cMovement->velocity * deltaTime;
+			entity->cSet->sprite.setPosition(entity->cPosition->position);
+		}
+		//Enemy Movement 
+		else if (entity->tag().find("Enemy") != std::string::npos)
+		{
+			// Check if the enemy has reached the end of the path.
 			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
-				continue;
-
-			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
-			Vector2f direction = target - entity->cPosition->position;
-
-			float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-
-			if (distance < 1.f)
 			{
-				entity->cMovement->currentPathindex++;
-
-				if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
-				{
-					m_health -= entity->cHealth->hp;
-					continue;
-				}
-
-				target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
-				direction = target - entity->cPosition->position;
-				distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+				m_health -= entity->cHealth->hp;
+				DeactivateEnemy(*entity);
+				continue; 
 			}
 
-			Vector2f movement(0.f, 0.f);
-			if (distance > 0)
-				movement = direction / distance;
+			// Get the next waypoint and calculate the direction towards it.
+			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
+			Vector2f direction = target - entity->cPosition->position;
+			float distance = MathSupport::Length(direction);
 
-			entity->cPosition->position += movement * entity->cMovement->speed * deltaTime;
+			// If the enemy is very close to the waypoint, move to the next one.
+			if (distance < 5.f) // Use a small threshold to prevent jittering.
+			{
+				entity->cMovement->currentPathindex++;
+			}
+			else
+			{
+				// Move the enemy towards the target.
+				Vector2f movement = MathSupport::Normalize(direction);
+				entity->cPosition->position += movement * entity->cMovement->speed * deltaTime;
+			}
 
-			sAnimation(entity, deltaTime);
-
-			entity->cSet->sprite.setTextureRect(entity->cSet->uvRect);
+			// Update the enemy's sprite position to match its new logical position.
 			entity->cSet->sprite.setPosition(entity->cPosition->position);
 		}
 	}
 }
 
-void Game::sCollision()
-{
-	//
-}
 
 
 void Game::sCheckWaveFinished()
@@ -710,24 +680,6 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 		{
 			if (!e->isActive())
 			{
-				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
-				e->active(true);
-				if (++count >= waveConfig.enemyType3Count) break;
-			}
-		}
-	}
-}
-
-
-void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
-{
-	entity->cSet->CurrImg.y = entity->cSet->row;
-	entity->cSet->totalTime += deltaTime;
-
-	if (entity->cSet->totalTime >= entity->cSet->switchTime)
-	{
-		entity->cSet->totalTime -= entity->cSet->switchTime;
-		entity->cSet->CurrImg.x++;
 				if (m_spawningTimer < m_spawningDelay) return false;
 
 				m_spawningTimer = 0;
@@ -745,3 +697,167 @@ void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
 }
 
 
+void Game::Shoot(Entity& tower)
+{
+	if (!tower.cTarget) { return; }
+
+	for (auto& bullet : m_entities.getEntites("Bullet"))
+	{
+		if (!bullet->isActive())
+		{
+			bullet->cPosition = make_shared<CPosition>(tower.cPosition->position);
+
+			bullet->cSet->sprite.setPosition(tower.cPosition->position);
+			cout << "fire\n";
+
+			bullet->active(true);
+
+			sf::Vector2f direction = tower.cTarget->cPosition->position - tower.cPosition->position;
+			sf::Vector2f normalized_direction = MathSupport::Normalize(direction);
+			bullet->cMovement->velocity = normalized_direction * m_bulletConfig.speed;
+
+			break;
+		}
+	}
+}
+
+
+void Game::TowerAttack()
+{
+	for (auto& curTower : m_scenes[m_state].getEntites("Tower"))
+	{
+
+		if (curTower->isActive() && curTower->cCooldown->shootClock.getElapsedTime().asSeconds() >= curTower->cCooldown->cooldownDuration.asSeconds())
+		{
+			std::shared_ptr<Entity> closestEnemy = nullptr;
+			float minDistance = curTower->cBound->radius;
+
+			for (auto& enemy : m_entities.getEntites("Enemy"))
+			{
+				if (enemy->isActive())
+				{
+					float distance = MathSupport::Length(enemy->cPosition->position - curTower->cPosition->position);
+					if (distance < minDistance)
+					{
+						minDistance = distance;
+						closestEnemy = enemy;
+					}
+				}
+			}
+
+			if (closestEnemy)
+			{
+				// Fire and reset cooldown
+				curTower->cTarget = closestEnemy;
+				Shoot(*curTower);
+				curTower->cCooldown->shootClock.restart();
+			}
+		}
+	}
+}
+
+void Game::DeactivateEnemy(Entity& enemy)
+{
+	if (!enemy.isActive())
+	{
+		return;
+	}
+
+	enemy.active(false);
+
+	if (enemy.cHealth)
+	{
+		if (enemy.tag() == "EnemyType1")
+		{
+			enemy.cHealth->hp = 100;// to be config
+		}
+		else if (enemy.tag() == "EnemyType2")
+		{
+			enemy.cHealth->hp = 100; // to be config 
+		}
+		else if (enemy.tag() == "EnemyType3")
+		{
+			enemy.cHealth->hp = 110; // to be config
+		}
+	}
+
+	if (enemy.cMovement)
+	{
+		enemy.cMovement->currentPathindex = 0;
+	}
+
+	//optional
+	if (enemy.cPosition)
+	{
+		enemy.cPosition->position = sf::Vector2f(-100, -100);
+	}
+}
+
+
+void Game::DeactivateTower(Entity& tower)
+{
+	if (!tower.isActive())
+		return;
+
+	// Deactivate the tower
+	tower.active(false);
+
+	// Reset position if needed (optional)
+	if (tower.cPosition)
+		tower.cPosition->position = sf::Vector2f(-100.f, -100.f); // Off-screen or default position
+
+	// Reset target
+	if (tower.cTarget)
+		tower.cTarget = nullptr;
+
+	// Reset cooldown timer
+	if (tower.cCooldown)
+		tower.cCooldown->shootClock.restart(); // Or set to zero elapsed time
+
+}
+
+void Game::DeactivateBullet(Entity& bullet)
+{
+	if (!bullet.isActive())
+		return;
+
+	// Deactivate the bullet
+	bullet.active(false);
+
+	// Reset position off-screen or to a default location
+	if (bullet.cPosition)
+		bullet.cPosition->position = sf::Vector2f(-100.f, -100.f);
+}
+
+bool collisionDetection(const Entity& entity1, const Entity& entity2)
+{
+	if (!entity1.cSet || !entity2.cSet) return false;
+	FloatRect bounds1 = entity1.cSet->sprite.getGlobalBounds();
+	FloatRect bounds2 = entity2.cSet->sprite.getGlobalBounds();
+	return bounds1.intersects(bounds2);
+}
+void Game::sCollision()
+{
+	for (auto& cur : m_entities.getEntites("Enemy"))
+	{
+		if (!cur->isActive()) continue;
+		
+		for (auto& bullet : m_entities.getEntites("Bullet"))
+		{
+			if (!bullet->isActive()) continue;
+			if(collisionDetection(*cur, *bullet))
+			{
+				if (cur->cHealth)
+				{
+					cur->cHealth->hp -= bullet->cDamage->damage;
+					if (cur->cHealth->hp <= 0)
+					{
+						//m_money += cur->cMoney->money;
+						DeactivateEnemy(*cur);
+					}
+				}
+				//DeactivateBullet(*bullet);
+			}
+		}
+	}
+}

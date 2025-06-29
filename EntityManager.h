@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <functional>
 
 class Entity;
 
@@ -29,5 +30,5 @@ public:
 
 	EntityVec& getEntites();
 
-	EntityVec& getEntites(const string& tag);
+	EntityVec getEntites(const string& tag);
 };

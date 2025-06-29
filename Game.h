@@ -6,6 +6,7 @@
 
 #include "Entity.h"
 #include "EntityManager.h"
+#include "MathSupport.h"
 
 using namespace std;
 using namespace sf;
@@ -53,10 +54,10 @@ class Game
 
 	SpawnStage m_spawnStage = SpawnStage::None;
 	float m_spawnTimer = 0.f;
+
 	float m_spawnDelay = 5.f; 
 	float m_spawningTimer = 0.f;
 	float m_spawningDelay = 1.f;
-	float m_spawnDelay = 5.f; // Delay between consecutive enemy spawn waves
 
 	int m_spawnedType1 = 0;
 	int m_spawnedType2 = 0;
@@ -91,12 +92,15 @@ class Game
 	void sCheckWaveFinished();
 	bool spawnEnemyType(int type, float& deltaTime);
 
-	
+	void DeactivateEnemy(Entity&);
+	void DeactivateBullet(Entity&);
+	void DeactivateTower(Entity&);
 
 
 public:
 	Game(const string& config);
 	void run();
-	void TowerShoot(); //check for collision
-
+	void Shoot(Entity&); //check for collision
+	void TowerAttack(); //check for collision with enemy and attack
+	void sCollision(); //check for collision between two entities
 };
