@@ -67,14 +67,13 @@ void Game::init(const string& path)
 		istringstream iss(line);
 		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money;
 
-
 		int amount;
 		iss >> amount;
 
 		for (int i = 0; i < amount; i++)
 		{
 			auto entity = m_entities.addEntity(m_enemyType2Config.tag);
-			entity->cSet = make_shared<CSet>(m_enemyType2Config.filepath, Vector2u(10, 1), 0.3f, 0);
+			entity->cSet = make_shared<CSet>(m_enemyType2Config.filepath, Vector2u(8, 1), 0.3f, 0);
 			entity->cHealth = make_shared<CHealth>(m_enemyType2Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.hp);
@@ -88,14 +87,13 @@ void Game::init(const string& path)
 		istringstream iss(line);
 		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money;
 
-
 		int amount;
 		iss >> amount;
 
 		for (int i = 0; i < amount; i++)
 		{
 			auto entity = m_entities.addEntity(m_enemyType3Config.tag);
-			entity->cSet = make_shared<CSet>(m_enemyType3Config.filepath, Vector2u(10, 1), 0.3f, 0);
+			entity->cSet = make_shared<CSet>(m_enemyType3Config.filepath, Vector2u(9, 1), 0.3f, 0);
 			entity->cHealth = make_shared<CHealth>(m_enemyType3Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType3Config.hp);
@@ -113,7 +111,6 @@ void Game::init(const string& path)
 		iss >> skip >> wave >> mapIndex >> type1 >> type2 >> type3;
 
 		m_waveConfigs[mapIndex][wave - 1] = { type1 , type2 , type3 };
-		break;
 	}
 
 	readconfig.close();
@@ -259,6 +256,7 @@ void Game::run()
 		sUserInput();
 		TowerAttack();
 		sCollision();
+
 		if (m_state == AppState::Map1 || m_state == AppState::Map2 || m_state == AppState::Map3)
 		{
 			sCheckWaveFinished();
@@ -312,7 +310,7 @@ void Game::sRender(float& deltaTime)
 			}
 
 			m_window.draw(e->cSet->sprite);
-		}
+		} 
 	}
 
 	m_window.display();
@@ -494,6 +492,14 @@ void Game::sMovement(float& deltaTime)
 		{
 			entity->cPosition->position += entity->cMovement->velocity * deltaTime;
 			entity->cSet->sprite.setPosition(entity->cPosition->position);
+
+			Vector2f pos = entity->cPosition->position;
+			Vector2u winSize = m_window.getSize();
+
+			if (pos.x < 0 || pos.y < 0 || pos.x > winSize.x || pos.y > winSize.y)
+			{
+				DeactivateBullet(*entity);
+			}
 		}
 		//Enemy Movement 
 		else if (entity->tag().find("Enemy") != std::string::npos)
@@ -528,8 +534,6 @@ void Game::sMovement(float& deltaTime)
 		}
 	}
 }
-
-
 
 void Game::sCheckWaveFinished()
 {
@@ -582,6 +586,10 @@ void Game::sSpawnWave(float& deltaTime)
 	{
 		m_spawnStage = SpawnStage::Type1;
 		m_spawnTimer = 0.f;
+
+		m_spawnedType1 = 0;
+		m_spawnedType2 = 0;
+		m_spawnedType3 = 0;
 	}
 
 	if (m_spawnStage == SpawnStage::Done)
@@ -592,8 +600,6 @@ void Game::sSpawnWave(float& deltaTime)
 	}
 
 	m_spawnTimer += deltaTime;
-
-	cout << m_spawnTimer << endl;
 
 	if (m_spawnTimer < m_spawnDelay) return;
 
@@ -618,7 +624,6 @@ void Game::sSpawnWave(float& deltaTime)
 		if (spawnEnemyType(3, deltaTime))
 		{
 			m_spawnStage = SpawnStage::Done;
-			m_currentWave++;
 			m_spawnTimer = 0;
 		}
 	}
@@ -636,10 +641,10 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 
 		for (auto& e : m_entities.getEntites(m_enemyType1Config.tag))
 		{
+			if (m_spawningTimer < m_spawningDelay) return false;
+
 			if (!e->isActive())
 			{
-				if (m_spawningTimer < m_spawningDelay) return false;
-
 				m_spawningTimer = 0;
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
@@ -648,6 +653,7 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				break;
 			}
 		}
+
 		return m_spawnedType1 >= wave.enemyType1Count;
 	}
 
@@ -657,10 +663,10 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 
 		for (auto& e : m_entities.getEntites(m_enemyType2Config.tag))
 		{
+			if (m_spawningTimer < m_spawningDelay) return false;
+
 			if (!e->isActive())
 			{
-				if (m_spawningTimer < m_spawningDelay) return false;
-
 				m_spawningTimer = 0;
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
@@ -669,6 +675,7 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				break;
 			}
 		}
+
 		return m_spawnedType2 >= wave.enemyType2Count;
 	}
 
@@ -678,10 +685,10 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 
 		for (auto& e : m_entities.getEntites(m_enemyType3Config.tag))
 		{
+			if (m_spawningTimer < m_spawningDelay) return false;
+
 			if (!e->isActive())
 			{
-				if (m_spawningTimer < m_spawningDelay) return false;
-
 				m_spawningTimer = 0;
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
@@ -690,12 +697,12 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				break;
 			}
 		}
+
 		return m_spawnedType3 >= wave.enemyType3Count;
 	}
 
 	return true;
 }
-
 
 void Game::Shoot(Entity& tower)
 {
@@ -708,7 +715,6 @@ void Game::Shoot(Entity& tower)
 			bullet->cPosition = make_shared<CPosition>(tower.cPosition->position);
 
 			bullet->cSet->sprite.setPosition(tower.cPosition->position);
-			cout << "fire\n";
 
 			bullet->active(true);
 
@@ -720,7 +726,6 @@ void Game::Shoot(Entity& tower)
 		}
 	}
 }
-
 
 void Game::TowerAttack()
 {
@@ -793,7 +798,6 @@ void Game::DeactivateEnemy(Entity& enemy)
 	}
 }
 
-
 void Game::DeactivateTower(Entity& tower)
 {
 	if (!tower.isActive())
@@ -836,6 +840,7 @@ bool collisionDetection(const Entity& entity1, const Entity& entity2)
 	FloatRect bounds2 = entity2.cSet->sprite.getGlobalBounds();
 	return bounds1.intersects(bounds2);
 }
+
 void Game::sCollision()
 {
 	for (auto& cur : m_entities.getEntites("Enemy"))
@@ -852,11 +857,11 @@ void Game::sCollision()
 					cur->cHealth->hp -= bullet->cDamage->damage;
 					if (cur->cHealth->hp <= 0)
 					{
-						//m_money += cur->cMoney->money;
+						m_money += cur->cMoney->money;
 						DeactivateEnemy(*cur);
 					}
 				}
-				//DeactivateBullet(*bullet);
+				DeactivateBullet(*bullet);
 			}
 		}
 	}

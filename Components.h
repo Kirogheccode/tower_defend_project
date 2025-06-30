@@ -35,18 +35,20 @@ struct CMovement
 	unsigned int currentPathindex = 0;
 	sf::Vector2f velocity = { 0.f, 0.f }; // Add this!
 
-	vector<Vector2f> starting_pos = { Vector2f(0.f, 500.f),					//Starting position for map 1
+	vector<Vector2f> starting_pos = { Vector2f(1150.f, 1080.f),				//Starting position for map 1
 								      Vector2f(0.f, 500.f),					//Starting position for map 2
 								      Vector2f(0.f, 500.f),					//Starting position for map 3
 								      Vector2f(0.f, 500.f)					//Starting position for map 4
 	};
 
-	vector<vector<Vector2f>> paths = { {Vector2f(0.f, 500.f),     //Cordination for map1
-										Vector2f(600.f, 500.f),
-										Vector2f(600.f, 700.f),
-										Vector2f(1200.f, 700.f),
-										Vector2f(1200.f, 400.f),
-										Vector2f(1920.f, 400.f)},
+	vector<vector<Vector2f>> paths = { {Vector2f(1150.f, 1080.f),     //Cordination for map1
+										Vector2f(1150.f, 880.f),
+										Vector2f(940.f, 880.f),
+										Vector2f(940.f, 730.f),
+										Vector2f(285.f, 730.f),
+										Vector2f(285.f, 330.f),
+										Vector2f(1770.f, 330.f),
+										Vector2f(1770.f, 0.f)},
 
 										{Vector2f(0.f, 500.f),     //Cordination for map2
 										Vector2f(600.f, 500.f),

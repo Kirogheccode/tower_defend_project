@@ -57,7 +57,7 @@ class Game
 
 	float m_spawnDelay = 5.f; 
 	float m_spawningTimer = 0.f;
-	float m_spawningDelay = 1.f;
+	float m_spawningDelay = 0.8f;
 
 	int m_spawnedType1 = 0;
 	int m_spawnedType2 = 0;
@@ -74,6 +74,7 @@ class Game
 	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
 	int m_score = 0;
 	int m_health = 1000;
+	int m_money = 0;
 	int m_currentFrame = 0;
 
 	bool m_paused = false;
