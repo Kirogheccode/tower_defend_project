@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -201,3 +201,51 @@ struct CCooldown
 	CCooldown(float seconds) : cooldownDuration(sf::seconds(seconds)) {}
 };
 
+struct CSlider {
+	sf::RectangleShape track;
+	sf::RectangleShape handle;
+	float* valueToControl = nullptr;
+	bool isDragging = false;
+
+	CSlider(float* valuePtr, sf::Vector2f position, sf::Vector2f trackSize) {
+		valueToControl = valuePtr;
+
+		// Thiết lập thanh trượt
+		track.setSize(trackSize);
+		track.setOrigin(trackSize.x / 2.f, trackSize.y / 2.f);
+		track.setPosition(position);
+		track.setFillColor(sf::Color(50, 50, 50)); // Màu xám tối
+
+		// Thiết lập nút kéo
+		handle.setSize({ 20.f, trackSize.y * 2.f }); // Nút kéo cao hơn thanh trượt một chút
+		handle.setOrigin(handle.getSize().x / 2.f, handle.getSize().y / 2.f);
+		handle.setFillColor(sf::Color(150, 150, 150)); // Màu xám sáng
+
+		// Đặt vị trí ban đầu của nút kéo dựa trên giá trị âm lượng
+		updateHandlePosition();
+	}
+
+	// Cập nhật vị trí của nút kéo dựa trên giá trị âm lượng
+	void updateHandlePosition() {
+		if (!valueToControl) return;
+		float percent = *valueToControl / 100.f; // Chuyển giá trị (0-100) thành tỷ lệ (0.0-1.0)
+		float trackLeft = track.getPosition().x - track.getSize().x / 2.f;
+		float newX = trackLeft + (track.getSize().x * percent);
+		handle.setPosition(newX, track.getPosition().y);
+	}
+
+	// Cập nhật giá trị âm lượng dựa trên vị trí của nút kéo
+	void updateValueFromHandle(float mouseX) {
+		if (!valueToControl) return;
+		float trackLeft = track.getPosition().x - track.getSize().x / 2.f;
+		float trackRight = track.getPosition().x + track.getSize().x / 2.f;
+
+		// Giới hạn vị trí chuột trong phạm vi thanh trượt
+		mouseX = std::max(trackLeft, std::min(mouseX, trackRight));
+
+		float percent = (mouseX - trackLeft) / track.getSize().x;
+		*valueToControl = percent * 100.f;
+
+		updateHandlePosition(); // Cập nhật lại vị trí handle cho chính xác
+	}
+};

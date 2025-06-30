@@ -28,7 +28,7 @@ public:
 
 	shared_ptr<Entity> addEntity(const string& tag);
 
-	EntityVec& getEntites();
+	EntityVec& getEntities();
 
-	EntityVec getEntites(const string& tag);
+	EntityVec getEntities(const string& tag);
 };

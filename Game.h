@@ -1,8 +1,14 @@
-#pragma once
+﻿#pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
+#include <fstream>
 #include <vector>
+#include <map>
+#include <functional>
+#include <string>
+#include <list>
 
 #include "Entity.h"
 #include "EntityManager.h"
@@ -11,7 +17,6 @@
 using namespace std;
 using namespace sf;
 
-enum class AppState { Dummy, MainMenu, SettingsMenu, Map1, Map2, Map3, TowerSelect, TowerPlace};
 class EntityManager; // Forward declaration
 
 enum class SpawnStage {
@@ -21,6 +26,21 @@ enum class SpawnStage {
 	Type3,
 	Done
 };
+
+enum class AppState {
+	Dummy,			// Dummy
+	MainMenu,       // Menu chính
+	PlayMenu,       // new game, load game
+	NameInput,      // pop-up nhập tên
+	SettingsMenu,   // Pop-up cài đặt
+	MapSelect,		// Màn hình chọn map/độ khó
+	GamePlay,       // Màn hình chơi game
+	TowerSelect,	// Chọn tháp 
+	TowerPlace,		// Đặt tháp
+	PauseMenu       // Pop-up tạm dừng
+};
+
+struct WindowConfig { unsigned int width; unsigned int height; int fps; int fullscreen; };
 
 struct BulletConfig { string tag; string filepath; int damage; float speed; };
 
@@ -41,7 +61,9 @@ struct WaveConfig {
 class Game
 {
 	RenderWindow m_window;
+	View m_view;
 
+	WindowConfig m_windowConfig;
 	BulletConfig m_bulletConfig;
 	EnemyType1Config m_enemyType1Config;
 	EnemyType2Config m_enemyType2Config;
@@ -50,7 +72,7 @@ class Game
 	TowerType2Config m_towerType2Config;
 	TowerType3Config m_towerType3Config;
 
-	map<int, map<int, WaveConfig>> m_waveConfigs;                                           //m_waveConfigs[map index][wave] = { type1, type2, type3 };
+	map<int, map<int, WaveConfig>> m_waveConfigs;                                           // m_waveConfigs[map index][wave] = { type1, type2, type3 };
 
 	SpawnStage m_spawnStage = SpawnStage::None;
 	float m_spawnTimer = 0.f;
@@ -77,17 +99,37 @@ class Game
 	int m_money = 0;
 	int m_currentFrame = 0;
 
+	Font m_font;
+	Text m_inputLabel;
+	Text m_inputText;
+	string m_playerName;
+	bool m_typingName = false;
+
+	sf::Music m_backgroundMusic;
+	float m_musicVolume = 50.0f;
+	bool m_musicMuted = false;
+
+	float m_sfxVolume = 80.0f;
+	bool m_sfxMuted = false;
+
+	sf::SoundBuffer m_clickBuffer;
+
+	std::list<sf::Sound> m_activeSounds;
+
+	bool m_setting = false;
 	bool m_paused = false;
 	bool m_running = true;
 	bool m_finishWave = true;                                                              
 
 	void init(const string& config);
+	void initUIFlow();
 
-	void sMovement(float& deltaTime);										                //System: Movement update
-	void sRender(float& deltaTime);															//System: Render / Drawing enemies and menus		
-	void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						    //System: Animation													
-	void sUserInput();																		//System: User input
-	//void sCollision();																		//System: Collision
+	void sMovement(float& deltaTime);										                // System: Movement update
+	void sRender(float& deltaTime);															// System: Render / Drawing enemies and menus		
+	void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						    // System: Animation													
+	void sUserInput();																		// System: User input
+
+	void updateAudioSettings();
 
 	void sSpawnWave(float& deltaTime);
 	void sCheckWaveFinished();
@@ -97,11 +139,15 @@ class Game
 	void DeactivateBullet(Entity&);
 	void DeactivateTower(Entity&);
 
+	void onResize(const sf::Event::SizeEvent& size);
 
 public:
 	Game(const string& config);
 	void run();
-	void Shoot(Entity&); //check for collision
-	void TowerAttack(); //check for collision with enemy and attack
-	void sCollision(); //check for collision between two entities
+
+	void Shoot(Entity&);			// Check for collision
+	void TowerAttack();				// Check for collision with enemy and attack
+	void sCollision();				// Check for collision between two entities
+
+	void playSfx(const sf::SoundBuffer& buffer, sf::Vector2f position = { -1, -1 });
 };

@@ -13,18 +13,12 @@ shared_ptr<Entity> EntityManager::addEntity(const string& tag)
 	return e;
 }
 
-EntityVec& EntityManager::getEntites()
+EntityVec& EntityManager::getEntities()
 {
 	return m_entities;
 }
 
-//EntityVec& EntityManager::getEntites(const string& tag)
-//{
-//
-//	return m_entityMap[tag];
-//}
-
-EntityVec EntityManager::getEntites(const std::string& tag)
+EntityVec EntityManager::getEntities(const std::string& tag)
 {
     EntityVec results;
 

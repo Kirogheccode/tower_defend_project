@@ -35,6 +35,7 @@ public:
 	shared_ptr<CCooldown> cCooldown;
 	shared_ptr<Entity> cTarget; //nearest enemies or leader enemy 
 	shared_ptr<Entity> cSource;
+	shared_ptr<CSlider> cSlider;
 
 	bool isActive() const;
 	const string& tag() const;
@@ -47,7 +48,6 @@ public:
 	sf::FloatRect GetRect();
 	float GetRadius();
 	
-	//static bool OnCollision(Entity&, Entity&);
 	void MotionProcess(Entity&, sf::Vector2f);
 	bool ReadyShoot();
 };
