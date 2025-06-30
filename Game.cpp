@@ -271,7 +271,7 @@ void Game::initUIFlow()
 		exit->cSet = std::make_shared<CSet>("IMGS/exit.png");
 		exit->cPosition = std::make_shared<CPosition>(sf::Vector2f(480, 700));
 		exit->cSet->sprite.setScale(0.8f, 0.8f);
-		exit->cInput = std::make_shared<CInput>([this]() {
+		exit->cInput = make_shared<CInput>([this]() {
 			m_window.close();
 			});
 	}
@@ -405,11 +405,11 @@ void Game::initUIFlow()
 			m_state = AppState::GamePlay;
 			});
 
-		auto back = m_scenes[AppState::TowerSelect].addEntity("Back");
-		back->cSet = std::make_shared<CSet>("IMGS/back.png");
-		back->cPosition = std::make_shared<CPosition>(sf::Vector2f(50, 600));
-		back->cSet->sprite.setScale(0.5f, 0.5f);
-		back->cInput = std::make_shared<CInput>([this]() {
+		auto back = m_scenes[AppState::GamePlay].addEntity("Back");
+		back->cSet = make_shared<CSet>("IMGS/back.png");
+		back->cPosition = make_shared<CPosition>(Vector2f(0, 1010));
+		back->cSet->sprite.setScale(1.f, 1.f);
+		back->cInput = make_shared<CInput>([this]() {
 			m_state = AppState::PlayMenu;
 			});
 	}
@@ -450,7 +450,12 @@ void Game::sRender(float& deltaTime)
 		if (e->cSet && e->cPosition)
 			e->cSet->sprite.setPosition(e->cPosition->position);
 
-		if (e->cSet) 
+		if (e->tag() == "Base")
+		{
+			if(e->isActive())
+			  m_window.draw(e->cSet->sprite);
+		}
+		else
 			m_window.draw(e->cSet->sprite);
 
 		if (e->cSlider) {
@@ -532,8 +537,8 @@ void Game::sUserInput()
 			m_window.close();
 		}
 
-		if (event.type == Event::Resized)
-			onResize(event.size);
+		/*if (event.type == Event::Resized)
+			onResize(event.size);*/
 
 		// --- Input cho SettingsMenu (Slider + Icon)
 		if (m_state == AppState::SettingsMenu)
@@ -655,7 +660,7 @@ void Game::sUserInput()
 						entity->cBound = make_shared<CBound>(1000.0f);
 						entity->cPosition = make_shared<CPosition>(mousePos);
 						auto& sprite = entity->cSet->sprite;
-						sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height / 2.f);
+						sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f)+20.0);
 						entity->active(true);
 					}
 
@@ -666,13 +671,36 @@ void Game::sUserInput()
 					// Xử lý click cho m_state1 nếu đang hiện overlay chọn tháp
 					AppState stateToHandle = (m_state1 != AppState::Dummy) ? m_state1 : m_state;
 
-					for (auto& e : m_scenes[stateToHandle].getEntities())
+					if (stateToHandle == AppState::TowerSelect)
 					{
-						if (e->cSet && e->cInput && e->cSet->sprite.getGlobalBounds().contains(mousePos))
+						bool isOutSide = true;
+						for (auto& e : m_scenes[stateToHandle].getEntities())
 						{
-							playSfx(m_clickBuffer);
-							e->cInput->onClick();
-							break;
+							if (e->cSet && e->cSet->sprite.getGlobalBounds().contains(mousePos))
+							{
+								if (e->cInput)
+								{
+									playSfx(m_clickBuffer);
+									e->cInput->onClick();
+									isOutSide = false;
+									break;
+								}
+								isOutSide = false;
+							}
+						}
+						if (isOutSide)
+							m_state1 = AppState::Dummy;
+					}
+					else
+					{
+						for (auto& e : m_scenes[stateToHandle].getEntities())
+						{
+							if (e->cSet && e->cInput && e->cSet->sprite.getGlobalBounds().contains(mousePos))
+							{
+								playSfx(m_clickBuffer);
+								e->cInput->onClick();
+								break;
+							}
 						}
 					}
 				}

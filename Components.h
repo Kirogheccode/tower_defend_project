@@ -154,7 +154,7 @@ struct CSet
 
 		isDynamic = true;
 		this->row = row;
-		sprite.setOrigin( (texture.getSize().x / ImgCount.x) / 2.f, (texture.getSize().y / ImgCount.y) / 2.f);
+		/*sprite.setOrigin( (texture.getSize().x / ImgCount.x) / 2.f, (texture.getSize().y / ImgCount.y) / 2.f);*/
 
 		sprite.setTextureRect(uvRect);
 	}
