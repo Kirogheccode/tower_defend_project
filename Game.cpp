@@ -886,10 +886,6 @@ void Game::sCheckWaveFinished()
 
 void Game::sSpawnWave(float& deltaTime)
 {
-	bool Type1Finish = false;
-	bool Type2Finish = false;
-	bool Type3Finish = false;
-
 	if (m_spawnStage == SpawnStage::None && m_finishWave)
 	{
 		m_spawnStage = SpawnStage::Type1;
