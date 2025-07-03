@@ -174,6 +174,7 @@ void Game::initUIFlow()
 
 		auto entity = m_scenes[AppState::MainMenu].addEntity("MainMenu");
 		entity->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		entity = m_scenes[AppState::GamePlay].addEntity("Map1");
 		entity->cSet = make_shared<CSet>("IMGS/map2.png");
@@ -509,6 +510,21 @@ void Game::sRender(float& deltaTime)
 {
 	m_window.clear();
 
+	/*if (m_setting)
+	{
+		for (auto& e : m_scenes[AppState::SettingsMenu].getEntities())
+		{
+			if (e->cSet && e->cPosition)
+				e->cSet->sprite.setPosition(e->cPosition->position);
+			m_window.draw(e->cSet->sprite);
+
+			if (e->cSlider) {
+				m_window.draw(e->cSlider->track);
+				m_window.draw(e->cSlider->handle);
+			}
+		}
+	}*/
+
 	for (auto& e : m_scenes[m_state].getEntities())
 	{
 		if (e->cSet && e->cPosition)
@@ -516,11 +532,14 @@ void Game::sRender(float& deltaTime)
 
 		if (e->tag() == "Base")
 		{
-			if(e->isActive())
-			  m_window.draw(e->cSet->sprite);
+			if (e->isActive())
+				m_window.draw(e->cSet->sprite);
 		}
 		else
-			m_window.draw(e->cSet->sprite);
+		{
+			if (e->cSet)
+				m_window.draw(e->cSet->sprite);
+		}
 
 		if (e->cSlider) {
 			m_window.draw(e->cSlider->track);
@@ -555,20 +574,6 @@ void Game::sRender(float& deltaTime)
 		m_window.draw(m_inputText);
 	}
 
-	if (m_setting && m_scenes.count(AppState::SettingsMenu))
-	{
-		for (auto& e : m_scenes[AppState::SettingsMenu].getEntities())
-		{
-			if (e->cSet && e->cPosition)
-				e->cSet->sprite.setPosition(e->cPosition->position);
-			m_window.draw(e->cSet->sprite);
-
-			if (e->cSlider) {
-				m_window.draw(e->cSlider->track);
-				m_window.draw(e->cSlider->handle);
-			}
-		}
-	}
 
 	for (auto& e : m_entities.getEntities())
 	{
@@ -580,7 +585,7 @@ void Game::sRender(float& deltaTime)
 			}
 
 			m_window.draw(e->cSet->sprite);
-		} 
+		}
 	}
 
 	m_window.display();
@@ -763,7 +768,7 @@ void Game::sUserInput()
 							{
 								playSfx(m_clickBuffer);
 								e->cInput->onClick();
-								break;
+								return;
 							}
 						}
 					}
