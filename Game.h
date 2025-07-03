@@ -105,18 +105,19 @@ class Game
 	string m_playerName;
 	bool m_typingName = false;
 
-	sf::Music m_backgroundMusic;
+	Music m_backgroundMusic;
 	float m_musicVolume = 50.0f;
 	bool m_musicMuted = false;
 
 	float m_sfxVolume = 80.0f;
 	bool m_sfxMuted = false;
 
-	sf::SoundBuffer m_clickBuffer;
+	SoundBuffer m_clickBuffer;
 
-	std::list<sf::Sound> m_activeSounds;
+	list<Sound> m_activeSounds;
 
 	bool m_setting = false;
+	bool m_quit = false;
 	bool m_paused = false;
 	bool m_running = true;
 	bool m_finishWave = true;                                                              

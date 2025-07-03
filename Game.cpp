@@ -115,31 +115,32 @@ void Game::init(const string& path)
 	readconfig.close();
 
 	if (!m_font.loadFromFile("IMGS/arial.ttf")) {
-		std::cerr << "Failed to load font\n";
+		cout << "Failed to load font\n";
 	}
 
 	if (!m_backgroundMusic.openFromFile("SOUNDS/bgmusic.wav")) {
-		std::cerr << "Error: Could not load background music file.\n";
+		cout << "Error: Could not load background music file.\n";
 	}
-	else {
+	else 
+	{
 		m_backgroundMusic.setLoop(true);
 		m_backgroundMusic.play();
 		updateAudioSettings();
 	}
 
 	if (!m_clickBuffer.loadFromFile("SOUNDS/hover.ogg")) {
-		std::cerr << "Error: Could not load click sound file.\n";
+		cout << "Error: Could not load click sound file.\n";
 	}
 
 	m_inputLabel.setFont(m_font);
 	m_inputLabel.setCharacterSize(24);
-	m_inputLabel.setFillColor(sf::Color::White);
+	m_inputLabel.setFillColor(Color::White);
 	m_inputLabel.setString("Enter your name:");
 	m_inputLabel.setPosition(500, 250);
 
 	m_inputText.setFont(m_font);
 	m_inputText.setCharacterSize(24);
-	m_inputText.setFillColor(sf::Color::Yellow);
+	m_inputText.setFillColor(Color::Yellow);
 	m_inputText.setPosition(500, 300);
 
 	m_view.setSize(m_windowConfig.width, m_windowConfig.height);
@@ -247,160 +248,222 @@ void Game::initUIFlow()
 	// -- MainMenu --
 	{
 		auto bg = m_scenes[AppState::MainMenu].addEntity("BG");
-		bg->cSet = std::make_shared<CSet>("IMGS/mainMenu.png");
-		bg->cPosition = std::make_shared<CPosition>(sf::Vector2f(0, 0));
+		bg->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto play = m_scenes[AppState::MainMenu].addEntity("Play");
-		play->cSet = std::make_shared<CSet>("IMGS/play.png");
-		play->cPosition = std::make_shared<CPosition>(sf::Vector2f(480, 300));
+		play->cSet = make_shared<CSet>("IMGS/play.png");
+		play->cPosition = make_shared<CPosition>(Vector2f(480, 300));
 		play->cSet->sprite.setScale(0.8f, 0.8f);
-		play->cInput = std::make_shared<CInput>([this]() {
+		play->cInput = make_shared<CInput>([this]() 
+			{
 			m_state = (AppState::PlayMenu);
-			});
+			},
+			[play]()
+			{
+				play->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[play]()
+			{
+				play->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 		auto settingsButton = m_scenes[AppState::MainMenu].addEntity("SettingsButton");
-		settingsButton->cSet = std::make_shared<CSet>("IMGS/setting.png");
-		settingsButton->cPosition = std::make_shared<CPosition>(sf::Vector2f(480, 500));
+		settingsButton->cSet = make_shared<CSet>("IMGS/setting.png");
+		settingsButton->cPosition = make_shared<CPosition>(Vector2f(480, 500));
 		settingsButton->cSet->sprite.setScale(0.8f, 0.8f);
-		settingsButton->cInput = std::make_shared<CInput>([this]() {
+		settingsButton->cInput = make_shared<CInput>([this]() 
+			{
 			m_setting = true;
 			m_state = AppState::SettingsMenu;
-			});
+			},
+			[settingsButton]()
+			{
+				settingsButton->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[settingsButton]()
+			{
+				settingsButton->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 		auto exit = m_scenes[AppState::MainMenu].addEntity("Exit");
-		exit->cSet = std::make_shared<CSet>("IMGS/exit.png");
-		exit->cPosition = std::make_shared<CPosition>(sf::Vector2f(480, 700));
+		exit->cSet = make_shared<CSet>("IMGS/exit.png");
+		exit->cPosition = make_shared<CPosition>(Vector2f(480, 700));
 		exit->cSet->sprite.setScale(0.8f, 0.8f);
 		exit->cInput = make_shared<CInput>([this]() {
 			m_window.close();
-			});
+			m_quit = true;
+			},
+			[exit]()
+			{
+				exit->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[exit]()
+			{
+				exit->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 	}
 
 	// -- PlayMenu --
 	{
 		auto bg = m_scenes[AppState::PlayMenu].addEntity("BG");
-		bg->cSet = std::make_shared<CSet>("IMGS/mainMenu.png");
-		bg->cPosition = std::make_shared<CPosition>(sf::Vector2f(0, 0));
+		bg->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto newGameButton = m_scenes[AppState::PlayMenu].addEntity("New");
-		newGameButton->cSet = std::make_shared<CSet>("IMGS/new.png");
-		newGameButton->cPosition = std::make_shared<CPosition>(sf::Vector2f(500, 300));
+		newGameButton->cSet = make_shared<CSet>("IMGS/new.png");
+		newGameButton->cPosition = make_shared<CPosition>(Vector2f(500, 300));
 		newGameButton->cSet->sprite.setScale(0.8f, 0.8f);
-		newGameButton->cInput = std::make_shared<CInput>([this]() {
+		newGameButton->cInput = make_shared<CInput>([this]() 
+			{
 			m_playerName = "";
 			m_inputText.setString("|");
 			m_state = (AppState::MapSelect);
-			});
+			},
+			[newGameButton]()
+			{
+				newGameButton->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[newGameButton]()
+			{
+				newGameButton->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 		auto loadGame = m_scenes[AppState::PlayMenu].addEntity("Load");
-		loadGame->cSet = std::make_shared<CSet>("IMGS/load.png");
-		loadGame->cPosition = std::make_shared<CPosition>(sf::Vector2f(500, 400));
+		loadGame->cSet = make_shared<CSet>("IMGS/load.png");
+		loadGame->cPosition = make_shared<CPosition>(Vector2f(500, 400));
 		loadGame->cSet->sprite.setScale(0.8f, 0.8f);
-		loadGame->cInput = std::make_shared<CInput>([]() {
-			std::cout << "Load Game clicked\n";
-			});
+		loadGame->cInput = make_shared<CInput>([this]() 
+			{
+			cout << "Load Game clicked\n";
+			},
+			[loadGame]()
+			{
+				loadGame->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[loadGame]()
+			{
+				loadGame->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 		auto back = m_scenes[AppState::PlayMenu].addEntity("Back");
-		back->cSet = std::make_shared<CSet>("IMGS/back.png");
-		back->cPosition = std::make_shared<CPosition>(sf::Vector2f(50, 600));
+		back->cSet = make_shared<CSet>("IMGS/back.png");
+		back->cPosition = make_shared<CPosition>(Vector2f(50, 600));
 		back->cSet->sprite.setScale(0.5f, 0.5f);
-		back->cInput = std::make_shared<CInput>([this]() {
+		back->cInput = make_shared<CInput>([this]() 
+			{
 			 m_state = AppState::MainMenu;
-			});
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 	}
 
 	// -- SettingsMenu (Pop-up) --
 	{
 		auto bg_faded = m_scenes[AppState::SettingsMenu].addEntity("BG_Faded");
-		bg_faded->cSet = std::make_shared<CSet>("IMGS/mainMenu.png");
-		bg_faded->cSet->sprite.setColor(sf::Color(255, 255, 255, 100));
+		bg_faded->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+		bg_faded->cPosition = make_shared<CPosition>(Vector2f(0, 0));
+		bg_faded->cSet->sprite.setColor(Color(255, 255, 255, 100));
 
 		auto panel = m_scenes[AppState::SettingsMenu].addEntity("SettingsPanel");
-		panel->cSet = std::make_shared<CSet>("IMGS/settingmenu.png");
-		panel->cPosition = std::make_shared<CPosition>(sf::Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		panel->cSet = make_shared<CSet>("IMGS/settingmenu.png");
+		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
 		panel->cSet->sprite.setScale(1.5f, 1.5f);
 
-		sf::Vector2f panelCenter = panel->cPosition->position;
+		Vector2f panelCenter = panel->cPosition->position;
 		float row1_y = panelCenter.y - 25.f;
 		float row2_y = panelCenter.y + 50.f;
 		float icon_x = panelCenter.x - 250.f;
 		float slider_x = panelCenter.x + 50.f;
 
 		auto musicIcon = m_scenes[AppState::SettingsMenu].addEntity("MusicIcon");
-		musicIcon->cSet = std::make_shared<CSet>("IMGS/music_on.png");
-		musicIcon->cPosition = std::make_shared<CPosition>(sf::Vector2f(icon_x, row1_y));
+		musicIcon->cSet = make_shared<CSet>("IMGS/music_on.png");
+		musicIcon->cPosition = make_shared<CPosition>(Vector2f(icon_x, row1_y));
 		musicIcon->cSet->sprite.setOrigin(musicIcon->cSet->sprite.getLocalBounds().width / 2.f, musicIcon->cSet->sprite.getLocalBounds().height / 2.f);
 		musicIcon->cSet->sprite.setScale(0.08f, 0.08f);
-		musicIcon->cInput = std::make_shared<CInput>([this, musicIcon]() {
+		musicIcon->cInput = make_shared<CInput>([this, musicIcon]() {
 			m_musicMuted = !m_musicMuted;
 			musicIcon->cSet->texture.loadFromFile(m_musicMuted ? "IMGS/music_off.png" : "IMGS/music_on.png");
 			updateAudioSettings();
 			});
 
 		auto musicSliderEntity = m_scenes[AppState::SettingsMenu].addEntity("MusicSlider");
-		musicSliderEntity->cSlider = std::make_shared<CSlider>(&m_musicVolume, sf::Vector2f(slider_x, row1_y), sf::Vector2f(300.f, 10.f));
+		musicSliderEntity->cSlider = make_shared<CSlider>(&m_musicVolume, Vector2f(slider_x, row1_y), Vector2f(300.f, 10.f));
 
 		auto sfxIcon = m_scenes[AppState::SettingsMenu].addEntity("SfxIcon");
-		sfxIcon->cSet = std::make_shared<CSet>("IMGS/sfx_on.png");
-		sfxIcon->cPosition = std::make_shared<CPosition>(sf::Vector2f(icon_x, row2_y));
+		sfxIcon->cSet = make_shared<CSet>("IMGS/sfx_on.png");
+		sfxIcon->cPosition = make_shared<CPosition>(sf::Vector2f(icon_x, row2_y));
 		sfxIcon->cSet->sprite.setOrigin(sfxIcon->cSet->sprite.getLocalBounds().width / 2.f, sfxIcon->cSet->sprite.getLocalBounds().height / 2.f);
 		sfxIcon->cSet->sprite.setScale(0.08f, 0.08f);
-		sfxIcon->cInput = std::make_shared<CInput>([this, sfxIcon]() {
+		sfxIcon->cInput = make_shared<CInput>([this, sfxIcon]() {
 			m_sfxMuted = !m_sfxMuted;
 			sfxIcon->cSet->texture.loadFromFile(m_sfxMuted ? "IMGS/sfx_off.png" : "IMGS/sfx_on.png");
 			});
 
 		auto sfxSliderEntity = m_scenes[AppState::SettingsMenu].addEntity("SfxSlider");
-		sfxSliderEntity->cSlider = std::make_shared<CSlider>(&m_sfxVolume, sf::Vector2f(slider_x, row2_y), sf::Vector2f(300.f, 10.f));
+		sfxSliderEntity->cSlider = make_shared<CSlider>(&m_sfxVolume, sf::Vector2f(slider_x, row2_y), sf::Vector2f(300.f, 10.f));
 
 		auto back = m_scenes[AppState::SettingsMenu].addEntity("Back");
-		back->cSet = std::make_shared<CSet>("IMGS/back.png");
-		back->cPosition = std::make_shared<CPosition>(sf::Vector2f(panelCenter.x, panelCenter.y + 200.f));
+		back->cSet = make_shared<CSet>("IMGS/back.png");
+		back->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x, panelCenter.y + 200.f));
 		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
-		back->cInput = std::make_shared<CInput>([this]() {
+		back->cInput = make_shared<CInput>([this]() {
 			m_setting = false;
+			m_state = AppState::MainMenu;
 			});
 	}
 
 	// -- MapSelect --
 	{
 		auto bg = m_scenes[AppState::MapSelect].addEntity("BG");
-		bg->cSet = std::make_shared<CSet>("IMGS/mainMenu.png");
-		bg->cPosition = std::make_shared<CPosition>(sf::Vector2f(0, 0));
+		bg->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto map1 = m_scenes[AppState::MapSelect].addEntity("Map1");
-		map1->cSet = std::make_shared<CSet>("IMGS/map1.png");
-		map1->cPosition = std::make_shared<CPosition>(sf::Vector2f(150, 250));
+		map1->cSet = make_shared<CSet>("IMGS/map1.png");
+		map1->cPosition = make_shared<CPosition>(Vector2f(150, 250));
 		map1->cSet->sprite.setScale(0.3f, 0.3f);
-		map1->cInput = std::make_shared<CInput>([this]() {
+		map1->cInput = make_shared<CInput>([this]() {
 			m_mapindex = 0;
 			m_state = AppState::GamePlay;
 			});
 
 		auto map2 = m_scenes[AppState::MapSelect].addEntity("Map2");
-		map2->cSet = std::make_shared<CSet>("IMGS/map2.png");
-		map2->cPosition = std::make_shared<CPosition>(sf::Vector2f(450, 250));
+		map2->cSet = make_shared<CSet>("IMGS/map2.png");
+		map2->cPosition = make_shared<CPosition>(Vector2f(450, 250));
 		map2->cSet->sprite.setScale(0.3f, 0.3f);
-		map2->cInput = std::make_shared<CInput>([this]() {
+		map2->cInput = make_shared<CInput>([this]() {
 			m_mapindex = 1;
 			m_state = AppState::GamePlay;
 			});
 
 		auto map3 = m_scenes[AppState::MapSelect].addEntity("Map3");
-		map3->cSet = std::make_shared<CSet>("IMGS/map3.png");
-		map3->cPosition = std::make_shared<CPosition>(sf::Vector2f(750, 250));
+		map3->cSet = make_shared<CSet>("IMGS/map3.png");
+		map3->cPosition = make_shared<CPosition>(Vector2f(750, 250));
 		map3->cSet->sprite.setScale(0.3f, 0.3f);
-		map3->cInput = std::make_shared<CInput>([this]() {
+		map3->cInput = make_shared<CInput>([this]() {
 			m_mapindex = 2;
 			m_state = AppState::GamePlay;
 			});
 
 		auto map4 = m_scenes[AppState::MapSelect].addEntity("Map4");
-		map4->cSet = std::make_shared<CSet>("IMGS/map4.png");
-		map4->cPosition = std::make_shared<CPosition>(sf::Vector2f(1050, 250));
+		map4->cSet = make_shared<CSet>("IMGS/map4.png");
+		map4->cPosition = make_shared<CPosition>(Vector2f(1050, 250));
 		map4->cSet->sprite.setScale(0.3f, 0.3f);
-		map4->cInput = std::make_shared<CInput>([this]() {
+		map4->cInput = make_shared<CInput>([this]() {
 			m_mapindex = 3;
 			m_state = AppState::GamePlay;
 			});
@@ -434,7 +497,8 @@ void Game::run()
 			sCheckWaveFinished();
 			sSpawnWave(dt);
 		}
-
+		if (m_quit)
+			break;
 		m_currentFrame++;
 	}
 }
