@@ -264,7 +264,7 @@ void Game::initUIFlow()
 		settingsButton->cSet->sprite.setScale(0.8f, 0.8f);
 		settingsButton->cInput = std::make_shared<CInput>([this]() {
 			m_setting = true;
-			m_state = (AppState::SettingsMenu);
+			m_state = AppState::SettingsMenu;
 			});
 
 		auto exit = m_scenes[AppState::MainMenu].addEntity("Exit");
