@@ -23,6 +23,15 @@ EnemyType2 IMGS/slime-Sheet.png 300 50 80 200
 EnemyType3 IMGS/WormEnemy.png 1000 30 180 200
 
 
+
+
+# Load tower format: <Tag> <Filepath> <SizeInSpriteSheet> <SwitchTime> <Range> <Cooldown> <Amount>
+
+Tower1 IMGS/BloodMoonTower/Tower1.png 11 1 0.3 1000 1.0 50
+
+Tower2 IMGS/BloodMoonTower/Tower2.png 8 1 0.3 1000 1.0 50
+
+
 # Wave format: <WaveNumber> <MapIndex> <EnemyType1> <EnemyType2> <EnemyType3>
 
 WAVE 1 0 10 5 3

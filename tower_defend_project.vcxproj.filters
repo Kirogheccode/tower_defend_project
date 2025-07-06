@@ -50,16 +50,10 @@
     <Image Include="IMGS\menu.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="IMGS\exit.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="IMGS\Menu_Screen_Temp.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="IMGS\play.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="IMGS\setting.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="IMGS\setting_menu.png">

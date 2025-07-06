@@ -160,7 +160,6 @@
     <Image Include="IMGS\Buttons.png" />
     <Image Include="IMGS\Coin.png" />
     <Image Include="IMGS\enter.png" />
-    <Image Include="IMGS\exit.png" />
     <Image Include="IMGS\Heart.png" />
     <Image Include="IMGS\Map\Decoration\spr_mushroom_01.png" />
     <Image Include="IMGS\Map\Decoration\spr_mushroom_02.png" />
@@ -182,7 +181,6 @@
     <Image Include="IMGS\menu.png" />
     <Image Include="IMGS\Menu_Screen_Temp.png" />
     <Image Include="IMGS\play.png" />
-    <Image Include="IMGS\setting.png" />
     <Image Include="IMGS\setting_menu.png" />
     <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Attack1.png" />
     <Image Include="IMGS\Skeletons_2vers 96x32\Skeletons_Free_Pack\Skeleton_Sword\Skeleton_White\Skeleton_Without_VFX\Skeleton_01_White_Attack2.png" />

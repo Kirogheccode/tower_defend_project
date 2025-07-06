@@ -117,7 +117,6 @@ class Game
 	list<Sound> m_activeSounds;
 
 	bool m_setting = false;
-	bool m_quit = false;
 	bool m_paused = false;
 	bool m_running = true;
 	bool m_finishWave = true;                                                              

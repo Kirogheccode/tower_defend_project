@@ -100,6 +100,52 @@ void Game::init(const string& path)
 
 		break;
 	}
+	//Load and Initialize Tower1
+	while (getline(readconfig, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		string tag, filePath;
+		Vector2u imgCount;
+		float switchTime, range, cooldown;
+		int amount;
+		iss >> tag >> filePath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entities.addEntity(tag);
+			entity->cSet = make_shared<CSet>(filePath, imgCount, switchTime, 0);
+			entity->cCooldown = make_shared<CCooldown>(cooldown);
+			entity->cBound = make_shared<CBound>(range);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+		}
+		break;
+	}
+
+	//Load and Initialize Tower2
+	while (getline(readconfig, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		string tag, filePath;
+		Vector2u imgCount;
+		float switchTime, range, cooldown;
+		int amount;
+		iss >> tag >> filePath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entities.addEntity(tag);
+			entity->cSet = make_shared<CSet>(filePath, imgCount, switchTime, 0);
+			entity->cCooldown = make_shared<CCooldown>(cooldown);
+			entity->cBound = make_shared<CBound>(range);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+		}
+		break;
+	}
+
 
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
@@ -172,11 +218,7 @@ void Game::initUIFlow()
 		Vector2f(1261,924)
 		};
 
-		auto entity = m_scenes[AppState::MainMenu].addEntity("MainMenu");
-		entity->cSet = make_shared<CSet>("IMGS/mainMenu.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(0, 0));
-
-		entity = m_scenes[AppState::GamePlay].addEntity("Map1");
+		auto entity = m_scenes[AppState::GamePlay].addEntity("Map1");
 		entity->cSet = make_shared<CSet>("IMGS/map2.png");
 		for (int i = 0; i < 15; i++)
 		{
@@ -254,8 +296,8 @@ void Game::initUIFlow()
 
 		auto play = m_scenes[AppState::MainMenu].addEntity("Play");
 		play->cSet = make_shared<CSet>("IMGS/play.png");
-		play->cPosition = make_shared<CPosition>(Vector2f(480, 300));
-		play->cSet->sprite.setScale(0.8f, 0.8f);
+		play->cPosition = make_shared<CPosition>(Vector2f(1090, 485));
+		play->cSet->sprite.setScale(0.85f, 0.85f);
 		play->cInput = make_shared<CInput>([this]() 
 			{
 			m_state = (AppState::PlayMenu);
@@ -272,8 +314,8 @@ void Game::initUIFlow()
 
 		auto settingsButton = m_scenes[AppState::MainMenu].addEntity("SettingsButton");
 		settingsButton->cSet = make_shared<CSet>("IMGS/setting.png");
-		settingsButton->cPosition = make_shared<CPosition>(Vector2f(480, 500));
-		settingsButton->cSet->sprite.setScale(0.8f, 0.8f);
+		settingsButton->cPosition = make_shared<CPosition>(Vector2f(1090, 680));
+		settingsButton->cSet->sprite.setScale(0.85f, 0.85f);
 		settingsButton->cInput = make_shared<CInput>([this]() 
 			{
 			m_setting = true;
@@ -290,12 +332,12 @@ void Game::initUIFlow()
 		);
 
 		auto exit = m_scenes[AppState::MainMenu].addEntity("Exit");
-		exit->cSet = make_shared<CSet>("IMGS/exit.png");
-		exit->cPosition = make_shared<CPosition>(Vector2f(480, 700));
-		exit->cSet->sprite.setScale(0.8f, 0.8f);
+		exit->cSet = make_shared<CSet>("IMGS/quit.png");
+		exit->cPosition = make_shared<CPosition>(Vector2f(1090, 876));
+		exit->cSet->sprite.setScale(0.85f, 0.85f);
 		exit->cInput = make_shared<CInput>([this]() {
 			m_window.close();
-			m_quit = true;
+			m_running = false;
 			},
 			[exit]()
 			{
@@ -498,9 +540,6 @@ void Game::run()
 			sCheckWaveFinished();
 			sSpawnWave(dt);
 		}
-		if (m_quit)
-			break;
-		m_currentFrame++;
 	}
 }
 
@@ -509,21 +548,6 @@ void Game::run()
 void Game::sRender(float& deltaTime)
 {
 	m_window.clear();
-
-	/*if (m_setting)
-	{
-		for (auto& e : m_scenes[AppState::SettingsMenu].getEntities())
-		{
-			if (e->cSet && e->cPosition)
-				e->cSet->sprite.setPosition(e->cPosition->position);
-			m_window.draw(e->cSet->sprite);
-
-			if (e->cSlider) {
-				m_window.draw(e->cSlider->track);
-				m_window.draw(e->cSlider->handle);
-			}
-		}
-	}*/
 
 	for (auto& e : m_scenes[m_state].getEntities())
 	{
@@ -560,12 +584,12 @@ void Game::sRender(float& deltaTime)
 
 	if (m_state == AppState::NameInput)
 	{
-		sf::Vector2f panelCenter(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
+		Vector2f panelCenter(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
 
 		m_inputLabel.setPosition(panelCenter.x, panelCenter.y - 50);
 		m_inputText.setPosition(panelCenter.x, panelCenter.y);
 
-		sf::FloatRect textRect = m_inputLabel.getLocalBounds();
+		FloatRect textRect = m_inputLabel.getLocalBounds();
 		m_inputLabel.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
 		textRect = m_inputText.getLocalBounds();
 		m_inputText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
@@ -579,6 +603,7 @@ void Game::sRender(float& deltaTime)
 	{
 		if (e->isActive())
 		{
+			
 			if (e->cSet->isDynamic)
 			{
 				sAnimation(e, deltaTime);
@@ -605,9 +630,6 @@ void Game::sUserInput()
 			m_running = false;
 			m_window.close();
 		}
-
-		/*if (event.type == Event::Resized)
-			onResize(event.size);*/
 
 		// --- Input cho SettingsMenu (Slider + Icon)
 		if (m_state == AppState::SettingsMenu)
@@ -722,15 +744,16 @@ void Game::sUserInput()
 
 					if (placed)
 					{
-						auto entity = m_scenes[m_state].addEntity(m_selected);
-						entity->cSet = make_shared<CSet>("IMGS/BloodMoonTower/" + m_selected + ".png",
-							m_selected == "Tower1" ? Vector2u(11, 1) : Vector2u(8, 1), 0.3f, 0);
-						entity->cCooldown = make_shared<CCooldown>(1.0f);
-						entity->cBound = make_shared<CBound>(1000.0f);
-						entity->cPosition = make_shared<CPosition>(mousePos);
-						auto& sprite = entity->cSet->sprite;
-						sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f)+20.0);
-						entity->active(true);
+						for (auto& e : m_entities.getEntities(m_selected))
+						{
+							if (!e->isActive())
+							{
+								e->active(true);
+								e->cPosition = make_shared<CPosition>(mousePos);
+								e->cSet->sprite.setPosition(e->cPosition->position);
+								break; 
+							}
+						}
 					}
 
 					m_state2 = AppState::Dummy;
@@ -874,8 +897,8 @@ void Game::sMovement(float& deltaTime)
 // --- Chỉnh sửa kích thước cửa sổ ---
 void Game::playSfx(const sf::SoundBuffer& buffer, sf::Vector2f position) {
 	if (m_sfxMuted) return;
-	m_activeSounds.remove_if([](const sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; });
-	sf::Sound& newSound = m_activeSounds.emplace_back();
+	m_activeSounds.remove_if([](const sf::Sound& s) { return s.getStatus() == Sound::Stopped; });
+	Sound& newSound = m_activeSounds.emplace_back();
 	newSound.setBuffer(buffer);
 	newSound.setVolume(m_sfxVolume);
 	newSound.play();
@@ -1093,8 +1116,8 @@ void Game::Shoot(Entity& tower)
 
 			bullet->active(true);
 
-			sf::Vector2f direction = tower.cTarget->cPosition->position - tower.cPosition->position;
-			sf::Vector2f normalized_direction = MathSupport::Normalize(direction);
+			Vector2f direction = tower.cTarget->cPosition->position - tower.cPosition->position;
+			Vector2f normalized_direction = MathSupport::Normalize(direction);
 			bullet->cMovement->velocity = normalized_direction * m_bulletConfig.speed;
 
 			break;
@@ -1104,12 +1127,12 @@ void Game::Shoot(Entity& tower)
 
 void Game::TowerAttack()
 {
-	for (auto& curTower : m_scenes[m_state].getEntities("Tower"))
+	for (auto& curTower : m_entities.getEntities("Tower"))
 	{
 
 		if (curTower->isActive() && curTower->cCooldown->shootClock.getElapsedTime().asSeconds() >= curTower->cCooldown->cooldownDuration.asSeconds())
 		{
-			std::shared_ptr<Entity> closestEnemy = nullptr;
+			shared_ptr<Entity> closestEnemy = nullptr;
 			float minDistance = curTower->cBound->radius;
 
 			for (auto& enemy : m_entities.getEntities("Enemy"))
