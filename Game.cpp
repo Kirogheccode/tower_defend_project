@@ -219,7 +219,7 @@ void Game::initUIFlow()
 		};
 
 		auto entity = m_scenes[AppState::GamePlay].addEntity("Map1");
-		entity->cSet = make_shared<CSet>("IMGS/map2.png");
+		entity->cSet = make_shared<CSet>("IMGS/map1.png");
 		for (int i = 0; i < 15; i++)
 		{
 			entity = m_scenes[AppState::GamePlay].addEntity("Base");
@@ -358,8 +358,7 @@ void Game::initUIFlow()
 
 		auto newGameButton = m_scenes[AppState::PlayMenu].addEntity("New");
 		newGameButton->cSet = make_shared<CSet>("IMGS/new.png");
-		newGameButton->cPosition = make_shared<CPosition>(Vector2f(500, 300));
-		newGameButton->cSet->sprite.setScale(0.8f, 0.8f);
+		newGameButton->cPosition = make_shared<CPosition>(Vector2f(1144, 605));
 		newGameButton->cInput = make_shared<CInput>([this]() 
 			{
 			m_playerName = "";
@@ -378,8 +377,7 @@ void Game::initUIFlow()
 
 		auto loadGame = m_scenes[AppState::PlayMenu].addEntity("Load");
 		loadGame->cSet = make_shared<CSet>("IMGS/load.png");
-		loadGame->cPosition = make_shared<CPosition>(Vector2f(500, 400));
-		loadGame->cSet->sprite.setScale(0.8f, 0.8f);
+		loadGame->cPosition = make_shared<CPosition>(Vector2f(1144, 766));
 		loadGame->cInput = make_shared<CInput>([this]() 
 			{
 			cout << "Load Game clicked\n";
@@ -396,8 +394,7 @@ void Game::initUIFlow()
 
 		auto back = m_scenes[AppState::PlayMenu].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(50, 600));
-		back->cSet->sprite.setScale(0.5f, 0.5f);
+		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
 		back->cInput = make_shared<CInput>([this]() 
 			{
 			 m_state = AppState::MainMenu;
@@ -477,47 +474,114 @@ void Game::initUIFlow()
 
 		auto map1 = m_scenes[AppState::MapSelect].addEntity("Map1");
 		map1->cSet = make_shared<CSet>("IMGS/map1.png");
-		map1->cPosition = make_shared<CPosition>(Vector2f(150, 250));
-		map1->cSet->sprite.setScale(0.3f, 0.3f);
-		map1->cInput = make_shared<CInput>([this]() {
+		map1->cPosition = make_shared<CPosition>(Vector2f(358, 267));
+		map1->cSet->sprite.setScale(0.25f, 0.25f);
+		map1->cInput = make_shared<CInput>([this]() 
+			{
 			m_mapindex = 0;
 			m_state = AppState::GamePlay;
-			});
+			},
+			[map1]()
+			{
+				map1->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map1]()
+			{
+				map1->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 		auto map2 = m_scenes[AppState::MapSelect].addEntity("Map2");
 		map2->cSet = make_shared<CSet>("IMGS/map2.png");
-		map2->cPosition = make_shared<CPosition>(Vector2f(450, 250));
-		map2->cSet->sprite.setScale(0.3f, 0.3f);
-		map2->cInput = make_shared<CInput>([this]() {
+		map2->cPosition = make_shared<CPosition>(Vector2f(1040, 267));
+		map2->cSet->sprite.setScale(0.25f, 0.25f);
+		map2->cInput = make_shared<CInput>([this]() 
+			{
 			m_mapindex = 1;
 			m_state = AppState::GamePlay;
-			});
+			},
+			[map2]()
+			{
+				map2->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map2]()
+			{
+				map2->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 		auto map3 = m_scenes[AppState::MapSelect].addEntity("Map3");
 		map3->cSet = make_shared<CSet>("IMGS/map3.png");
-		map3->cPosition = make_shared<CPosition>(Vector2f(750, 250));
-		map3->cSet->sprite.setScale(0.3f, 0.3f);
-		map3->cInput = make_shared<CInput>([this]() {
+		map3->cPosition = make_shared<CPosition>(Vector2f(358, 651));
+		map3->cSet->sprite.setScale(0.25f, 0.25f);
+		map3->cInput = make_shared<CInput>([this]() 
+			{
 			m_mapindex = 2;
 			m_state = AppState::GamePlay;
-			});
+			},
+			[map3]()
+			{
+				map3->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map3]()
+			{
+				map3->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 		auto map4 = m_scenes[AppState::MapSelect].addEntity("Map4");
 		map4->cSet = make_shared<CSet>("IMGS/map4.png");
-		map4->cPosition = make_shared<CPosition>(Vector2f(1050, 250));
-		map4->cSet->sprite.setScale(0.3f, 0.3f);
-		map4->cInput = make_shared<CInput>([this]() {
+		map4->cPosition = make_shared<CPosition>(Vector2f(1040, 651));
+		map4->cSet->sprite.setScale(0.25f, 0.25f);
+		map4->cInput = make_shared<CInput>([this]() 
+			{
 			m_mapindex = 3;
 			m_state = AppState::GamePlay;
-			});
+			},
+			[map4]()
+			{
+				map4->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map4]()
+			{
+				map4->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
-		auto back = m_scenes[AppState::GamePlay].addEntity("Back");
+
+		auto back = m_scenes[AppState::MapSelect].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(0, 1010));
-		back->cSet->sprite.setScale(1.f, 1.f);
-		back->cInput = make_shared<CInput>([this]() {
+		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		back->cInput = make_shared<CInput>([this]() 
+			{
 			m_state = AppState::PlayMenu;
-			});
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		back = m_scenes[AppState::GamePlay].addEntity("Back");
+		back->cSet = make_shared<CSet>("IMGS/back.png");
+		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		back->cInput = make_shared<CInput>([this]() 
+			{
+			m_state = AppState::PlayMenu;
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 	}
 }
 
@@ -571,6 +635,19 @@ void Game::sRender(float& deltaTime)
 		}
 	}
 
+	for (auto& e : m_entities.getEntities())
+	{
+		if (e->isActive())
+		{
+			
+			if (e->cSet->isDynamic)
+			{
+				sAnimation(e, deltaTime);
+			}
+
+			m_window.draw(e->cSet->sprite);
+		}
+	}
 	if (m_state1 == AppState::TowerSelect)
 	{
 		for (auto& e : m_scenes[m_state1].getEntities())
@@ -596,21 +673,6 @@ void Game::sRender(float& deltaTime)
 
 		m_window.draw(m_inputLabel);
 		m_window.draw(m_inputText);
-	}
-
-
-	for (auto& e : m_entities.getEntities())
-	{
-		if (e->isActive())
-		{
-			
-			if (e->cSet->isDynamic)
-			{
-				sAnimation(e, deltaTime);
-			}
-
-			m_window.draw(e->cSet->sprite);
-		}
 	}
 
 	m_window.display();
