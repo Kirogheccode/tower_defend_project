@@ -156,7 +156,7 @@
   <ItemGroup>
     <Image Include="IMGS\back.png" />
     <Image Include="IMGS\background.png" />
-    <Image Include="IMGS\bullet.png" />
+    <Image Include="IMGS\Bullet01.png" />
     <Image Include="IMGS\Buttons.png" />
     <Image Include="IMGS\Coin.png" />
     <Image Include="IMGS\enter.png" />
@@ -234,9 +234,13 @@
     <ClInclude Include="Components.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="MathSupport.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="tower_defend_project.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

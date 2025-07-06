@@ -64,7 +64,8 @@ class Game
 	View m_view;
 
 	WindowConfig m_windowConfig;
-	BulletConfig m_bulletConfig;
+	BulletConfig m_bullet01Config;
+	BulletConfig m_bullet02Config;
 	EnemyType1Config m_enemyType1Config;
 	EnemyType2Config m_enemyType2Config;
 	EnemyType3Config m_enemyType3Config;

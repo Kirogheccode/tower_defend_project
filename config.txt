@@ -12,7 +12,8 @@ TowerDefense 1920 1080 60 0
 # <FrameWidth>:    Width of a single animation frame
 # <FrameHeight>:   Height of a single animation frame
 # -------------------------------------------------------------------------------------------------------
-Bullet IMGS/bullet.png 35 800 4 0.05
+Bullet01 IMGS/Bullet01.png 10 500 
+Bullet02 IMGS/PoisonBullet.png 20 600 
 
 # Load enemy format: <Tag> <Filepath> <HP> <Speed> <Money> <Amount>
 

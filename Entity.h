@@ -36,6 +36,7 @@ public:
 	shared_ptr<Entity> cTarget; //nearest enemies or leader enemy 
 	shared_ptr<Entity> cSource;
 	shared_ptr<CSlider> cSlider;
+	shared_ptr<CWeapon> cWeapon;
 
 	bool isActive() const;
 	const string& tag() const;

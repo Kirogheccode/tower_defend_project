@@ -23,19 +23,32 @@ void Game::init(const string& path)
 		break;
 	}
 
-	// Reading bullet config
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >>m_bulletConfig.tag >> m_bulletConfig.filepath >> m_bulletConfig.damage >> m_bulletConfig.speed;
-
+		iss >> m_bullet01Config.tag >> m_bullet01Config.filepath >> m_bullet01Config.damage >> m_bullet01Config.speed;
 		for (int i = 0; i < 50; i++)
 		{
-			auto entity = m_entities.addEntity(m_bulletConfig.tag);
-			entity->cMovement = make_shared<CMovement>(m_bulletConfig.speed);
-			entity->cSet = make_shared<CSet>(m_bulletConfig.filepath, Vector2u(1, 1), 0.3f, 0);
+			auto entity = m_entities.addEntity(m_bullet01Config.tag);
+			entity->cMovement = make_shared<CMovement>(m_bullet01Config.speed);
+			entity->cSet = make_shared<CSet>(m_bullet01Config.filepath, Vector2u(1, 1), 0.5f, 0);
 			entity->cSet->isDynamic = true;
-			entity->cDamage = make_shared<CDamage>(m_bulletConfig.damage);
+			entity->cDamage = make_shared<CDamage>(m_bullet01Config.damage);
+		}
+		break;
+	}
+
+	while (getline(readconfig, line)) {
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		iss >> m_bullet02Config.tag >> m_bullet02Config.filepath >> m_bullet02Config.damage >> m_bullet02Config.speed;
+		for (int i = 0; i < 50; i++)
+		{
+			auto entity = m_entities.addEntity(m_bullet02Config.tag);
+			entity->cMovement = make_shared<CMovement>(m_bullet02Config.speed);
+			entity->cSet = make_shared<CSet>(m_bullet02Config.filepath, Vector2u(1, 1), 0.5f, 0);
+			entity->cSet->isDynamic = true;
+			entity->cDamage = make_shared<CDamage>(m_bullet02Config.damage);
 		}
 		break;
 	}
@@ -117,6 +130,7 @@ void Game::init(const string& path)
 			entity->cSet = make_shared<CSet>(filePath, imgCount, switchTime, 0);
 			entity->cCooldown = make_shared<CCooldown>(cooldown);
 			entity->cBound = make_shared<CBound>(range);
+			entity->cWeapon = make_shared<CWeapon>("Bullet01");
 			auto& sprite = entity->cSet->sprite;
 			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
@@ -140,6 +154,7 @@ void Game::init(const string& path)
 			entity->cSet = make_shared<CSet>(filePath, imgCount, switchTime, 0);
 			entity->cCooldown = make_shared<CCooldown>(cooldown);
 			entity->cBound = make_shared<CBound>(range);
+			entity->cWeapon = make_shared<CWeapon>("Bullet02");
 			auto& sprite = entity->cSet->sprite;
 			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
@@ -908,7 +923,7 @@ void Game::sMovement(float& deltaTime)
 		if (!entity->isActive() || !entity->cMovement || !entity->cPosition) continue;
 
 		//Bullet Movement 
-		if (entity->tag() == "Bullet")
+		if (entity->tag().find("Bullet") != std::string::npos)
 		{
 			entity->cPosition->position += entity->cMovement->velocity * deltaTime;
 			entity->cSet->sprite.setPosition(entity->cPosition->position);
@@ -1168,19 +1183,24 @@ void Game::Shoot(Entity& tower)
 {
 	if (!tower.cTarget) { return; }
 
-	for (auto& bullet : m_entities.getEntities("Bullet"))
+	for (auto& bullet : m_entities.getEntities(tower.cWeapon->tag))
 	{
 		if (!bullet->isActive())
 		{
 			bullet->cPosition = make_shared<CPosition>(tower.cPosition->position);
 
 			bullet->cSet->sprite.setPosition(tower.cPosition->position);
+			cout << "fire\n";
 
 			bullet->active(true);
 
-			Vector2f direction = tower.cTarget->cPosition->position - tower.cPosition->position;
-			Vector2f normalized_direction = MathSupport::Normalize(direction);
-			bullet->cMovement->velocity = normalized_direction * m_bulletConfig.speed;
+			sf::Vector2f direction = tower.cTarget->cPosition->position - tower.cPosition->position;
+			sf::Vector2f normalized_direction = MathSupport::Normalize(direction);
+
+			if (tower.cWeapon->tag == "Bullet01")
+				bullet->cMovement->velocity = normalized_direction * m_bullet01Config.speed;
+			else if (tower.cWeapon->tag == "Bullet02")
+				bullet->cMovement->velocity = normalized_direction * m_bullet02Config.speed;
 
 			break;
 		}
@@ -1296,32 +1316,41 @@ void Game::DeactivateBullet(Entity& bullet)
 }
 
 
+bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) {
+	// Check all four corners of the inner rectangle
+	return outer.contains(inner.left, inner.top) &&
+		outer.contains(inner.left + inner.width, inner.top) &&
+		outer.contains(inner.left, inner.top + inner.height) &&
+		outer.contains(inner.left + inner.width, inner.top + inner.height);
+}
+
 // --- Check collision ---
 bool collisionDetection(const Entity& entity1, const Entity& entity2)
 {
 	if (!entity1.cSet || !entity2.cSet) return false;
 	FloatRect bounds1 = entity1.cSet->sprite.getGlobalBounds();
 	FloatRect bounds2 = entity2.cSet->sprite.getGlobalBounds();
-	return bounds1.intersects(bounds2);
+	//return bounds1.intersects(bounds2);
+	return isContained(bounds1, bounds2);
 }
-
 void Game::sCollision()
 {
 	for (auto& cur : m_entities.getEntities("Enemy"))
 	{
 		if (!cur->isActive()) continue;
-		
+
 		for (auto& bullet : m_entities.getEntities("Bullet"))
 		{
 			if (!bullet->isActive()) continue;
-			if(collisionDetection(*cur, *bullet))
+			if (collisionDetection(*bullet, *cur))
 			{
+			std:cout << "Bump\n";
 				if (cur->cHealth)
 				{
 					cur->cHealth->hp -= bullet->cDamage->damage;
 					if (cur->cHealth->hp <= 0)
 					{
-						m_money += cur->cMoney->money;
+						//m_money += cur->cMoney->money;
 						DeactivateEnemy(*cur);
 					}
 				}

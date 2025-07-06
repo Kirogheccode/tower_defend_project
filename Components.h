@@ -249,3 +249,8 @@ struct CSlider {
 		updateHandlePosition(); // Cập nhật lại vị trí handle cho chính xác
 	}
 };
+
+struct CWeapon
+{
+	string tag;
+};
