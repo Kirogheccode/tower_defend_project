@@ -85,14 +85,6 @@ struct CPosition
 	CPosition(const Vector2f& A) : position(A) {}
 };
 
-struct CBound
-{
-	enum shapeType { Circle, Rectangle } shape = Rectangle; // Default shape is Rectangle
-	float radius = 0; // For Circle shape
-	FloatRect rect; // For Rectangle shape
-	CBound(float r) : radius(r), shape(Circle) {} // Constructor for Circle shape (one parameter)
-};
-
 struct CSet
 {
 	Texture texture;
@@ -154,11 +146,30 @@ struct CSet
 
 		isDynamic = true;
 		this->row = row;
-		/*sprite.setOrigin( (texture.getSize().x / ImgCount.x) / 2.f, (texture.getSize().y / ImgCount.y) / 2.f);*/
+		sprite.setOrigin( (texture.getSize().x / ImgCount.x) / 2.f, (texture.getSize().y / ImgCount.y) / 2.f);
 
 		sprite.setTextureRect(uvRect);
 	}
 };
+
+struct CBound
+{
+	enum shapeType { Circle, Rectangle } shape = Rectangle; // Default shape is Rectangle
+	float radius = 0; // For Circle shape
+	FloatRect rect; // For Rectangle shape
+	CBound(float r) : radius(r), shape(Circle) {} // Constructor for Circle shape (one parameter)
+
+	// Constructor for Rectangle shape
+	CBound(const FloatRect& r) : rect(r), shape(Rectangle) {}
+};
+
+struct CScale
+{
+	float scale;
+	CScale() : scale(1.0f) {}
+	CScale(float r) : scale(r) {}
+};
+
 
 struct CInput
 {

@@ -57,7 +57,7 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_enemyType1Config.tag >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed >> m_enemyType1Config.money;
+		iss >> m_enemyType1Config.tag >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed >> m_enemyType1Config.money >> m_enemyType1Config.scale;
 
 		int amount;
 		iss >> amount;
@@ -69,6 +69,7 @@ void Game::init(const string& path)
 			entity->cHealth = make_shared<CHealth>(m_enemyType1Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType1Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType1Config.hp);
+			entity->cScale = make_shared<CScale>(m_enemyType1Config.scale);
 		}
 
 		break;
@@ -77,7 +78,7 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money;
+		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money >> m_enemyType2Config.scale;
 
 		int amount;
 		iss >> amount;
@@ -89,6 +90,7 @@ void Game::init(const string& path)
 			entity->cHealth = make_shared<CHealth>(m_enemyType2Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.hp);
+			entity->cScale = make_shared<CScale>(m_enemyType2Config.scale);
 		}
 
 		break;
@@ -97,7 +99,7 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money;
+		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money >> m_enemyType3Config.scale;
 
 		int amount;
 		iss >> amount;
@@ -109,6 +111,7 @@ void Game::init(const string& path)
 			entity->cHealth = make_shared<CHealth>(m_enemyType3Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType3Config.hp);
+			entity->cScale = make_shared<CScale>(m_enemyType3Config.scale);
 		}
 
 		break;
@@ -895,7 +898,6 @@ void Game::sUserInput()
 	}
 }
 
-
 // --- Di chuyển và hoạt họa ---
 void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
 {
@@ -1252,19 +1254,19 @@ void Game::DeactivateEnemy(Entity& enemy)
 
 	enemy.active(false);
 
-	if (enemy.cHealth)
+	if (!enemy.cHealth)
 	{
 		if (enemy.tag() == "EnemyType1")
 		{
-			enemy.cHealth->hp = 100;// to be config
+			enemy.cHealth->hp = m_enemyType1Config.hp;// to be config
 		}
 		else if (enemy.tag() == "EnemyType2")
 		{
-			enemy.cHealth->hp = 100; // to be config 
+			enemy.cHealth->hp = m_enemyType2Config.hp; // to be config 
 		}
 		else if (enemy.tag() == "EnemyType3")
 		{
-			enemy.cHealth->hp = 110; // to be config
+			enemy.cHealth->hp = m_enemyType3Config.hp; // to be config
 		}
 	}
 
@@ -1315,8 +1317,9 @@ void Game::DeactivateBullet(Entity& bullet)
 		bullet.cPosition->position = sf::Vector2f(-100.f, -100.f);
 }
 
-
-bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) {
+// support collision logic 
+bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) 
+{
 	// Check all four corners of the inner rectangle
 	return outer.contains(inner.left, inner.top) &&
 		outer.contains(inner.left + inner.width, inner.top) &&
@@ -1324,15 +1327,33 @@ bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) {
 		outer.contains(inner.left + inner.width, inner.top + inner.height);
 }
 
+
+FloatRect scaleRect(const FloatRect& rect, float scale = 1.0f) 
+{
+	float newWidth = rect.width * scale;
+	float newHeight = rect.height * scale;
+	float centerX = rect.left + rect.width / 2.f;
+	float centerY = rect.top + rect.height / 2.f;
+	return FloatRect(
+		centerX - newWidth / 2.f,
+		centerY - newHeight / 2.f,
+		newWidth,
+		newHeight
+	);
+}
+
+
 // --- Check collision ---
 bool collisionDetection(const Entity& entity1, const Entity& entity2)
 {
 	if (!entity1.cSet || !entity2.cSet) return false;
 	FloatRect bounds1 = entity1.cSet->sprite.getGlobalBounds();
-	FloatRect bounds2 = entity2.cSet->sprite.getGlobalBounds();
+	FloatRect bounds2 = scaleRect(entity2.cSet->sprite.getGlobalBounds(), entity2.cScale->scale / 100.0f);
 	//return bounds1.intersects(bounds2);
 	return isContained(bounds1, bounds2);
 }
+
+// process collision 
 void Game::sCollision()
 {
 	for (auto& cur : m_entities.getEntities("Enemy"))

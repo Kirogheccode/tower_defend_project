@@ -95,4 +95,3 @@ bool Entity::ReadyShoot()
 	// All checks passed, the tower is ready to shoot!
 	return true;
 }
-

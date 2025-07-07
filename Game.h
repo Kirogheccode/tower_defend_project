@@ -44,9 +44,9 @@ struct WindowConfig { unsigned int width; unsigned int height; int fps; int full
 
 struct BulletConfig { string tag; string filepath; int damage; float speed; };
 
-struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; };			
-struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; };			
-struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; };
+struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; float scale;  };
+struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; float scale;  };
+struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; float scale;  };
 
 struct TowerType1Config {};
 struct TowerType3Config {};
