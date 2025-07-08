@@ -68,7 +68,7 @@ void Game::init(const string& path)
 			entity->cSet = make_shared<CSet>(m_enemyType1Config.filepath, Vector2u(10, 1), 0.3f, 0);
 			entity->cHealth = make_shared<CHealth>(m_enemyType1Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType1Config.speed);
-			entity->cMoney = make_shared<CMoney>(m_enemyType1Config.hp);
+			entity->cMoney = make_shared<CMoney>(m_enemyType1Config.money);
 			entity->cScale = make_shared<CScale>(m_enemyType1Config.scale);
 		}
 
@@ -89,7 +89,7 @@ void Game::init(const string& path)
 			entity->cSet = make_shared<CSet>(m_enemyType2Config.filepath, Vector2u(8, 1), 0.3f, 0);
 			entity->cHealth = make_shared<CHealth>(m_enemyType2Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
-			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.hp);
+			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.money);
 			entity->cScale = make_shared<CScale>(m_enemyType2Config.scale);
 		}
 
@@ -110,7 +110,7 @@ void Game::init(const string& path)
 			entity->cSet = make_shared<CSet>(m_enemyType3Config.filepath, Vector2u(9, 1), 0.3f, 0);
 			entity->cHealth = make_shared<CHealth>(m_enemyType3Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
-			entity->cMoney = make_shared<CMoney>(m_enemyType3Config.hp);
+			entity->cMoney = make_shared<CMoney>(m_enemyType3Config.money);
 			entity->cScale = make_shared<CScale>(m_enemyType3Config.scale);
 		}
 
@@ -218,35 +218,57 @@ void Game::initUIFlow()
 {
 	// -- Choose tower --
 	{
-		vector<Vector2f> towerPlace{
-		Vector2f(420,185),
-		Vector2f(120,538),
-		Vector2f(662,384),
-		Vector2f(963,420),
-		Vector2f(603,589),
-		Vector2f(1020,594),
-		Vector2f(1561,178),
-		Vector2f(1679,415),
-		Vector2f(385,508),
-		Vector2f(253,800),
-		Vector2f(177,181),
-		Vector2f(719,181),
-		Vector2f(1322,181),
-		Vector2f(479,809),
-		Vector2f(1261,924)
-		};
+		ifstream readMapBase("MapBase.txt");
+		string line;
 
-		auto entity = m_scenes[AppState::GamePlay].addEntity("Map1");
+		string tag, filepath;
+		Vector2f Base;
+		int base_amount{};
+
+		//Khởi tạo map1 
+		auto entity = m_scenes[AppState::Map1].addEntity("Map1");
 		entity->cSet = make_shared<CSet>("IMGS/map1.png");
-		for (int i = 0; i < 15; i++)
-		{
-			entity = m_scenes[AppState::GamePlay].addEntity("Base");
-			entity->cSet = make_shared<CSet>("IMGS/Base.png");
-			entity->cPosition = make_shared<CPosition>(towerPlace[i]);
-			entity->active(true);
+
+		while (getline(readMapBase, line)) {
+			if (line.empty() || line[0] == '#') continue;
+			istringstream iss(line);
+			iss >> tag >> filepath >> base_amount;
+			break;
 		}
 
-		entity = m_scenes[AppState::GamePlay].addEntity("SelectButton");
+		while (getline(readMapBase, line) && base_amount > 0) {
+			if (line.empty() || line[0] == '#') continue;
+
+			base_amount--;
+			istringstream iss(line);
+			iss >> Base.x >> Base.y;
+
+			entity = m_scenes[AppState::Map1].addEntity(tag);
+			entity->cSet = make_shared<CSet>(filepath);
+			entity->cPosition = make_shared<CPosition>(Base);
+			entity->active(true);
+		}
+		readMapBase.close();
+
+		entity = m_scenes[AppState::Map1].addEntity("Back");
+		entity->cSet = make_shared<CSet>("IMGS/back.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				prev_state = AppState::Map1;
+				m_state = AppState::PlayMenu;
+				sReset();
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+		entity = m_scenes[AppState::Map1].addEntity("SelectButton");
 		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
 		entity->cInput = make_shared<CInput>([this]()
@@ -264,6 +286,131 @@ void Game::initUIFlow()
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
+
+		//Khởi tạo map2
+		entity = m_scenes[AppState::Map2].addEntity("Map2");
+		entity->cSet = make_shared<CSet>("IMGS/map2.png");
+
+		entity = m_scenes[AppState::Map2].addEntity("Back");
+		entity->cSet = make_shared<CSet>("IMGS/back.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				prev_state = AppState::Map2;
+				m_state = AppState::PlayMenu;
+				sReset();
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+		entity = m_scenes[AppState::Map2].addEntity("SelectButton");
+		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+
+				m_state1 = AppState::TowerSelect;
+			},
+			[entity]()
+			{
+
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+		//Khởi tạo map3
+		entity = m_scenes[AppState::Map3].addEntity("Map3");
+		entity->cSet = make_shared<CSet>("IMGS/map3.png");
+
+		entity = m_scenes[AppState::Map3].addEntity("Back");
+		entity->cSet = make_shared<CSet>("IMGS/back.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				prev_state = AppState::Map3;
+				m_state = AppState::PlayMenu;
+				sReset();
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+		entity = m_scenes[AppState::Map3].addEntity("SelectButton");
+		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+
+				m_state1 = AppState::TowerSelect;
+			},
+			[entity]()
+			{
+
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+
+		//Khởi tạo map4
+		entity = m_scenes[AppState::Map4].addEntity("Map4");
+		entity->cSet = make_shared<CSet>("IMGS/map4.png");
+
+		entity = m_scenes[AppState::Map4].addEntity("Back");
+		entity->cSet = make_shared<CSet>("IMGS/back.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				prev_state = AppState::Map4;
+				m_state = AppState::PlayMenu;
+				sReset();
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+		entity = m_scenes[AppState::Map4].addEntity("SelectButton");
+		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+
+				m_state1 = AppState::TowerSelect;
+			},
+			[entity]()
+			{
+
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+
 		entity = m_scenes[AppState::TowerSelect].addEntity("SelectingBar");
 		entity->cSet = make_shared<CSet>("IMGS/SelectingBar1.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1720, 0));
@@ -309,7 +456,7 @@ void Game::initUIFlow()
 	// -- MainMenu --
 	{
 		auto bg = m_scenes[AppState::MainMenu].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto play = m_scenes[AppState::MainMenu].addEntity("Play");
@@ -371,7 +518,7 @@ void Game::initUIFlow()
 	// -- PlayMenu --
 	{
 		auto bg = m_scenes[AppState::PlayMenu].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto newGameButton = m_scenes[AppState::PlayMenu].addEntity("New");
@@ -431,7 +578,7 @@ void Game::initUIFlow()
 	// -- SettingsMenu (Pop-up) --
 	{
 		auto bg_faded = m_scenes[AppState::SettingsMenu].addEntity("BG_Faded");
-		bg_faded->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+		bg_faded->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
 		bg_faded->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 		bg_faded->cSet->sprite.setColor(Color(255, 255, 255, 100));
 
@@ -487,7 +634,7 @@ void Game::initUIFlow()
 	// -- MapSelect --
 	{
 		auto bg = m_scenes[AppState::MapSelect].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/mainMenu.png");
+		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto map1 = m_scenes[AppState::MapSelect].addEntity("Map1");
@@ -497,7 +644,7 @@ void Game::initUIFlow()
 		map1->cInput = make_shared<CInput>([this]() 
 			{
 			m_mapindex = 0;
-			m_state = AppState::GamePlay;
+			m_state = AppState::Map1;
 			},
 			[map1]()
 			{
@@ -516,7 +663,7 @@ void Game::initUIFlow()
 		map2->cInput = make_shared<CInput>([this]() 
 			{
 			m_mapindex = 1;
-			m_state = AppState::GamePlay;
+			m_state = AppState::Map2;
 			},
 			[map2]()
 			{
@@ -535,7 +682,7 @@ void Game::initUIFlow()
 		map3->cInput = make_shared<CInput>([this]() 
 			{
 			m_mapindex = 2;
-			m_state = AppState::GamePlay;
+			m_state = AppState::Map3;
 			},
 			[map3]()
 			{
@@ -554,7 +701,7 @@ void Game::initUIFlow()
 		map4->cInput = make_shared<CInput>([this]() 
 			{
 			m_mapindex = 3;
-			m_state = AppState::GamePlay;
+			m_state = AppState::Map4;
 			},
 			[map4]()
 			{
@@ -584,22 +731,6 @@ void Game::initUIFlow()
 			}
 		);
 
-		back = m_scenes[AppState::GamePlay].addEntity("Back");
-		back->cSet = make_shared<CSet>("IMGS/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
-		back->cInput = make_shared<CInput>([this]() 
-			{
-			m_state = AppState::PlayMenu;
-			},
-			[back]()
-			{
-				back->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[back]()
-			{
-				back->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
 	}
 }
 
@@ -620,7 +751,7 @@ void Game::run()
 			TowerAttack();
 			sCollision();
 
-			if (m_state == AppState::GamePlay)
+			if (m_state == AppState::Map1 || m_state == AppState::Map2 || m_state == AppState::Map3 || m_state == AppState::Map4)
 			{
 				sCheckWaveFinished();
 				sSpawnWave(dt);
@@ -661,7 +792,6 @@ void Game::sRender(float& deltaTime)
 			m_window.draw(e->cSlider->handle);
 		}
 	}
-
 	for (auto& e : m_entities.getEntities())
 	{
 		if (e->isActive())
@@ -888,9 +1018,9 @@ void Game::sUserInput()
 			}
 		}
 
-		if (event.type == sf::Event::KeyPressed)
+		if (event.type == Event::KeyPressed)
 		{
-			if (event.key.code == sf::Keyboard::P) // or Escape
+			if (event.key.code == Keyboard::P) // or Escape
 			{
 				m_paused = !m_paused;
 			}
@@ -905,6 +1035,7 @@ void Game::sUserInput()
 		if (e->cSet && e->cInput)
 		{
 			bool hovering = e->cSet->sprite.getGlobalBounds().contains(mousePos);
+
 			if (hovering && !e->cInput->isHovered && e->cInput->onHover)
 				e->cInput->onHover();
 			else if (!hovering && e->cInput->isHovered && e->cInput->offHover)
@@ -912,6 +1043,30 @@ void Game::sUserInput()
 
 			e->cInput->isHovered = hovering;
 		}
+	}
+}
+
+// --- Reset quái, tháp và đạn khi thoát game
+void Game::sReset()
+{
+	//Reset quái
+	for (auto& enemy : m_entities.getEntities("Enemy"))
+		DeactivateEnemy(*enemy);
+	m_finishWave = true;
+	m_spawnStage = SpawnStage::None;
+
+	//Reset tháp
+	for (auto& tower : m_entities.getEntities("Tower"))
+		DeactivateTower(*tower);
+
+	//Reset đạn
+	for (auto& bullet : m_entities.getEntities("Bullet"))
+		DeactivateBullet(*bullet);
+
+	for (auto& base : m_scenes[prev_state].getEntities("Base"))
+	{
+		if (!base->isActive())
+			base->active(true);
 	}
 }
 
@@ -1213,8 +1368,8 @@ void Game::Shoot(Entity& tower)
 
 			bullet->active(true);
 
-			sf::Vector2f direction = tower.cTarget->cPosition->position - tower.cPosition->position;
-			sf::Vector2f normalized_direction = MathSupport::Normalize(direction);
+			Vector2f direction = tower.cTarget->cPosition->position - tower.cPosition->position;
+			Vector2f normalized_direction = MathSupport::Normalize(direction);
 
 			if (tower.cWeapon->tag == "Bullet01")
 				bullet->cMovement->velocity = normalized_direction * m_bullet01Config.speed;
@@ -1295,7 +1450,7 @@ void Game::DeactivateEnemy(Entity& enemy)
 	//optional
 	if (enemy.cPosition)
 	{
-		enemy.cPosition->position = sf::Vector2f(-100, -100);
+		enemy.cPosition->position = Vector2f(-100, -100);
 	}
 }
 
@@ -1309,7 +1464,7 @@ void Game::DeactivateTower(Entity& tower)
 
 	// Reset position if needed (optional)
 	if (tower.cPosition)
-		tower.cPosition->position = sf::Vector2f(-100.f, -100.f); // Off-screen or default position
+		tower.cPosition = nullptr; // Off-screen or default position
 
 	// Reset target
 	if (tower.cTarget)
@@ -1331,7 +1486,7 @@ void Game::DeactivateBullet(Entity& bullet)
 
 	// Reset position off-screen or to a default location
 	if (bullet.cPosition)
-		bullet.cPosition->position = sf::Vector2f(-100.f, -100.f);
+		bullet.cPosition->position = Vector2f(-100.f, -100.f);
 }
 
 // support collision logic 

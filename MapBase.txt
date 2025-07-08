@@ -1,0 +1,20 @@
+# Load Map1 Base: <tag> <filepath> <amount>
+Base IMGS/Base.png 15
+
+
+# Coordination of Map1 Base: <x> <y>
+420 185
+120 538
+662 384
+963 420
+603 589
+1020 594
+1561 178
+1679 415
+385 508
+253 800
+177 181
+719 181
+1322 181
+479 809
+1261 924

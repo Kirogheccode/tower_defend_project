@@ -33,8 +33,12 @@ enum class AppState {
 	PlayMenu,       // new game, load game
 	NameInput,      // pop-up nhập tên
 	SettingsMenu,   // Pop-up cài đặt
-	MapSelect,		// Màn hình chọn map/độ khó
-	GamePlay,       // Màn hình chơi game
+	MapSelect,      // Màn hình chọn map/độ khó
+	Map1,
+	Map2,
+	Map3,
+	Map4,
+	GamePlay,       // Các chức năng trong game
 	TowerSelect,	// Chọn tháp 
 	TowerPlace,		// Đặt tháp
 	PauseMenu       // Pop-up tạm dừng
@@ -87,9 +91,14 @@ class Game
 	int m_spawnedType3 = 0;
 
 	map<AppState, EntityManager> m_scenes;
+
 	AppState m_state = AppState::MainMenu;
-	AppState m_state1 = AppState::Dummy;													// For tower selecting
+	AppState m_state1 = AppState::Dummy;	 												// For tower selecting
 	AppState m_state2 = AppState::Dummy;													// For tower placing
+	AppState prev_state = AppState::Dummy;
+	AppState game_state = AppState::Dummy;
+
+
 
 	EntityManager m_entities;
 	string m_selected = "";
@@ -129,6 +138,7 @@ class Game
 	void sRender(float& deltaTime);															// System: Render / Drawing enemies and menus		
 	void sAnimation(shared_ptr<Entity>& entity, float& deltaTime);						    // System: Animation													
 	void sUserInput();																		// System: User input
+	void sReset();
 
 	void updateAudioSettings();
 

@@ -257,10 +257,10 @@
     <Image Include="IMGS\enter.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="IMGS\bullet.png">
+    <Image Include="IMGS\TowerSelectButton.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="IMGS\TowerSelectButton.png">
+    <Image Include="IMGS\Bullet01.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -274,8 +274,17 @@
     <ClInclude Include="MathSupport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt" />
+    <Text Include="MapBase.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="tower_defend_project.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
