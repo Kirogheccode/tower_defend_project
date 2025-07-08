@@ -70,6 +70,8 @@ void Game::init(const string& path)
 			entity->cMovement = make_shared<CMovement>(m_enemyType1Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType1Config.hp);
 			entity->cScale = make_shared<CScale>(m_enemyType1Config.scale);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 
 		break;
@@ -91,6 +93,8 @@ void Game::init(const string& path)
 			entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.hp);
 			entity->cScale = make_shared<CScale>(m_enemyType2Config.scale);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 
 		break;
@@ -112,6 +116,8 @@ void Game::init(const string& path)
 			entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType3Config.hp);
 			entity->cScale = make_shared<CScale>(m_enemyType3Config.scale);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 
 		break;
