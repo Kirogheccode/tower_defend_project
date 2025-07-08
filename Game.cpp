@@ -611,16 +611,25 @@ void Game::run()
 	{
 		float dt = clock.restart().asSeconds();
 
-		sMovement(dt);
-		sRender(dt);
-		sUserInput();
-		TowerAttack();
-		sCollision();
+		sUserInput(); // Always process input (so you can pause/unpause)
 
-		if (m_state == AppState::GamePlay)
+		if (!m_paused)
 		{
-			sCheckWaveFinished();
-			sSpawnWave(dt);
+			sMovement(dt);
+			sRender(dt);
+			TowerAttack();
+			sCollision();
+
+			if (m_state == AppState::GamePlay)
+			{
+				sCheckWaveFinished();
+				sSpawnWave(dt);
+			}
+		}
+		else
+		{
+			// Optionally, render a pause overlay here
+			sRender(dt); // You may want to show a "Paused" message
 		}
 	}
 }
@@ -876,6 +885,14 @@ void Game::sUserInput()
 						}
 					}
 				}
+			}
+		}
+
+		if (event.type == sf::Event::KeyPressed)
+		{
+			if (event.key.code == sf::Keyboard::P) // or Escape
+			{
+				m_paused = !m_paused;
 			}
 		}
 	}
