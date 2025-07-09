@@ -26,7 +26,7 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_bullet01Config.tag >> m_bullet01Config.filepath >> m_bullet01Config.damage >> m_bullet01Config.speed;
+		iss >> m_bullet01Config.tag >> m_bullet01Config.filepath >> m_bullet01Config.damage >> m_bullet01Config.speed >> m_bullet01Config.scale;
 		for (int i = 0; i < 50; i++)
 		{
 			auto entity = m_entities.addEntity(m_bullet01Config.tag);
@@ -34,6 +34,10 @@ void Game::init(const string& path)
 			entity->cSet = make_shared<CSet>(m_bullet01Config.filepath, Vector2u(1, 1), 0.5f, 0);
 			entity->cSet->isDynamic = true;
 			entity->cDamage = make_shared<CDamage>(m_bullet01Config.damage);
+			entity->cScale = make_shared<CScale>(m_bullet01Config.scale);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(1.4f, 1.4f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 		break;
 	}
@@ -41,7 +45,7 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_bullet02Config.tag >> m_bullet02Config.filepath >> m_bullet02Config.damage >> m_bullet02Config.speed;
+		iss >> m_bullet02Config.tag >> m_bullet02Config.filepath >> m_bullet02Config.damage >> m_bullet02Config.speed >> m_bullet02Config.scale;
 		for (int i = 0; i < 50; i++)
 		{
 			auto entity = m_entities.addEntity(m_bullet02Config.tag);
@@ -49,6 +53,10 @@ void Game::init(const string& path)
 			entity->cSet = make_shared<CSet>(m_bullet02Config.filepath, Vector2u(1, 1), 0.5f, 0);
 			entity->cSet->isDynamic = true;
 			entity->cDamage = make_shared<CDamage>(m_bullet02Config.damage);
+			entity->cScale = make_shared<CScale>(m_bullet02Config.scale);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(1.2f, 1.2f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 		break;
 	}
@@ -70,6 +78,9 @@ void Game::init(const string& path)
 			entity->cMovement = make_shared<CMovement>(m_enemyType1Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType1Config.money);
 			entity->cScale = make_shared<CScale>(m_enemyType1Config.scale);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(1.2f, 1.2f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 
 		break;
@@ -91,6 +102,9 @@ void Game::init(const string& path)
 			entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.money);
 			entity->cScale = make_shared<CScale>(m_enemyType2Config.scale);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(2.f, 2.f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 
 		break;
@@ -112,6 +126,8 @@ void Game::init(const string& path)
 			entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType3Config.money);
 			entity->cScale = make_shared<CScale>(m_enemyType3Config.scale);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 
 		break;
@@ -1439,7 +1455,7 @@ FloatRect scaleRect(const FloatRect& rect, float scale = 1.0f)
 bool collisionDetection(const Entity& entity1, const Entity& entity2)
 {
 	if (!entity1.cSet || !entity2.cSet) return false;
-	FloatRect bounds1 = entity1.cSet->sprite.getGlobalBounds();
+	FloatRect bounds1 = scaleRect(entity1.cSet->sprite.getGlobalBounds(), entity2.cScale->scale / 100.0f);
 	FloatRect bounds2 = scaleRect(entity2.cSet->sprite.getGlobalBounds(), entity2.cScale->scale / 100.0f);
 	//return bounds1.intersects(bounds2);
 	return isContained(bounds1, bounds2);

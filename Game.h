@@ -46,7 +46,7 @@ enum class AppState {
 
 struct WindowConfig { unsigned int width; unsigned int height; int fps; int fullscreen; };
 
-struct BulletConfig { string tag; string filepath; int damage; float speed; };
+struct BulletConfig { string tag; string filepath; int damage; float speed; float scale;  };
 
 struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; float scale;  };
 struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; float scale;  };
