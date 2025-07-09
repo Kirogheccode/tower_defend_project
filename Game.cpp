@@ -634,6 +634,43 @@ void Game::initUIFlow()
 				back->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
+
+		auto aboutButton = m_scenes[AppState::SettingsMenu].addEntity("AboutButton");
+		aboutButton->cSet = make_shared<CSet>("IMGS/aboutus.png");
+		aboutButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x - 100.f, panelCenter.y + 115.f));
+		aboutButton->cSet->sprite.setOrigin(aboutButton->cSet->sprite.getLocalBounds().width / 2.f, aboutButton->cSet->sprite.getLocalBounds().height / 2.f);
+		aboutButton->cSet->sprite.setScale(4.0f, 4.0f);
+		aboutButton->cInput = make_shared<CInput>([this]() {
+			m_state1 = AppState::AboutUs;
+			},
+			[aboutButton]() {
+				aboutButton->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[aboutButton]() {
+				aboutButton->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		auto rulesButton = m_scenes[AppState::SettingsMenu].addEntity("RulesButton");
+		rulesButton->cSet = make_shared<CSet>("IMGS/rules.png");
+		rulesButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x + 100.f, panelCenter.y + 115.f));
+		rulesButton->cSet->sprite.setOrigin(rulesButton->cSet->sprite.getLocalBounds().width / 2.f, rulesButton->cSet->sprite.getLocalBounds().height / 2.f);
+		rulesButton->cSet->sprite.setScale(4.0f, 4.0f);
+		rulesButton->cInput = make_shared<CInput>([this]() {
+			m_state1 = AppState::Rules;
+			},
+			[rulesButton]() {
+				rulesButton->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[rulesButton]() {
+				rulesButton->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+	}
+
+	// -- AboutUs (Pop-up) --
+	{
+		
 	}
 
 	// -- MapSelect --

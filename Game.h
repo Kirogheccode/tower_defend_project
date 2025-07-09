@@ -33,6 +33,8 @@ enum class AppState {
 	PlayMenu,       // new game, load game
 	NameInput,      // pop-up nhập tên
 	SettingsMenu,   // Pop-up cài đặt
+	AboutUs,
+	Rules,
 	MapSelect,      // Màn hình chọn map/độ khó
 	Map1,
 	Map2,
