@@ -26,7 +26,8 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_bullet01Config.tag >> m_bullet01Config.filepath >> m_bullet01Config.damage >> m_bullet01Config.speed >> m_bullet01Config.scale;
+		iss >> m_bullet01Config.tag >> m_bullet01Config.filepath >> m_bullet01Config.damage >> m_bullet01Config.speed >> m_bullet01Config.Bscale >> m_bullet01Config.Sscale;
+
 		for (int i = 0; i < 50; i++)
 		{
 			auto entity = m_entities.addEntity(m_bullet01Config.tag);
@@ -34,9 +35,9 @@ void Game::init(const string& path)
 			entity->cSet = make_shared<CSet>(m_bullet01Config.filepath, Vector2u(1, 1), 0.5f, 0);
 			entity->cSet->isDynamic = true;
 			entity->cDamage = make_shared<CDamage>(m_bullet01Config.damage);
-			entity->cScale = make_shared<CScale>(m_bullet01Config.scale);
+			entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet01Config.Bscale);
 			auto& sprite = entity->cSet->sprite;
-			sprite.setScale(1.4f, 1.4f);
+			sprite.setScale(m_bullet01Config.Sscale, m_bullet01Config.Sscale);
 			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 		break;
@@ -45,7 +46,8 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_bullet02Config.tag >> m_bullet02Config.filepath >> m_bullet02Config.damage >> m_bullet02Config.speed >> m_bullet02Config.scale;
+		iss >> m_bullet02Config.tag >> m_bullet02Config.filepath >> m_bullet02Config.damage >> m_bullet02Config.speed >> m_bullet02Config.Bscale >> m_bullet02Config.Sscale;
+
 		for (int i = 0; i < 50; i++)
 		{
 			auto entity = m_entities.addEntity(m_bullet02Config.tag);
@@ -53,9 +55,9 @@ void Game::init(const string& path)
 			entity->cSet = make_shared<CSet>(m_bullet02Config.filepath, Vector2u(1, 1), 0.5f, 0);
 			entity->cSet->isDynamic = true;
 			entity->cDamage = make_shared<CDamage>(m_bullet02Config.damage);
-			entity->cScale = make_shared<CScale>(m_bullet02Config.scale);
+			entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet02Config.Bscale);
 			auto& sprite = entity->cSet->sprite;
-			sprite.setScale(1.2f, 1.2f);
+			sprite.setScale(m_bullet02Config.Sscale, m_bullet02Config.Sscale);
 			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 		break;
@@ -65,7 +67,7 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_enemyType1Config.tag >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed >> m_enemyType1Config.money >> m_enemyType1Config.scale;
+		iss >> m_enemyType1Config.tag >> m_enemyType1Config.filepath >> m_enemyType1Config.hp >> m_enemyType1Config.speed >> m_enemyType1Config.money >> m_enemyType1Config.Bscale >> m_enemyType1Config.Sscale;
 
 		int amount;
 		iss >> amount;
@@ -77,7 +79,9 @@ void Game::init(const string& path)
 			entity->cHealth = make_shared<CHealth>(m_enemyType1Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType1Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType1Config.money);
-			entity->cScale = make_shared<CScale>(m_enemyType1Config.scale);
+			entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType1Config.Bscale);
+			entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType1Config.Sscale);
+
 			auto& sprite = entity->cSet->sprite;
 			sprite.setScale(1.2f, 1.2f);
 			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
@@ -89,7 +93,7 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money >> m_enemyType2Config.scale;
+		iss >> m_enemyType2Config.tag >> m_enemyType2Config.filepath >> m_enemyType2Config.hp >> m_enemyType2Config.speed >> m_enemyType2Config.money >> m_enemyType2Config.Bscale >> m_enemyType2Config.Sscale;
 
 		int amount;
 		iss >> amount;
@@ -101,9 +105,11 @@ void Game::init(const string& path)
 			entity->cHealth = make_shared<CHealth>(m_enemyType2Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType2Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType2Config.money);
-			entity->cScale = make_shared<CScale>(m_enemyType2Config.scale);
+			entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType2Config.Bscale);
+			entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType2Config.Sscale);
+
 			auto& sprite = entity->cSet->sprite;
-			sprite.setScale(2.f, 2.f);
+			sprite.setScale(m_enemyType2Config.Sscale, m_enemyType2Config.Sscale);
 			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
 
@@ -113,7 +119,7 @@ void Game::init(const string& path)
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money >> m_enemyType3Config.scale;
+		iss >> m_enemyType3Config.tag >> m_enemyType3Config.filepath >> m_enemyType3Config.hp >> m_enemyType3Config.speed >> m_enemyType3Config.money >> m_enemyType3Config.Bscale >> m_enemyType3Config.Sscale;
 
 		int amount;
 		iss >> amount;
@@ -125,7 +131,9 @@ void Game::init(const string& path)
 			entity->cHealth = make_shared<CHealth>(m_enemyType3Config.hp);
 			entity->cMovement = make_shared<CMovement>(m_enemyType3Config.speed);
 			entity->cMoney = make_shared<CMoney>(m_enemyType3Config.money);
-			entity->cScale = make_shared<CScale>(m_enemyType3Config.scale);
+			entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType3Config.Bscale);
+			entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType3Config.Sscale);
+
 			auto& sprite = entity->cSet->sprite;
 			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 		}
@@ -201,7 +209,7 @@ void Game::init(const string& path)
 	if (!m_backgroundMusic.openFromFile("SOUNDS/bgmusic.wav")) {
 		cout << "Error: Could not load background music file.\n";
 	}
-	else 
+	else
 	{
 		m_backgroundMusic.setLoop(true);
 		m_backgroundMusic.play();
@@ -226,13 +234,13 @@ void Game::init(const string& path)
 	m_view.setSize(m_windowConfig.width, m_windowConfig.height);
 	m_view.setCenter(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
 	onResize({ m_windowConfig.width, m_windowConfig.height });
-	
+
 	initUIFlow();
 }
 
 void Game::initUIFlow()
 {
-	// -- Choose tower --
+	// -- Choose map --
 	{
 		ifstream readMapBase("MapBase.txt");
 		string line;
@@ -241,7 +249,7 @@ void Game::initUIFlow()
 		Vector2f Base;
 		int base_amount{};
 
-		//Khởi tạo map1 
+		// Khởi tạo map1 
 		auto entity = m_scenes[AppState::Map1].addEntity("Map1");
 		entity->cSet = make_shared<CSet>("IMGS/map1.png");
 
@@ -277,11 +285,44 @@ void Game::initUIFlow()
 		entity->cSet = make_shared<CSet>("IMGS/map3.png");
 
 		
-		//Khởi tạo map4
+		// Khởi tạo map4
 		entity = m_scenes[AppState::Map4].addEntity("Map4");
 		entity->cSet = make_shared<CSet>("IMGS/map4.png");
 
-		//Khởi tạo các chức năng trong game - GamePlay
+
+		// Cập nhật nội dung text
+		m_waveText.setString("WAVE");
+		m_waveNum.setString(std::to_string(m_currentWave));
+
+		// Đặt font và size
+		m_waveText.setFont(m_font);
+		m_waveNum.setFont(m_font);
+
+		m_waveText.setCharacterSize(80);
+		m_waveNum.setCharacterSize(80);
+
+		m_waveText.setFillColor(sf::Color::Black);
+		m_waveNum.setFillColor(sf::Color::Red);
+
+		// Lấy kích thước từng chuỗi
+		sf::FloatRect waveBounds = m_waveText.getLocalBounds();
+		sf::FloatRect numBounds = m_waveNum.getLocalBounds();
+
+		// Tổng chiều rộng để canh giữa
+		float totalWidth = waveBounds.width + 20 + numBounds.width; // 20 là khoảng cách giữa 2 chuỗi
+		float centerX = m_windowConfig.width / 2.f;
+		float centerY = m_windowConfig.height / 2.f;
+
+		// Đặt origin để canh giữa
+		m_waveText.setOrigin(waveBounds.left, waveBounds.top + waveBounds.height / 2.f);
+		m_waveNum.setOrigin(numBounds.left, numBounds.top + numBounds.height / 2.f);
+
+		// Đặt vị trí sao cho nằm giữa toàn bộ
+		m_waveText.setPosition(centerX - totalWidth / 2.f, centerY);
+		m_waveNum.setPosition(m_waveText.getPosition().x + waveBounds.width + 20, centerY);
+
+
+		// Khởi tạo các chức năng trong game - GamePlay
 		entity = m_scenes[AppState::GamePlay].addEntity("Back");
 		entity->cSet = make_shared<CSet>("IMGS/back.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
@@ -301,6 +342,36 @@ void Game::initUIFlow()
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
+
+
+		// Khởi tạo máu người chơi
+		for (int i = 0; i < 5; i++)
+		{
+			entity = m_scenes[AppState::GamePlay].addEntity("Heart");
+			entity->cSet = make_shared<CSet>("IMGS/Heart.png");
+			entity->cBoundaryScale = make_shared<CBoundaryScale>(0.1);
+			entity->active(true);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(entity->cBoundaryScale->scale, entity->cBoundaryScale->scale);
+			entity->cPosition = make_shared<CPosition>(Vector2f(i * sprite.getGlobalBounds().width, 0));
+		}
+
+
+		// Khởi tạo tiền
+		entity = m_scenes[AppState::GamePlay].addEntity("Coin");
+		entity->cSet = make_shared<CSet>("IMGS/Coin.png");
+		entity->cBoundaryScale = make_shared<CBoundaryScale>(0.1182432432432432);
+		auto& sprite = entity->cSet->sprite;
+		sprite.setScale(entity->cBoundaryScale->scale, entity->cBoundaryScale->scale);
+		entity->cPosition = make_shared<CPosition>(Vector2f(0, sprite.getGlobalBounds().height));
+
+		m_moneyText.setFont(m_font);
+		m_moneyText.setCharacterSize(50);
+		m_moneyText.setFillColor(sf::Color::Yellow);
+		m_moneyText.setPosition(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
+
+
+		// Khởi tạo việc chọn và đặt tháp
 		entity = m_scenes[AppState::GamePlay].addEntity("SelectButton");
 		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
@@ -319,7 +390,6 @@ void Game::initUIFlow()
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
-
 		
 		entity = m_scenes[AppState::TowerSelect].addEntity("SelectingBar");
 		entity->cSet = make_shared<CSet>("IMGS/SelectingBar1.png");
@@ -650,11 +720,9 @@ void Game::initUIFlow()
 
 void Game::run()
 {
-	Clock clock;
-
 	while (m_running)
 	{
-		float dt = clock.restart().asSeconds();
+		float dt = m_clock.restart().asSeconds();
 
 		sUserInput(); // Always process input (so you can pause/unpause)
 
@@ -685,6 +753,7 @@ void Game::sRender(float& deltaTime)
 {
 	m_window.clear();
 
+	// Hiển thị tổng
 	for (auto& e : m_scenes[m_state].getEntities())
 	{
 		if (e->cSet && e->cPosition)
@@ -706,16 +775,47 @@ void Game::sRender(float& deltaTime)
 			m_window.draw(e->cSlider->handle);
 		}
 	}
-	if(game_state == AppState::GamePlay)
+
+	if (game_state == AppState::GamePlay)
 	{
 		for (auto& e : m_scenes[game_state].getEntities())
 		{
-			if (e->cSet && e->cPosition)
-				e->cSet->sprite.setPosition(e->cPosition->position);
+			if (!e->cSet || !e->cPosition)
+				continue;
 
-			m_window.draw(e->cSet->sprite);
+			e->cSet->sprite.setPosition(e->cPosition->position);
+
+			// Nếu là trái tim (máu), chỉ vẽ nếu còn active
+			if (e->tag() == "Heart")
+			{
+				if (e->isActive())
+					m_window.draw(e->cSet->sprite);
+			}
+			else
+			{
+				// Các entity khác vẽ bình thường
+				m_window.draw(e->cSet->sprite);
+			}
+
+			m_waveNum.setString(to_string(m_currentWave + 1));
+			m_moneyText.setString(to_string(m_money));
+			m_window.draw(m_moneyText);
+
+			if (m_showWaveText)
+			{
+				m_waveText.setString("WAVE ");
+				m_window.draw(m_waveText);
+				m_window.draw(m_waveNum);
+
+				if (m_waveClock.getElapsedTime().asSeconds() > m_waveDisplayDuration)
+				{
+					m_showWaveText = false;
+				}
+			}
 		}
 	}
+
+	// Hiển thị quái và đạn
 	for (auto& e : m_entities.getEntities())
 	{
 		if (e->isActive())
@@ -729,6 +829,8 @@ void Game::sRender(float& deltaTime)
 			m_window.draw(e->cSet->sprite);
 		}
 	}
+
+	// Hiển thị chọn tháp
 	if (m_state1 == AppState::TowerSelect)
 	{
 		for (auto& e : m_scenes[m_state1].getEntities())
@@ -740,6 +842,7 @@ void Game::sRender(float& deltaTime)
 		}
 	}
 
+	// Hiển thị nhập tên
 	if (m_state == AppState::NameInput)
 	{
 		Vector2f panelCenter(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
@@ -985,17 +1088,17 @@ void Game::sUserInput()
 // --- Reset quái, tháp và đạn khi thoát game
 void Game::sReset()
 {
-	//Reset quái
+	// Reset quái
 	for (auto& enemy : m_entities.getEntities("Enemy"))
 		DeactivateEnemy(*enemy);
 	m_finishWave = true;
 	m_spawnStage = SpawnStage::None;
 
-	//Reset tháp
+	// Reset tháp
 	for (auto& tower : m_entities.getEntities("Tower"))
 		DeactivateTower(*tower);
 
-	//Reset đạn
+	// Reset đạn
 	for (auto& bullet : m_entities.getEntities("Bullet"))
 		DeactivateBullet(*bullet);
 
@@ -1004,6 +1107,21 @@ void Game::sReset()
 		if (!base->isActive())
 			base->active(true);
 	}
+
+	// Reset máu
+	for (auto& heart : m_scenes[AppState::GamePlay].getEntities("Heart"))
+	{
+		if (!heart->isActive())
+			heart->active(true);
+	}
+
+	// Reset tiền
+	m_money = 0;
+
+	// Reset wave
+	m_currentWave = -1;
+	m_showWaveText = false;
+	m_finishWave = false;
 }
 
 // --- Di chuyển và hoạt họa ---
@@ -1032,7 +1150,7 @@ void Game::sMovement(float& deltaTime)
 	{
 		if (!entity->isActive() || !entity->cMovement || !entity->cPosition) continue;
 
-		//Bullet Movement 
+		// Chuyển động đạn
 		if (entity->tag().find("Bullet") != std::string::npos)
 		{
 			entity->cPosition->position += entity->cMovement->velocity * deltaTime;
@@ -1046,35 +1164,85 @@ void Game::sMovement(float& deltaTime)
 				DeactivateBullet(*entity);
 			}
 		}
-		//Enemy Movement 
+
+		// Chuyển động quái
 		else if (entity->tag().find("Enemy") != std::string::npos)
 		{
-			// Check if the enemy has reached the end of the path.
+			// Nếu như quái đi hết đường đi
 			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
 			{
-				m_health -= entity->cHealth->hp;
+				auto heartvector = m_scenes[AppState::GamePlay].getEntities("Heart");
+				int index = static_cast<int>(heartvector.size()) - 1;
+
+				// Tìm trái tim cuối cùng còn active
+				while (index >= 0 && !heartvector[index]->isActive())
+				{
+					index--;
+				}
+
+				if (heartvector.size() - index == 5)
+				{
+					m_window.close();
+					// LOSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+				}
+				else
+				{
+					heartvector[index]->active(false); 
+				}
+
 				DeactivateEnemy(*entity);
 				continue; 
 			}
 
-			// Get the next waypoint and calculate the direction towards it.
+			// Tính toán đường đi đến điểm tiếp theo
 			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
 			Vector2f direction = target - entity->cPosition->position;
 			float distance = MathSupport::Length(direction);
 
-			// If the enemy is very close to the waypoint, move to the next one.
-			if (distance < 5.f) // Use a small threshold to prevent jittering.
+			
+
+			// Kiểm tra xem nếu đủ gần điểm thì chuyển tiếp điểm khác
+			if (distance < 5.f) 
 			{
 				entity->cMovement->currentPathindex++;
 			}
 			else
 			{
-				// Move the enemy towards the target.
+				// Di chuyển quái đến điểm
 				Vector2f movement = MathSupport::Normalize(direction);
 				entity->cPosition->position += movement * entity->cMovement->speed * deltaTime;
+
+				// Lật sprite theo hướng di chuyển
+				float baseScale = 1.f;
+
+				if (entity->cSpriteScale) baseScale = entity->cSpriteScale->scale;
+
+				// Tính toán để dự đoán hướng quay mặt tiếp theo
+				int currentIndex = entity->cMovement->currentPathindex;
+				int nextIndex = currentIndex + 1;
+
+				if (nextIndex < (int)entity->cMovement->paths[m_mapindex].size())
+				{
+					Vector2f currentTarget = entity->cMovement->paths[m_mapindex][currentIndex];
+					Vector2f nextTarget = entity->cMovement->paths[m_mapindex][nextIndex];
+
+					float dx = nextTarget.x - currentTarget.x;
+
+					if (dx < -0.1f)
+						entity->cSet->sprite.setScale(-baseScale, baseScale);
+					else if (dx > 0.1f)
+						entity->cSet->sprite.setScale(baseScale, baseScale);  
+				}
+				else
+				{
+					if (movement.x < -0.1f)
+						entity->cSet->sprite.setScale(-baseScale, baseScale);
+					else if (movement.x > 0.1f)
+						entity->cSet->sprite.setScale(baseScale, baseScale);
+				}
 			}
 
-			// Update the enemy's sprite position to match its new logical position.
+			// Cập nhật hình ảnh và vị trí
 			entity->cSet->sprite.setPosition(entity->cPosition->position);
 		}
 	}
@@ -1160,6 +1328,8 @@ void Game::sCheckWaveFinished()
 		m_currentWave++;
 		cout << "Spawning wave right now" << endl;
 		m_finishWave = true;
+		m_showWaveText = true;
+		m_waveClock.restart();
 	}
 }
 
@@ -1425,6 +1595,7 @@ void Game::DeactivateBullet(Entity& bullet)
 		bullet.cPosition->position = Vector2f(-100.f, -100.f);
 }
 
+
 // support collision logic 
 bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) 
 {
@@ -1434,7 +1605,6 @@ bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer)
 		outer.contains(inner.left, inner.top + inner.height) &&
 		outer.contains(inner.left + inner.width, inner.top + inner.height);
 }
-
 
 FloatRect scaleRect(const FloatRect& rect, float scale = 1.0f) 
 {
@@ -1455,11 +1625,12 @@ FloatRect scaleRect(const FloatRect& rect, float scale = 1.0f)
 bool collisionDetection(const Entity& entity1, const Entity& entity2)
 {
 	if (!entity1.cSet || !entity2.cSet) return false;
-	FloatRect bounds1 = scaleRect(entity1.cSet->sprite.getGlobalBounds(), entity2.cScale->scale / 100.0f);
-	FloatRect bounds2 = scaleRect(entity2.cSet->sprite.getGlobalBounds(), entity2.cScale->scale / 100.0f);
+	FloatRect bounds1 = scaleRect(entity1.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
+	FloatRect bounds2 = scaleRect(entity2.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
 	//return bounds1.intersects(bounds2);
 	return isContained(bounds1, bounds2);
 }
+
 
 // process collision 
 void Game::sCollision()
@@ -1479,7 +1650,7 @@ void Game::sCollision()
 					cur->cHealth->hp -= bullet->cDamage->damage;
 					if (cur->cHealth->hp <= 0)
 					{
-						//m_money += cur->cMoney->money;
+						m_money += cur->cMoney->money;
 						DeactivateEnemy(*cur);
 					}
 				}

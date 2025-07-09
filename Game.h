@@ -46,11 +46,11 @@ enum class AppState {
 
 struct WindowConfig { unsigned int width; unsigned int height; int fps; int fullscreen; };
 
-struct BulletConfig { string tag; string filepath; int damage; float speed; float scale;  };
+struct BulletConfig { string tag; string filepath; int damage; float speed; float Bscale; float Sscale; };
 
-struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; float scale;  };
-struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; float scale;  };
-struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; float scale;  };
+struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
+struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
+struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 
 struct TowerType1Config {};
 struct TowerType3Config {};
@@ -66,6 +66,9 @@ class Game
 {
 	RenderWindow m_window;
 	View m_view;
+
+	Clock m_clock;
+	Clock m_waveClock;
 
 	WindowConfig m_windowConfig;
 	BulletConfig m_bullet01Config;
@@ -85,6 +88,7 @@ class Game
 	float m_spawnDelay = 5.f; 
 	float m_spawningTimer = 0.f;
 	float m_spawningDelay = 0.8f;
+	float m_waveDisplayDuration = 2.0f;
 
 	int m_spawnedType1 = 0;
 	int m_spawnedType2 = 0;
@@ -98,13 +102,10 @@ class Game
 	AppState prev_state = AppState::Dummy;
 	AppState game_state = AppState::Dummy;
 
-
-
 	EntityManager m_entities;
 	string m_selected = "";
-	int m_currentWave = 0;                                                                  // Keep track of current wave
+	int m_currentWave = -1;                                                                 // Keep track of current wave
 	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
-	int m_score = 0;
 	int m_health = 1000;
 	int m_money = 0;
 	int m_currentFrame = 0;
@@ -112,6 +113,9 @@ class Game
 	Font m_font;
 	Text m_inputLabel;
 	Text m_inputText;
+	Text m_moneyText;
+	Text m_waveText;
+	Text m_waveNum;
 	string m_playerName;
 	bool m_typingName = false;
 
@@ -126,10 +130,11 @@ class Game
 
 	list<Sound> m_activeSounds;
 
+	bool m_showWaveText = false;
 	bool m_setting = false;
 	bool m_paused = false;
 	bool m_running = true;
-	bool m_finishWave = true;                                                              
+	bool m_finishWave = false;                                                              
 
 	void init(const string& config);
 	void initUIFlow();

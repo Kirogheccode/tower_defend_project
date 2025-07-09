@@ -37,7 +37,8 @@ public:
 	shared_ptr<Entity> cSource;
 	shared_ptr<CSlider> cSlider;
 	shared_ptr<CWeapon> cWeapon;
-	shared_ptr<CScale> cScale;
+	shared_ptr<CBoundaryScale> cBoundaryScale;
+	shared_ptr<CSpriteScale> cSpriteScale;
 
 	bool isActive() const;
 	const string& tag() const;

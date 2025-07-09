@@ -35,13 +35,13 @@ struct CMovement
 	unsigned int currentPathindex = 0;
 	sf::Vector2f velocity = { 0.f, 0.f }; // Add this!
 
-	vector<Vector2f> starting_pos = { Vector2f(1150.f, 1080.f),				//Starting position for map 1
+	vector<Vector2f> starting_pos = { Vector2f(1165.f, 1080.f),				//Starting position for map 1
 								      Vector2f(0.f, 500.f),					//Starting position for map 2
 								      Vector2f(0.f, 500.f),					//Starting position for map 3
 								      Vector2f(0.f, 500.f)					//Starting position for map 4
 	};
 
-	vector<vector<Vector2f>> paths = { {Vector2f(1150.f, 1080.f),     //Cordination for map1
+	vector<vector<Vector2f>> paths = { {Vector2f(1165.f, 1080.f),     //Cordination for map1
 										Vector2f(1150.f, 880.f),
 										Vector2f(940.f, 880.f),
 										Vector2f(940.f, 730.f),
@@ -163,13 +163,19 @@ struct CBound
 	CBound(const FloatRect& r) : rect(r), shape(Rectangle) {}
 };
 
-struct CScale
+struct CBoundaryScale
 {
 	float scale;
-	CScale() : scale(1.0f) {}
-	CScale(float r) : scale(r) {}
+	CBoundaryScale() : scale(1.0f) {}
+	CBoundaryScale(float r) : scale(r) {}
 };
 
+struct CSpriteScale
+{
+	float scale;
+	CSpriteScale() : scale(1.0f) {}
+	CSpriteScale(float r) : scale(r) {}
+};
 
 struct CInput
 {

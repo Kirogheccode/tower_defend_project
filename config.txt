@@ -12,16 +12,16 @@ TowerDefense 1920 1080 60 0
 # <FrameWidth>:    Width of a single animation frame
 # <FrameHeight>:   Height of a single animation frame
 # -------------------------------------------------------------------------------------------------------
-Bullet01 IMGS/Bullet01.png 10 650 250
-Bullet02 IMGS/PoisonBullet.png 20 600 250
+Bullet01 IMGS/Bullet01.png 10 650 250 1.4
+Bullet02 IMGS/PoisonBullet.png 20 600 250 1.2
 
-# Load enemy format: <Tag> <Filepath> <HP> <Speed> <Money> <Scale> <Amount>
+# Load enemy format: <Tag> <Filepath> <HP> <Speed> <Money> <BoundaryScale> <SpriteScale> <Amount>
 
-EnemyType1 IMGS/Skeleton_With_VFX/Skeleton_01_White_Walk.png 100 80 100 60 100
+EnemyType1 IMGS/Skeleton_With_VFX/Skeleton_01_White_Walk.png 100 80 100 60 1.2 100
 
-EnemyType2 IMGS/slime-Sheet.png 300 50 80 100 100
+EnemyType2 IMGS/slime-Sheet.png 300 50 80 100 2 100
 
-EnemyType3 IMGS/WormEnemy.png 1000 30 180 100 100
+EnemyType3 IMGS/WormEnemy.png 1000 30 180 100 1 100
 
 
 
