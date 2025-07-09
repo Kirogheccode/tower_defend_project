@@ -250,136 +250,30 @@ void Game::initUIFlow()
 		}
 		readMapBase.close();
 
-		entity = m_scenes[AppState::Map1].addEntity("Back");
-		entity->cSet = make_shared<CSet>("IMGS/back.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
-		entity->cInput = make_shared<CInput>([this]()
-			{
-				prev_state = AppState::Map1;
-				m_state = AppState::PlayMenu;
-				sReset();
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
-		entity = m_scenes[AppState::Map1].addEntity("SelectButton");
-		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
-		entity->cInput = make_shared<CInput>([this]()
-			{
-
-				m_state1 = AppState::TowerSelect;
-			},
-			[entity]()
-			{
-
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
 
 		//Khởi tạo map2
 		entity = m_scenes[AppState::Map2].addEntity("Map2");
 		entity->cSet = make_shared<CSet>("IMGS/map2.png");
 
-		entity = m_scenes[AppState::Map2].addEntity("Back");
-		entity->cSet = make_shared<CSet>("IMGS/back.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
-		entity->cInput = make_shared<CInput>([this]()
-			{
-				prev_state = AppState::Map2;
-				m_state = AppState::PlayMenu;
-				sReset();
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
-		entity = m_scenes[AppState::Map2].addEntity("SelectButton");
-		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
-		entity->cInput = make_shared<CInput>([this]()
-			{
-
-				m_state1 = AppState::TowerSelect;
-			},
-			[entity]()
-			{
-
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
+		
 		//Khởi tạo map3
 		entity = m_scenes[AppState::Map3].addEntity("Map3");
 		entity->cSet = make_shared<CSet>("IMGS/map3.png");
 
-		entity = m_scenes[AppState::Map3].addEntity("Back");
-		entity->cSet = make_shared<CSet>("IMGS/back.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
-		entity->cInput = make_shared<CInput>([this]()
-			{
-				prev_state = AppState::Map3;
-				m_state = AppState::PlayMenu;
-				sReset();
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
-		entity = m_scenes[AppState::Map3].addEntity("SelectButton");
-		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
-		entity->cInput = make_shared<CInput>([this]()
-			{
-
-				m_state1 = AppState::TowerSelect;
-			},
-			[entity]()
-			{
-
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
-
-
+		
 		//Khởi tạo map4
 		entity = m_scenes[AppState::Map4].addEntity("Map4");
 		entity->cSet = make_shared<CSet>("IMGS/map4.png");
 
-		entity = m_scenes[AppState::Map4].addEntity("Back");
+		//Khởi tạo các chức năng trong game - GamePlay
+		entity = m_scenes[AppState::GamePlay].addEntity("Back");
 		entity->cSet = make_shared<CSet>("IMGS/back.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
 		entity->cInput = make_shared<CInput>([this]()
 			{
-				prev_state = AppState::Map4;
+				prev_state = m_state;
 				m_state = AppState::PlayMenu;
+				game_state = AppState::Dummy;
 				sReset();
 			},
 			[entity]()
@@ -391,7 +285,7 @@ void Game::initUIFlow()
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
-		entity = m_scenes[AppState::Map4].addEntity("SelectButton");
+		entity = m_scenes[AppState::GamePlay].addEntity("SelectButton");
 		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
 		entity->cInput = make_shared<CInput>([this]()
@@ -410,7 +304,7 @@ void Game::initUIFlow()
 			}
 		);
 
-
+		
 		entity = m_scenes[AppState::TowerSelect].addEntity("SelectingBar");
 		entity->cSet = make_shared<CSet>("IMGS/SelectingBar1.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1720, 0));
@@ -645,6 +539,7 @@ void Game::initUIFlow()
 			{
 			m_mapindex = 0;
 			m_state = AppState::Map1;
+			game_state = AppState::GamePlay;
 			},
 			[map1]()
 			{
@@ -664,6 +559,7 @@ void Game::initUIFlow()
 			{
 			m_mapindex = 1;
 			m_state = AppState::Map2;
+			game_state = AppState::GamePlay;
 			},
 			[map2]()
 			{
@@ -683,6 +579,7 @@ void Game::initUIFlow()
 			{
 			m_mapindex = 2;
 			m_state = AppState::Map3;
+			game_state = AppState::GamePlay;
 			},
 			[map3]()
 			{
@@ -702,6 +599,7 @@ void Game::initUIFlow()
 			{
 			m_mapindex = 3;
 			m_state = AppState::Map4;
+			game_state = AppState::GamePlay;
 			},
 			[map4]()
 			{
@@ -790,6 +688,16 @@ void Game::sRender(float& deltaTime)
 		if (e->cSlider) {
 			m_window.draw(e->cSlider->track);
 			m_window.draw(e->cSlider->handle);
+		}
+	}
+	if(game_state == AppState::GamePlay)
+	{
+		for (auto& e : m_scenes[game_state].getEntities())
+		{
+			if (e->cSet && e->cPosition)
+				e->cSet->sprite.setPosition(e->cPosition->position);
+
+			m_window.draw(e->cSet->sprite);
 		}
 	}
 	for (auto& e : m_entities.getEntities())
@@ -980,7 +888,12 @@ void Game::sUserInput()
 				else
 				{
 					// Xử lý click cho m_state1 nếu đang hiện overlay chọn tháp
-					AppState stateToHandle = (m_state1 != AppState::Dummy) ? m_state1 : m_state;
+					/*AppState stateToHandle = (m_state1 != AppState::Dummy) ? m_state1 : m_state;*/
+					AppState stateToHandle = m_state;
+					if (m_state1 != AppState::Dummy)
+						stateToHandle = m_state1;
+					else if (game_state != AppState::Dummy)
+						stateToHandle = game_state;
 
 					if (stateToHandle == AppState::TowerSelect)
 					{
@@ -1028,7 +941,14 @@ void Game::sUserInput()
 	}
 
 	// --- Hover Detection
-	AppState hoverState = (m_state1 != AppState::Dummy && m_state2 == AppState::Dummy) ? m_state1 : m_state;
+	AppState hoverState = m_state;
+
+	if (m_state1 != AppState::Dummy && m_state2 == AppState::Dummy)
+		hoverState = m_state1;
+	else if (m_state2 != AppState::Dummy)
+		hoverState = m_state2;
+	else if (game_state != AppState::Dummy)
+		hoverState = game_state;
 
 	for (auto& e : m_scenes[hoverState].getEntities())
 	{
