@@ -342,6 +342,24 @@ void Game::initUIFlow()
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
+		entity = m_scenes[AppState::GamePlay].addEntity("SystemSetting");
+		entity->cSet = make_shared<CSet>("IMGS/Gear.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(20, 940));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				m_setting = true;
+				m_paused = true;
+				m_state1 = AppState::SettingsMenu;
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 
 		// Khởi tạo máu người chơi
@@ -464,7 +482,7 @@ void Game::initUIFlow()
 		settingsButton->cInput = make_shared<CInput>([this]() 
 			{
 			m_setting = true;
-			m_state = AppState::SettingsMenu;
+			m_state1 = AppState::SettingsMenu;
 			},
 			[settingsButton]()
 			{
@@ -557,10 +575,6 @@ void Game::initUIFlow()
 
 	// -- SettingsMenu (Pop-up) --
 	{
-		auto bg_faded = m_scenes[AppState::SettingsMenu].addEntity("BG_Faded");
-		bg_faded->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
-		bg_faded->cPosition = make_shared<CPosition>(Vector2f(0, 0));
-		bg_faded->cSet->sprite.setColor(Color(255, 255, 255, 100));
 
 		auto panel = m_scenes[AppState::SettingsMenu].addEntity("SettingsPanel");
 		panel->cSet = make_shared<CSet>("IMGS/settingmenu.png");
@@ -571,14 +585,14 @@ void Game::initUIFlow()
 		Vector2f panelCenter = panel->cPosition->position;
 		float row1_y = panelCenter.y - 25.f;
 		float row2_y = panelCenter.y + 50.f;
-		float icon_x = panelCenter.x - 250.f;
+		float icon_x = panelCenter.x - 170.f;
 		float slider_x = panelCenter.x + 50.f;
 
 		auto musicIcon = m_scenes[AppState::SettingsMenu].addEntity("MusicIcon");
 		musicIcon->cSet = make_shared<CSet>("IMGS/music_on.png");
 		musicIcon->cPosition = make_shared<CPosition>(Vector2f(icon_x, row1_y));
 		musicIcon->cSet->sprite.setOrigin(musicIcon->cSet->sprite.getLocalBounds().width / 2.f, musicIcon->cSet->sprite.getLocalBounds().height / 2.f);
-		musicIcon->cSet->sprite.setScale(0.08f, 0.08f);
+		musicIcon->cSet->sprite.setScale(0.1f, 0.1f);
 		musicIcon->cInput = make_shared<CInput>([this, musicIcon]() {
 			m_musicMuted = !m_musicMuted;
 			musicIcon->cSet->texture.loadFromFile(m_musicMuted ? "IMGS/music_off.png" : "IMGS/music_on.png");
@@ -586,29 +600,40 @@ void Game::initUIFlow()
 			});
 
 		auto musicSliderEntity = m_scenes[AppState::SettingsMenu].addEntity("MusicSlider");
-		musicSliderEntity->cSlider = make_shared<CSlider>(&m_musicVolume, Vector2f(slider_x, row1_y), Vector2f(300.f, 10.f));
+		musicSliderEntity->cSlider = make_shared<CSlider>(&m_musicVolume, Vector2f(slider_x, row1_y),"IMGS/Slider.png","IMGS/SlidingBar.png");
 
 		auto sfxIcon = m_scenes[AppState::SettingsMenu].addEntity("SfxIcon");
 		sfxIcon->cSet = make_shared<CSet>("IMGS/sfx_on.png");
-		sfxIcon->cPosition = make_shared<CPosition>(sf::Vector2f(icon_x, row2_y));
+		sfxIcon->cPosition = make_shared<CPosition>(Vector2f(icon_x, row2_y));
 		sfxIcon->cSet->sprite.setOrigin(sfxIcon->cSet->sprite.getLocalBounds().width / 2.f, sfxIcon->cSet->sprite.getLocalBounds().height / 2.f);
-		sfxIcon->cSet->sprite.setScale(0.08f, 0.08f);
+		sfxIcon->cSet->sprite.setScale(0.1f, 0.1f);
 		sfxIcon->cInput = make_shared<CInput>([this, sfxIcon]() {
 			m_sfxMuted = !m_sfxMuted;
 			sfxIcon->cSet->texture.loadFromFile(m_sfxMuted ? "IMGS/sfx_off.png" : "IMGS/sfx_on.png");
 			});
 
 		auto sfxSliderEntity = m_scenes[AppState::SettingsMenu].addEntity("SfxSlider");
-		sfxSliderEntity->cSlider = make_shared<CSlider>(&m_sfxVolume, sf::Vector2f(slider_x, row2_y), sf::Vector2f(300.f, 10.f));
+		sfxSliderEntity->cSlider = make_shared<CSlider>(&m_sfxVolume, Vector2f(slider_x, row2_y), "IMGS/Slider.png", "IMGS/SlidingBar.png");
 
 		auto back = m_scenes[AppState::SettingsMenu].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x, panelCenter.y + 200.f));
+		back->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x, panelCenter.y + 115.f));
 		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
-		back->cInput = make_shared<CInput>([this]() {
+		back->cInput = make_shared<CInput>([this]() 
+			{
 			m_setting = false;
-			m_state = AppState::MainMenu;
-			});
+			m_paused = false;
+			m_state1 = AppState::Dummy;
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 	}
 
 	// -- MapSelect --
@@ -769,11 +794,6 @@ void Game::sRender(float& deltaTime)
 			if (e->cSet)
 				m_window.draw(e->cSet->sprite);
 		}
-
-		if (e->cSlider) {
-			m_window.draw(e->cSlider->track);
-			m_window.draw(e->cSlider->handle);
-		}
 	}
 
 	if (game_state == AppState::GamePlay)
@@ -831,14 +851,21 @@ void Game::sRender(float& deltaTime)
 	}
 
 	// Hiển thị chọn tháp
-	if (m_state1 == AppState::TowerSelect)
+	if (m_state1 != AppState::Dummy)
 	{
 		for (auto& e : m_scenes[m_state1].getEntities())
 		{
 			if (e->cSet && e->cPosition)
 				e->cSet->sprite.setPosition(e->cPosition->position);
 
-			m_window.draw(e->cSet->sprite);
+			if(e->cSet)
+			   m_window.draw(e->cSet->sprite);
+
+			if (e->cSlider) 
+			{
+				m_window.draw(e->cSlider->track);
+				m_window.draw(e->cSlider->handle);
+			}
 		}
 	}
 
@@ -878,11 +905,11 @@ void Game::sUserInput()
 		}
 
 		// --- Input cho SettingsMenu (Slider + Icon)
-		if (m_state == AppState::SettingsMenu)
+		if (m_state1 == AppState::SettingsMenu)
 		{
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 			{
-				for (auto& e : m_scenes[m_state].getEntities())
+				for (auto& e : m_scenes[m_state1].getEntities())
 				{
 					if (e->cSlider &&
 						(e->cSlider->track.getGlobalBounds().contains(mousePos) || e->cSlider->handle.getGlobalBounds().contains(mousePos)))
@@ -909,7 +936,7 @@ void Game::sUserInput()
 
 			if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 			{
-				for (auto& e : m_scenes[m_state].getEntities())
+				for (auto& e : m_scenes[m_state1].getEntities())
 				{
 					if (e->cSlider && e->cSlider->isDragging)
 						e->cSlider->isDragging = false;
@@ -918,7 +945,7 @@ void Game::sUserInput()
 
 			if (event.type == Event::MouseMoved)
 			{
-				for (auto& e : m_scenes[m_state].getEntities())
+				for (auto& e : m_scenes[m_state1].getEntities())
 				{
 					if (e->cSlider && e->cSlider->isDragging)
 					{
@@ -1007,7 +1034,7 @@ void Game::sUserInput()
 				else
 				{
 					// Xử lý click cho m_state1 nếu đang hiện overlay chọn tháp
-					/*AppState stateToHandle = (m_state1 != AppState::Dummy) ? m_state1 : m_state;*/
+				    
 					AppState stateToHandle = m_state;
 					if (m_state1 != AppState::Dummy)
 						stateToHandle = m_state1;
@@ -1183,7 +1210,7 @@ void Game::sMovement(float& deltaTime)
 				if (heartvector.size() - index == 5)
 				{
 					m_window.close();
-					// LOSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+					// LOSE
 				}
 				else
 				{

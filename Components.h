@@ -219,24 +219,42 @@ struct CCooldown
 };
 
 struct CSlider {
-	sf::RectangleShape track;
-	sf::RectangleShape handle;
+	/*sf::RectangleShape track;
+	sf::RectangleShape handle;*/
+	Texture trackTexture;
+	Texture handleTexture;
+	Sprite track;
+	Sprite handle;
 	float* valueToControl = nullptr;
 	bool isDragging = false;
 
-	CSlider(float* valuePtr, sf::Vector2f position, sf::Vector2f trackSize) {
+	CSlider(float* valuePtr, Vector2f position, const string& handlePath, const string& trackPath) 
+	{
 		valueToControl = valuePtr;
 
+
+		if (!handleTexture.loadFromFile(handlePath))
+		{
+			cout << "Error loading handle texture" << endl;
+			return;
+		}
+		if (!trackTexture.loadFromFile(trackPath))
+		{
+			cout << "Error loading track texture" << endl;
+			return;
+		}
+		track.setTexture(trackTexture);
+		handle.setTexture(handleTexture);
+
 		// Thiết lập thanh trượt
-		track.setSize(trackSize);
-		track.setOrigin(trackSize.x / 2.f, trackSize.y / 2.f);
+		track.setOrigin(trackTexture.getSize().x / 2.f, trackTexture.getSize().y / 2.f);
 		track.setPosition(position);
-		track.setFillColor(sf::Color(50, 50, 50)); // Màu xám tối
+	    
 
 		// Thiết lập nút kéo
-		handle.setSize({ 20.f, trackSize.y * 2.f }); // Nút kéo cao hơn thanh trượt một chút
-		handle.setOrigin(handle.getSize().x / 2.f, handle.getSize().y / 2.f);
-		handle.setFillColor(sf::Color(150, 150, 150)); // Màu xám sáng
+		
+		handle.setOrigin(handleTexture.getSize().x / 2.f, handleTexture.getSize().y / 2.f);
+		
 
 		// Đặt vị trí ban đầu của nút kéo dựa trên giá trị âm lượng
 		updateHandlePosition();
@@ -246,21 +264,21 @@ struct CSlider {
 	void updateHandlePosition() {
 		if (!valueToControl) return;
 		float percent = *valueToControl / 100.f; // Chuyển giá trị (0-100) thành tỷ lệ (0.0-1.0)
-		float trackLeft = track.getPosition().x - track.getSize().x / 2.f;
-		float newX = trackLeft + (track.getSize().x * percent);
+		float trackLeft = track.getPosition().x - trackTexture.getSize().x / 2.f;
+		float newX = trackLeft + (trackTexture.getSize().x * percent);
 		handle.setPosition(newX, track.getPosition().y);
 	}
 
 	// Cập nhật giá trị âm lượng dựa trên vị trí của nút kéo
 	void updateValueFromHandle(float mouseX) {
 		if (!valueToControl) return;
-		float trackLeft = track.getPosition().x - track.getSize().x / 2.f;
-		float trackRight = track.getPosition().x + track.getSize().x / 2.f;
+		float trackLeft = track.getPosition().x - trackTexture.getSize().x / 2.f;
+		float trackRight = track.getPosition().x + trackTexture.getSize().x / 2.f;
 
 		// Giới hạn vị trí chuột trong phạm vi thanh trượt
 		mouseX = std::max(trackLeft, std::min(mouseX, trackRight));
 
-		float percent = (mouseX - trackLeft) / track.getSize().x;
+		float percent = (mouseX - trackLeft) / trackTexture.getSize().x;
 		*valueToControl = percent * 100.f;
 
 		updateHandlePosition(); // Cập nhật lại vị trí handle cho chính xác
