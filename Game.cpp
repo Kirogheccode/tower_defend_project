@@ -674,7 +674,36 @@ void Game::initUIFlow()
 
 	// -- AboutUs (Pop-up) --
 	{
-		
+		auto panel = m_scenes[AppState::AboutUs].addEntity("AboutPanel");
+		panel->cSet = make_shared<CSet>("IMGS/About.png");
+		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
+		panel->cSet->sprite.setScale(1.5f, 1.5f);
+
+
+		auto backBtn = m_scenes[AppState::AboutUs].addEntity("BackAbout");
+		backBtn->cSet = make_shared<CSet>("IMGS/back.png");
+		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
+		backBtn->cInput = make_shared<CInput>([this]() {
+			m_state1 = AppState::SettingsMenu;
+			}
+		);
+	}
+
+	// -- Rules (Pop - up) --
+	{
+		auto panel = m_scenes[AppState::Rules].addEntity("RulesPanel");
+		panel->cSet = make_shared<CSet>("IMGS/GameRules.png");
+		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
+		panel->cSet->sprite.setScale(1.5f, 1.5f);
+
+		auto backBtn = m_scenes[AppState::Rules].addEntity("BackRules");
+		backBtn->cSet = make_shared<CSet>("IMGS/back.png");
+		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
+		backBtn->cInput = make_shared<CInput>([this]() {
+			m_state1 = AppState::SettingsMenu;
+			});
 	}
 
 	// -- MapSelect --
@@ -940,6 +969,18 @@ void Game::sRender(float& deltaTime)
 		m_window.draw(m_inputText);
 	}
 
+	//// Hiển thị AboutUs/Rules
+	//if (m_state1 == AppState::AboutUs || m_state1 == AppState::Rules)
+	//{
+	//	for (auto& e : m_scenes[m_state1].getEntities())
+	//	{
+	//		if (e->cSet && e->cPosition)
+	//			e->cSet->sprite.setPosition(e->cPosition->position);
+
+	//		m_window.draw(e->cSet->sprite);
+	//	}
+	//}
+
 	m_window.display();
 }
 
@@ -1048,6 +1089,23 @@ void Game::sUserInput()
 					{
 						clickedSlider = true;
 						break;
+					}
+				}
+			}
+
+			// Intput cho about us và rules
+			if (m_state1 == AppState::AboutUs || m_state1 == AppState::Rules)
+			{
+				if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+				{
+					for (auto& e : m_scenes[m_state1].getEntities())
+					{
+						if (e->cSet && e->cInput && e->cSet->sprite.getGlobalBounds().contains(mousePos))
+						{
+							playSfx(m_clickBuffer);
+							e->cInput->onClick();
+							return;
+						}
 					}
 				}
 			}
