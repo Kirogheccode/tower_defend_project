@@ -281,6 +281,7 @@
   <ItemGroup>
     <Text Include="config.txt" />
     <Text Include="MapBase.txt" />
+    <Text Include="player.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="tower_defend_project.rc">

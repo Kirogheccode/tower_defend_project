@@ -231,10 +231,6 @@ void Game::init(const string& path)
 	m_inputText.setFillColor(Color::Yellow);
 	m_inputText.setPosition(500, 300);
 
-	m_view.setSize(m_windowConfig.width, m_windowConfig.height);
-	m_view.setCenter(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
-	onResize({ m_windowConfig.width, m_windowConfig.height });
-
 	initUIFlow();
 }
 
@@ -308,7 +304,7 @@ void Game::initUIFlow()
 		numEntity->cText->text.setCharacterSize(80);
 		numEntity->cText->text.setFillColor(sf::Color::Red);
 
-		sf::FloatRect numBounds = numEntity->cText->text.getLocalBounds();
+		FloatRect numBounds = numEntity->cText->text.getLocalBounds();
 		numEntity->cText->text.setOrigin(numBounds.left + numBounds.width / 2.f,
 			numBounds.top + numBounds.height / 2.f);
 
@@ -323,16 +319,68 @@ void Game::initUIFlow()
 		// Vị trí số wave
 		numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY);
 
+		// -- OptionMenu --
+		entity = m_scenes[AppState::OptionMenu].addEntity("OptionBoard");
+		entity->cSet = make_shared<CSet>("IMGS/OptionBoard.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		entity->cSet->sprite.setOrigin(entity->cSet->sprite.getLocalBounds().width / 2.f, entity->cSet->sprite.getLocalBounds().height / 2.f);
 
-		// Khởi tạo các chức năng trong game - GamePlay
-		entity = m_scenes[AppState::GamePlay].addEntity("Back");
-		entity->cSet = make_shared<CSet>("IMGS/back.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		entity = m_scenes[AppState::OptionMenu].addEntity("Title");
+		entity->cText = make_shared<CText>("OPTIONS");
+		entity->cText->text.setFont(m_font);
+		entity->cText->text.setCharacterSize(60);
+		entity->cText->text.setFillColor(Color::Black);
+		entity->cText->text.setPosition(Vector2f(839, 273));
+
+
+		entity = m_scenes[AppState::OptionMenu].addEntity("Resume");
+		entity->cSet = make_shared<CSet>("IMGS/play.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(839, 406));
+		entity->cSet->sprite.setScale(0.6f, 0.6f);
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				m_state1 = AppState::Dummy;
+				m_paused = false;
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		entity = m_scenes[AppState::OptionMenu].addEntity("Save");
+		entity->cSet = make_shared<CSet>("IMGS/setting.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(839, 539));
+		entity->cSet->sprite.setScale(0.6f, 0.6f);
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				cout << "Successfully saved" << endl;
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		entity = m_scenes[AppState::OptionMenu].addEntity("Quit");
+		entity->cSet = make_shared<CSet>("IMGS/quit.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(839, 672));
+		entity->cSet->sprite.setScale(0.6f, 0.6f);
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
 				m_state = AppState::PlayMenu;
 				game_state = AppState::Dummy;
+				m_state1 = AppState::Dummy;
+				m_paused = false;
 				sReset();
 			},
 			[entity]()
@@ -344,6 +392,26 @@ void Game::initUIFlow()
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
+		// Khởi tạo các chức năng trong game - GamePlay
+		entity = m_scenes[AppState::GamePlay].addEntity("OptionSetting");
+		entity->cSet = make_shared<CSet>("IMGS/Option.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				m_state1 = AppState::OptionMenu;
+				m_paused = true;
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+
 		entity = m_scenes[AppState::GamePlay].addEntity("SystemSetting");
 		entity->cSet = make_shared<CSet>("IMGS/Gear.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(20, 940));
@@ -502,7 +570,8 @@ void Game::initUIFlow()
 		exit->cSet = make_shared<CSet>("IMGS/quit.png");
 		exit->cPosition = make_shared<CPosition>(Vector2f(1090, 876));
 		exit->cSet->sprite.setScale(0.85f, 0.85f);
-		exit->cInput = make_shared<CInput>([this]() {
+		exit->cInput = make_shared<CInput>([this]() 
+			{
 			m_window.close();
 			m_running = false;
 			},
@@ -528,9 +597,9 @@ void Game::initUIFlow()
 		newGameButton->cPosition = make_shared<CPosition>(Vector2f(1144, 605));
 		newGameButton->cInput = make_shared<CInput>([this]() 
 			{
-			m_playerName = "";
+			m_playerName.clear();
 			m_inputText.setString("|");
-			m_state = (AppState::MapSelect);
+			m_typingName = true;
 			},
 			[newGameButton]()
 			{
@@ -565,6 +634,7 @@ void Game::initUIFlow()
 		back->cInput = make_shared<CInput>([this]() 
 			{
 			 m_state = AppState::MainMenu;
+			 m_typingName = false;
 			},
 			[back]()
 			{
@@ -684,8 +754,17 @@ void Game::initUIFlow()
 		auto backBtn = m_scenes[AppState::AboutUs].addEntity("BackAbout");
 		backBtn->cSet = make_shared<CSet>("IMGS/back.png");
 		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
-		backBtn->cInput = make_shared<CInput>([this]() {
+		backBtn->cInput = make_shared<CInput>([this]() 
+			{
 			m_state1 = AppState::SettingsMenu;
+			},
+			[backBtn]()
+			{
+				backBtn->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[backBtn]()
+			{
+				backBtn->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
 	}
@@ -701,9 +780,19 @@ void Game::initUIFlow()
 		auto backBtn = m_scenes[AppState::Rules].addEntity("BackRules");
 		backBtn->cSet = make_shared<CSet>("IMGS/back.png");
 		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
-		backBtn->cInput = make_shared<CInput>([this]() {
+		backBtn->cInput = make_shared<CInput>([this]() 
+			{
 			m_state1 = AppState::SettingsMenu;
-			});
+			},
+			[backBtn]()
+			{
+				backBtn->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[backBtn]()
+			{
+				backBtn->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 	}
 
 	// -- MapSelect --
@@ -943,6 +1032,8 @@ void Game::sRender(float& deltaTime)
 
 			if(e->cSet)
 			   m_window.draw(e->cSet->sprite);
+			if (e->cText)
+				m_window.draw(e->cText->text);
 
 			if (e->cSlider) 
 			{
@@ -953,7 +1044,7 @@ void Game::sRender(float& deltaTime)
 	}
 
 	// Hiển thị nhập tên
-	if (m_state == AppState::NameInput)
+	if (m_typingName)
 	{
 		Vector2f panelCenter(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
 
@@ -969,17 +1060,6 @@ void Game::sRender(float& deltaTime)
 		m_window.draw(m_inputText);
 	}
 
-	//// Hiển thị AboutUs/Rules
-	//if (m_state1 == AppState::AboutUs || m_state1 == AppState::Rules)
-	//{
-	//	for (auto& e : m_scenes[m_state1].getEntities())
-	//	{
-	//		if (e->cSet && e->cPosition)
-	//			e->cSet->sprite.setPosition(e->cPosition->position);
-
-	//		m_window.draw(e->cSet->sprite);
-	//	}
-	//}
 
 	m_window.display();
 }
@@ -1052,7 +1132,7 @@ void Game::sUserInput()
 		}
 
 		// --- Input cho NameInput (gõ tên)
-		if (m_state == AppState::NameInput)
+		if(m_typingName)
 		{
 			if (event.type == Event::TextEntered)
 			{
@@ -1064,15 +1144,15 @@ void Game::sUserInput()
 				{
 					if (!m_playerName.empty())
 					{
-						std::ofstream("player.txt") << m_playerName;
-						m_state = AppState::TowerSelect;
+						sSavePlayerName();
+						m_state = AppState::MapSelect;
 					}
 				}
 				else if (event.text.unicode >= 32 && event.text.unicode < 128)
 				{
 					m_playerName += static_cast<char>(event.text.unicode);
 				}
-				m_inputText.setString(m_playerName + "|");
+				m_inputText.setString(m_playerName);
 			}
 		}
 
@@ -1093,22 +1173,7 @@ void Game::sUserInput()
 				}
 			}
 
-			// Intput cho about us và rules
-			if (m_state1 == AppState::AboutUs || m_state1 == AppState::Rules)
-			{
-				if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
-				{
-					for (auto& e : m_scenes[m_state1].getEntities())
-					{
-						if (e->cSet && e->cInput && e->cSet->sprite.getGlobalBounds().contains(mousePos))
-						{
-							playSfx(m_clickBuffer);
-							e->cInput->onClick();
-							return;
-						}
-					}
-				}
-			}
+			
 
 			if (!clickedSlider)
 			{
@@ -1223,7 +1288,18 @@ void Game::sUserInput()
 		}
 	}
 }
-
+// --- Lưu tên người chơi khi nhập ở PlayMenu
+void Game::sSavePlayerName()
+{
+	ofstream writePlayer("player.txt");
+	if (writePlayer.is_open())
+	{
+	   writePlayer << m_playerName;
+	   writePlayer.close();
+	   cout << "Player name saved: " << m_playerName << endl;
+	}
+	m_typingName = false;
+}
 // --- Reset quái, tháp và đạn khi thoát game
 void Game::sReset()
 {

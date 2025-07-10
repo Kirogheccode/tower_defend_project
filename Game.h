@@ -33,6 +33,7 @@ enum class AppState {
 	PlayMenu,       // new game, load game
 	NameInput,      // pop-up nhập tên
 	SettingsMenu,   // Pop-up cài đặt
+	OptionMenu,     // Pop-up lựa chọn
 	AboutUs,
 	Rules,
 	MapSelect,      // Màn hình chọn map/độ khó
@@ -113,8 +114,8 @@ class Game
 	int m_currentFrame = 0;
 
 	Font m_font;
-	sf::Text m_inputLabel;
-	sf::Text m_inputText;
+	Text m_inputLabel;
+	Text m_inputText;
 	string m_playerName;
 	bool m_typingName = false;
 
@@ -155,6 +156,9 @@ class Game
 	void DeactivateTower(Entity&);
 
 	void onResize(const sf::Event::SizeEvent& size);
+
+
+	void sSavePlayerName();
 
 public:
 	Game(const string& config);
