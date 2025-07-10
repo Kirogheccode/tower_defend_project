@@ -289,3 +289,25 @@ struct CWeapon
 {
 	string tag;
 };
+
+struct CText
+{
+	sf::Text text;
+
+	CText() {}
+
+	CText(const string& A)
+	{
+		text.setString(A);
+	}
+
+	CText(const int& A)
+	{
+		text.setString(to_string(A));
+	}
+
+	CText(const float& A)
+	{
+		text.setString(to_string(A));
+	}
+};

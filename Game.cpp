@@ -290,36 +290,38 @@ void Game::initUIFlow()
 		entity->cSet = make_shared<CSet>("IMGS/map4.png");
 
 
-		// Cập nhật nội dung text
-		m_waveText.setString("WAVE");
-		m_waveNum.setString(std::to_string(m_currentWave));
+		// Khởi tạo WAVE text
+		auto waveEntity = m_scenes[AppState::GamePlay].addEntity("WaveText");
+		waveEntity->cText = make_shared<CText>("WAVE ");
+		waveEntity->cText->text.setFont(m_font);
+		waveEntity->cText->text.setCharacterSize(80);
+		waveEntity->cText->text.setFillColor(sf::Color::Black);
 
-		// Đặt font và size
-		m_waveText.setFont(m_font);
-		m_waveNum.setFont(m_font);
+		sf::FloatRect waveBounds = waveEntity->cText->text.getLocalBounds();
+		waveEntity->cText->text.setOrigin(waveBounds.left + waveBounds.width / 2.f,
+			waveBounds.top + waveBounds.height / 2.f);
 
-		m_waveText.setCharacterSize(80);
-		m_waveNum.setCharacterSize(80);
+		// Khởi tạo số wave 
+		auto numEntity = m_scenes[AppState::GamePlay].addEntity("WaveNumber");
+		numEntity->cText = make_shared<CText>(std::to_string(m_currentWave));
+		numEntity->cText->text.setFont(m_font);
+		numEntity->cText->text.setCharacterSize(80);
+		numEntity->cText->text.setFillColor(sf::Color::Red);
 
-		m_waveText.setFillColor(sf::Color::Black);
-		m_waveNum.setFillColor(sf::Color::Red);
+		sf::FloatRect numBounds = numEntity->cText->text.getLocalBounds();
+		numEntity->cText->text.setOrigin(numBounds.left + numBounds.width / 2.f,
+			numBounds.top + numBounds.height / 2.f);
 
-		// Lấy kích thước từng chuỗi
-		sf::FloatRect waveBounds = m_waveText.getLocalBounds();
-		sf::FloatRect numBounds = m_waveNum.getLocalBounds();
-
-		// Tổng chiều rộng để canh giữa
-		float totalWidth = waveBounds.width + 20 + numBounds.width; // 20 là khoảng cách giữa 2 chuỗi
+		// Canh giữa 
+		float totalWidth = waveBounds.width + 20 + numBounds.width;
 		float centerX = m_windowConfig.width / 2.f;
 		float centerY = m_windowConfig.height / 2.f;
 
-		// Đặt origin để canh giữa
-		m_waveText.setOrigin(waveBounds.left, waveBounds.top + waveBounds.height / 2.f);
-		m_waveNum.setOrigin(numBounds.left, numBounds.top + numBounds.height / 2.f);
+		// Vị trí text "WAVE"
+		waveEntity->cText->text.setPosition(centerX - totalWidth / 2.f + waveBounds.width / 2.f, centerY);
 
-		// Đặt vị trí sao cho nằm giữa toàn bộ
-		m_waveText.setPosition(centerX - totalWidth / 2.f, centerY);
-		m_waveNum.setPosition(m_waveText.getPosition().x + waveBounds.width + 20, centerY);
+		// Vị trí số wave
+		numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY);
 
 
 		// Khởi tạo các chức năng trong game - GamePlay
@@ -383,10 +385,12 @@ void Game::initUIFlow()
 		sprite.setScale(entity->cBoundaryScale->scale, entity->cBoundaryScale->scale);
 		entity->cPosition = make_shared<CPosition>(Vector2f(0, sprite.getGlobalBounds().height));
 
-		m_moneyText.setFont(m_font);
-		m_moneyText.setCharacterSize(50);
-		m_moneyText.setFillColor(sf::Color::Yellow);
-		m_moneyText.setPosition(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
+		auto moneyText = m_scenes[AppState::GamePlay].addEntity("MoneyText");
+		moneyText->cText = make_shared<CText>(0);
+		moneyText->cText->text.setFont(m_font);
+		moneyText->cText->text.setCharacterSize(50);
+		moneyText->cText->text.setFillColor(sf::Color::Yellow);
+		moneyText->cText->text.setPosition(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
 
 
 		// Khởi tạo việc chọn và đặt tháp
@@ -854,15 +858,28 @@ void Game::sRender(float& deltaTime)
 				m_window.draw(e->cSet->sprite);
 			}
 
-			m_waveNum.setString(to_string(m_currentWave + 1));
-			m_moneyText.setString(to_string(m_money));
-			m_window.draw(m_moneyText);
+			for (auto& e : m_scenes[AppState::GamePlay].getEntities("MoneyText"))
+			{
+				e->cText->text.setString(to_string(m_money));
+
+				if (e->cText)
+					m_window.draw(e->cText->text);
+			}
 
 			if (m_showWaveText)
 			{
-				m_waveText.setString("WAVE ");
-				m_window.draw(m_waveText);
-				m_window.draw(m_waveNum);
+				for (auto& e : m_scenes[AppState::GamePlay].getEntities("WaveText"))
+				{
+					if (e->cText)
+						m_window.draw(e->cText->text);
+				}
+				for (auto& e : m_scenes[AppState::GamePlay].getEntities("WaveNumber"))
+				{
+					e->cText->text.setString(to_string(m_currentWave + 1));
+
+					if (e->cText)
+						m_window.draw(e->cText->text);
+				}
 
 				if (m_waveClock.getElapsedTime().asSeconds() > m_waveDisplayDuration)
 				{

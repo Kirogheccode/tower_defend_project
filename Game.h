@@ -113,11 +113,8 @@ class Game
 	int m_currentFrame = 0;
 
 	Font m_font;
-	Text m_inputLabel;
-	Text m_inputText;
-	Text m_moneyText;
-	Text m_waveText;
-	Text m_waveNum;
+	sf::Text m_inputLabel;
+	sf::Text m_inputText;
 	string m_playerName;
 	bool m_typingName = false;
 

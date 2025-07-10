@@ -39,6 +39,7 @@ public:
 	shared_ptr<CWeapon> cWeapon;
 	shared_ptr<CBoundaryScale> cBoundaryScale;
 	shared_ptr<CSpriteScale> cSpriteScale;
+	shared_ptr<CText> cText;
 
 	bool isActive() const;
 	const string& tag() const;
