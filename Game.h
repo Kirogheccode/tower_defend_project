@@ -55,9 +55,9 @@ struct EnemyType1Config { string tag; string filepath; int hp; float speed; int 
 struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 
-struct TowerType1Config {};
-struct TowerType3Config {};
-struct TowerType2Config {};
+struct TowerType1Config { string tag; string filepath; };
+struct TowerType3Config { string tag; string filepath; };
+struct TowerType2Config { string tag; string filepath; };
 
 struct WaveConfig {
 	int enemyType1Count = 0;
@@ -76,9 +76,11 @@ class Game
 	WindowConfig m_windowConfig;
 	BulletConfig m_bullet01Config;
 	BulletConfig m_bullet02Config;
+
 	EnemyType1Config m_enemyType1Config;
 	EnemyType2Config m_enemyType2Config;
 	EnemyType3Config m_enemyType3Config;
+
 	TowerType1Config m_towerType1Config;
 	TowerType2Config m_towerType2Config;
 	TowerType3Config m_towerType3Config;
@@ -107,10 +109,12 @@ class Game
 
 	EntityManager m_entities;
 	string m_selected = "";
-	int m_currentWave = -1;                                                                 // Keep track of current wave
+
+	vector<int> m_currentWave = { -1, -1, -1, -1 };                                         // Keep track of current wave
 	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
-	int m_health = 1000;
-	int m_money = 0;
+
+	vector<vector<int>> m_health;
+	vector<int> m_coin = {0, 0, 0, 0};
 	int m_currentFrame = 0;
 
 	Font m_font;
@@ -157,8 +161,8 @@ class Game
 
 	void onResize(const sf::Event::SizeEvent& size);
 
-
-	void sSavePlayerName();
+	void sSaveGame();
+	void sLoadGame();
 
 public:
 	Game(const string& config);
