@@ -336,18 +336,55 @@ void Game::initUIFlow()
 			entity->active(true);
 		}
 
-		readMapBase.close();
 
 
 		//Khởi tạo map2
 		entity = m_scenes[AppState::Map2].addEntity("Map2");
 		entity->cSet = make_shared<CSet>("IMGS/map2.png");
 
+		while (getline(readMapBase, line)) {
+			if (line.empty() || line[0] == '#') continue;
+			istringstream iss(line);
+			iss >> tag >> filepath >> base_amount;
+			break;
+		}
+
+		while (getline(readMapBase, line) && base_amount > 0) {
+			if (line.empty() || line[0] == '#') continue;
+
+			base_amount--;
+			istringstream iss(line);
+			iss >> Base.x >> Base.y;
+
+			entity = m_scenes[AppState::Map2].addEntity(tag);
+			entity->cSet = make_shared<CSet>(filepath);
+			entity->cPosition = make_shared<CPosition>(Base);
+			entity->active(true);
+		}
 		
 		//Khởi tạo map3
 		entity = m_scenes[AppState::Map3].addEntity("Map3");
 		entity->cSet = make_shared<CSet>("IMGS/map3.png");
+		while (getline(readMapBase, line)) {
+			if (line.empty() || line[0] == '#') continue;
+			istringstream iss(line);
+			iss >> tag >> filepath >> base_amount;
+			break;
+		}
 
+		while (getline(readMapBase, line) && base_amount > 0) {
+			if (line.empty() || line[0] == '#') continue;
+
+			base_amount--;
+			istringstream iss(line);
+			iss >> Base.x >> Base.y;
+
+			entity = m_scenes[AppState::Map3].addEntity(tag);
+			entity->cSet = make_shared<CSet>(filepath);
+			entity->cPosition = make_shared<CPosition>(Base);
+			entity->active(true);
+		}
+		readMapBase.close();
 		
 		// Khởi tạo map4
 		entity = m_scenes[AppState::Map4].addEntity("Map4");

@@ -18,3 +18,49 @@ Base IMGS/Base.png 15
 1322 181
 479 809
 1261 924
+
+
+# Load Map2 Base: <tag> <filepath> <amount>
+Base IMGS/SandBase.png 16
+
+
+# Coordination of Map2 Base: <x> <y>
+950 485
+1111 355
+833 313
+659 464
+1042 653
+810 611
+828 791
+1129 789
+1360 784
+1253 961
+1450 961
+1429 374
+1341 492
+1071 104
+801 105
+454 287
+
+
+# Load Map3 Base: <tag> <filepath> <amount>
+Base IMGS/LavaBase.png 16
+
+
+# Coordination of Map3 Base: <x> <y>
+905 641
+457 420
+891 425
+1132 411
+1306 223
+755 217
+1028 225
+1555 331
+1202 644
+403 234
+143 370
+473 628
+224 627
+690 766
+1089 986
+1335 826
