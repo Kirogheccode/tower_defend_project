@@ -1,0 +1,34 @@
+# Current wave index: 
+1 -1 -1 -1
+# Remaining health: 
+1 1 1 1
+1 1 1 1
+1 1 1 1
+1 1 1 1
+# Money: 
+2350 0 0 0
+# Tower1 position
+505 830.513
+616 617.618
+#
+# Tower2 position
+1067 617.618
+1301 928.09
+#
+# Base in current map
+1
+1
+1
+1
+0
+0
+1
+1
+1
+1
+1
+1
+1
+0
+0
+#

@@ -36,6 +36,7 @@ enum class AppState {
 	OptionMenu,     // Pop-up lựa chọn
 	AboutUs,
 	Rules,
+	LoadGame,
 	MapSelect,      // Màn hình chọn map/độ khó
 	Map1,
 	Map2,
@@ -63,6 +64,13 @@ struct WaveConfig {
 	int enemyType1Count = 0;
 	int enemyType2Count = 0;
 	int enemyType3Count = 0;
+};
+
+struct SaveGame
+{
+	string fileName;
+	AppState m_save;
+	int mapIndex;
 };
 
 class Game
@@ -163,6 +171,9 @@ class Game
 
 	void sSaveGame();
 	void sLoadGame();
+	void sAddGameSave();
+	vector<SaveGame> loadGames;
+	int m_loadIndex = -1;
 
 public:
 	Game(const string& config);

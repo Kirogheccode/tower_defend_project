@@ -391,79 +391,83 @@ void Game::initUIFlow()
 		entity->cSet = make_shared<CSet>("IMGS/map4.png");
 
 		// -- OptionMenu --
-		entity = m_scenes[AppState::OptionMenu].addEntity("OptionBoard");
-		entity->cSet = make_shared<CSet>("IMGS/OptionBoard.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
-		entity->cSet->sprite.setOrigin(entity->cSet->sprite.getLocalBounds().width / 2.f, entity->cSet->sprite.getLocalBounds().height / 2.f);
+		{
 
-		entity = m_scenes[AppState::OptionMenu].addEntity("Title");
-		entity->cText = make_shared<CText>("OPTIONS");
-		entity->cText->text.setFont(m_font);
-		entity->cText->text.setCharacterSize(60);
-		entity->cText->text.setFillColor(Color::Black);
-		entity->cText->text.setPosition(Vector2f(839, 273));
+			entity = m_scenes[AppState::OptionMenu].addEntity("OptionBoard");
+			entity->cSet = make_shared<CSet>("IMGS/OptionBoard.png");
+			entity->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+			entity->cSet->sprite.setOrigin(entity->cSet->sprite.getLocalBounds().width / 2.f, entity->cSet->sprite.getLocalBounds().height / 2.f);
 
-
-		entity = m_scenes[AppState::OptionMenu].addEntity("Resume");
-		entity->cSet = make_shared<CSet>("IMGS/play.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(839, 406));
-		entity->cSet->sprite.setScale(0.6f, 0.6f);
-		entity->cInput = make_shared<CInput>([this]()
-			{
-				m_state1 = AppState::Dummy;
-				m_paused = false;
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
-
-		entity = m_scenes[AppState::OptionMenu].addEntity("Save");
-		entity->cSet = make_shared<CSet>("IMGS/setting.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(839, 539));
-		entity->cSet->sprite.setScale(0.6f, 0.6f);
-		entity->cInput = make_shared<CInput>([this]()
-			{
-				cout << "Successfully saved" << endl;
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
+			entity = m_scenes[AppState::OptionMenu].addEntity("Title");
+			entity->cText = make_shared<CText>("OPTIONS");
+			entity->cText->text.setFont(m_font);
+			entity->cText->text.setCharacterSize(60);
+			entity->cText->text.setFillColor(Color::Black);
+			entity->cText->text.setPosition(Vector2f(839, 273));
 
 
-		entity = m_scenes[AppState::OptionMenu].addEntity("Quit");
-		entity->cSet = make_shared<CSet>("IMGS/quit.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(839, 672));
-		entity->cSet->sprite.setScale(0.6f, 0.6f);
-		entity->cInput = make_shared<CInput>([this]()
-			{
-				prev_state = m_state;
-				m_state = AppState::MapSelect;
-				game_state = AppState::Dummy;
-				m_state1 = AppState::Dummy;
-				sReset();
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
+			entity = m_scenes[AppState::OptionMenu].addEntity("Resume");
+			entity->cSet = make_shared<CSet>("IMGS/play.png");
+			entity->cPosition = make_shared<CPosition>(Vector2f(839, 406));
+			entity->cSet->sprite.setScale(0.6f, 0.6f);
+			entity->cInput = make_shared<CInput>([this]()
+				{
+					m_state1 = AppState::Dummy;
+					m_paused = false;
+				},
+				[entity]()
+				{
+					entity->cSet->sprite.setColor(Color(200, 200, 200));
+				},
+				[entity]()
+				{
+					entity->cSet->sprite.setColor(Color(255, 255, 255));
+				}
+			);
 
+			entity = m_scenes[AppState::OptionMenu].addEntity("Save");
+			entity->cSet = make_shared<CSet>("IMGS/setting.png");
+			entity->cPosition = make_shared<CPosition>(Vector2f(839, 539));
+			entity->cSet->sprite.setScale(0.6f, 0.6f);
+			entity->cInput = make_shared<CInput>([this]()
+				{
+					sAddGameSave();
+					cout << "Successfully saved" << endl;
+				},
+				[entity]()
+				{
+					entity->cSet->sprite.setColor(Color(200, 200, 200));
+				},
+				[entity]()
+				{
+					entity->cSet->sprite.setColor(Color(255, 255, 255));
+				}
+			);
+
+
+			entity = m_scenes[AppState::OptionMenu].addEntity("Quit");
+			entity->cSet = make_shared<CSet>("IMGS/quit.png");
+			entity->cPosition = make_shared<CPosition>(Vector2f(839, 672));
+			entity->cSet->sprite.setScale(0.6f, 0.6f);
+			entity->cInput = make_shared<CInput>([this]()
+				{
+					prev_state = m_state;
+					m_state = AppState::PlayMenu;
+					game_state = AppState::Dummy;
+					m_state1 = AppState::Dummy;
+					m_playerName.clear();
+					sReset();
+				},
+				[entity]()
+				{
+					entity->cSet->sprite.setColor(Color(200, 200, 200));
+				},
+				[entity]()
+				{
+					entity->cSet->sprite.setColor(Color(255, 255, 255));
+				}
+			);
+		}
 
 		// Khởi tạo các chức năng trong game - GamePlay
 		entity = m_scenes[AppState::GamePlay].addEntity("OptionSetting");
@@ -660,8 +664,9 @@ void Game::initUIFlow()
 		loadGame->cPosition = make_shared<CPosition>(Vector2f(1144, 766));
 		loadGame->cInput = make_shared<CInput>([this]() 
 			{
-			cout << "Load Game clicked\n";
-			// sLoadGame();
+				m_typingName = false;
+				m_state = AppState::LoadGame;
+			    // sLoadGame();
 			},
 			[loadGame]()
 			{
@@ -690,6 +695,30 @@ void Game::initUIFlow()
 				back->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
+	}
+	// -- LoadGame --
+	{
+	  auto bg = m_scenes[AppState::LoadGame].addEntity("BG");
+	  bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
+	  bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
+
+	  auto back = m_scenes[AppState::LoadGame].addEntity("Back");
+	  back->cSet = make_shared<CSet>("IMGS/back.png");
+	  back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+	  back->cInput = make_shared<CInput>([this]()
+		  {
+			  m_state = AppState::PlayMenu;
+		  },
+		  [back]()
+		  {
+			  back->cSet->sprite.setColor(Color(200, 200, 200));
+		  },
+		  [back]()
+		  {
+			  back->cSet->sprite.setColor(Color(255, 255, 255));
+		  }
+	  );
+
 	}
 
 	// -- SettingsMenu (Pop-up) --
@@ -1007,23 +1036,48 @@ void Game::sRender(float& deltaTime)
 	m_window.clear();
 
 	// Hiển thị tổng
-	for (auto& e : m_scenes[m_state].getEntities())
+	if (m_state == AppState::LoadGame)
 	{
-		if (e->cSet && e->cPosition)
-			e->cSet->sprite.setPosition(e->cPosition->position);
+		Vector2f layout{10.f,10.f};
+		int indent = 0;
+		for (auto& e : m_scenes[m_state].getEntities())
+		{
+			if (e->tag() == "GameSave")
+			{
+				layout.x = layout.x + e->cSet->texture.getSize().x * indent + 20.f;
+				e->cPosition = make_shared<CPosition>(layout);
+				indent++;
+			}
 
-		if (e->tag() == "Base")
-		{
-			if (e->isActive())
+			if (e->cSet && e->cPosition)
+			{
+				e->cSet->sprite.setPosition(e->cPosition->position);
 				m_window.draw(e->cSet->sprite);
-		}
-		else
-		{
-			if (e->cSet)
-				m_window.draw(e->cSet->sprite);
+			}
+
 		}
 	}
+	else
+	{
 
+		for (auto& e : m_scenes[m_state].getEntities())
+		{
+			if (e->cSet && e->cPosition)
+				e->cSet->sprite.setPosition(e->cPosition->position);
+
+			if (e->tag() == "Base")
+			{
+				if (e->isActive())
+					m_window.draw(e->cSet->sprite);
+			}
+			else
+			{
+				if (e->cSet)
+					m_window.draw(e->cSet->sprite);
+			}
+		}
+
+	}
 	if (game_state == AppState::GamePlay)
 	{
 		for (auto& e : m_scenes[game_state].getEntities())
@@ -1212,8 +1266,8 @@ void Game::sUserInput()
 				{
 					if (!m_playerName.empty())
 					{
-						sSaveGame();
 						m_state = AppState::MapSelect;
+						m_typingName = false;
 					}
 				}
 				else if (event.text.unicode >= 32 && event.text.unicode < 128)
@@ -1309,6 +1363,8 @@ void Game::sUserInput()
 					{
 						for (auto& e : m_scenes[stateToHandle].getEntities())
 						{
+							if (stateToHandle == AppState::LoadGame && e->tag() == "GameSave")
+								m_loadIndex++;
 							if (e->cSet && e->cInput && e->cSet->sprite.getGlobalBounds().contains(mousePos))
 							{
 								playSfx(m_clickBuffer);
@@ -1355,12 +1411,60 @@ void Game::sUserInput()
 		}
 	}
 }
+// --- Thêm màn chơi được save (khi bấm save trong options) vào danh sách loadGames ---
+void Game::sAddGameSave()
+{
+	string fileName = m_playerName + ".txt";
+	loadGames.push_back({ fileName, m_state, m_mapindex });
 
+	switch (m_state)
+	{
+	  case AppState::Map1:
+		   fileName = "map1";
+		   break;
+	  case AppState::Map2:
+		  fileName = "map2";
+		  break;
+	  case AppState::Map3:
+		  fileName = "map3";
+		  break;
+	  case AppState::Map4:
+		  fileName = "map4";
+		  break;
+	}
+
+
+	auto map = m_scenes[AppState::LoadGame].addEntity("GameSave");
+	map->cSet = make_shared<CSet>("IMGS/" + fileName + ".png");
+	map->cSet->sprite.setScale(0.15f, 0.15f);
+	map->cInput = make_shared<CInput>([this]()
+		{
+			sLoadGame();
+			m_mapindex = loadGames[m_loadIndex].mapIndex;
+			m_state = loadGames[m_loadIndex].m_save;
+			game_state = AppState::GamePlay;
+			m_loadIndex = -1;
+			int i = 0;
+			for (auto& e : m_scenes[AppState::GamePlay].getEntities("Heart"))
+			{
+				e->active((bool)m_health[m_mapindex][i++]);
+			}
+		},
+		[map]()
+		{
+			map->cSet->sprite.setColor(Color(200, 200, 200));
+		},
+		[map]()
+		{
+			map->cSet->sprite.setColor(Color(255, 255, 255));
+		}
+	);
+}
 
 // --- Lưu tên người chơi khi nhập ở PlayMenu ---
 void Game::sSaveGame()
 {
-	// Thêm bước kiểm tra trùng tên
+	// ============Thêm bước kiểm tra trùng tên============
 	//
 	//
 	//
@@ -1369,16 +1473,22 @@ void Game::sSaveGame()
 	// 
 	// 
 	//
-	///////////////////////////////
-
+	// ====================================================
+	if (m_playerName.empty())
+		return;
 	ofstream writePlayer(m_playerName + ".txt");
-
+	cout << m_playerName + ".txt";
 	if (writePlayer.is_open())
 	{
 		// Lưu wave
 		writePlayer << "# Current wave index: " << "\n";
 		for (int i = 0; i < m_currentWave.size(); i++)
 		{
+			if (i == m_currentWave.size() - 1)
+			{
+				writePlayer << m_currentWave[i];
+				break;
+			}
 			writePlayer << m_currentWave[i] << " ";
 		}
 		writePlayer << "\n";
@@ -1390,6 +1500,11 @@ void Game::sSaveGame()
 		{
 			for (int j = 0; j < m_health[i].size(); j++)
 			{
+				if (j == m_health.size() - 1)
+				{
+					writePlayer << m_health[i][j];
+					break;
+				}
 				writePlayer << m_health[i][j] << " ";
 			}
 			writePlayer << "\n";
@@ -1400,33 +1515,57 @@ void Game::sSaveGame()
 		writePlayer << "# Money: " << "\n";
 		for (int i = 0; i < m_coin.size(); i++)
 		{
+			if (i == m_coin.size() - 1)
+			{
+				writePlayer << m_coin[i];
+				break;
+			}
 			writePlayer << m_coin[i] << " ";
 		}
 		writePlayer << "\n";
 
 
 		// Lưu vị trí tháp
-		writePlayer << "# Tower position" << "\n";
+		writePlayer << "# Tower1 position" << "\n";
 		for (auto& entity : m_entities.getEntities(m_towerType1Config.tag))
 		{
+			
 			if (entity->isActive())
 			{
-				writePlayer << entity->id() << " " << entity->cPosition->position.x << " " << entity->cPosition->position.y << "\n";
+				cout << entity->cPosition->position.x << " " << entity->cPosition->position.y << "\n";
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << "\n";
 			}
 		}
-		//
-		//
-		//
-		//
-		////////////////
-	}
+		writePlayer << "#" << "\n";
+		writePlayer << "# Tower2 position" << "\n";
+		for (auto& entity : m_entities.getEntities(m_towerType2Config.tag))
+		{
 
-	m_typingName = false;
+			if (entity->isActive())
+			{
+				cout << entity->cPosition->position.x << " " << entity->cPosition->position.y << "\n";
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << "\n";
+			}
+		}
+
+		writePlayer << "#" << "\n";
+		writePlayer << "# Base in current map" << "\n";
+
+		for (auto& base : m_scenes[m_state].getEntities("Base"))
+		{
+			cout << base->isActive() << "\n";
+			writePlayer << base->isActive() << "\n";
+		}
+		writePlayer << "#" << "\n";
+		writePlayer.close();
+	}
 }
 
 void Game::sLoadGame()
 {
-	ifstream readPlayer(m_playerName + ".txt");
+	
+	ifstream readPlayer(loadGames[m_loadIndex].fileName);
+	cout << loadGames[m_loadIndex].fileName << endl;
 
 	if (!readPlayer.is_open())
 	{
@@ -1436,7 +1575,7 @@ void Game::sLoadGame()
 		//
 		//
 		//
-		////////////////////////////////////////////////
+		//==============================================
 
 		cout << "Can't open file or file doesn't exist!" << endl;
 		return;
@@ -1444,7 +1583,8 @@ void Game::sLoadGame()
 
 	string line;
 
-	while (getline(readPlayer, line)) {
+	while (getline(readPlayer, line))
+	{
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 
@@ -1453,35 +1593,71 @@ void Game::sLoadGame()
 		{
 			iss >> m_currentWave[i];
 		}
+		break;
+	}
 
-
-		// Load máu
-		for (int i = 0; i < m_health.size(); i++)
+	getline(readPlayer, line);
+	for (int i = 0; i < m_health.size(); i++)
+	{
+		getline(readPlayer, line);
+		istringstream iss(line);
+		for (int j = 0; j < m_health[i].size(); j++)
 		{
-			for (int j = 0; j < m_health[i].size(); j++)
-			{
-				iss >> m_health[i][j];
-			}
+			iss >> m_health[i][j];
 		}
+	}
 
-
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
 		// Load tiền
 		for (int i = 0; i < m_coin.size(); i++)
 		{
 			iss >> m_coin[i];
 		}
-
-
-		// Đọc tháp
-		//
-		//
-		//
-		//
-		//
-		//////////
-
 		break;
 	}
+
+	getline(readPlayer, line);
+	for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
+	{
+		getline(readPlayer, line);
+		if (line.empty() || line[0] == '#') break;
+        istringstream iss(line);
+		Vector2f pos;
+		iss >> pos.x >> pos.y;
+		cout << pos.x << " " << pos.y << endl;
+		tower->cPosition = make_shared<CPosition>(pos);
+		tower->cSet->sprite.setPosition(tower->cPosition->position);
+		tower->active(true);
+	}
+
+	getline(readPlayer, line);
+	for (auto& tower : m_entities.getEntities(m_towerType2Config.tag))
+	{
+		getline(readPlayer, line);
+		if (line.empty() || line[0] == '#') break;
+		istringstream iss(line);
+		Vector2f pos;
+		iss >> pos.x >> pos.y;
+		cout << pos.x << " " << pos.y << endl;
+		tower->cPosition = make_shared<CPosition>(pos);
+		tower->cSet->sprite.setPosition(tower->cPosition->position);
+		tower->active(true);
+	}
+	getline(readPlayer, line);
+	for (auto& base : m_scenes[loadGames[m_loadIndex].m_save].getEntities("Base"))
+	{
+		getline(readPlayer, line);
+		if (line.empty() || line[0] == '#') break;
+		istringstream iss(line);
+		bool isActive;
+		iss >> isActive;
+		base->active(isActive);
+	}
+	cout << "Game loaded successfully" << endl;
+	readPlayer.close();
 }
 
 // --- Reset quái, tháp và đạn khi thoát game ---
@@ -1564,7 +1740,7 @@ void Game::sMovement(float& deltaTime)
 		}
 
 		// Chuyển động quái
-		else if (entity->tag().find("Enemy") != std::string::npos)
+		else if (entity->tag().find("Enemy") != string::npos)
 		{
 			// Nếu như quái đi hết đường đi
 			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
@@ -1875,7 +2051,7 @@ void Game::Shoot(Entity& tower)
 			bullet->cPosition = make_shared<CPosition>(tower.cPosition->position);
 
 			bullet->cSet->sprite.setPosition(tower.cPosition->position);
-			cout << "fire\n";
+			
 
 			bullet->active(true);
 
@@ -2050,7 +2226,7 @@ void Game::sCollision()
 			if (!bullet->isActive()) continue;
 			if (collisionDetection(*bullet, *cur))
 			{
-			std:cout << "Bump\n";
+			
 				if (cur->cHealth)
 				{
 					cur->cHealth->hp -= bullet->cDamage->damage;
