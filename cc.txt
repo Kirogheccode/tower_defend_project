@@ -5,7 +5,7 @@
 0 1 2 3 4 
 
 # Money: 
-1000
+0
 
 # Enemies position
 

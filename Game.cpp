@@ -240,13 +240,12 @@ void Game::init(const string& path)
 
 
 	// --- Khởi tạo máu người chơi
-	m_health.resize(4, vector<int>(5, 1));
-
 	for (int i = 0; i < 5; i++)
 	{
 		auto entity = m_scenes[AppState::GamePlay].addEntity("Heart");
 		entity->cSet = make_shared<CSet>("IMGS/Heart.png");
 		entity->cBoundaryScale = make_shared<CBoundaryScale>(0.1);
+		entity->active(true);
 		auto& sprite = entity->cSet->sprite;
 		sprite.setScale(entity->cBoundaryScale->scale, entity->cBoundaryScale->scale);
 		entity->cPosition = make_shared<CPosition>(Vector2f(i * sprite.getGlobalBounds().width, 0));
@@ -281,7 +280,7 @@ void Game::init(const string& path)
 		waveBounds.top + waveBounds.height / 2.f);
 
 	auto numEntity = m_scenes[AppState::GamePlay].addEntity("WaveNumber");
-	numEntity->cText = make_shared<CText>(to_string(m_currentWave[m_mapindex]));
+	numEntity->cText = make_shared<CText>(to_string(m_currentWave));
 	numEntity->cText->text.setFont(m_font);
 	numEntity->cText->text.setCharacterSize(80);
 	numEntity->cText->text.setFillColor(sf::Color::Red);
@@ -885,12 +884,6 @@ void Game::initUIFlow()
 			m_mapindex = 0;
 			m_state = AppState::Map1;
 			game_state = AppState::GamePlay;
-
-			int i = 0;
-			for (auto& e : m_scenes[AppState::GamePlay].getEntities("Heart"))
-			{
-				e->active((bool)m_health[m_mapindex][i++]);
-			}
 			},
 			[map1]()
 			{
@@ -911,12 +904,6 @@ void Game::initUIFlow()
 			m_mapindex = 1;
 			m_state = AppState::Map2;
 			game_state = AppState::GamePlay;
-
-			int i = 0;
-			for (auto& e : m_scenes[AppState::GamePlay].getEntities("Heart"))
-			{
-				e->active((bool)m_health[m_mapindex][i++]);
-			}
 			},
 			[map2]()
 			{
@@ -937,12 +924,6 @@ void Game::initUIFlow()
 			m_mapindex = 2;
 			m_state = AppState::Map3;
 			game_state = AppState::GamePlay;
-
-			int i = 0;
-			for (auto& e : m_scenes[AppState::GamePlay].getEntities("Heart"))
-			{
-				e->active((bool)m_health[m_mapindex][i++]);
-			}
 			},
 			[map3]()
 			{
@@ -963,12 +944,6 @@ void Game::initUIFlow()
 			m_mapindex = 3;
 			m_state = AppState::Map4;
 			game_state = AppState::GamePlay;
-
-			int i = 0;
-			for (auto& e : m_scenes[AppState::GamePlay].getEntities("Heart"))
-			{
-				e->active((bool)m_health[m_mapindex][i++]);
-			}
 			},
 			[map4]()
 			{
@@ -1102,7 +1077,7 @@ void Game::sRender(float& deltaTime)
 
 			for (auto& e : m_scenes[AppState::GamePlay].getEntities("MoneyText"))
 			{
-				e->cText->text.setString(to_string(m_coin[m_mapindex]));
+				e->cText->text.setString(to_string(m_coin));
 
 				if (e->cText)
 					m_window.draw(e->cText->text);
@@ -1117,7 +1092,7 @@ void Game::sRender(float& deltaTime)
 				}
 				for (auto& e : m_scenes[AppState::GamePlay].getEntities("WaveNumber"))
 				{
-					e->cText->text.setString(to_string(m_currentWave[m_mapindex] + 1));
+					e->cText->text.setString(to_string(m_currentWave + 1));
 
 					if (e->cText)
 						m_window.draw(e->cText->text);
@@ -1446,13 +1421,9 @@ void Game::sAddGameSave()
 			sLoadGame();
 			m_mapindex = loadGames[m_loadIndex].mapIndex;
 			m_state = loadGames[m_loadIndex].m_save;
+
 			game_state = AppState::GamePlay;
 			m_loadIndex = -1;
-			int i = 0;
-			for (auto& e : m_scenes[AppState::GamePlay].getEntities("Heart"))
-			{
-				e->active((bool)m_health[m_mapindex][i++]);
-			}
 		},
 		[map]()
 		{
@@ -1477,82 +1448,94 @@ void Game::sSaveGame()
 	{
 		// Lưu wave
 		writePlayer << "# Current wave index: " << "\n";
-		for (int i = 0; i < m_currentWave.size(); i++)
-		{
-			if (i == m_currentWave.size() - 1)
-			{
-				writePlayer << m_currentWave[i];
-				break;
-			}
-			writePlayer << m_currentWave[i] << " ";
-		}
+		writePlayer << m_currentWave << "\n";
 		writePlayer << "\n";
 
 
 		// Lưu index của máu còn lại
 		writePlayer << "# Remaining health: " << "\n";
-		for (int i = 0; i < m_health.size(); i++)
+		for (auto& e: m_scenes[AppState::GamePlay].getEntities("Heart"))
 		{
-			for (int j = 0; j < m_health[i].size(); j++)
+			if (e->isActive())
 			{
-				if (j == m_health.size() - 1)
-				{
-					writePlayer << m_health[i][j];
-					break;
-				}
-				writePlayer << m_health[i][j] << " ";
+				writePlayer << e->id() << " ";
 			}
-			writePlayer << "\n";
 		}
+		writePlayer << "\n";
+		writePlayer << "\n";
 
 
 		// Lưu tiền
 		writePlayer << "# Money: " << "\n";
-		for (int i = 0; i < m_coin.size(); i++)
-		{
-			if (i == m_coin.size() - 1)
-			{
-				writePlayer << m_coin[i];
-				break;
-			}
-			writePlayer << m_coin[i] << " ";
-		}
+		writePlayer << m_coin << "\n";
 		writePlayer << "\n";
 
+		
+		// Lưu vị trí quái
+		writePlayer << "# Enemies position" << "\n";
+		for (auto& entity : m_entities.getEntities(m_enemyType1Config.tag))
+		{
+			if (entity->isActive())
+			{
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " <<  entity->cMovement->currentPathindex << " ";
+			}
+		}
+		writePlayer << "\n";
+		writePlayer << "\n";
+
+		for (auto& entity : m_entities.getEntities(m_enemyType2Config.tag))
+		{
+			if (entity->isActive())
+			{
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			}
+		}
+		writePlayer << "\n";
+		writePlayer << "\n";
+
+		for (auto& entity : m_entities.getEntities(m_enemyType3Config.tag))
+		{
+			if (entity->isActive())
+			{
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			}
+		}
+
+		writePlayer << "\n";
+		writePlayer << "\n";
 
 		// Lưu vị trí tháp
-		writePlayer << "# Tower1 position" << "\n";
+		writePlayer << "# Tower position" << "\n";
 		for (auto& entity : m_entities.getEntities(m_towerType1Config.tag))
 		{
 			
 			if (entity->isActive())
 			{
-				cout << entity->cPosition->position.x << " " << entity->cPosition->position.y << "\n";
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << "\n";
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
 			}
 		}
-		writePlayer << "#" << "\n";
 
-		writePlayer << "# Tower2 position" << "\n";
+		writePlayer << "\n";
+		writePlayer << "\n";
+
 		for (auto& entity : m_entities.getEntities(m_towerType2Config.tag))
 		{
-
 			if (entity->isActive())
 			{
-				cout << entity->cPosition->position.x << " " << entity->cPosition->position.y << "\n";
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << "\n";
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
 			}
 		}
 
-		writePlayer << "#" << "\n";
+		writePlayer << "\n";
+		writePlayer << "\n";
 		writePlayer << "# Base in current map" << "\n";
 
 		for (auto& base : m_scenes[m_state].getEntities("Base"))
 		{
-			cout << base->isActive() << "\n";
-			writePlayer << base->isActive() << "\n";
+			writePlayer << base->isActive() << " ";
 		}
-		writePlayer << "#" << "\n";
+
+		writePlayer << "\n";
 		writePlayer.close();
 	}
 }
@@ -1579,79 +1562,202 @@ void Game::sLoadGame()
 
 	string line;
 
+	// Load wave index
 	while (getline(readPlayer, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 
-		// Load màn chơi
-		for (int i = 0; i < m_currentWave.size(); i++)
-		{
-			iss >> m_currentWave[i];
-		}
+		iss >> m_currentWave;
 		break;
 	}
 
-	getline(readPlayer, line);
-	for (int i = 0; i < m_health.size(); i++)
-	{
-		getline(readPlayer, line);
-		istringstream iss(line);
-		for (int j = 0; j < m_health[i].size(); j++)
-		{
-			iss >> m_health[i][j];
-		}
-	}
 
+	// Load máu người chơi
 	while (getline(readPlayer, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		// Load tiền
-		for (int i = 0; i < m_coin.size(); i++)
+		int value;
+		int i = 0;
+
+		for (auto& heart : m_scenes[AppState::GamePlay].getEntities("Heart"))
 		{
-			iss >> m_coin[i];
+			if (!(iss >> value)) break;
+
+			heart->active(true);
+			i++;
 		}
 		break;
 	}
+	
 
-	getline(readPlayer, line);
-	for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
+	// Load tiền người chơi
+	while (getline(readPlayer, line))
 	{
-		getline(readPlayer, line);
-		if (line.empty() || line[0] == '#') break;
-        istringstream iss(line);
-		Vector2f pos;
-		iss >> pos.x >> pos.y;
-		cout << pos.x << " " << pos.y << endl;
-		tower->cPosition = make_shared<CPosition>(pos);
-		tower->cSet->sprite.setPosition(tower->cPosition->position);
-		tower->active(true);
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+
+		iss >> m_coin;
+		break;
 	}
 
-	getline(readPlayer, line);
-	for (auto& tower : m_entities.getEntities(m_towerType2Config.tag))
+
+	// Load quái type 1
+	while (getline(readPlayer, line))
 	{
-		getline(readPlayer, line);
-		if (line.empty() || line[0] == '#') break;
+		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		Vector2f pos;
-		iss >> pos.x >> pos.y;
-		cout << pos.x << " " << pos.y << endl;
-		tower->cPosition = make_shared<CPosition>(pos);
-		tower->cSet->sprite.setPosition(tower->cPosition->position);
-		tower->active(true);
+
+		for (auto& enemy : m_entities.getEntities(m_enemyType1Config.tag))
+		{
+			float x, y;
+			int index;
+
+			if (!(iss >> x >> y >> index)) break;
+
+			cout << x << " " << y << " " << index << endl;
+
+			Vector2f pos(x, y);
+
+			enemy->cPosition = make_shared<CPosition>(pos);
+			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
+			enemy->active(true);
+
+			enemy->cMovement->currentPathindex = index;
+		}
+
+		break;
 	}
-	getline(readPlayer, line);
-	for (auto& base : m_scenes[loadGames[m_loadIndex].m_save].getEntities("Base"))
+
+
+	// Load quái type 2
+	while (getline(readPlayer, line))
 	{
-		getline(readPlayer, line);
-		if (line.empty() || line[0] == '#') break;
+		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
-		bool isActive;
-		iss >> isActive;
-		base->active(isActive);
+
+		for (auto& enemy : m_entities.getEntities(m_enemyType1Config.tag))
+		{
+			float x, y;
+			int index;
+
+			if (!(iss >> x >> y >> index)) break;
+
+			cout << x << " " << y << " " << index << endl;
+
+			Vector2f pos(x, y);
+
+			enemy->cPosition = make_shared<CPosition>(pos);
+			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
+			enemy->active(true);
+
+			enemy->cMovement->currentPathindex = index;
+		}
+
+		break;
 	}
+
+
+	// Load quái type 3
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+
+		for (auto& enemy : m_entities.getEntities(m_enemyType1Config.tag))
+		{
+			float x, y;
+			int index;
+
+			if (!(iss >> x >> y >> index)) break;
+
+			cout << x << " " << y << " " << index << endl;
+
+			Vector2f pos(x, y);
+
+			enemy->cPosition = make_shared<CPosition>(pos);
+			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
+			enemy->active(true);
+
+			enemy->cMovement->currentPathindex = index;
+		}
+
+		break;
+	}
+
+
+	// Load tháp type 1
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+
+		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
+		{
+			float x, y;
+
+			if (!(iss >> x >> y)) break;
+
+			cout << x << " " << y << endl;
+
+			Vector2f pos(x, y);
+
+			tower->cPosition = make_shared<CPosition>(pos);
+			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->active(true);
+		}
+
+		break;
+	}
+
+
+	// Load tháp type 2
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+
+		for (auto& tower : m_entities.getEntities(m_towerType2Config.tag))
+		{
+			float x, y;
+
+			if (!(iss >> x >> y)) break;
+
+			cout << x << " " << y << endl;
+
+			Vector2f pos(x, y);
+
+			tower->cPosition = make_shared<CPosition>(pos);
+			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->active(true);
+		}
+
+		break;
+	}
+
+
+	// Load base
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		bool value;
+		int i = 0;
+
+		for (auto& base : m_scenes[loadGames[m_loadIndex].m_save].getEntities("Base"))
+		{
+			if (!(iss >> value)) break;
+
+			base->active(value);
+			i++;
+		}
+
+		cout << "Base loaded: " << i << endl;
+
+		break;
+	}
+
 	cout << "Game loaded successfully" << endl;
 	readPlayer.close();
 }
@@ -1687,6 +1793,12 @@ void Game::sReset()
 		if (!heart->isActive())
 			heart->active(true);
 	}
+
+	// Reset tiền
+	m_coin = 0;
+
+	// Reset wave
+	m_currentWave = -1;
 
 	// Reset wave
 	m_showWaveText = false;
@@ -1743,29 +1855,22 @@ void Game::sMovement(float& deltaTime)
 			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
 			{
 				auto heartvector = m_scenes[AppState::GamePlay].getEntities("Heart");
-				int vecindex = 4;
 				int index = static_cast<int>(heartvector.size()) - 1;
 
 				// Tìm trái tim cuối cùng còn active
 				while (index >= 0 && !heartvector[index]->isActive())
 				{
 					index--;
-					vecindex--;
 				}
 
 				if (heartvector.size() - index == 5)
 				{
 					m_window.close();
-					// LOSE
-					//
-					//
-					//
-					///////
+					// LOSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 				}
 				else
 				{
-					heartvector[index]->active(false); 
-					m_health[m_mapindex][vecindex] = 0;
+					heartvector[index]->active(false);
 				}
 
 				DeactivateEnemy(*entity);
@@ -1902,7 +2007,7 @@ void Game::sCheckWaveFinished()
 
 	if (allInactive)
 	{
-		m_currentWave[m_mapindex]++;
+		m_currentWave++;
 		cout << "Spawning wave right now" << endl;
 		m_finishWave = true;
 		m_showWaveText = true;
@@ -1962,7 +2067,7 @@ void Game::sSpawnWave(float& deltaTime)
 
 bool Game::spawnEnemyType(int type, float& deltaTime)
 {
-	WaveConfig& wave = m_waveConfigs[m_mapindex][m_currentWave[m_mapindex]];
+	WaveConfig& wave = m_waveConfigs[m_mapindex][m_currentWave];
 
 	m_spawningTimer += deltaTime;
 
@@ -2175,7 +2280,7 @@ void Game::DeactivateBullet(Entity& bullet)
 }
 
 
-// support collision logic 
+// --- Hàm hỗ trợ logic ---
 bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) 
 {
 	// Check all four corners of the inner rectangle
@@ -2200,7 +2305,7 @@ FloatRect scaleRect(const FloatRect& rect, float scale = 1.0f)
 }
 
 
-// --- Check collision ---
+// --- Kiểm tra va chạm ---
 bool collisionDetection(const Entity& entity1, const Entity& entity2)
 {
 	if (!entity1.cSet || !entity2.cSet) return false;
@@ -2211,7 +2316,7 @@ bool collisionDetection(const Entity& entity1, const Entity& entity2)
 }
 
 
-// process collision 
+// --- Hàm va chạm ---
 void Game::sCollision()
 {
 	for (auto& cur : m_entities.getEntities("Enemy"))
@@ -2229,7 +2334,7 @@ void Game::sCollision()
 					cur->cHealth->hp -= bullet->cDamage->damage;
 					if (cur->cHealth->hp <= 0)
 					{
-						m_coin[m_mapindex] += cur->cMoney->money;
+						m_coin += cur->cMoney->money;
 						DeactivateEnemy(*cur);
 					}
 				}

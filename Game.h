@@ -118,11 +118,9 @@ class Game
 	EntityManager m_entities;
 	string m_selected = "";
 
-	vector<int> m_currentWave = { -1, -1, -1, -1 };                                         // Keep track of current wave
+	int m_currentWave = -1;                                                                 // Keep track of current wave
 	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
-
-	vector<vector<int>> m_health;
-	vector<int> m_coin = {0, 0, 0, 0};
+	int m_coin = 1000;
 	int m_currentFrame = 0;
 
 	Font m_font;
