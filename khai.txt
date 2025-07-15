@@ -1,0 +1,23 @@
+# Current wave index: 
+0
+
+# Remaining health: 
+0 1 2 
+
+# Money: 
+1950
+
+# Enemies position
+@
+
+285.365 361.105 4 286.341 441.89 4 286.846 482.897 4 287.057 523.839 4 
+
+942.76 816.924 2 943.373 841.732 2 944.128 865.279 2 
+
+# Tower position
+@
+
+@
+
+# Base in current map
+1 1 0 0 0 1 1 1 0 0 1 1 1 0 1 

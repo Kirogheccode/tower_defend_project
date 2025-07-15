@@ -57,8 +57,11 @@ struct EnemyType2Config { string tag; string filepath; int hp; float speed; int 
 struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 
 struct TowerType1Config { string tag; string filepath; };
-struct TowerType3Config { string tag; string filepath; };
 struct TowerType2Config { string tag; string filepath; };
+struct TowerType3Config { string tag; string filepath; };
+struct TowerType4Config { string tag; string filepath; };
+struct TowerType5Config { string tag; string filepath; };
+struct TowerType6Config { string tag; string filepath; };
 
 struct WaveConfig {
 	int enemyType1Count = 0;
@@ -92,11 +95,14 @@ class Game
 	TowerType1Config m_towerType1Config;
 	TowerType2Config m_towerType2Config;
 	TowerType3Config m_towerType3Config;
+	TowerType4Config m_towerType4Config;
+	TowerType5Config m_towerType5Config;
+	TowerType6Config m_towerType6Config;
 
 	map<int, map<int, WaveConfig>> m_waveConfigs;                                           // m_waveConfigs[map index][wave] = { type1, type2, type3 };
 
 	SpawnStage m_spawnStage = SpawnStage::None;
-	float m_spawnTimer = 0.f;
+	float m_spawnTimer = 5.f;
 
 	float m_spawnDelay = 5.f; 
 	float m_spawningTimer = 0.f;

@@ -12,7 +12,7 @@ void Game::init(const string& path)
 	string line;
 
 
-	// --- Reading window config
+	// --- Đọc config window
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
@@ -24,7 +24,7 @@ void Game::init(const string& path)
 		break;
 	}
 
-
+	// --- Đọc config đạn
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
@@ -67,7 +67,7 @@ void Game::init(const string& path)
 	}
 
 
-	// --- Rading enemy config && Pre-loaded enemies
+	// --- Đọc config quái
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
@@ -148,7 +148,7 @@ void Game::init(const string& path)
 	}
 
 
-	// --- Load and Initialize Tower1
+	// --- Đọc config tháp
 	while (getline(readconfig, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
@@ -171,8 +171,6 @@ void Game::init(const string& path)
 		break;
 	}
 
-
-	// --- Load and Initialize Tower2
 	while (getline(readconfig, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
@@ -195,7 +193,96 @@ void Game::init(const string& path)
 		break;
 	}
 
+	while (getline(readconfig, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		Vector2u imgCount;
+		float switchTime, range, cooldown;
+		int amount;
+		iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
 
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entities.addEntity(m_towerType3Config.tag);
+			entity->cSet = make_shared<CSet>(m_towerType3Config.filepath, imgCount, switchTime, 0);
+			entity->cCooldown = make_shared<CCooldown>(cooldown);
+			entity->cBound = make_shared<CBound>(range);
+			entity->cWeapon = make_shared<CWeapon>("Bullet01");
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+		}
+		break;
+	}
+
+	while (getline(readconfig, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		Vector2u imgCount;
+		float switchTime, range, cooldown;
+		int amount;
+		iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entities.addEntity(m_towerType4Config.tag);
+			entity->cSet = make_shared<CSet>(m_towerType4Config.filepath, imgCount, switchTime, 0);
+			entity->cCooldown = make_shared<CCooldown>(cooldown);
+			entity->cBound = make_shared<CBound>(range);
+			entity->cWeapon = make_shared<CWeapon>("Bullet01");
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+		}
+		break;
+	}
+
+	while (getline(readconfig, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		Vector2u imgCount;
+		float switchTime, range, cooldown;
+		int amount;
+		iss >> m_towerType5Config.tag >> m_towerType5Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entities.addEntity(m_towerType5Config.tag);
+			entity->cSet = make_shared<CSet>(m_towerType5Config.filepath, imgCount, switchTime, 0);
+			entity->cCooldown = make_shared<CCooldown>(cooldown);
+			entity->cBound = make_shared<CBound>(range);
+			entity->cWeapon = make_shared<CWeapon>("Bullet01");
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+		}
+		break;
+	}
+
+	while (getline(readconfig, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+		Vector2u imgCount;
+		float switchTime, range, cooldown;
+		int amount;
+		iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+
+		for (int i = 0; i < amount; i++)
+		{
+			auto entity = m_entities.addEntity(m_towerType6Config.tag);
+			entity->cSet = make_shared<CSet>(m_towerType6Config.filepath, imgCount, switchTime, 0);
+			entity->cCooldown = make_shared<CCooldown>(cooldown);
+			entity->cBound = make_shared<CBound>(range);
+			entity->cWeapon = make_shared<CWeapon>("Bullet02");
+			auto& sprite = entity->cSet->sprite;
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+		}
+		break;
+	}
+
+	
+	// --- Đọc config từng wave
 	while (getline(readconfig, line)) {
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
@@ -209,6 +296,8 @@ void Game::init(const string& path)
 
 	readconfig.close();
 
+	
+	// --- Khởi tạo front chữ
 	if (!m_font.loadFromFile("IMGS/ARCADECLASSIC.ttf")) {
 		cout << "Failed to load font\n";
 	}
@@ -579,6 +668,82 @@ void Game::initUIFlow()
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				m_selected = "Tower2";
+				m_state2 = AppState::TowerPlace;
+			},
+			[entity]()
+			{
+
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		entity = m_scenes[AppState::TowerSelect].addEntity("Tower3Button");
+		entity->cSet = make_shared<CSet>(m_towerType3Config.filepath);
+		entity->cPosition = make_shared<CPosition>(Vector2f(1735, 130));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				m_selected = "Tower3";
+				m_state2 = AppState::TowerPlace;
+			},
+			[entity]()
+			{
+
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		entity = m_scenes[AppState::TowerSelect].addEntity("Tower4Button");
+		entity->cSet = make_shared<CSet>(m_towerType4Config.filepath);
+		entity->cPosition = make_shared<CPosition>(Vector2f(1825, 130));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				m_selected = "Tower4";
+				m_state2 = AppState::TowerPlace;
+			},
+			[entity]()
+			{
+
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		entity = m_scenes[AppState::TowerSelect].addEntity("Tower5Button");
+		entity->cSet = make_shared<CSet>(m_towerType5Config.filepath);
+		entity->cPosition = make_shared<CPosition>(Vector2f(1735, 230));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				m_selected = "Tower5";
+				m_state2 = AppState::TowerPlace;
+			},
+			[entity]()
+			{
+
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		entity = m_scenes[AppState::TowerSelect].addEntity("Tower6Button");
+		entity->cSet = make_shared<CSet>(m_towerType6Config.filepath);
+		entity->cPosition = make_shared<CPosition>(Vector2f(1825, 230));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				m_selected = "Tower6";
 				m_state2 = AppState::TowerPlace;
 			},
 			[entity]()
@@ -1943,7 +2108,6 @@ void Game::sMovement(float& deltaTime)
 			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
 			Vector2f direction = target - entity->cPosition->position;
 			float distance = MathSupport::Length(direction);
-			
 
 			// Kiểm tra xem nếu đủ gần điểm thì chuyển tiếp điểm khác
 			if (distance < 5.f) 
@@ -2082,7 +2246,7 @@ void Game::sSpawnWave(float& deltaTime)
 	if (m_spawnStage == SpawnStage::None && m_finishWave)
 	{
 		m_spawnStage = SpawnStage::Type1;
-		m_spawnTimer = 0.f;
+		m_spawnTimer = 5.f;
 
 		m_spawnedType1 = 0;
 		m_spawnedType2 = 0;

@@ -30,6 +30,14 @@ Tower1 IMGS/BloodMoonTower/Tower1.png 11 1 0.3 800 2.5 50
 
 Tower2 IMGS/BloodMoonTower/Tower2.png 8 1 0.3 800 3.0 50
 
+Tower3 IMGS/mage_guardian-magenta.png 14 1 0.3 800 3.0 50
+
+Tower4 IMGS/mage_guardian-red.png 14 1 0.3 800 3.0 50
+
+Tower5 IMGS/mage_guardian-blue.png 14 1 0.3 800 3.0 50
+
+Tower6 IMGS/pumpkintower.png 8 1 0.3 800 3.0 50 
+
 
 # Wave format: <WaveNumber> <MapIndex> <EnemyType1> <EnemyType2> <EnemyType3>
 

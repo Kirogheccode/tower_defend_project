@@ -31,50 +31,57 @@ struct CHealth
 
 struct CMovement
 {
-	float speed = 0;
+	float speed = 0.f;
 	unsigned int currentPathindex = 0;
-	sf::Vector2f velocity = { 0.f, 0.f }; // Add this!
+	sf::Vector2f velocity = { 0.f, 0.f };
 
-	vector<Vector2f> starting_pos = { Vector2f(1165.f, 1080.f),				//Starting position for map 1
-								      Vector2f(0.f, 500.f),					//Starting position for map 2
-								      Vector2f(0.f, 500.f),					//Starting position for map 3
-								      Vector2f(0.f, 500.f)					//Starting position for map 4
+	// Starting positions for each map
+	// +500f starting delay
+	std::vector<sf::Vector2f> starting_pos = {
+		{1165.f, 1580.f},   // Map 1
+		{0.f,   500.f},     // Map 2
+		{1254.f, 1277.f},   // Map 3
+		{0.f,   500.f}      // Map 4
 	};
 
-	vector<vector<Vector2f>> paths = { {Vector2f(1165.f, 1080.f),     //Cordination for map1
-										Vector2f(1150.f, 880.f),
-										Vector2f(940.f, 880.f),
-										Vector2f(940.f, 730.f),
-										Vector2f(285.f, 730.f),
-										Vector2f(285.f, 330.f),
-										Vector2f(1770.f, 330.f),
-										Vector2f(1770.f, 0.f)},
-
-										{Vector2f(0.f, 500.f),     //Cordination for map2
-										Vector2f(600.f, 500.f),
-										Vector2f(600.f, 700.f),
-										Vector2f(1200.f, 700.f),
-										Vector2f(1200.f, 400.f),
-										Vector2f(1920.f, 400.f)},
-
-										{Vector2f(0.f, 500.f),     //Cordination for map3
-										Vector2f(600.f, 500.f),
-										Vector2f(600.f, 700.f),
-										Vector2f(1200.f, 700.f),
-										Vector2f(1200.f, 400.f),
-										Vector2f(1920.f, 400.f)},
-
-										{Vector2f(0.f, 500.f),     //Cordination for map4
-										Vector2f(600.f, 500.f),
-										Vector2f(600.f, 700.f),
-										Vector2f(1200.f, 700.f),
-										Vector2f(1200.f, 400.f),
-										Vector2f(1920.f, 400.f) }
+	// Path coordinates for each map
+	std::vector<std::vector<sf::Vector2f>> paths = {
+		{   // Map 1
+			{1165.f, 880.f},
+			{940.f,  880.f},
+			{940.f,  730.f},
+			{285.f,  730.f},
+			{285.f,  330.f},
+			{1770.f, 330.f},
+			{1770.f, 0.f}
+		},
+		{   // Map 2
+			{600.f,  500.f},
+			{600.f,  700.f},
+			{1200.f, 700.f},
+			{1200.f, 400.f},
+			{1920.f, 400.f}
+		},
+		{   // Map 3
+			{1254.f, 755.f},
+			{1055.f, 755.f},
+			{1055.f, 700.f},
+			{1200.f, 400.f},
+			{1920.f, 400.f}
+		},
+		{   // Map 4
+			{600.f,  500.f},
+			{600.f,  700.f},
+			{1200.f, 700.f},
+			{1200.f, 400.f},
+			{1920.f, 400.f}
+		}
 	};
 
-	CMovement() {}
-	CMovement(const float& v)
-		: speed(v) {}
+	CMovement() = default;
+	explicit CMovement(const float& v)
+		: speed(v) {
+	}
 };
 
 struct CPosition
