@@ -455,6 +455,7 @@ void Game::initUIFlow()
 					m_state = AppState::PlayMenu;
 					game_state = AppState::Dummy;
 					m_state1 = AppState::Dummy;
+					sSaveGame();
 					m_playerName.clear();
 					sReset();
 				},
@@ -1197,6 +1198,7 @@ void Game::sUserInput()
 	{
 		if (event.type == Event::Closed)
 		{
+			sSaveGame();
 			m_running = false;
 			m_window.close();
 		}
@@ -1411,6 +1413,8 @@ void Game::sUserInput()
 		}
 	}
 }
+
+
 // --- Thêm màn chơi được save (khi bấm save trong options) vào danh sách loadGames ---
 void Game::sAddGameSave()
 {
@@ -1461,19 +1465,10 @@ void Game::sAddGameSave()
 	);
 }
 
+
 // --- Lưu tên người chơi khi nhập ở PlayMenu ---
 void Game::sSaveGame()
 {
-	// ============Thêm bước kiểm tra trùng tên============
-	//
-	//
-	//
-	//
-	// 
-	// 
-	// 
-	//
-	// ====================================================
 	if (m_playerName.empty())
 		return;
 	ofstream writePlayer(m_playerName + ".txt");
@@ -1537,6 +1532,7 @@ void Game::sSaveGame()
 			}
 		}
 		writePlayer << "#" << "\n";
+
 		writePlayer << "# Tower2 position" << "\n";
 		for (auto& entity : m_entities.getEntities(m_towerType2Config.tag))
 		{
@@ -1659,6 +1655,7 @@ void Game::sLoadGame()
 	cout << "Game loaded successfully" << endl;
 	readPlayer.close();
 }
+
 
 // --- Reset quái, tháp và đạn khi thoát game ---
 void Game::sReset()

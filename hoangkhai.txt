@@ -1,11 +1,15 @@
 # Current wave index: 
--1 -1 -1 -1 
+-1 -1 -1 -1
 # Remaining health: 
-1 1 1 1 1 
-1 1 1 1 1 
-1 1 1 1 1 
-1 1 1 1 1 
-
+1 1 1 1
+1 1 1 1
+1 1 1 1
+1 1 1 1
 # Money: 
-0 0 0 0 
-# Tower position
+0 0 0 0
+# Tower1 position
+#
+# Tower2 position
+#
+# Base in current map
+#
