@@ -1649,7 +1649,7 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 
-		for (auto& enemy : m_entities.getEntities(m_enemyType1Config.tag))
+		for (auto& enemy : m_entities.getEntities(m_enemyType2Config.tag))
 		{
 			float x, y;
 			int index;
@@ -1677,7 +1677,7 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 
-		for (auto& enemy : m_entities.getEntities(m_enemyType1Config.tag))
+		for (auto& enemy : m_entities.getEntities(m_enemyType3Config.tag))
 		{
 			float x, y;
 			int index;
