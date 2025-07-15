@@ -384,13 +384,31 @@ void Game::initUIFlow()
 			entity->cPosition = make_shared<CPosition>(Base);
 			entity->active(true);
 		}
-		readMapBase.close();
 		
 
 		// Khởi tạo map4
 		entity = m_scenes[AppState::Map4].addEntity("Map4");
 		entity->cSet = make_shared<CSet>("IMGS/map4.png");
+		while (getline(readMapBase, line)) {
+			if (line.empty() || line[0] == '#') continue;
+			istringstream iss(line);
+			iss >> tag >> filepath >> base_amount;
+			break;
+		}
 
+		while (getline(readMapBase, line) && base_amount > 0) {
+			if (line.empty() || line[0] == '#') continue;
+
+			base_amount--;
+			istringstream iss(line);
+			iss >> Base.x >> Base.y;
+
+			entity = m_scenes[AppState::Map4].addEntity(tag);
+			entity->cSet = make_shared<CSet>(filepath);
+			entity->cPosition = make_shared<CPosition>(Base);
+			entity->active(true);
+		}
+		readMapBase.close();
 
 		// -- OptionMenu --
 		{
@@ -433,6 +451,7 @@ void Game::initUIFlow()
 			entity->cSet->sprite.setScale(0.6f, 0.6f);
 			entity->cInput = make_shared<CInput>([this]()
 				{
+					sSaveGame();
 					sAddGameSave();
 					cout << "Successfully saved" << endl;
 				},
@@ -457,7 +476,6 @@ void Game::initUIFlow()
 					m_state = AppState::PlayMenu;
 					game_state = AppState::Dummy;
 					m_state1 = AppState::Dummy;
-					sSaveGame();
 					m_playerName.clear();
 					sReset();
 				},
@@ -1027,12 +1045,13 @@ void Game::sRender(float& deltaTime)
 	if (m_state == AppState::LoadGame)
 	{
 		Vector2f layout{10.f,10.f};
+		Vector2f TinyMap{ 288.f, 162.f };
 		int indent = 0;
 		for (auto& e : m_scenes[m_state].getEntities())
 		{
 			if (e->tag() == "GameSave")
 			{
-				layout.x = layout.x + e->cSet->texture.getSize().x * indent + 20.f;
+				layout.x = layout.x + TinyMap.x * indent + 20.f;
 				e->cPosition = make_shared<CPosition>(layout);
 				indent++;
 			}
@@ -1455,7 +1474,7 @@ void Game::sSaveGame()
 	if (m_playerName.empty())
 		return;
 	ofstream writePlayer(m_playerName + ".txt");
-	cout << m_playerName + ".txt";
+
 	if (writePlayer.is_open())
 	{
 		// Lưu wave
@@ -1485,13 +1504,19 @@ void Game::sSaveGame()
 		
 		// Lưu vị trí quái
 		writePlayer << "# Enemies position" << "\n";
+		bool isExist = false;
 		for (auto& entity : m_entities.getEntities(m_enemyType1Config.tag))
 		{
 			if (entity->isActive())
 			{
 				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " <<  entity->cMovement->currentPathindex << " ";
+				isExist = true;
 			}
 		}
+		if (!isExist)
+			writePlayer << "@";
+		else
+			isExist = false;
 		writePlayer << "\n";
 		writePlayer << "\n";
 
@@ -1500,8 +1525,14 @@ void Game::sSaveGame()
 			if (entity->isActive())
 			{
 				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+				isExist = true;
 			}
 		}
+		if (!isExist)
+			writePlayer << "@";
+		else
+			isExist = false;
+
 		writePlayer << "\n";
 		writePlayer << "\n";
 
@@ -1510,9 +1541,13 @@ void Game::sSaveGame()
 			if (entity->isActive())
 			{
 				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+				isExist = true;
 			}
 		}
-
+		if (!isExist)
+			writePlayer << "@";
+		else
+			isExist = false;
 		writePlayer << "\n";
 		writePlayer << "\n";
 
@@ -1524,9 +1559,13 @@ void Game::sSaveGame()
 			if (entity->isActive())
 			{
 				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+				isExist = true;
 			}
 		}
-
+		if (!isExist)
+			writePlayer << "@";
+		else
+			isExist = false;
 		writePlayer << "\n";
 		writePlayer << "\n";
 
@@ -1535,9 +1574,13 @@ void Game::sSaveGame()
 			if (entity->isActive())
 			{
 				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+				isExist = true;
 			}
 		}
-
+		if (!isExist)
+			writePlayer << "@";
+		else
+			isExist = false;
 		writePlayer << "\n";
 		writePlayer << "\n";
 		writePlayer << "# Base in current map" << "\n";
@@ -1545,10 +1588,16 @@ void Game::sSaveGame()
 		for (auto& base : m_scenes[m_state].getEntities("Base"))
 		{
 			writePlayer << base->isActive() << " ";
+			cout << base->isActive() << " ";
 		}
-
+		if (!writePlayer)
+		{
+			cout << "Error writing" << endl;
+		}
+		cout << endl;
 		writePlayer << "\n";
 		writePlayer.close();
+		cout << "Game saved" << endl;
 	}
 }
 
@@ -1619,6 +1668,7 @@ void Game::sLoadGame()
 	while (getline(readPlayer, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
 		istringstream iss(line);
 
 		for (auto& enemy : m_entities.getEntities(m_enemyType1Config.tag))
@@ -1628,7 +1678,7 @@ void Game::sLoadGame()
 
 			if (!(iss >> x >> y >> index)) break;
 
-			cout << x << " " << y << " " << index << endl;
+			
 
 			Vector2f pos(x, y);
 
@@ -1647,6 +1697,7 @@ void Game::sLoadGame()
 	while (getline(readPlayer, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
 		istringstream iss(line);
 
 		for (auto& enemy : m_entities.getEntities(m_enemyType2Config.tag))
@@ -1656,7 +1707,7 @@ void Game::sLoadGame()
 
 			if (!(iss >> x >> y >> index)) break;
 
-			cout << x << " " << y << " " << index << endl;
+			
 
 			Vector2f pos(x, y);
 
@@ -1675,6 +1726,7 @@ void Game::sLoadGame()
 	while (getline(readPlayer, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
 		istringstream iss(line);
 
 		for (auto& enemy : m_entities.getEntities(m_enemyType3Config.tag))
@@ -1684,7 +1736,7 @@ void Game::sLoadGame()
 
 			if (!(iss >> x >> y >> index)) break;
 
-			cout << x << " " << y << " " << index << endl;
+			
 
 			Vector2f pos(x, y);
 
@@ -1703,15 +1755,16 @@ void Game::sLoadGame()
 	while (getline(readPlayer, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
 		istringstream iss(line);
-
+		cout << line << endl;
 		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
 		{
 			float x, y;
 
 			if (!(iss >> x >> y)) break;
 
-			cout << x << " " << y << endl;
+			
 
 			Vector2f pos(x, y);
 
@@ -1728,15 +1781,15 @@ void Game::sLoadGame()
 	while (getline(readPlayer, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
 		istringstream iss(line);
-
+		cout << line << endl;
 		for (auto& tower : m_entities.getEntities(m_towerType2Config.tag))
 		{
 			float x, y;
 
 			if (!(iss >> x >> y)) break;
 
-			cout << x << " " << y << endl;
 
 			Vector2f pos(x, y);
 
@@ -1755,17 +1808,14 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		bool value;
-		int i = 0;
 
 		for (auto& base : m_scenes[loadGames[m_loadIndex].m_save].getEntities("Base"))
 		{
 			if (!(iss >> value)) break;
 
 			base->active(value);
-			i++;
 		}
 
-		cout << "Base loaded: " << i << endl;
 
 		break;
 	}
@@ -1878,7 +1928,7 @@ void Game::sMovement(float& deltaTime)
 				if (heartvector.size() - index == 5)
 				{
 					m_window.close();
-					// LOSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+					// LOSE
 				}
 				else
 				{
@@ -2024,7 +2074,6 @@ void Game::sCheckWaveFinished()
 		m_finishWave = true;
 		m_showWaveText = true;
 		m_waveClock.restart();
-		sSaveGame();
 	}
 }
 

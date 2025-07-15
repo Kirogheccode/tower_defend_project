@@ -64,3 +64,22 @@ Base IMGS/LavaBase.png 16
 690 766
 1089 986
 1335 826
+
+
+# Load Map4 Base: <tag> <filepath> <amount>
+Base IMGS/SnowBase.png 12
+
+
+# Coordination of Map4 Base: <x> <y>
+537 738
+509 888
+813 987
+812 597
+727 105
+328 94
+528 119
+1359 307
+1152 970
+700 326
+1072 99
+1373 932
