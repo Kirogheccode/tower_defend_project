@@ -311,6 +311,7 @@ void Game::initUIFlow()
 		Vector2f Base;
 		int base_amount{};
 
+
 		// Khởi tạo map1 
 		auto entity = m_scenes[AppState::Map1].addEntity("Map1");
 		entity->cSet = make_shared<CSet>("IMGS/map1.png");
@@ -336,7 +337,6 @@ void Game::initUIFlow()
 		}
 
 
-
 		//Khởi tạo map2
 		entity = m_scenes[AppState::Map2].addEntity("Map2");
 		entity->cSet = make_shared<CSet>("IMGS/map2.png");
@@ -360,6 +360,7 @@ void Game::initUIFlow()
 			entity->cPosition = make_shared<CPosition>(Base);
 			entity->active(true);
 		}
+
 		
 		//Khởi tạo map3
 		entity = m_scenes[AppState::Map3].addEntity("Map3");
@@ -385,9 +386,11 @@ void Game::initUIFlow()
 		}
 		readMapBase.close();
 		
+
 		// Khởi tạo map4
 		entity = m_scenes[AppState::Map4].addEntity("Map4");
 		entity->cSet = make_shared<CSet>("IMGS/map4.png");
+
 
 		// -- OptionMenu --
 		{
@@ -468,6 +471,7 @@ void Game::initUIFlow()
 				}
 			);
 		}
+
 
 		// Khởi tạo các chức năng trong game - GamePlay
 		entity = m_scenes[AppState::GamePlay].addEntity("OptionSetting");
@@ -571,6 +575,7 @@ void Game::initUIFlow()
 		);
 	}
 
+
 	// -- MainMenu --
 	{
 		auto bg = m_scenes[AppState::MainMenu].addEntity("BG");
@@ -634,6 +639,7 @@ void Game::initUIFlow()
 		);
 	}
 
+
 	// -- PlayMenu --
 	{
 		auto bg = m_scenes[AppState::PlayMenu].addEntity("BG");
@@ -696,6 +702,8 @@ void Game::initUIFlow()
 			}
 		);
 	}
+
+
 	// -- LoadGame --
 	{
 	  auto bg = m_scenes[AppState::LoadGame].addEntity("BG");
@@ -720,6 +728,7 @@ void Game::initUIFlow()
 	  );
 
 	}
+
 
 	// -- SettingsMenu (Pop-up) --
 	{
@@ -816,6 +825,7 @@ void Game::initUIFlow()
 		);
 	}
 
+
 	// -- AboutUs (Pop-up) --
 	{
 		auto panel = m_scenes[AppState::AboutUs].addEntity("AboutPanel");
@@ -843,6 +853,7 @@ void Game::initUIFlow()
 		);
 	}
 
+
 	// -- Rules (Pop - up) --
 	{
 		auto panel = m_scenes[AppState::Rules].addEntity("RulesPanel");
@@ -868,6 +879,7 @@ void Game::initUIFlow()
 			}
 		);
 	}
+
 
 	// -- MapSelect --
 	{
