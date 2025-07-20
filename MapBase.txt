@@ -1,5 +1,5 @@
 # Load Map1 Base: <tag> <filepath> <amount>
-Base IMGS/Base.png 15
+Base IMGS/Bases/Base.png 15
 
 
 # Coordination of Map1 Base: <x> <y>
@@ -21,7 +21,7 @@ Base IMGS/Base.png 15
 
 
 # Load Map2 Base: <tag> <filepath> <amount>
-Base IMGS/SandBase.png 16
+Base IMGS/Bases/SandBase.png 16
 
 
 # Coordination of Map2 Base: <x> <y>
@@ -44,7 +44,7 @@ Base IMGS/SandBase.png 16
 
 
 # Load Map3 Base: <tag> <filepath> <amount>
-Base IMGS/LavaBase.png 16
+Base IMGS/Bases/LavaBase.png 16
 
 
 # Coordination of Map3 Base: <x> <y>
@@ -67,7 +67,7 @@ Base IMGS/LavaBase.png 16
 
 
 # Load Map4 Base: <tag> <filepath> <amount>
-Base IMGS/SnowBase.png 12
+Base IMGS/Bases/SnowBase.png 12
 
 
 # Coordination of Map4 Base: <x> <y>

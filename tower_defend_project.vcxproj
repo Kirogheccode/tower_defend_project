@@ -149,9 +149,12 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="EntityManager.h" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="InitGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game.h" />
     <ClCompile Include="MathSupport.cpp" />
+    <ClCompile Include="ResetData.cpp" />
+    <ClCompile Include="SpawnEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="IMGS\back.png" />

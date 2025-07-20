@@ -153,6 +153,8 @@ class Game
 	bool m_finishWave = false;                                                              
 
 	void init(const string& config);
+	void loadHeartCoin();
+	void loadFontText();
 	void initUIFlow();
 
 	void sMovement(float& deltaTime);										                // System: Movement update

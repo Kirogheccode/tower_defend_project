@@ -36,6 +36,15 @@
     <ClCompile Include="MathSupport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="InitGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResetData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpawnEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="IMGS\back.png">
@@ -281,7 +290,7 @@
   <ItemGroup>
     <Text Include="config.txt" />
     <Text Include="MapBase.txt" />
-    <Text Include="player.txt" />
+    <Text Include="players.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="tower_defend_project.rc">
