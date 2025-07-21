@@ -31,7 +31,7 @@ void Game::sReset()
 			heart->active(true);
 	}
 
-	// Reset ti?n
+	// Reset tien
 	m_coin = 0;
 
 	// Reset wave

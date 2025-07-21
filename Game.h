@@ -143,6 +143,7 @@ class Game
 	bool m_sfxMuted = false;
 
 	SoundBuffer m_clickBuffer;
+	SoundBuffer m_constructTower;
 
 	list<Sound> m_activeSounds;
 

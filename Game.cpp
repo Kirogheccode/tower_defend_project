@@ -273,28 +273,69 @@ void Game::sUserInput()
 
 				if (m_state2 == AppState::TowerPlace)
 				{
-					bool placed = false;
-
-					for (auto& e : m_scenes[m_state].getEntities("Base"))
+					if (m_selected == "DeleteTower")
 					{
-						if (e->isActive() && e->cSet->sprite.getGlobalBounds().contains(mousePos))
+						bool remove = false;
+
+						for (auto& e : m_entities.getEntities("Tower"))
 						{
-							e->active(false);
-							placed = true;
-							break;
+							if (e->isActive() && e->cSet->sprite.getGlobalBounds().contains(mousePos))
+							{
+								DeactivateTower(*e);
+								remove = true;
+								break;
+							}
+						}
+						if (remove)
+						{
+							float marginX = 10.f;
+							float marginY = 10.f;
+							for (auto& e : m_scenes[m_state].getEntities("Base"))
+							{
+								if (!e->isActive())
+								{
+									FloatRect bounds = e->cSet->sprite.getGlobalBounds();
+									bounds.left -= marginX;
+									bounds.top -= marginY;
+									bounds.width += 2 * marginX;
+									bounds.height += 2 * marginY;
+									if (bounds.contains(mousePos))
+									{
+										e->active(true);
+										break;
+									}
+								}
+							}
 						}
 					}
-
-					if (placed)
+					else
 					{
-						for (auto& e : m_entities.getEntities(m_selected))
+
+						bool placed = false;
+
+						for (auto& e : m_scenes[m_state].getEntities("Base"))
 						{
-							if (!e->isActive())
+							if (e->isActive() && e->cSet->sprite.getGlobalBounds().contains(mousePos))
 							{
-								e->active(true);
-								e->cPosition = make_shared<CPosition>(mousePos);
-								e->cSet->sprite.setPosition(e->cPosition->position);
-								break; 
+								e->active(false);
+								placed = true;
+								playSfx(m_constructTower);
+								break;
+							}
+						}
+
+						if (placed)
+						{
+							for (auto& e : m_entities.getEntities(m_selected))
+							{
+								if (!e->isActive())
+								{
+									e->active(true);
+									e->cPosition = make_shared<CPosition>(mousePos);
+									e->cSet->sprite.setPosition(e->cPosition->position);
+									
+									break;
+								}
 							}
 						}
 					}
@@ -310,7 +351,7 @@ void Game::sUserInput()
 						stateToHandle = m_state1;
 					else if (game_state != AppState::Dummy)
 						stateToHandle = game_state;
-
+					
 					if (stateToHandle == AppState::TowerSelect)
 					{
 						bool isOutSide = true;
@@ -417,7 +458,7 @@ void Game::run()
 void Game::sAddGameSave()
 {
 	string fileName = m_playerName + ".txt";
-	loadGames.push_back({ fileName, m_state, m_mapindex });
+	loadGames.push_back({ m_playerName, m_state, m_mapindex });
 
 	switch (m_state)
 	{
@@ -437,15 +478,16 @@ void Game::sAddGameSave()
 
 
 	auto map = m_scenes[AppState::LoadGame].addEntity("GameSave");
-	map->cSet = make_shared<CSet>("IMGS/" + fileName + ".png");
+	map->cSet = make_shared<CSet>("IMGS/Maps/" + fileName + ".png");
 	map->cSet->sprite.setScale(0.15f, 0.15f);
 	map->cInput = make_shared<CInput>([this]()
 		{
 			sLoadGame();
 			m_mapindex = loadGames[m_loadIndex].mapIndex;
 			m_state = loadGames[m_loadIndex].m_save;
-
+			m_playerName = loadGames[m_loadIndex].fileName;
 			game_state = AppState::GamePlay;
+			prev_state = AppState::LoadGame;
 			m_loadIndex = -1;
 		},
 		[map]()
@@ -575,6 +617,66 @@ void Game::sSaveGame()
 			isExist = false;
 		writePlayer << "\n";
 		writePlayer << "\n";
+
+		for (auto& entity : m_entities.getEntities(m_towerType3Config.tag))
+		{
+			if (entity->isActive())
+			{
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+				isExist = true;
+			}
+		}
+		if (!isExist)
+			writePlayer << "@";
+		else
+			isExist = false;
+		writePlayer << "\n";
+		writePlayer << "\n";
+
+		for (auto& entity : m_entities.getEntities(m_towerType4Config.tag))
+		{
+			if (entity->isActive())
+			{
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+				isExist = true;
+			}
+		}
+		if (!isExist)
+			writePlayer << "@";
+		else
+			isExist = false;
+		writePlayer << "\n";
+		writePlayer << "\n";
+
+		for (auto& entity : m_entities.getEntities(m_towerType5Config.tag))
+		{
+			if (entity->isActive())
+			{
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+				isExist = true;
+			}
+		}
+		if (!isExist)
+			writePlayer << "@";
+		else
+			isExist = false;
+		writePlayer << "\n";
+		writePlayer << "\n";
+
+		for (auto& entity : m_entities.getEntities(m_towerType6Config.tag))
+		{
+			if (entity->isActive())
+			{
+				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+				isExist = true;
+			}
+		}
+		if (!isExist)
+			writePlayer << "@";
+		else
+			isExist = false;
+		writePlayer << "\n";
+		writePlayer << "\n";
 		writePlayer << "# Base in current map" << "\n";
 
 		for (auto& base : m_scenes[m_state].getEntities("Base"))
@@ -596,7 +698,7 @@ void Game::sSaveGame()
 void Game::sLoadGame()
 {
 	
-	ifstream readPlayer(loadGames[m_loadIndex].fileName);
+	ifstream readPlayer(loadGames[m_loadIndex].fileName + ".txt");
 	cout << loadGames[m_loadIndex].fileName << endl;
 
 	if (!readPlayer.is_open())
@@ -777,6 +879,106 @@ void Game::sLoadGame()
 		istringstream iss(line);
 		cout << line << endl;
 		for (auto& tower : m_entities.getEntities(m_towerType2Config.tag))
+		{
+			float x, y;
+
+			if (!(iss >> x >> y)) break;
+
+
+			Vector2f pos(x, y);
+
+			tower->cPosition = make_shared<CPosition>(pos);
+			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->active(true);
+		}
+
+		break;
+	}
+
+	
+	// Load thap type 3
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
+		istringstream iss(line);
+		cout << line << endl;
+		for (auto& tower : m_entities.getEntities(m_towerType3Config.tag))
+		{
+			float x, y;
+
+			if (!(iss >> x >> y)) break;
+
+
+			Vector2f pos(x, y);
+
+			tower->cPosition = make_shared<CPosition>(pos);
+			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->active(true);
+		}
+
+		break;
+	}
+
+
+	// Load thap type 4
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
+		istringstream iss(line);
+		cout << line << endl;
+		for (auto& tower : m_entities.getEntities(m_towerType4Config.tag))
+		{
+			float x, y;
+
+			if (!(iss >> x >> y)) break;
+
+
+			Vector2f pos(x, y);
+
+			tower->cPosition = make_shared<CPosition>(pos);
+			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->active(true);
+		}
+
+		break;
+	}
+
+
+	// Load thap type 5
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
+		istringstream iss(line);
+		cout << line << endl;
+		for (auto& tower : m_entities.getEntities(m_towerType5Config.tag))
+		{
+			float x, y;
+
+			if (!(iss >> x >> y)) break;
+
+
+			Vector2f pos(x, y);
+
+			tower->cPosition = make_shared<CPosition>(pos);
+			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->active(true);
+		}
+
+		break;
+	}
+
+
+	// Load thap type 6
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
+		istringstream iss(line);
+		cout << line << endl;
+		for (auto& tower : m_entities.getEntities(m_towerType6Config.tag))
 		{
 			float x, y;
 

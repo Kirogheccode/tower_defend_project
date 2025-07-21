@@ -394,11 +394,15 @@ void Game::loadFontText()
 	if (!m_clickBuffer.loadFromFile("SOUNDS/hover.ogg")) {
 		cout << "Error: Could not load click sound file.\n";
 	}
+	if (!m_constructTower.loadFromFile("SOUNDS/Constructing.mp3"))
+	{
+		cout << "Error: Could not load construct sound file.\n";
+	}
 
 	m_inputLabel.setFont(m_font);
 	m_inputLabel.setCharacterSize(24);
-	m_inputLabel.setFillColor(Color::White);
-	m_inputLabel.setString("Enter your name:");
+	m_inputLabel.setFillColor(Color::Black);
+	m_inputLabel.setString("Enter your name");
 	m_inputLabel.setPosition(500, 250);
 
 	m_inputText.setFont(m_font);
@@ -588,7 +592,8 @@ void Game::initUIFlow()
 			entity->cInput = make_shared<CInput>([this]()
 				{
 					sSaveGame();
-					sAddGameSave();
+					if(prev_state != AppState::LoadGame)
+					   sAddGameSave();
 					cout << "Successfully saved" << endl;
 				},
 				[entity]()
@@ -796,6 +801,23 @@ void Game::initUIFlow()
 			[entity]()
 			{
 
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+		entity = m_scenes[AppState::TowerSelect].addEntity("Spatula");
+		entity->cSet = make_shared<CSet>("IMGS/Spatula.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(1795, 330));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				m_selected = "DeleteTower";
+				m_state2 = AppState::TowerPlace;
+			},
+			[entity]()
+			{
 				entity->cSet->sprite.setColor(Color(200, 200, 200));
 			},
 			[entity]()
