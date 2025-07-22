@@ -174,7 +174,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType1Config.tag >> m_towerType1Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+			iss >> m_towerType1Config.tag >> m_towerType1Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType1Config.cost;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -199,7 +199,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType2Config.cost;;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -224,7 +224,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType3Config.cost;;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -250,7 +250,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType4Config.cost;;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -275,7 +275,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType5Config.tag >> m_towerType5Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+			iss >> m_towerType5Config.tag >> m_towerType5Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType5Config.cost;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -300,7 +300,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount;
+			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType6Config.cost;;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -703,6 +703,7 @@ void Game::initUIFlow()
 			{
 				m_selected = "Tower1";
 				m_state2 = AppState::TowerPlace;
+				m_cost = m_towerType1Config.cost;
 			},
 			[entity]()
 			{
@@ -721,6 +722,7 @@ void Game::initUIFlow()
 			{
 				m_selected = "Tower2";
 				m_state2 = AppState::TowerPlace;
+				m_cost = m_towerType2Config.cost;
 			},
 			[entity]()
 			{
@@ -740,6 +742,7 @@ void Game::initUIFlow()
 			{
 				m_selected = "Tower3";
 				m_state2 = AppState::TowerPlace;
+				m_cost = m_towerType3Config.cost;
 			},
 			[entity]()
 			{
@@ -759,6 +762,7 @@ void Game::initUIFlow()
 			{
 				m_selected = "Tower4";
 				m_state2 = AppState::TowerPlace;
+				m_cost = m_towerType4Config.cost;
 			},
 			[entity]()
 			{
@@ -778,6 +782,7 @@ void Game::initUIFlow()
 			{
 				m_selected = "Tower5";
 				m_state2 = AppState::TowerPlace;
+				m_cost = m_towerType5Config.cost;
 			},
 			[entity]()
 			{
@@ -797,6 +802,7 @@ void Game::initUIFlow()
 			{
 				m_selected = "Tower6";
 				m_state2 = AppState::TowerPlace;
+				m_cost = m_towerType6Config.cost;
 			},
 			[entity]()
 			{

@@ -56,12 +56,12 @@ struct EnemyType1Config { string tag; string filepath; int hp; float speed; int 
 struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 
-struct TowerType1Config { string tag; string filepath; };
-struct TowerType2Config { string tag; string filepath; };
-struct TowerType3Config { string tag; string filepath; };
-struct TowerType4Config { string tag; string filepath; };
-struct TowerType5Config { string tag; string filepath; };
-struct TowerType6Config { string tag; string filepath; };
+struct TowerType1Config { string tag; string filepath; int cost; };
+struct TowerType2Config { string tag; string filepath; int cost; };
+struct TowerType3Config { string tag; string filepath; int cost; };
+struct TowerType4Config { string tag; string filepath; int cost; };
+struct TowerType5Config { string tag; string filepath; int cost; };
+struct TowerType6Config { string tag; string filepath; int cost; };
 
 struct WaveConfig {
 	int enemyType1Count = 0;
@@ -128,6 +128,7 @@ class Game
 	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
 	int m_coin = 1000;
 	int m_currentFrame = 0;
+	int m_cost = 0;
 
 	Font m_font;
 	Text m_inputLabel;

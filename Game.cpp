@@ -281,6 +281,14 @@ void Game::sUserInput()
 						{
 							if (e->isActive() && e->cSet->sprite.getGlobalBounds().contains(mousePos))
 							{
+								// Hoàn lại 70% khi xoá tháp
+								if (e->tag() == m_towerType1Config.tag) m_coin += 0.7 * m_towerType1Config.cost;
+								else if (e->tag() == m_towerType2Config.tag) m_coin += 0.7 * m_towerType2Config.cost;
+								else if (e->tag() == m_towerType3Config.tag) m_coin += 0.7 * m_towerType3Config.cost;
+								else if (e->tag() == m_towerType4Config.tag) m_coin += 0.7 * m_towerType4Config.cost;
+								else if (e->tag() == m_towerType5Config.tag) m_coin += 0.7 * m_towerType5Config.cost;
+								else if (e->tag() == m_towerType6Config.tag) m_coin += 0.7 * m_towerType6Config.cost;
+
 								DeactivateTower(*e);
 								remove = true;
 								break;
@@ -315,8 +323,9 @@ void Game::sUserInput()
 
 						for (auto& e : m_scenes[m_state].getEntities("Base"))
 						{
-							if (e->isActive() && e->cSet->sprite.getGlobalBounds().contains(mousePos))
+							if (e->isActive() && e->cSet->sprite.getGlobalBounds().contains(mousePos) && m_coin >= m_cost)
 							{
+								m_coin -= m_cost;
 								e->active(false);
 								placed = true;
 								playSfx(m_constructTower);
@@ -453,6 +462,7 @@ void Game::run()
 		}
 	}
 }
+
 
 // --- Thêm màn chơi được save (khi bấm save trong options) vào danh sách loadGames ---
 void Game::sAddGameSave()
@@ -1018,6 +1028,7 @@ void Game::sLoadGame()
 	readPlayer.close();
 }
 
+
 // --- Di chuyển và hoạt họa ---
 void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
 {
@@ -1179,6 +1190,7 @@ void Game::updateAudioSettings() {
 		m_backgroundMusic.setVolume(m_musicVolume);
 	}
 }
+
 
 // --- Tháp bắn quái ---
 void Game::Shoot(Entity& tower)
