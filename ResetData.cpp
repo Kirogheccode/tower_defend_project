@@ -73,6 +73,19 @@ void Game::DeactivateEnemy(Entity& enemy)
 	// Reset chuy?n ??ng
 	if (enemy.cMovement)
 	{
+		if (enemy.tag() == "EnemyType1")
+		{
+			enemy.cMovement->speed = m_enemyType1Config.speed;
+		}
+		else if (enemy.tag() == "EnemyType2")
+		{
+			enemy.cMovement->speed = m_enemyType2Config.speed;
+		}
+		else if (enemy.tag() == "EnemyType3")
+		{
+			enemy.cMovement->speed = m_enemyType3Config.speed;
+		}
+
 		enemy.cMovement->currentPathindex = 0;
 	}
 

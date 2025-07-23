@@ -112,6 +112,8 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				m_spawningTimer = 0;
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
+				e->cHealth->hp = e->cHealth->hp * multiplies[m_mapindex];
+				e->cMovement->speed = e->cMovement->speed * multiplies[m_mapindex];
 				e->active(true);
 				m_spawnedType1++;
 				break;
@@ -134,6 +136,8 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				m_spawningTimer = 0;
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
+				e->cHealth->hp = e->cHealth->hp * multiplies[m_mapindex];
+				e->cMovement->speed = e->cMovement->speed * multiplies[m_mapindex];
 				e->active(true);
 				m_spawnedType2++;
 				break;
@@ -156,6 +160,8 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				m_spawningTimer = 0;
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
+				e->cHealth->hp = e->cHealth->hp * multiplies[m_mapindex];
+				e->cMovement->speed = e->cMovement->speed * multiplies[m_mapindex];
 				e->active(true);
 				m_spawnedType3++;
 				break;

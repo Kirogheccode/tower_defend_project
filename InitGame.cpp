@@ -336,9 +336,9 @@ void Game::init(const string& path)
 
 	readconfig.close();
 
+	initUIFlow();
 	loadHeartCoin();
 	loadFontText();
-	initUIFlow();
 }
 
 
@@ -394,9 +394,15 @@ void Game::loadFontText()
 	if (!m_clickBuffer.loadFromFile("SOUNDS/hover.ogg")) {
 		cout << "Error: Could not load click sound file.\n";
 	}
+
 	if (!m_constructTower.loadFromFile("SOUNDS/Constructing.mp3"))
 	{
 		cout << "Error: Could not load construct sound file.\n";
+	}
+
+	if (!m_error.loadFromFile("SOUNDS/Error.mp3"))
+	{
+		cout << "Error: Could not load error sound file.\n";
 	}
 
 	m_inputLabel.setFont(m_font);
@@ -409,6 +415,50 @@ void Game::loadFontText()
 	m_inputText.setCharacterSize(24);
 	m_inputText.setFillColor(Color::Yellow);
 	m_inputText.setPosition(500, 300);
+
+
+	// -- Hiển thị giá tiền cho từng tháp
+	auto Tower1Cost = m_scenes[AppState::TowerSelect].addEntity("Tower1Cost");
+	Tower1Cost->cText = make_shared<CText>(m_towerType1Config.cost);
+	Tower1Cost->cText->text.setFont(m_font);
+	Tower1Cost->cText->text.setPosition(Vector2f(1760, 110));
+	Tower1Cost->cText->text.setCharacterSize(20);
+	Tower1Cost->cText->text.setFillColor(sf::Color::Yellow);
+
+	auto Tower2Cost = m_scenes[AppState::TowerSelect].addEntity("Tower2Cost");
+	Tower2Cost->cText = make_shared<CText>(m_towerType2Config.cost);
+	Tower2Cost->cText->text.setFont(m_font);
+	Tower2Cost->cText->text.setPosition(Vector2f(1850, 110));
+	Tower2Cost->cText->text.setCharacterSize(20);
+	Tower2Cost->cText->text.setFillColor(sf::Color::Yellow);
+
+	auto Tower3Cost = m_scenes[AppState::TowerSelect].addEntity("Tower3Cost");
+	Tower3Cost->cText = make_shared<CText>(m_towerType3Config.cost);
+	Tower3Cost->cText->text.setFont(m_font);
+	Tower3Cost->cText->text.setPosition(Vector2f(1760, 260));
+	Tower3Cost->cText->text.setCharacterSize(20);
+	Tower3Cost->cText->text.setFillColor(sf::Color::Yellow);
+
+	auto Tower4Cost = m_scenes[AppState::TowerSelect].addEntity("Tower4Cost");
+	Tower4Cost->cText = make_shared<CText>(m_towerType4Config.cost);
+	Tower4Cost->cText->text.setFont(m_font);
+	Tower4Cost->cText->text.setPosition(Vector2f(1850, 260));
+	Tower4Cost->cText->text.setCharacterSize(20);
+	Tower4Cost->cText->text.setFillColor(sf::Color::Yellow);
+
+	auto Tower5Cost = m_scenes[AppState::TowerSelect].addEntity("Tower5Cost");
+	Tower5Cost->cText = make_shared<CText>(m_towerType5Config.cost);
+	Tower5Cost->cText->text.setFont(m_font);
+	Tower5Cost->cText->text.setPosition(Vector2f(1760, 410));
+	Tower5Cost->cText->text.setCharacterSize(20);
+	Tower5Cost->cText->text.setFillColor(sf::Color::Yellow);
+
+	auto Tower6Cost = m_scenes[AppState::TowerSelect].addEntity("Tower6Cost");
+	Tower6Cost->cText = make_shared<CText>(m_towerType6Config.cost);
+	Tower6Cost->cText->text.setFont(m_font);
+	Tower6Cost->cText->text.setPosition(Vector2f(1850, 410));
+	Tower6Cost->cText->text.setCharacterSize(20);
+	Tower6Cost->cText->text.setFillColor(sf::Color::Yellow);
 
 
 	// --- Khởi tạo WAVE text
@@ -565,7 +615,6 @@ void Game::initUIFlow()
 			entity->cText->text.setFillColor(Color::Black);
 			entity->cText->text.setPosition(Vector2f(839, 273));
 
-
 			entity = m_scenes[AppState::OptionMenu].addEntity("Resume");
 			entity->cSet = make_shared<CSet>("IMGS/play.png");
 			entity->cPosition = make_shared<CPosition>(Vector2f(839, 406));
@@ -678,7 +727,6 @@ void Game::initUIFlow()
 		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
 		entity->cInput = make_shared<CInput>([this]()
 			{
-
 				m_state1 = AppState::TowerSelect;
 			},
 			[entity]()
@@ -737,7 +785,7 @@ void Game::initUIFlow()
 
 		entity = m_scenes[AppState::TowerSelect].addEntity("Tower3Button");
 		entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower3Button.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1735, 130));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1735, 180));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				m_selected = "Tower3";
@@ -757,7 +805,7 @@ void Game::initUIFlow()
 
 		entity = m_scenes[AppState::TowerSelect].addEntity("Tower4Button");
 		entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower4Button.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1825, 130));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1825, 180));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				m_selected = "Tower4";
@@ -777,7 +825,7 @@ void Game::initUIFlow()
 
 		entity = m_scenes[AppState::TowerSelect].addEntity("Tower5Button");
 		entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower5Button.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1735, 230));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1735, 330));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				m_selected = "Tower5";
@@ -797,7 +845,7 @@ void Game::initUIFlow()
 
 		entity = m_scenes[AppState::TowerSelect].addEntity("Tower6Button");
 		entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower6Button.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1825, 230));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1825, 330));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				m_selected = "Tower6";
@@ -816,7 +864,7 @@ void Game::initUIFlow()
 		);
 		entity = m_scenes[AppState::TowerSelect].addEntity("Spatula");
 		entity->cSet = make_shared<CSet>("IMGS/Spatula.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1795, 330));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1795, 480));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				m_selected = "DeleteTower";

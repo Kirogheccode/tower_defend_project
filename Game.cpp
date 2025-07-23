@@ -25,12 +25,10 @@ void Game::sRender(float& deltaTime)
 				e->cSet->sprite.setPosition(e->cPosition->position);
 				m_window.draw(e->cSet->sprite);
 			}
-
 		}
 	}
 	else
 	{
-
 		for (auto& e : m_scenes[m_state].getEntities())
 		{
 			if (e->cSet && e->cPosition)
@@ -47,8 +45,8 @@ void Game::sRender(float& deltaTime)
 					m_window.draw(e->cSet->sprite);
 			}
 		}
-
 	}
+
 	if (game_state == AppState::GamePlay)
 	{
 		for (auto& e : m_scenes[game_state].getEntities())
@@ -69,6 +67,9 @@ void Game::sRender(float& deltaTime)
 				// Các entity khác vẽ bình thường
 				m_window.draw(e->cSet->sprite);
 			}
+
+			if (e->cText)
+				m_window.draw(e->cText->text);
 
 			for (auto& e : m_scenes[AppState::GamePlay].getEntities("MoneyText"))
 			{
@@ -98,6 +99,9 @@ void Game::sRender(float& deltaTime)
 					m_showWaveText = false;
 				}
 			}
+
+			if (e->cText)
+				m_window.draw(e->cText->text);
 		}
 	}
 
@@ -318,7 +322,6 @@ void Game::sUserInput()
 					}
 					else
 					{
-
 						bool placed = false;
 
 						for (auto& e : m_scenes[m_state].getEntities("Base"))
@@ -346,6 +349,10 @@ void Game::sUserInput()
 									break;
 								}
 							}
+						}
+						else
+						{
+							playSfx(m_error);
 						}
 					}
 
@@ -378,7 +385,9 @@ void Game::sUserInput()
 								isOutSide = false;
 							}
 						}
+
 						if (isOutSide)
+							playSfx(m_error);
 							m_state1 = AppState::Dummy;
 					}
 					else
@@ -1287,7 +1296,7 @@ bool collisionDetection(const Entity& entity1, const Entity& entity2)
 	if (!entity1.cSet || !entity2.cSet) return false;
 	FloatRect bounds1 = scaleRect(entity1.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
 	FloatRect bounds2 = scaleRect(entity2.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
-	//return bounds1.intersects(bounds2);
+
 	return isContained(bounds1, bounds2);
 }
 
@@ -1308,6 +1317,9 @@ void Game::sCollision()
 				if (cur->cHealth)
 				{
 					cur->cHealth->hp -= bullet->cDamage->damage;
+
+
+
 					if (cur->cHealth->hp <= 0)
 					{
 						m_coin += cur->cMoney->money;

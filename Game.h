@@ -130,6 +130,8 @@ class Game
 	int m_currentFrame = 0;
 	int m_cost = 0;
 
+	vector<float> multiplies = { 1, 1.2, 1.4, 1.6 };
+
 	Font m_font;
 	Text m_inputLabel;
 	Text m_inputText;
@@ -145,6 +147,7 @@ class Game
 
 	SoundBuffer m_clickBuffer;
 	SoundBuffer m_constructTower;
+	SoundBuffer m_error;
 
 	list<Sound> m_activeSounds;
 
