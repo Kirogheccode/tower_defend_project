@@ -259,18 +259,6 @@ void Game::sUserInput()
 		{
 			bool clickedSlider = false;
 
-			if (m_state == AppState::SettingsMenu)
-			{
-				for (auto& e : m_scenes[m_state].getEntities())
-				{
-					if (e->cSlider && e->cSlider->isDragging)
-					{
-						clickedSlider = true;
-						break;
-					}
-				}
-			}
-
 			if (!clickedSlider)
 			{
 				// Ưu tiên state2 nếu đang chọn tower
@@ -280,7 +268,7 @@ void Game::sUserInput()
 					if (m_selected == "DeleteTower")
 					{
 						bool remove = false;
-
+						Vector2f removing;
 						for (auto& e : m_entities.getEntities("Tower"))
 						{
 							if (e->isActive() && e->cSet->sprite.getGlobalBounds().contains(mousePos))
@@ -292,7 +280,7 @@ void Game::sUserInput()
 								else if (e->tag() == m_towerType4Config.tag) m_coin += 0.7 * m_towerType4Config.cost;
 								else if (e->tag() == m_towerType5Config.tag) m_coin += 0.7 * m_towerType5Config.cost;
 								else if (e->tag() == m_towerType6Config.tag) m_coin += 0.7 * m_towerType6Config.cost;
-
+								removing = e->cPosition->position;
 								DeactivateTower(*e);
 								remove = true;
 								break;
@@ -300,22 +288,13 @@ void Game::sUserInput()
 						}
 						if (remove)
 						{
-							float marginX = 10.f;
-							float marginY = 10.f;
+							
 							for (auto& e : m_scenes[m_state].getEntities("Base"))
 							{
-								if (!e->isActive())
+								if (!e->isActive() && e->cSet->sprite.getGlobalBounds().contains(removing))
 								{
-									FloatRect bounds = e->cSet->sprite.getGlobalBounds();
-									bounds.left -= marginX;
-									bounds.top -= marginY;
-									bounds.width += 2 * marginX;
-									bounds.height += 2 * marginY;
-									if (bounds.contains(mousePos))
-									{
 										e->active(true);
 										break;
-									}
 								}
 							}
 						}
@@ -323,7 +302,7 @@ void Game::sUserInput()
 					else
 					{
 						bool placed = false;
-
+						Vector2f placing;
 						for (auto& e : m_scenes[m_state].getEntities("Base"))
 						{
 							if (e->isActive() && e->cSet->sprite.getGlobalBounds().contains(mousePos) && m_coin >= m_cost)
@@ -331,6 +310,9 @@ void Game::sUserInput()
 								m_coin -= m_cost;
 								e->active(false);
 								placed = true;
+								placing.x = e->cSet->sprite.getGlobalBounds().left + e->cSet->sprite.getGlobalBounds().width/ 2.f;
+								placing.y = e->cSet->sprite.getGlobalBounds().top + e->cSet->sprite.getGlobalBounds().height/ 2.f;
+
 								playSfx(m_constructTower);
 								break;
 							}
@@ -343,7 +325,7 @@ void Game::sUserInput()
 								if (!e->isActive())
 								{
 									e->active(true);
-									e->cPosition = make_shared<CPosition>(mousePos);
+									e->cPosition = make_shared<CPosition>(placing);
 									e->cSet->sprite.setPosition(e->cPosition->position);
 									
 									break;
@@ -387,7 +369,6 @@ void Game::sUserInput()
 						}
 
 						if (isOutSide)
-							playSfx(m_error);
 							m_state1 = AppState::Dummy;
 					}
 					else
