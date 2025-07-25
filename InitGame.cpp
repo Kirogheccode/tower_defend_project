@@ -381,14 +381,21 @@ void Game::loadFontText()
 		cout << "Failed to load font\n";
 	}
 
-	if (!m_backgroundMusic.openFromFile("SOUNDS/bgmusic.wav")) {
-		cout << "Error: Could not load background music file.\n";
+	if (!m_backgroundMusic.openFromFile("SOUNDS/MainMenuMusic.mp3")) {
+		cout << "Error: Could not load main menu music file.\n";
 	}
 	else
 	{
 		m_backgroundMusic.setLoop(true);
-		m_backgroundMusic.play();
-		updateAudioSettings();
+	}
+
+	if (!m_gamePlayMusic.openFromFile("SOUNDS/GameMusic1.wav")) {
+		cout << "Error: Could not load game play 1 music file.\n";
+	}
+	else
+	{
+		m_gamePlayMusic.setLoop(true);
+		//m_backgroundMusic.play();
 	}
 
 	if (!m_clickBuffer.loadFromFile("SOUNDS/hover.ogg")) {
@@ -404,6 +411,8 @@ void Game::loadFontText()
 	{
 		cout << "Error: Could not load error sound file.\n";
 	}
+
+	updateAudioSettings();
 
 	m_inputLabel.setFont(m_font);
 	m_inputLabel.setCharacterSize(24);

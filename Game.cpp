@@ -431,6 +431,7 @@ void Game::run()
 		float dt = m_clock.restart().asSeconds();
 
 		sUserInput(); // Always process input (so you can pause/unpause)
+		updateMusicState();
 
 		if (!m_paused)
 		{
@@ -1182,6 +1183,39 @@ void Game::updateAudioSettings() {
 	}
 	else {
 		m_backgroundMusic.setVolume(m_musicVolume);
+	}
+}
+
+void Game::updateMusicState() {
+	if (m_state == AppState::MainMenu) {
+		// Nếu chưa phát menuMusic thì bật, đồng thời tắt gameplayMusic
+		if (m_gamePlayMusic.getStatus() == sf::Music::Playing)
+			m_gamePlayMusic.stop();
+		if (m_backgroundMusic.getStatus() != sf::Music::Playing)
+			m_backgroundMusic.play();
+	}
+	else if (m_state == AppState::Map1) {
+			// Đang trong gameplay -> phát nhạc gameplay
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_gamePlayMusic.getStatus() != sf::Music::Playing)
+			m_gamePlayMusic.play();
+	}
+	//else if (m_state == AppState::Map1 || m_state == AppState::Map2 ||
+	//	m_state == AppState::Map3 || m_state == AppState::Map4 ||
+	//	m_state == AppState::GamePlay) {
+	//	// Đang trong gameplay -> phát nhạc gameplay
+	//	if (m_menuMusic.getStatus() == sf::Music::Playing)
+	//		m_menuMusic.stop();
+	//	if (m_gameplayMusic.getStatus() != sf::Music::Playing)
+	//		m_gameplayMusic.play();
+	//}
+	else {
+		// Các state khác thì dừng hết
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_gamePlayMusic.getStatus() == sf::Music::Playing)
+			m_gamePlayMusic.stop();
 	}
 }
 

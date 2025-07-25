@@ -139,6 +139,7 @@ class Game
 	bool m_typingName = false;
 
 	Music m_backgroundMusic;
+	Music m_gamePlayMusic;
 	float m_musicVolume = 50.0f;
 	bool m_musicMuted = false;
 
@@ -169,6 +170,7 @@ class Game
 	void sReset();
 
 	void updateAudioSettings();
+	void updateMusicState();
 
 	void sSpawnWave(float& deltaTime);
 	void sCheckWaveFinished();
