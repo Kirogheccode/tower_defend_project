@@ -734,15 +734,19 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		istringstream iss(line);
 		int value;
-		int i = 0;
+
+		for (auto& heart : m_scenes[AppState::GamePlay].getEntities("Heart"))
+		{
+			heart->active(false);
+		}
 
 		for (auto& heart : m_scenes[AppState::GamePlay].getEntities("Heart"))
 		{
 			if (!(iss >> value)) break;
 
 			heart->active(true);
-			i++;
 		}
+
 		break;
 	}
 	
