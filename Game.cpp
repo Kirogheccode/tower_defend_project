@@ -1186,36 +1186,71 @@ void Game::updateAudioSettings() {
 	}
 }
 
+void Game::playMapMusic(int mapIdx) {
+	for (auto& [idx, music] : m_mapMusic) {
+		if (idx != mapIdx && music.getStatus() == sf::Music::Playing) {
+			music.stop();
+		}
+	}
+
+	auto& currentMusic = m_mapMusic[mapIdx];
+	if (currentMusic.getStatus() != sf::Music::Playing) {
+		currentMusic.play();
+	}
+}
+
 void Game::updateMusicState() {
-	if (m_state == AppState::MainMenu) {
+	bool isMenuState = (m_state == AppState::MainMenu ||
+		m_state == AppState::SettingsMenu);
+
+	if (isMenuState) {
 		// Nếu chưa phát menuMusic thì bật, đồng thời tắt gameplayMusic
-		if (m_gamePlayMusic.getStatus() == sf::Music::Playing)
-			m_gamePlayMusic.stop();
+		for (auto& [idx, music] : m_mapMusic) {
+			if (music.getStatus() == sf::Music::Playing) {
+				music.stop();
+			}
+		}
+
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
+
 		if (m_backgroundMusic.getStatus() != sf::Music::Playing)
 			m_backgroundMusic.play();
 	}
-	else if (m_state == AppState::Map1) {
-			// Đang trong gameplay -> phát nhạc gameplay
+	else if (m_state == AppState::PlayMenu || m_state == AppState::MapSelect) {
+		for (auto& [idx, music] : m_mapMusic) {
+			if (music.getStatus() == sf::Music::Playing) {
+				music.stop();
+			}
+		}
+
 		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
 			m_backgroundMusic.stop();
-		if (m_gamePlayMusic.getStatus() != sf::Music::Playing)
-			m_gamePlayMusic.play();
+
+		if (m_mapSelect.getStatus() != sf::Music::Playing)
+			m_mapSelect.play();
 	}
-	//else if (m_state == AppState::Map1 || m_state == AppState::Map2 ||
-	//	m_state == AppState::Map3 || m_state == AppState::Map4 ||
-	//	m_state == AppState::GamePlay) {
-	//	// Đang trong gameplay -> phát nhạc gameplay
-	//	if (m_menuMusic.getStatus() == sf::Music::Playing)
-	//		m_menuMusic.stop();
-	//	if (m_gameplayMusic.getStatus() != sf::Music::Playing)
-	//		m_gameplayMusic.play();
-	//}
+	else if (m_state == AppState::Map1) {
+		playMapMusic(0);
+	}
+	else if (m_state == AppState::Map2) {
+		playMapMusic(1);
+	}
+	else if (m_state == AppState::Map3) {
+		playMapMusic(2);
+	}
+	else if (m_state == AppState::Map4) {
+		playMapMusic(3);
+	}
 	else {
 		// Các state khác thì dừng hết
 		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
 			m_backgroundMusic.stop();
-		if (m_gamePlayMusic.getStatus() == sf::Music::Playing)
-			m_gamePlayMusic.stop();
+		for (auto& [idx, music] : m_mapMusic) {
+			if (music.getStatus() == sf::Music::Playing) {
+				music.stop();
+			}
+		}
 	}
 }
 
