@@ -349,7 +349,7 @@ void Game::loadHeartCoin()
 	for (int i = 0; i < 5; i++)
 	{
 		auto entity = m_scenes[AppState::GamePlay].addEntity("Heart");
-		entity->cSet = make_shared<CSet>("IMGS/Heart.png");
+		entity->cSet = make_shared<CSet>("IMGS/GUI/Heart.png");
 		entity->cBoundaryScale = make_shared<CBoundaryScale>(0.1);
 		entity->active(true);
 		auto& sprite = entity->cSet->sprite;
@@ -360,7 +360,7 @@ void Game::loadHeartCoin()
 
 	// --- Khởi tạo tiền
 	auto coin = m_scenes[AppState::GamePlay].addEntity("Coin");
-	coin->cSet = make_shared<CSet>("IMGS/Coin.png");
+	coin->cSet = make_shared<CSet>("IMGS/GUI/Coin.png");
 	coin->cBoundaryScale = make_shared<CBoundaryScale>(0.1182432432432432);
 	auto& sprite = coin->cSet->sprite;
 	sprite.setScale(coin->cBoundaryScale->scale, coin->cBoundaryScale->scale);
@@ -377,7 +377,7 @@ void Game::loadHeartCoin()
 void Game::loadFontText()
 {
 	// -- Khởi tạo font chữ
-	if (!m_font.loadFromFile("IMGS/ARCADECLASSIC.ttf")) {
+	if (!m_font.loadFromFile("IMGS/Fonts/ARCADECLASSIC.ttf")) {
 		cout << "Failed to load font\n";
 	}
 
@@ -604,7 +604,7 @@ void Game::initUIFlow()
 		{
 
 			entity = m_scenes[AppState::OptionMenu].addEntity("OptionBoard");
-			entity->cSet = make_shared<CSet>("IMGS/OptionBoard.png");
+			entity->cSet = make_shared<CSet>("IMGS/GUI/optionBoard.png");
 			entity->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 			entity->cSet->sprite.setOrigin(entity->cSet->sprite.getLocalBounds().width / 2.f, entity->cSet->sprite.getLocalBounds().height / 2.f);
 
@@ -616,7 +616,7 @@ void Game::initUIFlow()
 			entity->cText->text.setPosition(Vector2f(839, 273));
 
 			entity = m_scenes[AppState::OptionMenu].addEntity("Resume");
-			entity->cSet = make_shared<CSet>("IMGS/play.png");
+			entity->cSet = make_shared<CSet>("IMGS/Buttons/play.png");
 			entity->cPosition = make_shared<CPosition>(Vector2f(839, 406));
 			entity->cSet->sprite.setScale(0.6f, 0.6f);
 			entity->cInput = make_shared<CInput>([this]()
@@ -635,7 +635,7 @@ void Game::initUIFlow()
 			);
 
 			entity = m_scenes[AppState::OptionMenu].addEntity("Save");
-			entity->cSet = make_shared<CSet>("IMGS/setting.png");
+			entity->cSet = make_shared<CSet>("IMGS/Buttons/setting.png");
 			entity->cPosition = make_shared<CPosition>(Vector2f(839, 539));
 			entity->cSet->sprite.setScale(0.6f, 0.6f);
 			entity->cInput = make_shared<CInput>([this]()
@@ -657,7 +657,7 @@ void Game::initUIFlow()
 
 
 			entity = m_scenes[AppState::OptionMenu].addEntity("Quit");
-			entity->cSet = make_shared<CSet>("IMGS/quit.png");
+			entity->cSet = make_shared<CSet>("IMGS/Buttons/quit.png");
 			entity->cPosition = make_shared<CPosition>(Vector2f(839, 672));
 			entity->cSet->sprite.setScale(0.6f, 0.6f);
 			entity->cInput = make_shared<CInput>([this]()
@@ -683,7 +683,7 @@ void Game::initUIFlow()
 
 		// Khởi tạo các chức năng trong game - GamePlay
 		entity = m_scenes[AppState::GamePlay].addEntity("OptionSetting");
-		entity->cSet = make_shared<CSet>("IMGS/Option.png");
+		entity->cSet = make_shared<CSet>("IMGS/Buttons/Option.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
 		entity->cInput = make_shared<CInput>([this]()
 			{
@@ -702,7 +702,7 @@ void Game::initUIFlow()
 
 
 		entity = m_scenes[AppState::GamePlay].addEntity("SystemSetting");
-		entity->cSet = make_shared<CSet>("IMGS/Gear.png");
+		entity->cSet = make_shared<CSet>("IMGS/Buttons/Gear.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(20, 940));
 		entity->cInput = make_shared<CInput>([this]()
 			{
@@ -723,7 +723,7 @@ void Game::initUIFlow()
 
 		// Khởi tạo việc chọn và đặt tháp
 		entity = m_scenes[AppState::GamePlay].addEntity("SelectButton");
-		entity->cSet = make_shared<CSet>("IMGS/TowerSelectButton.png");
+		entity->cSet = make_shared<CSet>("IMGS/Buttons/towerSelectButton.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 980));
 		entity->cInput = make_shared<CInput>([this]()
 			{
@@ -741,7 +741,7 @@ void Game::initUIFlow()
 		);
 
 		entity = m_scenes[AppState::TowerSelect].addEntity("SelectingBar");
-		entity->cSet = make_shared<CSet>("IMGS/SelectingBar1.png");
+		entity->cSet = make_shared<CSet>("IMGS/GUI/selectingTower.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1720, 0));
 
 		entity = m_scenes[AppState::TowerSelect].addEntity("Tower1Button");
@@ -863,7 +863,7 @@ void Game::initUIFlow()
 			}
 		);
 		entity = m_scenes[AppState::TowerSelect].addEntity("Spatula");
-		entity->cSet = make_shared<CSet>("IMGS/Spatula.png");
+		entity->cSet = make_shared<CSet>("IMGS/GUI/Spatula.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1795, 480));
 		entity->cInput = make_shared<CInput>([this]()
 			{
@@ -885,11 +885,11 @@ void Game::initUIFlow()
 	// -- MainMenu --
 	{
 		auto bg = m_scenes[AppState::MainMenu].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
+		bg->cSet = make_shared<CSet>("IMGS/Background/MainMenu.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto play = m_scenes[AppState::MainMenu].addEntity("Play");
-		play->cSet = make_shared<CSet>("IMGS/play.png");
+		play->cSet = make_shared<CSet>("IMGS/Buttons/play.png");
 		play->cPosition = make_shared<CPosition>(Vector2f(1090, 485));
 		play->cSet->sprite.setScale(0.85f, 0.85f);
 		play->cInput = make_shared<CInput>([this]()
@@ -907,7 +907,7 @@ void Game::initUIFlow()
 		);
 
 		auto settingsButton = m_scenes[AppState::MainMenu].addEntity("SettingsButton");
-		settingsButton->cSet = make_shared<CSet>("IMGS/setting.png");
+		settingsButton->cSet = make_shared<CSet>("IMGS/Buttons/setting.png");
 		settingsButton->cPosition = make_shared<CPosition>(Vector2f(1090, 680));
 		settingsButton->cSet->sprite.setScale(0.85f, 0.85f);
 		settingsButton->cInput = make_shared<CInput>([this]()
@@ -926,7 +926,7 @@ void Game::initUIFlow()
 		);
 
 		auto exit = m_scenes[AppState::MainMenu].addEntity("Exit");
-		exit->cSet = make_shared<CSet>("IMGS/quit.png");
+		exit->cSet = make_shared<CSet>("IMGS/Buttons/quit.png");
 		exit->cPosition = make_shared<CPosition>(Vector2f(1090, 876));
 		exit->cSet->sprite.setScale(0.85f, 0.85f);
 		exit->cInput = make_shared<CInput>([this]()
@@ -949,11 +949,11 @@ void Game::initUIFlow()
 	// -- PlayMenu --
 	{
 		auto bg = m_scenes[AppState::PlayMenu].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
+		bg->cSet = make_shared<CSet>("IMGS/Background/MainMenu.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto newGameButton = m_scenes[AppState::PlayMenu].addEntity("New");
-		newGameButton->cSet = make_shared<CSet>("IMGS/new.png");
+		newGameButton->cSet = make_shared<CSet>("IMGS/Buttons/newgame.png");
 		newGameButton->cPosition = make_shared<CPosition>(Vector2f(1144, 605));
 		newGameButton->cInput = make_shared<CInput>([this]()
 			{
@@ -972,7 +972,7 @@ void Game::initUIFlow()
 		);
 
 		auto loadGame = m_scenes[AppState::PlayMenu].addEntity("Load");
-		loadGame->cSet = make_shared<CSet>("IMGS/load.png");
+		loadGame->cSet = make_shared<CSet>("IMGS/Buttons/loadgame.png");
 		loadGame->cPosition = make_shared<CPosition>(Vector2f(1144, 766));
 		loadGame->cInput = make_shared<CInput>([this]()
 			{
@@ -991,7 +991,7 @@ void Game::initUIFlow()
 		);
 
 		auto back = m_scenes[AppState::PlayMenu].addEntity("Back");
-		back->cSet = make_shared<CSet>("IMGS/back.png");
+		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
 		back->cInput = make_shared<CInput>([this]()
 			{
@@ -1013,11 +1013,11 @@ void Game::initUIFlow()
 	// -- LoadGame --
 	{
 		auto bg = m_scenes[AppState::LoadGame].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
+		bg->cSet = make_shared<CSet>("IMGS/Background/MainMenu.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto back = m_scenes[AppState::LoadGame].addEntity("Back");
-		back->cSet = make_shared<CSet>("IMGS/back.png");
+		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
 		back->cInput = make_shared<CInput>([this]()
 			{
@@ -1040,7 +1040,7 @@ void Game::initUIFlow()
 	{
 
 		auto panel = m_scenes[AppState::SettingsMenu].addEntity("SettingsPanel");
-		panel->cSet = make_shared<CSet>("IMGS/settingmenu.png");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/settingmenu.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
 		panel->cSet->sprite.setScale(1.5f, 1.5f);
@@ -1052,34 +1052,34 @@ void Game::initUIFlow()
 		float slider_x = panelCenter.x + 50.f;
 
 		auto musicIcon = m_scenes[AppState::SettingsMenu].addEntity("MusicIcon");
-		musicIcon->cSet = make_shared<CSet>("IMGS/music_on.png");
+		musicIcon->cSet = make_shared<CSet>("IMGS/Buttons/music_on.png");
 		musicIcon->cPosition = make_shared<CPosition>(Vector2f(icon_x, row1_y));
 		musicIcon->cSet->sprite.setOrigin(musicIcon->cSet->sprite.getLocalBounds().width / 2.f, musicIcon->cSet->sprite.getLocalBounds().height / 2.f);
 		musicIcon->cSet->sprite.setScale(0.1f, 0.1f);
 		musicIcon->cInput = make_shared<CInput>([this, musicIcon]() {
 			m_musicMuted = !m_musicMuted;
-			musicIcon->cSet->texture.loadFromFile(m_musicMuted ? "IMGS/music_off.png" : "IMGS/music_on.png");
+			musicIcon->cSet->texture.loadFromFile(m_musicMuted ? "IMGS/Buttons/music_off.png" : "IMGS/Buttons/music_on.png");
 			updateAudioSettings();
 			});
 
 		auto musicSliderEntity = m_scenes[AppState::SettingsMenu].addEntity("MusicSlider");
-		musicSliderEntity->cSlider = make_shared<CSlider>(&m_musicVolume, Vector2f(slider_x, row1_y), "IMGS/Slider.png", "IMGS/SlidingBar.png");
+		musicSliderEntity->cSlider = make_shared<CSlider>(&m_musicVolume, Vector2f(slider_x, row1_y), "IMGS/GUI/Slider.png", "IMGS/GUI/SlidingBar.png");
 
 		auto sfxIcon = m_scenes[AppState::SettingsMenu].addEntity("SfxIcon");
-		sfxIcon->cSet = make_shared<CSet>("IMGS/sfx_on.png");
+		sfxIcon->cSet = make_shared<CSet>("IMGS/Buttons/sfx_on.png");
 		sfxIcon->cPosition = make_shared<CPosition>(Vector2f(icon_x, row2_y));
 		sfxIcon->cSet->sprite.setOrigin(sfxIcon->cSet->sprite.getLocalBounds().width / 2.f, sfxIcon->cSet->sprite.getLocalBounds().height / 2.f);
 		sfxIcon->cSet->sprite.setScale(0.1f, 0.1f);
 		sfxIcon->cInput = make_shared<CInput>([this, sfxIcon]() {
 			m_sfxMuted = !m_sfxMuted;
-			sfxIcon->cSet->texture.loadFromFile(m_sfxMuted ? "IMGS/sfx_off.png" : "IMGS/sfx_on.png");
+			sfxIcon->cSet->texture.loadFromFile(m_sfxMuted ? "IMGS/Buttons/sfx_off.png" : "IMGS/Buttons/sfx_on.png");
 			});
 
 		auto sfxSliderEntity = m_scenes[AppState::SettingsMenu].addEntity("SfxSlider");
-		sfxSliderEntity->cSlider = make_shared<CSlider>(&m_sfxVolume, Vector2f(slider_x, row2_y), "IMGS/Slider.png", "IMGS/SlidingBar.png");
+		sfxSliderEntity->cSlider = make_shared<CSlider>(&m_sfxVolume, Vector2f(slider_x, row2_y), "IMGS/GUI/Slider.png", "IMGS/GUI/SlidingBar.png");
 
 		auto back = m_scenes[AppState::SettingsMenu].addEntity("Back");
-		back->cSet = make_shared<CSet>("IMGS/back.png");
+		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		back->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x, panelCenter.y + 115.f));
 		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
 		back->cInput = make_shared<CInput>([this]()
@@ -1099,7 +1099,7 @@ void Game::initUIFlow()
 		);
 
 		auto aboutButton = m_scenes[AppState::SettingsMenu].addEntity("AboutButton");
-		aboutButton->cSet = make_shared<CSet>("IMGS/aboutus.png");
+		aboutButton->cSet = make_shared<CSet>("IMGS/Buttons/aboutus.png");
 		aboutButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x - 100.f, panelCenter.y + 115.f));
 		aboutButton->cSet->sprite.setOrigin(aboutButton->cSet->sprite.getLocalBounds().width / 2.f, aboutButton->cSet->sprite.getLocalBounds().height / 2.f);
 		aboutButton->cSet->sprite.setScale(4.0f, 4.0f);
@@ -1115,7 +1115,7 @@ void Game::initUIFlow()
 		);
 
 		auto rulesButton = m_scenes[AppState::SettingsMenu].addEntity("RulesButton");
-		rulesButton->cSet = make_shared<CSet>("IMGS/rules.png");
+		rulesButton->cSet = make_shared<CSet>("IMGS/Buttons/rules.png");
 		rulesButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x + 100.f, panelCenter.y + 115.f));
 		rulesButton->cSet->sprite.setOrigin(rulesButton->cSet->sprite.getLocalBounds().width / 2.f, rulesButton->cSet->sprite.getLocalBounds().height / 2.f);
 		rulesButton->cSet->sprite.setScale(4.0f, 4.0f);
@@ -1135,14 +1135,14 @@ void Game::initUIFlow()
 	// -- AboutUs (Pop-up) --
 	{
 		auto panel = m_scenes[AppState::AboutUs].addEntity("AboutPanel");
-		panel->cSet = make_shared<CSet>("IMGS/About.png");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/About.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
 		panel->cSet->sprite.setScale(1.5f, 1.5f);
 
 
 		auto backBtn = m_scenes[AppState::AboutUs].addEntity("BackAbout");
-		backBtn->cSet = make_shared<CSet>("IMGS/back.png");
+		backBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
 		backBtn->cInput = make_shared<CInput>([this]()
 			{
@@ -1163,13 +1163,13 @@ void Game::initUIFlow()
 	// -- Rules (Pop - up) --
 	{
 		auto panel = m_scenes[AppState::Rules].addEntity("RulesPanel");
-		panel->cSet = make_shared<CSet>("IMGS/GameRules.png");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/GameRules.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
 		panel->cSet->sprite.setScale(1.5f, 1.5f);
 
 		auto backBtn = m_scenes[AppState::Rules].addEntity("BackRules");
-		backBtn->cSet = make_shared<CSet>("IMGS/back.png");
+		backBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
 		backBtn->cInput = make_shared<CInput>([this]()
 			{
@@ -1190,7 +1190,7 @@ void Game::initUIFlow()
 	// -- MapSelect --
 	{
 		auto bg = m_scenes[AppState::MapSelect].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
+		bg->cSet = make_shared<CSet>("IMGS/Background/MainMenu.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto map1 = m_scenes[AppState::MapSelect].addEntity("Map1");
@@ -1275,7 +1275,7 @@ void Game::initUIFlow()
 
 
 		auto back = m_scenes[AppState::MapSelect].addEntity("Back");
-		back->cSet = make_shared<CSet>("IMGS/back.png");
+		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
 		back->cInput = make_shared<CInput>([this]()
 			{
