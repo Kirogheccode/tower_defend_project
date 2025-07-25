@@ -6,6 +6,15 @@ Game::Game(const string& config)
 	init(config);
 }
 
+void clearFile(std::string fileName)
+{
+	std::ofstream file(fileName, std::ios::out | std::ios::trunc);
+	if (!file) {
+		std::cout << "Error opening file\n";
+	}
+	file.close();
+}
+
 
 // --- Đọc file config.txt ---
 void Game::init(const string& path)
@@ -641,8 +650,6 @@ void Game::initUIFlow()
 			entity->cInput = make_shared<CInput>([this]()
 				{
 					sSaveGame();
-					if(prev_state != AppState::LoadGame)
-					   sAddGameSave();
 					cout << "Successfully saved" << endl;
 				},
 				[entity]()
@@ -949,15 +956,20 @@ void Game::initUIFlow()
 	// -- PlayMenu --
 	{
 		auto bg = m_scenes[AppState::PlayMenu].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/Background/MainMenu.png");
+		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto newGameButton = m_scenes[AppState::PlayMenu].addEntity("New");
-		newGameButton->cSet = make_shared<CSet>("IMGS/Buttons/newgame.png");
+		newGameButton->cSet = make_shared<CSet>("IMGS/new.png");
 		newGameButton->cPosition = make_shared<CPosition>(Vector2f(1144, 605));
 		newGameButton->cInput = make_shared<CInput>([this]()
 			{
 				m_playerName.clear();
+				clearFile("map1.txt");
+				clearFile("map2.txt");
+				clearFile("map3.txt");
+				clearFile("map4.txt");
+				std::cout << "File content cleared successfully\n";
 				m_inputText.setString("|");
 				m_typingName = true;
 			},
@@ -1013,11 +1025,11 @@ void Game::initUIFlow()
 	// -- LoadGame --
 	{
 		auto bg = m_scenes[AppState::LoadGame].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/Background/MainMenu.png");
+		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto back = m_scenes[AppState::LoadGame].addEntity("Back");
-		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		back->cSet = make_shared<CSet>("IMGS/back.png");
 		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
 		back->cInput = make_shared<CInput>([this]()
 			{
@@ -1033,6 +1045,93 @@ void Game::initUIFlow()
 			}
 		);
 
+		auto map1 = m_scenes[AppState::LoadGame].addEntity("Map1");
+		map1->cSet = make_shared<CSet>("IMGS/Maps/map1.png");
+		map1->cPosition = make_shared<CPosition>(Vector2f(358, 267));
+		map1->cSet->sprite.setScale(0.25f, 0.25f);
+		map1->cInput = make_shared<CInput>([this]()
+			{
+				m_mapindex = 0;
+				m_state = AppState::Map1;
+				fileForSave = "map1.txt";
+				sLoadGame();
+				game_state = AppState::GamePlay;
+			},
+			[map1]()
+			{
+				map1->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map1]()
+			{
+				map1->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		auto map2 = m_scenes[AppState::LoadGame].addEntity("Map2");
+		map2->cSet = make_shared<CSet>("IMGS/Maps/map2.png");
+		map2->cPosition = make_shared<CPosition>(Vector2f(1040, 267));
+		map2->cSet->sprite.setScale(0.25f, 0.25f);
+		map2->cInput = make_shared<CInput>([this]()
+			{
+				m_mapindex = 1;
+				m_state = AppState::Map2;
+				fileForSave = "map2.txt";
+				sLoadGame();
+				game_state = AppState::GamePlay;
+			},
+			[map2]()
+			{
+				map2->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map2]()
+			{
+				map2->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		auto map3 = m_scenes[AppState::LoadGame].addEntity("Map3");
+		map3->cSet = make_shared<CSet>("IMGS/Maps/map3.png");
+		map3->cPosition = make_shared<CPosition>(Vector2f(358, 651));
+		map3->cSet->sprite.setScale(0.25f, 0.25f);
+		map3->cInput = make_shared<CInput>([this]()
+			{
+				m_mapindex = 2;
+				m_state = AppState::Map3;
+				fileForSave = "map3.txt";
+				sLoadGame();
+				game_state = AppState::GamePlay;
+			},
+			[map3]()
+			{
+				map3->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map3]()
+			{
+				map3->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		auto map4 = m_scenes[AppState::LoadGame].addEntity("Map4");
+		map4->cSet = make_shared<CSet>("IMGS/Maps/map4.png");
+		map4->cPosition = make_shared<CPosition>(Vector2f(1040, 651));
+		map4->cSet->sprite.setScale(0.25f, 0.25f);
+		map4->cInput = make_shared<CInput>([this]()
+			{
+				m_mapindex = 3;
+				m_state = AppState::Map4;
+				fileForSave = "map4.txt";
+				sLoadGame();
+				game_state = AppState::GamePlay;
+			},
+			[map4]()
+			{
+				map4->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map4]()
+			{
+				map4->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 	}
 
 

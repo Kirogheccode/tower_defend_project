@@ -178,13 +178,9 @@ class Game
 	void DeactivateBullet(Entity&);
 	void DeactivateTower(Entity&);
 
-	void onResize(const sf::Event::SizeEvent& size);
-
 	void sSaveGame();
 	void sLoadGame();
-	void sAddGameSave();
-	vector<SaveGame> loadGames;
-	int m_loadIndex = -1;
+	string fileForSave = ""; // File name corresponding to the playing map 
 
 public:
 	Game(const string& config);

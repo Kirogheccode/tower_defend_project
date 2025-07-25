@@ -375,8 +375,6 @@ void Game::sUserInput()
 					{
 						for (auto& e : m_scenes[stateToHandle].getEntities())
 						{
-							if (stateToHandle == AppState::LoadGame && e->tag() == "GameSave")
-								m_loadIndex++;
 							if (e->cSet && e->cInput && e->cSet->sprite.getGlobalBounds().contains(mousePos))
 							{
 								playSfx(m_clickBuffer);
@@ -452,55 +450,6 @@ void Game::run()
 		}
 	}
 }
-
-
-// --- Thêm màn chơi được save (khi bấm save trong options) vào danh sách loadGames ---
-void Game::sAddGameSave()
-{
-	string fileName = m_playerName + ".txt";
-	loadGames.push_back({ m_playerName, m_state, m_mapindex });
-
-	switch (m_state)
-	{
-	  case AppState::Map1:
-		   fileName = "map1";
-		   break;
-	  case AppState::Map2:
-		  fileName = "map2";
-		  break;
-	  case AppState::Map3:
-		  fileName = "map3";
-		  break;
-	  case AppState::Map4:
-		  fileName = "map4";
-		  break;
-	}
-
-
-	auto map = m_scenes[AppState::LoadGame].addEntity("GameSave");
-	map->cSet = make_shared<CSet>("IMGS/Maps/" + fileName + ".png");
-	map->cSet->sprite.setScale(0.15f, 0.15f);
-	map->cInput = make_shared<CInput>([this]()
-		{
-			sLoadGame();
-			m_mapindex = loadGames[m_loadIndex].mapIndex;
-			m_state = loadGames[m_loadIndex].m_save;
-			m_playerName = loadGames[m_loadIndex].fileName;
-			game_state = AppState::GamePlay;
-			prev_state = AppState::LoadGame;
-			m_loadIndex = -1;
-		},
-		[map]()
-		{
-			map->cSet->sprite.setColor(Color(200, 200, 200));
-		},
-		[map]()
-		{
-			map->cSet->sprite.setColor(Color(255, 255, 255));
-		}
-	);
-}
-
 
 // --- Lưu tên người chơi khi nhập ở PlayMenu ---
 void Game::sSaveGame()
@@ -697,20 +646,13 @@ void Game::sSaveGame()
 
 void Game::sLoadGame()
 {
+	string fileName = fileForSave;
+	cout << fileName << endl;
+	ifstream readPlayer(fileName);
 	
-	ifstream readPlayer(loadGames[m_loadIndex].fileName + ".txt");
-	cout << loadGames[m_loadIndex].fileName << endl;
-
 	if (!readPlayer.is_open())
 	{
-		// Thêm hiển thị thông báo trên màn hình nếu cần
-		//
-		//
-		//
-		//
-		//
-		//==============================================
-
+		// thông báo trên màn hình 
 		cout << "Can't open file or file doesn't exist!" << endl;
 		return;
 	}
@@ -1007,13 +949,12 @@ void Game::sLoadGame()
 		istringstream iss(line);
 		bool value;
 
-		for (auto& base : m_scenes[loadGames[m_loadIndex].m_save].getEntities("Base"))
+		for (auto& base : m_scenes[m_state].getEntities("Base"))
 		{
 			if (!(iss >> value)) break;
 
 			base->active(value);
 		}
-
 
 		break;
 	}
@@ -1155,25 +1096,6 @@ void Game::playSfx(const sf::SoundBuffer& buffer, sf::Vector2f position) {
 	newSound.setVolume(m_sfxVolume);
 	newSound.play();
 }
-
-void Game::onResize(const sf::Event::SizeEvent& size) {
-	m_view.setSize(m_windowConfig.width, m_windowConfig.height);
-	m_view.setCenter(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
-	float windowRatio = static_cast<float>(size.width) / static_cast<float>(size.height);
-	float viewRatio = static_cast<float>(m_windowConfig.width) / static_cast<float>(m_windowConfig.height);
-	float sizeX = 1.0f, sizeY = 1.0f, posX = 0.0f, posY = 0.0f;
-	if (windowRatio > viewRatio) {
-		sizeX = viewRatio / windowRatio;
-		posX = (1.0f - sizeX) / 2.0f;
-	}
-	else {
-		sizeY = windowRatio / viewRatio;
-		posY = (1.0f - sizeY) / 2.0f;
-	}
-	m_view.setViewport(sf::FloatRect(posX, posY, sizeX, sizeY));
-	m_window.setView(m_view);
-}
-
 
 // --- Âm thanh và Xử lý sự kiện ---
 void Game::updateAudioSettings() {
