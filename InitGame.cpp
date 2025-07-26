@@ -398,7 +398,7 @@ void Game::loadFontText()
 		m_mapSelect.setLoop(true);
 	}
 
-	if (!m_mapMusic[0].openFromFile("SOUNDS/GameMusic1.wav")) {
+	if (!m_mapMusic[0].openFromFile("SOUNDS/ForestBattle.mp3")) {
 		cout << "Error: Could not load map 1 music file.\n";
 	}
 	else
@@ -406,7 +406,7 @@ void Game::loadFontText()
 		m_mapMusic[0].setLoop(true);
 	}
 
-	if (!m_mapMusic[1].openFromFile("SOUNDS/GameMusic1.wav")) {
+	if (!m_mapMusic[1].openFromFile("SOUNDS/DesertBattle.mp3")) {
 		cout << "Error: Could not load map 1 music file.\n";
 	}
 	else
@@ -414,7 +414,7 @@ void Game::loadFontText()
 		m_mapMusic[1].setLoop(true);
 	}
 
-	if (!m_mapMusic[2].openFromFile("SOUNDS/GameMusic1.wav")) {
+	if (!m_mapMusic[2].openFromFile("SOUNDS/LavaBattle.mp3")) {
 		cout << "Error: Could not load map 1 music file.\n";
 	}
 	else
@@ -422,7 +422,7 @@ void Game::loadFontText()
 		m_mapMusic[2].setLoop(true);
 	}
 
-	if (!m_mapMusic[3].openFromFile("SOUNDS/GameMusic1.wav")) {
+	if (!m_mapMusic[3].openFromFile("SOUNDS/FrozenBattle.mp3")) {
 		cout << "Error: Could not load map 1 music file.\n";
 	}
 	else

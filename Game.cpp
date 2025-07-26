@@ -1231,21 +1231,39 @@ void Game::updateMusicState() {
 			m_mapSelect.play();
 	}
 	else if (m_state == AppState::Map1) {
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
 		playMapMusic(0);
 	}
 	else if (m_state == AppState::Map2) {
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
 		playMapMusic(1);
 	}
 	else if (m_state == AppState::Map3) {
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
 		playMapMusic(2);
 	}
 	else if (m_state == AppState::Map4) {
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
 		playMapMusic(3);
 	}
 	else {
 		// Các state khác thì dừng hết
 		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
 			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
 		for (auto& [idx, music] : m_mapMusic) {
 			if (music.getStatus() == sf::Music::Playing) {
 				music.stop();
@@ -1317,7 +1335,6 @@ void Game::TowerAttack()
 		}
 	}
 }
-
 
 // --- Hàm hỗ trợ logic ---
 bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) 
