@@ -1407,6 +1407,27 @@ bool collisionDetection(const Entity& entity1, const Entity& entity2)
 }
 
 
+sf::Vector2f Game::getWindowSize() const {
+	sf::Vector2u size = m_window.getSize();
+	return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
+}
+
+// --- Kiểm tra xem entity (bullet) có nằm ngoài ranh giới không ---
+bool Game::isOutOfBounds(const Entity& entity, float margin) {
+	if (!entity.cPosition) return false;
+
+	Vector2f pos = entity.cPosition->position;
+	sf::Vector2f windowSize = getWindowSize();
+
+	return (pos.x < -margin ||
+		pos.x > windowSize.x + margin ||
+		pos.y < -margin ||
+		pos.y > windowSize.y + margin);
+}
+
+
+
+
 // --- Hàm va chạm ---
 void Game::sCollision()
 {
@@ -1417,6 +1438,12 @@ void Game::sCollision()
 		for (auto& bullet : m_entities.getEntities("Bullet"))
 		{
 			if (!bullet->isActive()) continue;
+
+			if (isOutOfBounds(*bullet, 100.0f)) 
+			{
+				DeactivateBullet(*bullet);
+			}
+
 			if (collisionDetection(*bullet, *cur))
 			{
 			

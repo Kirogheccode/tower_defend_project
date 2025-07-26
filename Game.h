@@ -204,6 +204,7 @@ public:
 	void queueSave();  // Save game in a separate thread
 	void startWriting(const string& filename);
 	void stopWriting();
-
+	sf::Vector2f getWindowSize() const;
+	bool isOutOfBounds(const Entity& entity, float margin = 50.0f);
 };
 
