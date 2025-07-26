@@ -9,6 +9,11 @@
 #include <functional>
 #include <string>
 #include <list>
+#include <thread>
+#include <chrono>
+#include <mutex>
+#include <ctime>
+#include <cstdio>
 
 #include "Entity.h"
 #include "EntityManager.h"
@@ -181,7 +186,8 @@ class Game
 	void sSaveGame();
 	void sLoadGame();
 	string fileForSave = ""; // File name corresponding to the playing map 
-
+	std::mutex  saveMutex;  // Protect shared data
+	ofstream writePlayer;
 public:
 	Game(const string& config);
 	void run();
@@ -191,4 +197,9 @@ public:
 	void sCollision();				// Check for collision between two entities
 
 	void playSfx(const sf::SoundBuffer& buffer, sf::Vector2f position = { -1, -1 });
+	void queueSave();  // Save game in a separate thread
+	void startWriting(const string& filename);
+	void stopWriting();
+
 };
+

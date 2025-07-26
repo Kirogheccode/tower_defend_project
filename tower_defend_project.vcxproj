@@ -241,6 +241,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt" />
+    <Text Include="map1.txt" />
+    <Text Include="map2.txt" />
+    <Text Include="map3.txt" />
+    <Text Include="map4.txt" />
     <Text Include="MapBase.txt" />
   </ItemGroup>
   <ItemGroup>

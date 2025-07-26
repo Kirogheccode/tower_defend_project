@@ -451,197 +451,311 @@ void Game::run()
 	}
 }
 
+
+
+// Simplified start/stop without locks (locking is higher-level)
+void Game::startWriting(const std::string& filename) {
+	writePlayer.open(filename, std::ios::out | std::ios::trunc);
+	if (!writePlayer.is_open()) {
+		std::cerr << "FATAL: Could not open file: " << filename << std::endl;
+	}
+	writePlayer.clear();
+}
+
+void Game::stopWriting() {
+	if (writePlayer.is_open()) {
+		writePlayer.flush();
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Delay here if needed
+		writePlayer.close();
+	}
+}
+
+// Restore async queueSave with thread (from history)
+void Game::queueSave() {
+	cout << "queueSave called\n";
+	std::thread saveThread([this]() {
+		std::lock_guard<std::mutex> lock(saveMutex);  // Lock for entire save
+		sSaveGame();
+		});
+	saveThread.detach();  // Async
+}
+
 // --- Lưu tên người chơi khi nhập ở PlayMenu ---
 void Game::sSaveGame()
 {
-	if (m_playerName.empty())
-		return;
-	ofstream writePlayer(m_playerName + ".txt");
 
-	if (writePlayer.is_open())
+	cout << "sSaveGame called\n";
+	//if (m_playerName.empty())
+	//	return;
+	cout << "Saving game for player: " << m_playerName << "\n";
+
+	string fileName;
+	switch (m_state)
 	{
-		// Lưu wave
-		writePlayer << "# Current wave index: " << "\n";
-		writePlayer << m_currentWave << "\n";
-		writePlayer << "\n";
-
-
-		// Lưu index của máu còn lại
-		writePlayer << "# Remaining health: " << "\n";
-		for (auto& e: m_scenes[AppState::GamePlay].getEntities("Heart"))
-		{
-			if (e->isActive())
-			{
-				writePlayer << e->id() << " ";
-			}
-		}
-		writePlayer << "\n";
-		writePlayer << "\n";
-
-
-		// Lưu tiền
-		writePlayer << "# Money: " << "\n";
-		writePlayer << m_coin << "\n";
-		writePlayer << "\n";
-
-		
-		// Lưu vị trí quái
-		writePlayer << "# Enemies position" << "\n";
-		bool isExist = false;
-		for (auto& entity : m_entities.getEntities(m_enemyType1Config.tag))
-		{
-			if (entity->isActive())
-			{
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " <<  entity->cMovement->currentPathindex << " ";
-				isExist = true;
-			}
-		}
-		if (!isExist)
-			writePlayer << "@";
-		else
-			isExist = false;
-		writePlayer << "\n";
-		writePlayer << "\n";
-
-		for (auto& entity : m_entities.getEntities(m_enemyType2Config.tag))
-		{
-			if (entity->isActive())
-			{
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
-				isExist = true;
-			}
-		}
-		if (!isExist)
-			writePlayer << "@";
-		else
-			isExist = false;
-
-		writePlayer << "\n";
-		writePlayer << "\n";
-
-		for (auto& entity : m_entities.getEntities(m_enemyType3Config.tag))
-		{
-			if (entity->isActive())
-			{
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
-				isExist = true;
-			}
-		}
-		if (!isExist)
-			writePlayer << "@";
-		else
-			isExist = false;
-		writePlayer << "\n";
-		writePlayer << "\n";
-
-		// Lưu vị trí tháp
-		writePlayer << "# Tower position" << "\n";
-		for (auto& entity : m_entities.getEntities(m_towerType1Config.tag))
-		{
-			
-			if (entity->isActive())
-			{
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
-				isExist = true;
-			}
-		}
-		if (!isExist)
-			writePlayer << "@";
-		else
-			isExist = false;
-		writePlayer << "\n";
-		writePlayer << "\n";
-
-		for (auto& entity : m_entities.getEntities(m_towerType2Config.tag))
-		{
-			if (entity->isActive())
-			{
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
-				isExist = true;
-			}
-		}
-		if (!isExist)
-			writePlayer << "@";
-		else
-			isExist = false;
-		writePlayer << "\n";
-		writePlayer << "\n";
-
-		for (auto& entity : m_entities.getEntities(m_towerType3Config.tag))
-		{
-			if (entity->isActive())
-			{
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
-				isExist = true;
-			}
-		}
-		if (!isExist)
-			writePlayer << "@";
-		else
-			isExist = false;
-		writePlayer << "\n";
-		writePlayer << "\n";
-
-		for (auto& entity : m_entities.getEntities(m_towerType4Config.tag))
-		{
-			if (entity->isActive())
-			{
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
-				isExist = true;
-			}
-		}
-		if (!isExist)
-			writePlayer << "@";
-		else
-			isExist = false;
-		writePlayer << "\n";
-		writePlayer << "\n";
-
-		for (auto& entity : m_entities.getEntities(m_towerType5Config.tag))
-		{
-			if (entity->isActive())
-			{
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
-				isExist = true;
-			}
-		}
-		if (!isExist)
-			writePlayer << "@";
-		else
-			isExist = false;
-		writePlayer << "\n";
-		writePlayer << "\n";
-
-		for (auto& entity : m_entities.getEntities(m_towerType6Config.tag))
-		{
-			if (entity->isActive())
-			{
-				writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
-				isExist = true;
-			}
-		}
-		if (!isExist)
-			writePlayer << "@";
-		else
-			isExist = false;
-		writePlayer << "\n";
-		writePlayer << "\n";
-		writePlayer << "# Base in current map" << "\n";
-
-		for (auto& base : m_scenes[m_state].getEntities("Base"))
-		{
-			writePlayer << base->isActive() << " ";
-			cout << base->isActive() << " ";
-		}
-		if (!writePlayer)
-		{
-			cout << "Error writing" << endl;
-		}
-		cout << endl;
-		writePlayer << "\n";
-		writePlayer.close();
-		cout << "Game saved" << endl;
+	case AppState::Map1:
+		fileName = "map1.txt";
+		break;
+	case AppState::Map2:
+		fileName = "map2.txt";
+		break;
+	case AppState::Map3:
+		fileName = "map3.txt";
+		break;
+	case AppState::Map4:
+		fileName = "map4.txt";
+		break;
 	}
+
+	cout << fileName << "\n";
+
+	//std::ofstream writePlayer(fileName, std::ios::out | std::ios::trunc);
+	//if (!writePlayer.is_open()) {
+	//	std::cerr << "Error opening file: " << fileName << " (check permissions or path).\n";
+	//	return;
+	//}
+
+	std::cout << "[DEBUG] Before write: State " << writePlayer.rdstate() << " (0 = good)\n";
+	startWriting(fileName);  // Start writing to the file
+
+	writePlayer.clear();  // Reset any potential error state
+
+	// Helper to check stream after writes
+	auto checkStream = [&]() 
+	{
+		if (writePlayer.fail()) 
+		{
+			std::cerr << "Write error occurred. State: " << writePlayer.rdstate() << "\n";
+			writePlayer.clear();  // Attempt to recover
+			return false;
+		}
+		return true;
+	};
+
+	// Lưu wave
+	writePlayer << "# Current wave index: " << "\n";
+	writePlayer << m_currentWave << "\n";
+	writePlayer << "\n";
+
+
+	// Lưu index của máu còn lại
+	writePlayer << "# Remaining health: " << "\n";
+	for (auto& e: m_scenes[AppState::GamePlay].getEntities("Heart"))
+	{
+		if (e->isActive())
+		{
+			writePlayer << e->id() << " ";
+		}
+	}
+	writePlayer << "\n";
+	writePlayer << "\n";
+
+	if (!checkStream())
+	{
+		std::cerr << "Error writing health data.\n";
+		writePlayer.close();
+		return;
+	}
+
+	// Lưu tiền
+	writePlayer << "# Money: " << "\n";
+	writePlayer << m_coin << "\n";
+	writePlayer << "\n";
+
+	if (!checkStream())
+	{
+		std::cerr << "Error writing health data.\n";
+		writePlayer.close();
+		return;
+	}
+		
+	// Lưu vị trí quái
+	writePlayer << "# Enemies position" << "\n";
+	bool isExist = false;
+	for (auto& entity : m_entities.getEntities(m_enemyType1Config.tag))
+	{
+		if (entity->isActive())
+		{
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " <<  entity->cMovement->currentPathindex << " ";
+			isExist = true;
+		}
+	}
+	if (!isExist)
+		writePlayer << "@";
+	else
+		isExist = false;
+	writePlayer << "\n";
+	writePlayer << "\n";
+
+	if (!checkStream())
+	{
+		std::cerr << "Error writing health data.\n";
+		writePlayer.close();
+		return;
+	}
+
+	for (auto& entity : m_entities.getEntities(m_enemyType2Config.tag))
+	{
+		if (entity->isActive())
+		{
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			isExist = true;
+		}
+	}
+	if (!isExist)
+		writePlayer << "@";
+	else
+		isExist = false;
+
+	writePlayer << "\n";
+	writePlayer << "\n";
+
+	if (!checkStream())
+	{
+		std::cerr << "Error writing health data.\n";
+		writePlayer.close();
+		return;
+	}
+
+	for (auto& entity : m_entities.getEntities(m_enemyType3Config.tag))
+	{
+		if (entity->isActive())
+		{
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			isExist = true;
+		}
+	}
+	if (!isExist)
+		writePlayer << "@";
+	else
+		isExist = false;
+	writePlayer << "\n";
+	writePlayer << "\n";
+
+	// Lưu vị trí tháp
+	writePlayer << "# Tower position" << "\n";
+	for (auto& entity : m_entities.getEntities(m_towerType1Config.tag))
+	{
+			
+		if (entity->isActive())
+		{
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			isExist = true;
+		}
+	}
+	if (!isExist)
+		writePlayer << "@";
+	else
+		isExist = false;
+	writePlayer << "\n";
+	writePlayer << "\n";
+
+	for (auto& entity : m_entities.getEntities(m_towerType2Config.tag))
+	{
+		if (entity->isActive())
+		{
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			isExist = true;
+		}
+	}
+	if (!isExist)
+		writePlayer << "@";
+	else
+		isExist = false;
+	writePlayer << "\n";
+	writePlayer << "\n";
+
+	for (auto& entity : m_entities.getEntities(m_towerType3Config.tag))
+	{
+		if (entity->isActive())
+		{
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			isExist = true;
+		}
+	}
+	if (!isExist)
+		writePlayer << "@";
+	else
+		isExist = false;
+	writePlayer << "\n";
+	writePlayer << "\n";
+
+	for (auto& entity : m_entities.getEntities(m_towerType4Config.tag))
+	{
+		if (entity->isActive())
+		{
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			isExist = true;
+		}
+	}
+	if (!isExist)
+		writePlayer << "@";
+	else
+		isExist = false;
+	writePlayer << "\n";
+	writePlayer << "\n";
+
+	for (auto& entity : m_entities.getEntities(m_towerType5Config.tag))
+	{
+		if (entity->isActive())
+		{
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			isExist = true;
+		}
+	}
+	if (!isExist)
+		writePlayer << "@";
+	else
+		isExist = false;
+	writePlayer << "\n";
+	writePlayer << "\n";
+
+	for (auto& entity : m_entities.getEntities(m_towerType6Config.tag))
+	{
+		if (entity->isActive())
+		{
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			isExist = true;
+		}
+	}
+	if (!isExist)
+		writePlayer << "@";
+	else
+		isExist = false;
+	writePlayer << "\n";
+	writePlayer << "\n";
+	writePlayer << "# Base in current map" << "\n";
+
+	for (auto& base : m_scenes[m_state].getEntities("Base"))
+	{
+		writePlayer << base->isActive() << " ";
+		cout << base->isActive() << " ";
+	}
+	if (!writePlayer)
+	{
+		cout << "Error writing" << endl;
+	}
+	cout << endl;
+	writePlayer << "\n";
+
+	if (!checkStream())
+	{
+		std::cerr << "Error writing health data.\n";
+		writePlayer.close();
+		return;
+	}
+	if (writePlayer.fail()) {
+		std::cerr << "Error writing to file.\n";
+	}
+
+	cout << "has been written" << endl;
+	writePlayer.flush();  // Ensure writes are committed
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	//writePlayer.close();
+	stopWriting();  // Stop writing to the file
+
+
+	std::cout << "[DEBUG] After write: State " << writePlayer.rdstate() << "\n";
+	std::cout << "Game saved successfully.\n";
 }
 
 void Game::sLoadGame()
@@ -958,7 +1072,6 @@ void Game::sLoadGame()
 
 		break;
 	}
-
 	cout << "Game loaded successfully" << endl;
 	readPlayer.close();
 }

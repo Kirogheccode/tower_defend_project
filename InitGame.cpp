@@ -649,8 +649,9 @@ void Game::initUIFlow()
 			entity->cSet->sprite.setScale(0.6f, 0.6f);
 			entity->cInput = make_shared<CInput>([this]()
 				{
-					sSaveGame();
-					cout << "Successfully saved" << endl;
+					//sSaveGame();
+					queueSave();
+					std::this_thread::sleep_for(std::chrono::milliseconds(50));
 				},
 				[entity]()
 				{
@@ -990,7 +991,6 @@ void Game::initUIFlow()
 			{
 				m_typingName = false;
 				m_state = AppState::LoadGame;
-				// sLoadGame();
 			},
 			[loadGame]()
 			{
@@ -1025,11 +1025,11 @@ void Game::initUIFlow()
 	// -- LoadGame --
 	{
 		auto bg = m_scenes[AppState::LoadGame].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
+		bg->cSet = make_shared<CSet>("IMGS/Background/mainmenu.jpg");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto back = m_scenes[AppState::LoadGame].addEntity("Back");
-		back->cSet = make_shared<CSet>("IMGS/back.png");
+		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
 		back->cInput = make_shared<CInput>([this]()
 			{

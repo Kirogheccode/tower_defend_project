@@ -290,6 +290,10 @@
   <ItemGroup>
     <Text Include="config.txt" />
     <Text Include="MapBase.txt" />
+    <Text Include="map1.txt" />
+    <Text Include="map2.txt" />
+    <Text Include="map3.txt" />
+    <Text Include="map4.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="tower_defend_project.rc">
