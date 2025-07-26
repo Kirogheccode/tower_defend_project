@@ -892,13 +892,13 @@ void Game::initUIFlow()
 	// -- MainMenu --
 	{
 		auto bg = m_scenes[AppState::MainMenu].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/Background/MainMenu.png");
+		bg->cSet = make_shared<CSet>("IMGS/Background/MainMenu.jpg");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto play = m_scenes[AppState::MainMenu].addEntity("Play");
 		play->cSet = make_shared<CSet>("IMGS/Buttons/play.png");
-		play->cPosition = make_shared<CPosition>(Vector2f(1090, 485));
-		play->cSet->sprite.setScale(0.85f, 0.85f);
+		play->cPosition = make_shared<CPosition>(Vector2f(800, 425));
+		play->cSet->sprite.setScale(0.55f, 0.55f);
 		play->cInput = make_shared<CInput>([this]()
 			{
 				m_state = (AppState::PlayMenu);
@@ -915,8 +915,8 @@ void Game::initUIFlow()
 
 		auto settingsButton = m_scenes[AppState::MainMenu].addEntity("SettingsButton");
 		settingsButton->cSet = make_shared<CSet>("IMGS/Buttons/setting.png");
-		settingsButton->cPosition = make_shared<CPosition>(Vector2f(1090, 680));
-		settingsButton->cSet->sprite.setScale(0.85f, 0.85f);
+		settingsButton->cPosition = make_shared<CPosition>(Vector2f(1150, 400));
+		settingsButton->cSet->sprite.setScale(0.55f, 0.55f);
 		settingsButton->cInput = make_shared<CInput>([this]()
 			{
 				m_setting = true;
@@ -934,8 +934,8 @@ void Game::initUIFlow()
 
 		auto exit = m_scenes[AppState::MainMenu].addEntity("Exit");
 		exit->cSet = make_shared<CSet>("IMGS/Buttons/quit.png");
-		exit->cPosition = make_shared<CPosition>(Vector2f(1090, 876));
-		exit->cSet->sprite.setScale(0.85f, 0.85f);
+		exit->cPosition = make_shared<CPosition>(Vector2f(1500, 400));
+		exit->cSet->sprite.setScale(0.55f, 0.55f);
 		exit->cInput = make_shared<CInput>([this]()
 			{
 				m_window.close();
@@ -956,12 +956,12 @@ void Game::initUIFlow()
 	// -- PlayMenu --
 	{
 		auto bg = m_scenes[AppState::PlayMenu].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/mainMenu1.png");
+		bg->cSet = make_shared<CSet>("IMGS/Background/playchoose.jpg");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto newGameButton = m_scenes[AppState::PlayMenu].addEntity("New");
-		newGameButton->cSet = make_shared<CSet>("IMGS/new.png");
-		newGameButton->cPosition = make_shared<CPosition>(Vector2f(1144, 605));
+		newGameButton->cSet = make_shared<CSet>("IMGS/GUI/dark.png");
+		newGameButton->cPosition = make_shared<CPosition>(Vector2f(212, 628));
 		newGameButton->cInput = make_shared<CInput>([this]()
 			{
 				m_playerName.clear();
@@ -984,8 +984,8 @@ void Game::initUIFlow()
 		);
 
 		auto loadGame = m_scenes[AppState::PlayMenu].addEntity("Load");
-		loadGame->cSet = make_shared<CSet>("IMGS/Buttons/loadgame.png");
-		loadGame->cPosition = make_shared<CPosition>(Vector2f(1144, 766));
+		loadGame->cSet = make_shared<CSet>("IMGS/GUI/dark.png");
+		loadGame->cPosition = make_shared<CPosition>(Vector2f(1515, 628));
 		loadGame->cInput = make_shared<CInput>([this]()
 			{
 				m_typingName = false;
@@ -1289,13 +1289,13 @@ void Game::initUIFlow()
 	// -- MapSelect --
 	{
 		auto bg = m_scenes[AppState::MapSelect].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/Background/MainMenu.png");
+		bg->cSet = make_shared<CSet>("IMGS/Background/MapSelect.jpg");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto map1 = m_scenes[AppState::MapSelect].addEntity("Map1");
-		map1->cSet = make_shared<CSet>("IMGS/Maps/map1.png");
-		map1->cPosition = make_shared<CPosition>(Vector2f(358, 267));
-		map1->cSet->sprite.setScale(0.25f, 0.25f);
+		map1->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+		map1->cPosition = make_shared<CPosition>(Vector2f(317, 390));
+		map1->cSet->sprite.setScale(1.0f, 1.0f);
 		map1->cInput = make_shared<CInput>([this]()
 			{
 				m_mapindex = 0;
@@ -1313,9 +1313,9 @@ void Game::initUIFlow()
 		);
 
 		auto map2 = m_scenes[AppState::MapSelect].addEntity("Map2");
-		map2->cSet = make_shared<CSet>("IMGS/Maps/map2.png");
-		map2->cPosition = make_shared<CPosition>(Vector2f(1040, 267));
-		map2->cSet->sprite.setScale(0.25f, 0.25f);
+		map2->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+		map2->cPosition = make_shared<CPosition>(Vector2f(25, 337));
+		map2->cSet->sprite.setScale(1.125f, 1.125f);
 		map2->cInput = make_shared<CInput>([this]()
 			{
 				m_mapindex = 1;
@@ -1333,9 +1333,9 @@ void Game::initUIFlow()
 		);
 
 		auto map3 = m_scenes[AppState::MapSelect].addEntity("Map3");
-		map3->cSet = make_shared<CSet>("IMGS/Maps/map3.png");
-		map3->cPosition = make_shared<CPosition>(Vector2f(358, 651));
-		map3->cSet->sprite.setScale(0.25f, 0.25f);
+		map3->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+		map3->cPosition = make_shared<CPosition>(Vector2f(1297, 390));
+		map3->cSet->sprite.setScale(1.0f, 1.0f);
 		map3->cInput = make_shared<CInput>([this]()
 			{
 				m_mapindex = 2;
@@ -1353,9 +1353,9 @@ void Game::initUIFlow()
 		);
 
 		auto map4 = m_scenes[AppState::MapSelect].addEntity("Map4");
-		map4->cSet = make_shared<CSet>("IMGS/Maps/map4.png");
-		map4->cPosition = make_shared<CPosition>(Vector2f(1040, 651));
-		map4->cSet->sprite.setScale(0.25f, 0.25f);
+		map4->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+		map4->cPosition = make_shared<CPosition>(Vector2f(1557, 337));
+		map4->cSet->sprite.setScale(1.125f, 1.125f);
 		map4->cInput = make_shared<CInput>([this]()
 			{
 				m_mapindex = 3;
