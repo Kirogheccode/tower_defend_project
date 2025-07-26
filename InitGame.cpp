@@ -390,17 +390,56 @@ void Game::loadFontText()
 		cout << "Failed to load font\n";
 	}
 
-	if (!m_backgroundMusic.openFromFile("SOUNDS/bgmusic.wav")) {
-		cout << "Error: Could not load background music file.\n";
+	// -- Load nhạc
+	if (!m_backgroundMusic.openFromFile("SOUNDS/MainMenuMusic.mp3")) {
+		cout << "Error: Could not load main menu music file.\n";
 	}
 	else
 	{
 		m_backgroundMusic.setLoop(true);
-		m_backgroundMusic.play();
-		updateAudioSettings();
 	}
 
-	if (!m_clickBuffer.loadFromFile("SOUNDS/hover.ogg")) {
+	if (!m_mapSelect.openFromFile("SOUNDS/freedom.mp3")) {
+		cout << "Error: Could not load map select music file.\n";
+	}
+	else
+	{
+		m_mapSelect.setLoop(true);
+	}
+
+	if (!m_mapMusic[0].openFromFile("SOUNDS/ForestBattle.mp3")) {
+		cout << "Error: Could not load map 1 music file.\n";
+	}
+	else
+	{
+		m_mapMusic[0].setLoop(true);
+	}
+
+	if (!m_mapMusic[1].openFromFile("SOUNDS/DesertBattle.mp3")) {
+		cout << "Error: Could not load map 1 music file.\n";
+	}
+	else
+	{
+		m_mapMusic[1].setLoop(true);
+	}
+
+	if (!m_mapMusic[2].openFromFile("SOUNDS/LavaBattle.mp3")) {
+		cout << "Error: Could not load map 1 music file.\n";
+	}
+	else
+	{
+		m_mapMusic[2].setLoop(true);
+	}
+
+	if (!m_mapMusic[3].openFromFile("SOUNDS/FrozenBattle.mp3")) {
+		cout << "Error: Could not load map 1 music file.\n";
+	}
+	else
+	{
+		m_mapMusic[3].setLoop(true);
+	}
+
+	if (!m_clickBuffer.loadFromFile("SOUNDS/click.mp3")) {
 		cout << "Error: Could not load click sound file.\n";
 	}
 
@@ -413,6 +452,8 @@ void Game::loadFontText()
 	{
 		cout << "Error: Could not load error sound file.\n";
 	}
+
+	updateAudioSettings();
 
 	m_inputLabel.setFont(m_font);
 	m_inputLabel.setCharacterSize(24);

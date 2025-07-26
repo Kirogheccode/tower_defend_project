@@ -429,6 +429,7 @@ void Game::run()
 		float dt = m_clock.restart().asSeconds();
 
 		sUserInput(); // Always process input (so you can pause/unpause)
+		updateMusicState();
 
 		if (!m_paused)
 		{
@@ -1220,6 +1221,92 @@ void Game::updateAudioSettings() {
 	}
 }
 
+void Game::playMapMusic(int mapIdx) {
+	for (auto& [idx, music] : m_mapMusic) {
+		if (idx != mapIdx && music.getStatus() == sf::Music::Playing) {
+			music.stop();
+		}
+	}
+
+	auto& currentMusic = m_mapMusic[mapIdx];
+	if (currentMusic.getStatus() != sf::Music::Playing) {
+		currentMusic.play();
+	}
+}
+
+void Game::updateMusicState() {
+	bool isMenuState = (m_state == AppState::MainMenu ||
+		m_state == AppState::SettingsMenu);
+
+	if (isMenuState) {
+		// Nếu chưa phát menuMusic thì bật, đồng thời tắt gameplayMusic
+		for (auto& [idx, music] : m_mapMusic) {
+			if (music.getStatus() == sf::Music::Playing) {
+				music.stop();
+			}
+		}
+
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
+
+		if (m_backgroundMusic.getStatus() != sf::Music::Playing)
+			m_backgroundMusic.play();
+	}
+	else if (m_state == AppState::PlayMenu || m_state == AppState::MapSelect) {
+		for (auto& [idx, music] : m_mapMusic) {
+			if (music.getStatus() == sf::Music::Playing) {
+				music.stop();
+			}
+		}
+
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+
+		if (m_mapSelect.getStatus() != sf::Music::Playing)
+			m_mapSelect.play();
+	}
+	else if (m_state == AppState::Map1) {
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
+		playMapMusic(0);
+	}
+	else if (m_state == AppState::Map2) {
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
+		playMapMusic(1);
+	}
+	else if (m_state == AppState::Map3) {
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
+		playMapMusic(2);
+	}
+	else if (m_state == AppState::Map4) {
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
+		playMapMusic(3);
+	}
+	else {
+		// Các state khác thì dừng hết
+		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == sf::Music::Playing)
+			m_mapSelect.stop();
+		for (auto& [idx, music] : m_mapMusic) {
+			if (music.getStatus() == sf::Music::Playing) {
+				music.stop();
+			}
+		}
+	}
+}
+
 
 // --- Tháp bắn quái ---
 void Game::Shoot(Entity& tower)
@@ -1283,7 +1370,6 @@ void Game::TowerAttack()
 		}
 	}
 }
-
 
 // --- Hàm hỗ trợ logic ---
 bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) 

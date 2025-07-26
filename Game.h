@@ -144,6 +144,8 @@ class Game
 	bool m_typingName = false;
 
 	Music m_backgroundMusic;
+	Music m_mapSelect;
+	map<int, Music> m_mapMusic;
 	float m_musicVolume = 50.0f;
 	bool m_musicMuted = false;
 
@@ -174,6 +176,8 @@ class Game
 	void sReset();
 
 	void updateAudioSettings();
+	void playMapMusic(int mapIdx);
+	void updateMusicState();
 
 	void sSpawnWave(float& deltaTime);
 	void sCheckWaveFinished();
