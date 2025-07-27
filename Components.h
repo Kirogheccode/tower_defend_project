@@ -161,13 +161,32 @@ struct CSet
 
 struct CBound
 {
-	enum shapeType { Circle, Rectangle } shape = Rectangle; // Default shape is Rectangle
-	float radius = 0; // For Circle shape
-	FloatRect rect; // For Rectangle shape
-	CBound(float r) : radius(r), shape(Circle) {} // Constructor for Circle shape (one parameter)
+	enum shapeType { Circle, Rectangle } shape = Rectangle; // Mặc định là Rectangle
 
-	// Constructor for Rectangle shape
-	CBound(const FloatRect& r) : rect(r), shape(Rectangle) {}
+	sf::CircleShape circle;
+	sf::RectangleShape rectangle;
+
+	float radius = 0;        // Dùng để cập nhật lại circle khi cần
+	FloatRect rect;          // Dùng để cập nhật lại rectangle khi cần
+
+	// Constructor cho hình tròn
+	CBound(float r) : radius(r), shape(Circle)
+	{
+		circle.setRadius(radius);
+		circle.setOrigin(radius, radius);
+		circle.setFillColor(sf::Color(255, 255, 255, 20));
+		circle.setOutlineThickness(0.f);
+
+	}
+
+	// Constructor cho hình chữ nhật
+	CBound(const FloatRect& r) : rect(r), shape(Rectangle)
+	{
+		rectangle.setSize({ rect.width, rect.height });
+		rectangle.setPosition(rect.left, rect.top);
+		rectangle.setFillColor(sf::Color(255, 255, 255, 20));
+		rectangle.setOutlineThickness(0.f);
+	}
 };
 
 struct CBoundaryScale
@@ -190,6 +209,7 @@ struct CInput
 	function<void()> onHover;
 	function<void()> offHover;
 
+	bool isChoosing = false;
 	bool isHovered = false;
 
 	CInput() = default;
@@ -259,7 +279,6 @@ struct CSlider {
 	    
 
 		// Thiết lập nút kéo
-		
 		handle.setOrigin(handleTexture.getSize().x / 2.f, handleTexture.getSize().y / 2.f);
 		
 

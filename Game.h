@@ -129,6 +129,7 @@ class Game
 	EntityManager m_entities;
 	string m_selected = "";
 
+	float m_refund = 0.7;
 	int m_currentWave = -1;                                                                 // Keep track of current wave
 	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
 	int m_coin = 1000;

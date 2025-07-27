@@ -194,6 +194,18 @@ void Game::init(const string& path)
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+
+				entity->cInput = make_shared<CInput>(
+					[entity]() {
+						entity->cInput->isChoosing = true;
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(200, 200, 200));
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(255, 255, 255));
+					}
+				);
 			}
 			break;
 		}
@@ -219,6 +231,18 @@ void Game::init(const string& path)
 				entity->cWeapon = make_shared<CWeapon>("Bullet02");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+
+				entity->cInput = make_shared<CInput>(
+					[entity]() {
+						entity->cInput->isChoosing = true;
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(200, 200, 200));
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(255, 255, 255));
+					}
+				);
 			}
 			break;
 		}
@@ -245,6 +269,18 @@ void Game::init(const string& path)
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(0.5, 0.5);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 60.0);
+
+				entity->cInput = make_shared<CInput>(
+					[entity]() {
+						entity->cInput->isChoosing = true;
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(200, 200, 200));
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(255, 255, 255));
+					}
+				);
 			}
 			break;
 		}
@@ -270,6 +306,18 @@ void Game::init(const string& path)
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+
+				entity->cInput = make_shared<CInput>(
+					[entity]() {
+						entity->cInput->isChoosing = true;
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(200, 200, 200));
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(255, 255, 255));
+					}
+				);
 			}
 			break;
 		}
@@ -295,6 +343,18 @@ void Game::init(const string& path)
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+
+				entity->cInput = make_shared<CInput>(
+					[entity]() {
+						entity->cInput->isChoosing = true;
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(200, 200, 200));
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(255, 255, 255));
+					}
+				);
 			}
 			break;
 		}
@@ -321,6 +381,18 @@ void Game::init(const string& path)
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(0.5, 0.5);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 80.0);
+
+				entity->cInput = make_shared<CInput>(
+					[entity]() {
+						entity->cInput->isChoosing = true;
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(200, 200, 200));
+					},
+					[entity]() {
+						entity->cSet->sprite.setColor(Color(255, 255, 255));
+					}
+				);
 			}
 			break;
 		}
