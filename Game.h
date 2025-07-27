@@ -156,6 +156,7 @@ class Game
 	SoundBuffer m_clickBuffer;
 	SoundBuffer m_constructTower;
 	SoundBuffer m_error;
+	SoundBuffer m_collide;
 
 	list<Sound> m_activeSounds;
 

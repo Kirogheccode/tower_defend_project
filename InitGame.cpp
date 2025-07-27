@@ -342,6 +342,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
+				sprite.setScale(1.45, 1.45);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
@@ -523,6 +524,11 @@ void Game::loadFontText()
 	if (!m_error.loadFromFile("SOUNDS/Error.mp3"))
 	{
 		cout << "Error: Could not load error sound file.\n";
+	}
+
+	if(!m_collide.loadFromFile("SOUNDS/HitSound.mp3"))
+	{
+		cout << "Error: Could not load collide sound file.\n";
 	}
 
 	updateAudioSettings();

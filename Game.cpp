@@ -1268,7 +1268,6 @@ void Game::sMovement(float& deltaTime)
 }
 
 
-// --- Chỉnh sửa kích thước cửa sổ ---
 void Game::playSfx(const sf::SoundBuffer& buffer, sf::Vector2f position) {
 	if (m_sfxMuted) return;
 	m_activeSounds.remove_if([](const sf::Sound& s) { return s.getStatus() == Sound::Stopped; });
@@ -1516,7 +1515,7 @@ void Game::sCollision()
 
 			if (collisionDetection(*bullet, *cur))
 			{
-			
+				playSfx(m_collide, bullet->cPosition->position);
 				if (cur->cHealth)
 				{
 					cur->cHealth->hp -= bullet->cDamage->damage;
