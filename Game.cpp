@@ -44,6 +44,9 @@ void Game::sRender(float& deltaTime)
 				if (e->cSet)
 					m_window.draw(e->cSet->sprite);
 			}
+
+			if (e->cText)
+				m_window.draw(e->cText->text);
 		}
 	}
 
@@ -272,25 +275,29 @@ void Game::sUserInput()
 			{
 				if (tower->isActive() && tower->cSet->sprite.getGlobalBounds().contains(mousePos))
 				{
-					if (tower->cInput)
+					// Reset hiển thị range hết tháp để chỉ hiển thị một tháp
+					for (auto& other : m_entities.getEntities("Tower"))
 					{
-						tower->cInput->onClick();
+						if (other->cInput) other->cInput->isChoosing = false;
 					}
 
-					// Bật isChoosing = true cho tháp vừa click
-					if (tower->cInput->isChoosing) tower->cInput->isChoosing = true; // hoặc tower->setChoosing(true);
+					if (tower->cInput)
+					{
+						tower->cInput->isChoosing = true;
+						tower->cInput->onClick();
+					}
 
 					clickedOnTower = true;
 					break;
 				}
 			}
 
+			// Reset hiển thị range nếu bấm ra ngoài tháp
 			if (!clickedOnTower)
 			{
-				// Nếu click ngoài tháp, thì reset tất cả tháp
 				for (auto& tower : m_entities.getEntities("Tower"))
 				{
-					if (tower->cInput->isChoosing) tower->cInput->isChoosing = false; // hoặc tower->setChoosing(false);
+					if (tower->cInput) tower->cInput->isChoosing = false;
 				}
 			}
 
@@ -493,7 +500,7 @@ void Game::run()
 {
 	while (m_running)
 	{
-		float dt = m_clock.restart().asSeconds();
+		dt = m_clock.restart().asSeconds();
 
 		sUserInput(); // Always process input (so you can pause/unpause)
 		updateMusicState();
@@ -521,7 +528,7 @@ void Game::run()
 
 
 
-// Simplified start/stop without locks (locking is higher-level)
+// --- Simplified start/stop without locks (locking is higher-level) ---
 void Game::startWriting(const std::string& filename) {
 	writePlayer.open(filename, std::ios::out | std::ios::trunc);
 	if (!writePlayer.is_open()) {
@@ -538,7 +545,8 @@ void Game::stopWriting() {
 	}
 }
 
-// Restore async queueSave with thread (from history)
+
+// --- Restore async queueSave with thread (from history) ---
 void Game::queueSave() {
 	cout << "queueSave called\n";
 	std::thread saveThread([this]() {
@@ -547,6 +555,7 @@ void Game::queueSave() {
 		});
 	saveThread.detach();  // Async
 }
+
 
 // --- Lưu tên người chơi khi nhập ở PlayMenu ---
 void Game::sSaveGame()
@@ -604,7 +613,6 @@ void Game::sSaveGame()
 	writePlayer << m_currentWave << "\n";
 	writePlayer << "\n";
 
-
 	// Lưu index của máu còn lại
 	writePlayer << "# Remaining health: " << "\n";
 	for (auto& e: m_scenes[AppState::GamePlay].getEntities("Heart"))
@@ -636,6 +644,40 @@ void Game::sSaveGame()
 		return;
 	}
 		
+	// Lưu biến đếm khi spawn
+	writePlayer << "# Spawning timer: " << "\n";
+	writePlayer << m_spawnTimer << " " << m_spawningTimer << "\n";
+	writePlayer << "\n";
+
+	// Lưu số lượng quái đã spawn
+	writePlayer << "# Spanwed enemies: " << "\n";
+	writePlayer << m_spawnedType1 << " " << m_spawnedType2 << " " << m_spawnedType3 << "\n";
+	writePlayer << "\n";
+
+	// Lưu spawning stage
+	writePlayer << "# Spawning stage" << "\n";
+	if (m_spawnStage == SpawnStage::Type1)
+	{
+		writePlayer << "Type1" << "\n";
+	} 
+	else if (m_spawnStage == SpawnStage::Type2)
+	{
+		writePlayer << "Type2" << "\n";
+	}
+	else if (m_spawnStage == SpawnStage::Type3)
+	{
+		writePlayer << "Type3" << "\n";
+	}
+	else if (m_spawnStage == SpawnStage::None)
+	{
+		writePlayer << "None" << "\n";
+	}
+	else if (m_spawnStage == SpawnStage::Done)
+	{
+		writePlayer << "Done" << "\n";
+	}
+	writePlayer << "\n";
+
 	// Lưu vị trí quái
 	writePlayer << "# Enemies position" << "\n";
 	bool isExist = false;
@@ -851,7 +893,6 @@ void Game::sLoadGame()
 		break;
 	}
 
-
 	// Load máu người chơi
 	while (getline(readPlayer, line))
 	{
@@ -873,7 +914,6 @@ void Game::sLoadGame()
 
 		break;
 	}
-	
 
 	// Load tiền người chơi
 	while (getline(readPlayer, line))
@@ -885,6 +925,46 @@ void Game::sLoadGame()
 		break;
 	}
 
+	// Load biến time cho việc spawning
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+
+		iss >> m_spawnTimer >> m_spawningTimer;
+
+		break;
+	}
+
+	// Load số lượng quái đã spawn
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+
+		iss >> m_spawnedType1 >> m_spawnedType2 >> m_spawnedType3;
+
+		break;
+	}
+
+	// Load spawnStage
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		if (line[0] == '@') break;
+		istringstream iss(line);
+
+		string stage;
+		iss >> stage;
+
+		if (stage == "None") m_spawnStage = SpawnStage::None;
+		else if (stage == "Type1") m_spawnStage = SpawnStage::Type1;
+		else if (stage == "Type2") m_spawnStage == SpawnStage::Type2;
+		else if (stage == "Type3") m_spawnStage == SpawnStage::Type3;
+		else if (stage == "Done") m_spawnStage == SpawnStage::Done;
+
+		break;
+	}
 
 	// Load quái type 1
 	while (getline(readPlayer, line))
@@ -914,7 +994,6 @@ void Game::sLoadGame()
 		break;
 	}
 
-
 	// Load quái type 2
 	while (getline(readPlayer, line))
 	{
@@ -942,7 +1021,6 @@ void Game::sLoadGame()
 
 		break;
 	}
-
 
 	// Load quái type 3
 	while (getline(readPlayer, line))
@@ -972,7 +1050,6 @@ void Game::sLoadGame()
 		break;
 	}
 
-
 	// Load tháp type 1
 	while (getline(readPlayer, line))
 	{
@@ -998,7 +1075,6 @@ void Game::sLoadGame()
 		break;
 	}
 
-
 	// Load tháp type 2
 	while (getline(readPlayer, line))
 	{
@@ -1023,7 +1099,6 @@ void Game::sLoadGame()
 		break;
 	}
 
-	
 	// Load thap type 3
 	while (getline(readPlayer, line))
 	{
@@ -1047,7 +1122,6 @@ void Game::sLoadGame()
 
 		break;
 	}
-
 
 	// Load thap type 4
 	while (getline(readPlayer, line))
@@ -1073,7 +1147,6 @@ void Game::sLoadGame()
 		break;
 	}
 
-
 	// Load thap type 5
 	while (getline(readPlayer, line))
 	{
@@ -1098,7 +1171,6 @@ void Game::sLoadGame()
 		break;
 	}
 
-
 	// Load thap type 6
 	while (getline(readPlayer, line))
 	{
@@ -1122,7 +1194,6 @@ void Game::sLoadGame()
 
 		break;
 	}
-
 
 	// Load base
 	while (getline(readPlayer, line))
@@ -1268,6 +1339,7 @@ void Game::sMovement(float& deltaTime)
 }
 
 
+// --- Âm thanh và Xử lý sự kiện ---
 void Game::playSfx(const sf::SoundBuffer& buffer, sf::Vector2f position) {
 	if (m_sfxMuted) return;
 	m_activeSounds.remove_if([](const sf::Sound& s) { return s.getStatus() == Sound::Stopped; });
@@ -1277,7 +1349,6 @@ void Game::playSfx(const sf::SoundBuffer& buffer, sf::Vector2f position) {
 	newSound.play();
 }
 
-// --- Âm thanh và Xử lý sự kiện ---
 void Game::updateAudioSettings() {
 	if (m_musicMuted) {
 		m_backgroundMusic.setVolume(0);
@@ -1440,6 +1511,7 @@ void Game::TowerAttack()
 	}
 }
 
+
 // --- Hàm hỗ trợ logic ---
 bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) 
 {
@@ -1475,11 +1547,11 @@ bool collisionDetection(const Entity& entity1, const Entity& entity2)
 	return isContained(bounds1, bounds2);
 }
 
-
 sf::Vector2f Game::getWindowSize() const {
 	sf::Vector2u size = m_window.getSize();
 	return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
 }
+
 
 // --- Kiểm tra xem entity (bullet) có nằm ngoài ranh giới không ---
 bool Game::isOutOfBounds(const Entity& entity, float margin) {
@@ -1493,8 +1565,6 @@ bool Game::isOutOfBounds(const Entity& entity, float margin) {
 		pos.y < -margin ||
 		pos.y > windowSize.y + margin);
 }
-
-
 
 
 // --- Hàm va chạm ---

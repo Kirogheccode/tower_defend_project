@@ -545,6 +545,36 @@ void Game::loadFontText()
 	m_inputText.setPosition(500, 300);
 
 
+	// -- Hiển thị độ khó cho từng map
+	auto easyText = m_scenes[AppState::MapSelect].addEntity("easyText");
+	easyText->cText = make_shared<CText>("EASY");
+	easyText->cText->text.setFont(m_font);
+	easyText->cText->text.setPosition(Vector2f(430, 395));
+	easyText->cText->text.setCharacterSize(40);
+	easyText->cText->text.setFillColor(sf::Color::Green);
+
+	auto mediumText = m_scenes[AppState::MapSelect].addEntity("mediumText");
+	mediumText->cText = make_shared<CText>("MEDIUM");
+	mediumText->cText->text.setFont(m_font);
+	mediumText->cText->text.setPosition(Vector2f(130, 345));
+	mediumText->cText->text.setCharacterSize(40);
+	mediumText->cText->text.setFillColor(sf::Color::Yellow);
+
+	auto hardText = m_scenes[AppState::MapSelect].addEntity("hardText");
+	hardText->cText = make_shared<CText>("HARD");
+	hardText->cText->text.setFont(m_font);
+	hardText->cText->text.setPosition(Vector2f(1410, 395));
+	hardText->cText->text.setCharacterSize(40);
+	hardText->cText->text.setFillColor(sf::Color::Red);
+
+	auto extremeText = m_scenes[AppState::MapSelect].addEntity("extremeText");
+	extremeText->cText = make_shared<CText>("EXTREME");
+	extremeText->cText->text.setFont(m_font);
+	extremeText->cText->text.setPosition(Vector2f(1650, 345));
+	extremeText->cText->text.setCharacterSize(40);
+	extremeText->cText->text.setFillColor(sf::Color::Black);
+
+
 	// -- Hiển thị giá tiền cho từng tháp
 	auto Tower1Cost = m_scenes[AppState::TowerSelect].addEntity("Tower1Cost");
 	Tower1Cost->cText = make_shared<CText>(m_towerType1Config.cost);
@@ -615,7 +645,7 @@ void Game::loadFontText()
 	float centerY = m_windowConfig.height / 2.f;
 
 	waveEntity->cText->text.setPosition(centerX - totalWidth / 2.f + waveBounds.width / 2.f, centerY);
-	numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY);
+	numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY - 10);
 }
 
 void Game::initUIFlow()
