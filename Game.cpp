@@ -117,6 +117,15 @@ void Game::sRender(float& deltaTime)
 			}
 
 			m_window.draw(e->cSet->sprite);
+
+			if (e->cInput)
+			{
+				if (e->cInput->isChoosing)
+				{
+					e->cBound->circle.setPosition(e->cPosition->position);
+					m_window.draw(e->cBound->circle);
+				}
+			}
 		}
 	}
 
@@ -257,6 +266,34 @@ void Game::sUserInput()
 		// --- Click chuột trái
 		if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 		{
+			bool clickedOnTower = false;
+
+			for (auto& tower : m_entities.getEntities("Tower"))
+			{
+				if (tower->isActive() && tower->cSet->sprite.getGlobalBounds().contains(mousePos))
+				{
+					if (tower->cInput)
+					{
+						tower->cInput->onClick();
+					}
+
+					// Bật isChoosing = true cho tháp vừa click
+					if (tower->cInput->isChoosing) tower->cInput->isChoosing = true; // hoặc tower->setChoosing(true);
+
+					clickedOnTower = true;
+					break;
+				}
+			}
+
+			if (!clickedOnTower)
+			{
+				// Nếu click ngoài tháp, thì reset tất cả tháp
+				for (auto& tower : m_entities.getEntities("Tower"))
+				{
+					if (tower->cInput->isChoosing) tower->cInput->isChoosing = false; // hoặc tower->setChoosing(false);
+				}
+			}
+
 			bool clickedSlider = false;
 
 			if (!clickedSlider)
@@ -274,12 +311,13 @@ void Game::sUserInput()
 							if (e->isActive() && e->cSet->sprite.getGlobalBounds().contains(mousePos))
 							{
 								// Hoàn lại 70% khi xoá tháp
-								if (e->tag() == m_towerType1Config.tag) m_coin += 0.7 * m_towerType1Config.cost;
-								else if (e->tag() == m_towerType2Config.tag) m_coin += 0.7 * m_towerType2Config.cost;
-								else if (e->tag() == m_towerType3Config.tag) m_coin += 0.7 * m_towerType3Config.cost;
-								else if (e->tag() == m_towerType4Config.tag) m_coin += 0.7 * m_towerType4Config.cost;
-								else if (e->tag() == m_towerType5Config.tag) m_coin += 0.7 * m_towerType5Config.cost;
-								else if (e->tag() == m_towerType6Config.tag) m_coin += 0.7 * m_towerType6Config.cost;
+
+								if (e->tag() == m_towerType1Config.tag) m_coin += m_refund * m_towerType1Config.cost;
+								else if (e->tag() == m_towerType2Config.tag) m_coin += m_refund * m_towerType2Config.cost;
+								else if (e->tag() == m_towerType3Config.tag) m_coin += m_refund * m_towerType3Config.cost;
+								else if (e->tag() == m_towerType4Config.tag) m_coin += m_refund * m_towerType4Config.cost;
+								else if (e->tag() == m_towerType5Config.tag) m_coin += m_refund * m_towerType5Config.cost;
+								else if (e->tag() == m_towerType6Config.tag) m_coin += m_refund * m_towerType6Config.cost;
 								removing = e->cPosition->position;
 								DeactivateTower(*e);
 								remove = true;
@@ -369,7 +407,9 @@ void Game::sUserInput()
 						}
 
 						if (isOutSide)
+						{
 							m_state1 = AppState::Dummy;
+						}
 					}
 					else
 					{
@@ -415,9 +455,36 @@ void Game::sUserInput()
 			bool hovering = e->cSet->sprite.getGlobalBounds().contains(mousePos);
 
 			if (hovering && !e->cInput->isHovered && e->cInput->onHover)
+			{
 				e->cInput->onHover();
+				e->cInput->isHovered = true;
+			}
 			else if (!hovering && e->cInput->isHovered && e->cInput->offHover)
+			{
 				e->cInput->offHover();
+				e->cInput->isHovered = false;
+			}
+
+			e->cInput->isHovered = hovering;
+		}
+	}
+
+	for (auto& e : m_entities.getEntities())
+	{
+		if (e->cSet && e->cInput)
+		{
+			bool hovering = e->cSet->sprite.getGlobalBounds().contains(mousePos);
+
+			if (hovering && !e->cInput->isHovered && e->cInput->onHover)
+			{
+				e->cInput->onHover();
+				e->cInput->isHovered = true;
+			}
+			else if (!hovering && e->cInput->isHovered && e->cInput->offHover)
+			{
+				e->cInput->offHover();
+				e->cInput->isHovered = false;
+			}
 
 			e->cInput->isHovered = hovering;
 		}
@@ -1180,9 +1247,13 @@ void Game::onResize(const sf::Event::SizeEvent& size) {
 void Game::updateAudioSettings() {
 	if (m_musicMuted) {
 		m_backgroundMusic.setVolume(0);
+		m_mapMusic[m_mapindex].setVolume(0);
+		m_mapSelect.setVolume(0);
 	}
 	else {
 		m_backgroundMusic.setVolume(m_musicVolume);
+		m_mapMusic[m_mapindex].setVolume(m_musicVolume);
+		m_mapSelect.setVolume(m_musicVolume);
 	}
 }
 
@@ -1285,7 +1356,6 @@ void Game::Shoot(Entity& tower)
 			bullet->cPosition = make_shared<CPosition>(tower.cPosition->position);
 
 			bullet->cSet->sprite.setPosition(tower.cPosition->position);
-			
 
 			bullet->active(true);
 
