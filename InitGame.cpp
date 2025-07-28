@@ -6,11 +6,11 @@ Game::Game(const string& config)
 	init(config);
 }
 
-void clearFile(std::string fileName)
+void clearFile(string fileName)
 {
-	std::ofstream file(fileName, std::ios::out | std::ios::trunc);
+	ofstream file(fileName, ios::out | ios::trunc);
 	if (!file) {
-		std::cout << "Error opening file\n";
+		cout << "Error opening file\n";
 	}
 	file.close();
 }
@@ -452,7 +452,7 @@ void Game::loadHeartCoin()
 	moneyText->cText = make_shared<CText>(0);
 	moneyText->cText->text.setFont(m_font);
 	moneyText->cText->text.setCharacterSize(50);
-	moneyText->cText->text.setFillColor(sf::Color::Yellow);
+	moneyText->cText->text.setFillColor(Color::Yellow);
 	moneyText->cText->text.setPosition(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
 }
 
@@ -535,7 +535,7 @@ void Game::loadFontText()
 
 	m_inputLabel.setFont(m_font);
 	m_inputLabel.setCharacterSize(24);
-	m_inputLabel.setFillColor(Color::Black);
+	m_inputLabel.setFillColor(Color::White);
 	m_inputLabel.setString("Enter your name");
 	m_inputLabel.setPosition(500, 250);
 
@@ -545,48 +545,78 @@ void Game::loadFontText()
 	m_inputText.setPosition(500, 300);
 
 
+	// -- Hiển thị độ khó cho từng map
+	auto easyText = m_scenes[AppState::MapSelect].addEntity("easyText");
+	easyText->cText = make_shared<CText>("EASY");
+	easyText->cText->text.setFont(m_font);
+	easyText->cText->text.setPosition(Vector2f(430, 395));
+	easyText->cText->text.setCharacterSize(40);
+	easyText->cText->text.setFillColor(Color::Green);
+
+	auto mediumText = m_scenes[AppState::MapSelect].addEntity("mediumText");
+	mediumText->cText = make_shared<CText>("MEDIUM");
+	mediumText->cText->text.setFont(m_font);
+	mediumText->cText->text.setPosition(Vector2f(130, 343));
+	mediumText->cText->text.setCharacterSize(40);
+	mediumText->cText->text.setFillColor(Color::Yellow);
+
+	auto hardText = m_scenes[AppState::MapSelect].addEntity("hardText");
+	hardText->cText = make_shared<CText>("HARD");
+	hardText->cText->text.setFont(m_font);
+	hardText->cText->text.setPosition(Vector2f(1410, 395));
+	hardText->cText->text.setCharacterSize(40);
+	hardText->cText->text.setFillColor(Color::Red);
+
+	auto extremeText = m_scenes[AppState::MapSelect].addEntity("extremeText");
+	extremeText->cText = make_shared<CText>("EXTREME");
+	extremeText->cText->text.setFont(m_font);
+	extremeText->cText->text.setPosition(Vector2f(1650, 343));
+	extremeText->cText->text.setCharacterSize(40);
+	extremeText->cText->text.setFillColor(Color::Black);
+
+
 	// -- Hiển thị giá tiền cho từng tháp
 	auto Tower1Cost = m_scenes[AppState::TowerSelect].addEntity("Tower1Cost");
 	Tower1Cost->cText = make_shared<CText>(m_towerType1Config.cost);
 	Tower1Cost->cText->text.setFont(m_font);
 	Tower1Cost->cText->text.setPosition(Vector2f(1760, 110));
 	Tower1Cost->cText->text.setCharacterSize(20);
-	Tower1Cost->cText->text.setFillColor(sf::Color::Yellow);
+	Tower1Cost->cText->text.setFillColor(Color::Yellow);
 
 	auto Tower2Cost = m_scenes[AppState::TowerSelect].addEntity("Tower2Cost");
 	Tower2Cost->cText = make_shared<CText>(m_towerType2Config.cost);
 	Tower2Cost->cText->text.setFont(m_font);
 	Tower2Cost->cText->text.setPosition(Vector2f(1850, 110));
 	Tower2Cost->cText->text.setCharacterSize(20);
-	Tower2Cost->cText->text.setFillColor(sf::Color::Yellow);
+	Tower2Cost->cText->text.setFillColor(Color::Yellow);
 
 	auto Tower3Cost = m_scenes[AppState::TowerSelect].addEntity("Tower3Cost");
 	Tower3Cost->cText = make_shared<CText>(m_towerType3Config.cost);
 	Tower3Cost->cText->text.setFont(m_font);
 	Tower3Cost->cText->text.setPosition(Vector2f(1760, 260));
 	Tower3Cost->cText->text.setCharacterSize(20);
-	Tower3Cost->cText->text.setFillColor(sf::Color::Yellow);
+	Tower3Cost->cText->text.setFillColor(Color::Yellow);
 
 	auto Tower4Cost = m_scenes[AppState::TowerSelect].addEntity("Tower4Cost");
 	Tower4Cost->cText = make_shared<CText>(m_towerType4Config.cost);
 	Tower4Cost->cText->text.setFont(m_font);
 	Tower4Cost->cText->text.setPosition(Vector2f(1850, 260));
 	Tower4Cost->cText->text.setCharacterSize(20);
-	Tower4Cost->cText->text.setFillColor(sf::Color::Yellow);
+	Tower4Cost->cText->text.setFillColor(Color::Yellow);
 
 	auto Tower5Cost = m_scenes[AppState::TowerSelect].addEntity("Tower5Cost");
 	Tower5Cost->cText = make_shared<CText>(m_towerType5Config.cost);
 	Tower5Cost->cText->text.setFont(m_font);
 	Tower5Cost->cText->text.setPosition(Vector2f(1760, 410));
 	Tower5Cost->cText->text.setCharacterSize(20);
-	Tower5Cost->cText->text.setFillColor(sf::Color::Yellow);
+	Tower5Cost->cText->text.setFillColor(Color::Yellow);
 
 	auto Tower6Cost = m_scenes[AppState::TowerSelect].addEntity("Tower6Cost");
 	Tower6Cost->cText = make_shared<CText>(m_towerType6Config.cost);
 	Tower6Cost->cText->text.setFont(m_font);
 	Tower6Cost->cText->text.setPosition(Vector2f(1850, 410));
 	Tower6Cost->cText->text.setCharacterSize(20);
-	Tower6Cost->cText->text.setFillColor(sf::Color::Yellow);
+	Tower6Cost->cText->text.setFillColor(Color::Yellow);
 
 
 	// --- Khởi tạo WAVE text
@@ -594,7 +624,7 @@ void Game::loadFontText()
 	waveEntity->cText = make_shared<CText>("WAVE ");
 	waveEntity->cText->text.setFont(m_font);
 	waveEntity->cText->text.setCharacterSize(80);
-	waveEntity->cText->text.setFillColor(sf::Color::Black);
+	waveEntity->cText->text.setFillColor(Color::Black);
 
 	sf::FloatRect waveBounds = waveEntity->cText->text.getLocalBounds();
 	waveEntity->cText->text.setOrigin(waveBounds.left + waveBounds.width / 2.f,
@@ -604,7 +634,7 @@ void Game::loadFontText()
 	numEntity->cText = make_shared<CText>(to_string(m_currentWave));
 	numEntity->cText->text.setFont(m_font);
 	numEntity->cText->text.setCharacterSize(80);
-	numEntity->cText->text.setFillColor(sf::Color::Red);
+	numEntity->cText->text.setFillColor(Color::Red);
 
 	FloatRect numBounds = numEntity->cText->text.getLocalBounds();
 	numEntity->cText->text.setOrigin(numBounds.left + numBounds.width / 2.f,
@@ -615,7 +645,7 @@ void Game::loadFontText()
 	float centerY = m_windowConfig.height / 2.f;
 
 	waveEntity->cText->text.setPosition(centerX - totalWidth / 2.f + waveBounds.width / 2.f, centerY);
-	numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY);
+	numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY - 10);
 }
 
 void Game::initUIFlow()
@@ -768,9 +798,9 @@ void Game::initUIFlow()
 			entity->cSet->sprite.setScale(0.6f, 0.6f);
 			entity->cInput = make_shared<CInput>([this]()
 				{
-					//sSaveGame();
+					
 					queueSave();
-					std::this_thread::sleep_for(std::chrono::milliseconds(50));
+					this_thread::sleep_for(chrono::milliseconds(50));
 				},
 				[entity]()
 				{
@@ -1018,7 +1048,7 @@ void Game::initUIFlow()
 		auto play = m_scenes[AppState::MainMenu].addEntity("Play");
 		play->cSet = make_shared<CSet>("IMGS/Buttons/play.png");
 		play->cPosition = make_shared<CPosition>(Vector2f(800, 425));
-		play->cSet->sprite.setScale(0.55f, 0.55f);
+		play->cSet->sprite.setScale(0.7f, 0.7f);
 		play->cInput = make_shared<CInput>([this]()
 			{
 				m_state = (AppState::PlayMenu);
@@ -1036,7 +1066,7 @@ void Game::initUIFlow()
 		auto settingsButton = m_scenes[AppState::MainMenu].addEntity("SettingsButton");
 		settingsButton->cSet = make_shared<CSet>("IMGS/Buttons/setting.png");
 		settingsButton->cPosition = make_shared<CPosition>(Vector2f(1150, 400));
-		settingsButton->cSet->sprite.setScale(0.55f, 0.55f);
+		settingsButton->cSet->sprite.setScale(0.7f, 0.7f);
 		settingsButton->cInput = make_shared<CInput>([this]()
 			{
 				m_setting = true;
@@ -1055,7 +1085,7 @@ void Game::initUIFlow()
 		auto exit = m_scenes[AppState::MainMenu].addEntity("Exit");
 		exit->cSet = make_shared<CSet>("IMGS/Buttons/quit.png");
 		exit->cPosition = make_shared<CPosition>(Vector2f(1500, 400));
-		exit->cSet->sprite.setScale(0.55f, 0.55f);
+		exit->cSet->sprite.setScale(0.7f, 0.7f);
 		exit->cInput = make_shared<CInput>([this]()
 			{
 				m_window.close();
@@ -1085,11 +1115,7 @@ void Game::initUIFlow()
 		newGameButton->cInput = make_shared<CInput>([this]()
 			{
 				m_playerName.clear();
-				clearFile("map1.txt");
-				clearFile("map2.txt");
-				clearFile("map3.txt");
-				clearFile("map4.txt");
-				std::cout << "File content cleared successfully\n";
+				cout << "File content cleared successfully\n";
 				m_inputText.setString("|");
 				m_typingName = true;
 			},
@@ -1170,11 +1196,14 @@ void Game::initUIFlow()
 		map1->cSet->sprite.setScale(0.25f, 0.25f);
 		map1->cInput = make_shared<CInput>([this]()
 			{
-				m_mapindex = 0;
-				m_state = AppState::Map1;
 				fileForSave = "map1.txt";
-				sLoadGame();
-				game_state = AppState::GamePlay;
+				if (!isFileEmpty(fileForSave))
+				{
+					m_mapindex = 0;
+					m_state = AppState::Map1;
+					sLoadGame();
+					game_state = AppState::GamePlay;
+				}
 			},
 			[map1]()
 			{
@@ -1192,11 +1221,14 @@ void Game::initUIFlow()
 		map2->cSet->sprite.setScale(0.25f, 0.25f);
 		map2->cInput = make_shared<CInput>([this]()
 			{
-				m_mapindex = 1;
-				m_state = AppState::Map2;
 				fileForSave = "map2.txt";
-				sLoadGame();
-				game_state = AppState::GamePlay;
+				if (!isFileEmpty(fileForSave))
+				{
+					m_mapindex = 1;
+					m_state = AppState::Map2;
+					sLoadGame();
+					game_state = AppState::GamePlay;
+				}
 			},
 			[map2]()
 			{
@@ -1214,11 +1246,14 @@ void Game::initUIFlow()
 		map3->cSet->sprite.setScale(0.25f, 0.25f);
 		map3->cInput = make_shared<CInput>([this]()
 			{
-				m_mapindex = 2;
-				m_state = AppState::Map3;
 				fileForSave = "map3.txt";
-				sLoadGame();
-				game_state = AppState::GamePlay;
+				if (!isFileEmpty(fileForSave))
+				{
+					m_mapindex = 2;
+					m_state = AppState::Map3;
+					sLoadGame();
+					game_state = AppState::GamePlay;
+				}
 			},
 			[map3]()
 			{
@@ -1236,11 +1271,14 @@ void Game::initUIFlow()
 		map4->cSet->sprite.setScale(0.25f, 0.25f);
 		map4->cInput = make_shared<CInput>([this]()
 			{
-				m_mapindex = 3;
-				m_state = AppState::Map4;
 				fileForSave = "map4.txt";
-				sLoadGame();
-				game_state = AppState::GamePlay;
+				if (!isFileEmpty(fileForSave))
+				{
+					m_mapindex = 3;
+					m_state = AppState::Map4;
+					sLoadGame();
+					game_state = AppState::GamePlay;
+				}
 			},
 			[map4]()
 			{
@@ -1413,11 +1451,13 @@ void Game::initUIFlow()
 
 		auto map1 = m_scenes[AppState::MapSelect].addEntity("Map1");
 		map1->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-		map1->cPosition = make_shared<CPosition>(Vector2f(317, 390));
+		map1->cPosition = make_shared<CPosition>(Vector2f(408, 436));
 		map1->cSet->sprite.setScale(1.0f, 1.0f);
 		map1->cInput = make_shared<CInput>([this]()
 			{
 				m_mapindex = 0;
+				clearFile("map1.txt");
+				fileForSave = "map1.txt";
 				m_state = AppState::Map1;
 				game_state = AppState::GamePlay;
 			},
@@ -1433,11 +1473,13 @@ void Game::initUIFlow()
 
 		auto map2 = m_scenes[AppState::MapSelect].addEntity("Map2");
 		map2->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-		map2->cPosition = make_shared<CPosition>(Vector2f(25, 337));
-		map2->cSet->sprite.setScale(1.125f, 1.125f);
+		map2->cPosition = make_shared<CPosition>(Vector2f(118, 383));
+		map2->cSet->sprite.setScale(1.2f, 1.2f);
 		map2->cInput = make_shared<CInput>([this]()
 			{
 				m_mapindex = 1;
+				clearFile("map2.txt");
+				fileForSave = "map2.txt";
 				m_state = AppState::Map2;
 				game_state = AppState::GamePlay;
 			},
@@ -1453,11 +1495,13 @@ void Game::initUIFlow()
 
 		auto map3 = m_scenes[AppState::MapSelect].addEntity("Map3");
 		map3->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-		map3->cPosition = make_shared<CPosition>(Vector2f(1297, 390));
+		map3->cPosition = make_shared<CPosition>(Vector2f(1388, 436));
 		map3->cSet->sprite.setScale(1.0f, 1.0f);
 		map3->cInput = make_shared<CInput>([this]()
 			{
 				m_mapindex = 2;
+				clearFile("map3.txt");
+				fileForSave = "map3.txt";
 				m_state = AppState::Map3;
 				game_state = AppState::GamePlay;
 			},
@@ -1473,11 +1517,13 @@ void Game::initUIFlow()
 
 		auto map4 = m_scenes[AppState::MapSelect].addEntity("Map4");
 		map4->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-		map4->cPosition = make_shared<CPosition>(Vector2f(1557, 337));
-		map4->cSet->sprite.setScale(1.125f, 1.125f);
+		map4->cPosition = make_shared<CPosition>(Vector2f(1648, 383));
+		map4->cSet->sprite.setScale(1.25f, 1.25f);
 		map4->cInput = make_shared<CInput>([this]()
 			{
 				m_mapindex = 3;
+				clearFile("map4.txt");
+				fileForSave = "map4.txt";
 				m_state = AppState::Map4;
 				game_state = AppState::GamePlay;
 			},

@@ -107,12 +107,13 @@ class Game
 	map<int, map<int, WaveConfig>> m_waveConfigs;                                           // m_waveConfigs[map index][wave] = { type1, type2, type3 };
 
 	SpawnStage m_spawnStage = SpawnStage::None;
-	float m_spawnTimer = 5.f;
+	float m_spawnTimer = 3.f;
 
-	float m_spawnDelay = 5.f; 
+	float m_spawnDelay = 3.f; 
 	float m_spawningTimer = 0.f;
 	float m_spawningDelay = 0.8f;
 	float m_waveDisplayDuration = 2.0f;
+	float dt = 0;
 
 	int m_spawnedType1 = 0;
 	int m_spawnedType2 = 0;
@@ -191,9 +192,11 @@ class Game
 
 	void sSaveGame();
 	void sLoadGame();
+	bool isFileEmpty(const string& filename);
 	string fileForSave = ""; // File name corresponding to the playing map 
-	std::mutex  saveMutex;  // Protect shared data
+	mutex saveMutex;  // Protect shared data
 	ofstream writePlayer;
+
 public:
 	Game(const string& config);
 	void run();
@@ -206,7 +209,7 @@ public:
 	void queueSave();  // Save game in a separate thread
 	void startWriting(const string& filename);
 	void stopWriting();
-	sf::Vector2f getWindowSize() const;
+	Vector2f getWindowSize() const;
 	bool isOutOfBounds(const Entity& entity, float margin = 50.0f);
 };
 

@@ -49,7 +49,7 @@ void Game::sSpawnWave(float& deltaTime)
 	if (m_spawnStage == SpawnStage::None && m_finishWave)
 	{
 		m_spawnStage = SpawnStage::Type1;
-		m_spawnTimer = 5.f;
+		m_spawnTimer = 3.f;
 
 		m_spawnedType1 = 0;
 		m_spawnedType2 = 0;
@@ -107,6 +107,8 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 		{
 			if (m_spawningTimer < m_spawningDelay) return false;
 
+			cout << "spawning type 1" << endl;
+
 			if (!e->isActive())
 			{
 				m_spawningTimer = 0;
@@ -115,6 +117,7 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				e->cHealth->hp = e->cHealth->hp * multiplies[m_mapindex];
 				e->cMovement->speed = e->cMovement->speed * multiplies[m_mapindex];
 				e->active(true);
+
 				m_spawnedType1++;
 				break;
 			}
@@ -131,6 +134,8 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 		{
 			if (m_spawningTimer < m_spawningDelay + 0.5f) return false;
 
+			cout << "spawning type 2" << endl;
+
 			if (!e->isActive())
 			{
 				m_spawningTimer = 0;
@@ -139,6 +144,7 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				e->cHealth->hp = e->cHealth->hp * multiplies[m_mapindex];
 				e->cMovement->speed = e->cMovement->speed * multiplies[m_mapindex];
 				e->active(true);
+
 				m_spawnedType2++;
 				break;
 			}
@@ -163,6 +169,7 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				e->cHealth->hp = e->cHealth->hp * multiplies[m_mapindex];
 				e->cMovement->speed = e->cMovement->speed * multiplies[m_mapindex];
 				e->active(true);
+
 				m_spawnedType3++;
 				break;
 			}

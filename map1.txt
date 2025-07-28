@@ -1,0 +1,40 @@
+# Current wave index: 
+0
+
+# Remaining health: 
+3 4 5 6 7 
+
+# Money: 
+1000
+
+# Spawning timer: 
+5.87839 0.441298
+
+# Spanwed enemies: 
+4 0 0
+
+# Spawning stage
+Type1
+
+# Enemies position
+1165 1351.06 0 1165 1415.4 0 1165 1479.46 0 1165 1544.7 0 
+
+@
+
+@
+
+# Tower position
+@
+
+@
+
+@
+
+@
+
+@
+
+@
+
+# Base in current map
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 

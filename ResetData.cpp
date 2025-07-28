@@ -1,16 +1,16 @@
-#include "Game.h"
+ï»¿#include "Game.h"
 
-// --- Reset quái, tháp và ??n khi thoát game ---
+// --- Reset quÃ¡i, thÃ¡p vÃ  ??n khi thoÃ¡t game ---
 void Game::sReset()
 {
-	// Reset quái
+	// Reset quÃ¡i
 	for (auto& enemy : m_entities.getEntities("Enemy"))
 		DeactivateEnemy(*enemy);
 
 	m_finishWave = true;
 	m_spawnStage = SpawnStage::None;
 
-	// Reset tháp
+	// Reset thÃ¡p
 	for (auto& tower : m_entities.getEntities("Tower"))
 		DeactivateTower(*tower);
 
@@ -24,23 +24,28 @@ void Game::sReset()
 			base->active(true);
 	}
 
-	// Reset máu
+	// Reset mÃ¡u
 	for (auto& heart : m_scenes[AppState::GamePlay].getEntities("Heart"))
 	{
 		if (!heart->isActive())
 			heart->active(true);
 	}
 
-	// Reset tien
-	m_coin = 0;
+	// Reset tien (default: 1000)
+	m_coin = 1000;
 
 	// Reset wave
 	m_currentWave = -1;
 
-	// Reset wave
+	// Reset text
 	m_showWaveText = false;
 	m_finishWave = false;
 	m_paused = false;
+
+	// Reset sá»‘ lÆ°á»£ng quÃ¡i Ä‘Ã£ spawn
+	m_spawnedType1 = 0;
+	m_spawnedType2 = 0;
+	m_spawnedType3 = 0;
 }
 
 // --- Reset d? li?u ---
@@ -53,7 +58,7 @@ void Game::DeactivateEnemy(Entity& enemy)
 
 	enemy.active(false);
 
-	// Reset máu
+	// Reset mÃ¡u
 	if (!enemy.cHealth)
 	{
 		if (enemy.tag() == "EnemyType1")
@@ -89,7 +94,7 @@ void Game::DeactivateEnemy(Entity& enemy)
 		enemy.cMovement->currentPathindex = 0;
 	}
 
-	// Reset v? trí
+	// Reset v? trÃ­
 	if (enemy.cPosition)
 	{
 		enemy.cPosition->position = Vector2f(-100, -100);
