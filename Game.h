@@ -192,8 +192,9 @@ class Game
 
 	void sSaveGame();
 	void sLoadGame();
+	bool isFileEmpty(const string& filename);
 	string fileForSave = ""; // File name corresponding to the playing map 
-	std::mutex saveMutex;  // Protect shared data
+	mutex saveMutex;  // Protect shared data
 	ofstream writePlayer;
 
 public:
@@ -208,7 +209,7 @@ public:
 	void queueSave();  // Save game in a separate thread
 	void startWriting(const string& filename);
 	void stopWriting();
-	sf::Vector2f getWindowSize() const;
+	Vector2f getWindowSize() const;
 	bool isOutOfBounds(const Entity& entity, float margin = 50.0f);
 };
 
