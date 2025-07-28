@@ -426,14 +426,6 @@ void Game::sUserInput()
 				}
 			}
 		}
-
-		if (event.type == Event::KeyPressed)
-		{
-			if (event.key.code == Keyboard::P) // or Escape
-			{
-				m_paused = !m_paused;
-			}
-		}
 	}
 
 	// --- Hover Detection
