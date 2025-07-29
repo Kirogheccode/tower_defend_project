@@ -216,5 +216,6 @@ public:
 	void stopWriting();
 	Vector2f getWindowSize() const;
 	bool isOutOfBounds(const Entity& entity, float margin = 50.0f);
+	bool isFileEmpty(const string& filename);
 };
 
