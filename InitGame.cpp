@@ -183,14 +183,16 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType1Config.tag >> m_towerType1Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType1Config.cost;
+			iss >> m_towerType1Config.tag >> m_towerType1Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType1Config.range >> m_towerType1Config.cooldown >> amount >> m_towerType1Config.cost;
 
 			for (int i = 0; i < amount; i++)
 			{
 				auto entity = m_entities.addEntity(m_towerType1Config.tag);
 				entity->cSet = make_shared<CSet>(m_towerType1Config.filepath, imgCount, switchTime, 0);
-				entity->cCooldown = make_shared<CCooldown>(cooldown);
-				entity->cBound = make_shared<CBound>(range);
+				entity->cCooldown = make_shared<CCooldown>(m_towerType1Config.cooldown);
+				entity->cLevel = make_shared<CLevel>(0);
+				entity->cMoney = make_shared<CMoney>(m_towerType1Config.cost);
+				entity->cBound = make_shared<CBound>(m_towerType1Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
@@ -220,14 +222,16 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType2Config.cost;;
+			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType2Config.range >> m_towerType2Config.cooldown >> amount >> m_towerType2Config.cost;;
 
 			for (int i = 0; i < amount; i++)
 			{
 				auto entity = m_entities.addEntity(m_towerType2Config.tag);
 				entity->cSet = make_shared<CSet>(m_towerType2Config.filepath, imgCount, switchTime, 0);
-				entity->cCooldown = make_shared<CCooldown>(cooldown);
-				entity->cBound = make_shared<CBound>(range);
+				entity->cCooldown = make_shared<CCooldown>(m_towerType2Config.cooldown);
+				entity->cLevel = make_shared<CLevel>(0);
+				entity->cMoney = make_shared<CMoney>(m_towerType2Config.cost);
+				entity->cBound = make_shared<CBound>(m_towerType2Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet02");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
@@ -257,14 +261,16 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType3Config.cost;;
+			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType3Config.range >> m_towerType3Config.cooldown >> amount >> m_towerType3Config.cost;;
 
 			for (int i = 0; i < amount; i++)
 			{
 				auto entity = m_entities.addEntity(m_towerType3Config.tag);
 				entity->cSet = make_shared<CSet>(m_towerType3Config.filepath, imgCount, switchTime, 0);
-				entity->cCooldown = make_shared<CCooldown>(cooldown);
-				entity->cBound = make_shared<CBound>(range);
+				entity->cCooldown = make_shared<CCooldown>(m_towerType3Config.cooldown);
+				entity->cLevel = make_shared<CLevel>(0);
+				entity->cMoney = make_shared<CMoney>(m_towerType3Config.cost);
+				entity->cBound = make_shared<CBound>(m_towerType3Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(0.5, 0.5);
@@ -295,14 +301,16 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType4Config.cost;;
+			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType4Config.range >> m_towerType4Config.cooldown >> amount >> m_towerType4Config.cost;;
 
 			for (int i = 0; i < amount; i++)
 			{
 				auto entity = m_entities.addEntity(m_towerType4Config.tag);
 				entity->cSet = make_shared<CSet>(m_towerType4Config.filepath, imgCount, switchTime, 0);
-				entity->cCooldown = make_shared<CCooldown>(cooldown);
-				entity->cBound = make_shared<CBound>(range);
+				entity->cCooldown = make_shared<CCooldown>(m_towerType4Config.cooldown);
+				entity->cLevel = make_shared<CLevel>(0);
+				entity->cMoney = make_shared<CMoney>(m_towerType4Config.cost);
+				entity->cBound = make_shared<CBound>(m_towerType4Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
@@ -332,14 +340,16 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType5Config.tag >> m_towerType5Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType5Config.cost;
+			iss >> m_towerType5Config.tag >> m_towerType5Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType5Config.range >> m_towerType5Config.cooldown >> amount >> m_towerType5Config.cost;
 
 			for (int i = 0; i < amount; i++)
 			{
 				auto entity = m_entities.addEntity(m_towerType5Config.tag);
 				entity->cSet = make_shared<CSet>(m_towerType5Config.filepath, imgCount, switchTime, 0);
-				entity->cCooldown = make_shared<CCooldown>(cooldown);
-				entity->cBound = make_shared<CBound>(range);
+				entity->cCooldown = make_shared<CCooldown>(m_towerType5Config.cooldown);
+				entity->cLevel = make_shared<CLevel>(0);
+				entity->cMoney = make_shared<CMoney>(m_towerType5Config.cost);
+				entity->cBound = make_shared<CBound>(m_towerType5Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(1.45, 1.45);
@@ -370,14 +380,16 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> range >> cooldown >> amount >> m_towerType6Config.cost;;
+			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType6Config.range >> m_towerType6Config.cooldown >> amount >> m_towerType6Config.cost;;
 
 			for (int i = 0; i < amount; i++)
 			{
 				auto entity = m_entities.addEntity(m_towerType6Config.tag);
 				entity->cSet = make_shared<CSet>(m_towerType6Config.filepath, imgCount, switchTime, 0);
-				entity->cCooldown = make_shared<CCooldown>(cooldown);
-				entity->cBound = make_shared<CBound>(range);
+				entity->cCooldown = make_shared<CCooldown>(m_towerType6Config.cooldown);
+				entity->cLevel = make_shared<CLevel>(0);
+				entity->cMoney = make_shared<CMoney>(m_towerType6Config.cost);
+				entity->cBound = make_shared<CBound>(m_towerType6Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet02");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(0.5, 0.5);
@@ -544,6 +556,102 @@ void Game::loadFontText()
 	m_inputText.setFillColor(Color::Yellow);
 	m_inputText.setPosition(500, 300);
 
+	// -- Hiển thị thông tin tháp
+	auto Rect = m_scenes[AppState::GamePlay].addEntity("rectangle");
+	Rect->cBound = make_shared<CBound>(FloatRect{ 10, 320, 265, 220 }); 
+
+	auto towerName = m_scenes[AppState::GamePlay].addEntity("towerName");
+	towerName->cText = make_shared<CText>("");
+	towerName->cText->text.setFont(m_font);
+	towerName->cText->text.setPosition(Vector2f(20, 330));
+	towerName->cText->text.setCharacterSize(40);
+	towerName->cText->text.setFillColor(sf::Color::Magenta);
+
+	auto towerLevel = m_scenes[AppState::GamePlay].addEntity("towerLevel");
+	towerLevel->cText = make_shared<CText>("");
+	towerLevel->cText->text.setFont(m_font);
+	towerLevel->cText->text.setPosition(Vector2f(170, 330));
+	towerLevel->cText->text.setCharacterSize(20);
+	towerLevel->cText->text.setFillColor(sf::Color::Yellow);
+
+	auto towerDamage = m_scenes[AppState::GamePlay].addEntity("towerDamage");
+	towerDamage->cText = make_shared<CText>("");
+	towerDamage->cText->text.setFont(m_font);
+	towerDamage->cText->text.setPosition(Vector2f(20, 380));
+	towerDamage->cText->text.setCharacterSize(20);
+	towerDamage->cText->text.setFillColor(sf::Color::White);
+
+	auto towerCooldown = m_scenes[AppState::GamePlay].addEntity("towerCooldown");
+	towerCooldown->cText = make_shared<CText>("");
+	towerCooldown->cText->text.setFont(m_font);
+	towerCooldown->cText->text.setPosition(Vector2f(20, 410));
+	towerCooldown->cText->text.setCharacterSize(20);
+	towerCooldown->cText->text.setFillColor(sf::Color::White);
+
+	auto towerRange = m_scenes[AppState::GamePlay].addEntity("towerRange");
+	towerRange->cText = make_shared<CText>("");
+	towerRange->cText->text.setFont(m_font);
+	towerRange->cText->text.setPosition(Vector2f(20, 440));
+	towerRange->cText->text.setCharacterSize(20);
+	towerRange->cText->text.setFillColor(sf::Color::White);
+
+	auto sellButton = m_scenes[AppState::GamePlay].addEntity("sellButton");
+	sellButton->cText = make_shared<CText>("");
+	sellButton->cText->text.setFont(m_font);
+	sellButton->cText->text.setPosition(Vector2f(20, 480));
+	sellButton->cText->text.setCharacterSize(20);
+	sellButton->cText->text.setFillColor(sf::Color::Red);
+	sellButton->cInput = make_shared<CInput>(
+		[this]() {
+			m_clickedTower = true;
+		},
+		[sellButton]() {
+			sellButton->cText->text.setStyle(Text::Bold);
+		},
+		[sellButton]() {
+			sellButton->cText->text.setStyle(Text::Regular);
+		}
+	);
+
+	auto upgradeButton = m_scenes[AppState::GamePlay].addEntity("upgradeButton");
+	upgradeButton->cText = make_shared<CText>("");
+	upgradeButton->cText->text.setFont(m_font);
+	upgradeButton->cText->text.setPosition(Vector2f(150, 480));
+	upgradeButton->cText->text.setCharacterSize(20);
+	upgradeButton->cText->text.setFillColor(sf::Color::Green);
+	upgradeButton->cInput = make_shared<CInput>(
+		[this]() {
+			m_clickedTower = true;
+		},
+		[upgradeButton]() {
+			upgradeButton->cText->text.setStyle(Text::Bold);
+		},
+		[upgradeButton]() {
+			upgradeButton->cText->text.setStyle(Text::Regular);
+		}
+	);
+
+	// --- Thông số nâng cấp tiếp theo của tháp
+	auto towerDamageNext = m_scenes[AppState::GamePlay].addEntity("towerDamageNext");
+	towerDamageNext->cText = make_shared<CText>("");
+	towerDamageNext->cText->text.setFont(m_font);
+	towerDamageNext->cText->text.setPosition(Vector2f(170, 380));
+	towerDamageNext->cText->text.setCharacterSize(20);
+	towerDamageNext->cText->text.setFillColor(sf::Color::Green);
+
+	auto towerCooldownNext = m_scenes[AppState::GamePlay].addEntity("towerCooldownNext");
+	towerCooldownNext->cText = make_shared<CText>("");
+	towerCooldownNext->cText->text.setFont(m_font);
+	towerCooldownNext->cText->text.setPosition(Vector2f(170, 410)); 
+	towerCooldownNext->cText->text.setCharacterSize(20);
+	towerCooldownNext->cText->text.setFillColor(sf::Color::Green);
+
+	auto towerRangeNext = m_scenes[AppState::GamePlay].addEntity("towerRangeNext");
+	towerRangeNext->cText = make_shared<CText>("");
+	towerRangeNext->cText->text.setFont(m_font);
+	towerRangeNext->cText->text.setPosition(Vector2f(170, 440));
+	towerRangeNext->cText->text.setCharacterSize(20);
+	towerRangeNext->cText->text.setFillColor(sf::Color::Green);
 
 	// -- Hiển thị độ khó cho từng map
 	auto easyText = m_scenes[AppState::MapSelect].addEntity("easyText");
@@ -573,7 +681,6 @@ void Game::loadFontText()
 	extremeText->cText->text.setPosition(Vector2f(1650, 345));
 	extremeText->cText->text.setCharacterSize(40);
 	extremeText->cText->text.setFillColor(sf::Color::Black);
-
 
 	// -- Hiển thị giá tiền cho từng tháp
 	auto Tower1Cost = m_scenes[AppState::TowerSelect].addEntity("Tower1Cost");
@@ -617,7 +724,6 @@ void Game::loadFontText()
 	Tower6Cost->cText->text.setPosition(Vector2f(1850, 410));
 	Tower6Cost->cText->text.setCharacterSize(20);
 	Tower6Cost->cText->text.setFillColor(sf::Color::Yellow);
-
 
 	// --- Khởi tạo WAVE text
 	auto waveEntity = m_scenes[AppState::GamePlay].addEntity("WaveText");
@@ -1012,23 +1118,6 @@ void Game::initUIFlow()
 			[entity]()
 			{
 
-				entity->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[entity]()
-			{
-				entity->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
-		entity = m_scenes[AppState::TowerSelect].addEntity("Spatula");
-		entity->cSet = make_shared<CSet>("IMGS/GUI/Spatula.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1795, 480));
-		entity->cInput = make_shared<CInput>([this]()
-			{
-				m_selected = "DeleteTower";
-				m_state2 = AppState::TowerPlace;
-			},
-			[entity]()
-			{
 				entity->cSet->sprite.setColor(Color(200, 200, 200));
 			},
 			[entity]()

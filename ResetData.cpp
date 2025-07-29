@@ -12,11 +12,15 @@ void Game::sReset()
 
 	// Reset tháp
 	for (auto& tower : m_entities.getEntities("Tower"))
+	{
 		DeactivateTower(*tower);
+	}
 
-	// Reset ??n
+	// Reset đạn
 	for (auto& bullet : m_entities.getEntities("Bullet"))
+	{
 		DeactivateBullet(*bullet);
+	}
 
 	for (auto& base : m_scenes[prev_state].getEntities("Base"))
 	{
@@ -47,6 +51,7 @@ void Game::sReset()
 	m_spawnedType2 = 0;
 	m_spawnedType3 = 0;
 }
+
 
 // --- Reset d? li?u ---
 void Game::DeactivateEnemy(Entity& enemy)
@@ -105,6 +110,9 @@ void Game::DeactivateTower(Entity& tower)
 {
 	if (!tower.isActive())
 		return;
+
+	// Reset dữ liệu
+	tower.cLevel->levelindex = 0;
 
 	// Deactivate the tower
 	tower.active(false);

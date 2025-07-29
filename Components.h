@@ -29,6 +29,17 @@ struct CHealth
 	}
 };
 
+struct CLevel
+{
+	int levelindex = 0;
+
+	CLevel() {};
+	CLevel(const int& h)
+	{
+		levelindex = h;
+	}
+};
+
 struct CMovement
 {
 	float speed = 0.f;
@@ -174,7 +185,7 @@ struct CBound
 	{
 		circle.setRadius(radius);
 		circle.setOrigin(radius, radius);
-		circle.setFillColor(sf::Color(255, 255, 255, 20));
+		circle.setFillColor(sf::Color(0, 0, 0, 40));
 		circle.setOutlineThickness(0.f);
 
 	}
