@@ -37,7 +37,6 @@ void Game::sCheckWaveFinished()
 	if (allInactive)
 	{
 		m_currentWave++;
-		cout << "Spawning wave right now" << endl;
 		m_finishWave = true;
 		m_showWaveText = true;
 		m_waveClock.restart();
@@ -107,15 +106,13 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 		{
 			if (m_spawningTimer < m_spawningDelay) return false;
 
-			cout << "spawning type 1" << endl;
-
 			if (!e->isActive())
 			{
 				m_spawningTimer = 0;
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
-				e->cHealth->hp = e->cHealth->hp * multiplies[m_mapindex];
-				e->cMovement->speed = e->cMovement->speed * multiplies[m_mapindex];
+				e->cHealth->hp = e->cHealth->hp * m_multiplies[m_mapindex];
+				e->cMovement->speed = e->cMovement->speed * m_multiplies[m_mapindex];
 				e->active(true);
 
 				m_spawnedType1++;
@@ -134,15 +131,13 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 		{
 			if (m_spawningTimer < m_spawningDelay + 0.5f) return false;
 
-			cout << "spawning type 2" << endl;
-
 			if (!e->isActive())
 			{
 				m_spawningTimer = 0;
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
-				e->cHealth->hp = e->cHealth->hp * multiplies[m_mapindex];
-				e->cMovement->speed = e->cMovement->speed * multiplies[m_mapindex];
+				e->cHealth->hp = e->cHealth->hp * m_multiplies[m_mapindex];
+				e->cMovement->speed = e->cMovement->speed * m_multiplies[m_mapindex];
 				e->active(true);
 
 				m_spawnedType2++;
@@ -166,8 +161,8 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 				m_spawningTimer = 0;
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
-				e->cHealth->hp = e->cHealth->hp * multiplies[m_mapindex];
-				e->cMovement->speed = e->cMovement->speed * multiplies[m_mapindex];
+				e->cHealth->hp = e->cHealth->hp * m_multiplies[m_mapindex];
+				e->cMovement->speed = e->cMovement->speed * m_multiplies[m_mapindex];
 				e->active(true);
 
 				m_spawnedType3++;

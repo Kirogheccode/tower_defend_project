@@ -50,7 +50,8 @@ enum class AppState {
 	GamePlay,       // Các chức năng trong game
 	TowerSelect,	// Chọn tháp 
 	TowerPlace,		// Đặt tháp
-	PauseMenu       // Pop-up tạm dừng
+	PauseMenu,      // Pop-up tạm dừng
+	TowerInfo	
 };
 
 struct WindowConfig { unsigned int width; unsigned int height; int fps; int fullscreen; };
@@ -61,12 +62,12 @@ struct EnemyType1Config { string tag; string filepath; int hp; float speed; int 
 struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 
-struct TowerType1Config { string tag; string filepath; int cost; };
-struct TowerType2Config { string tag; string filepath; int cost; };
-struct TowerType3Config { string tag; string filepath; int cost; };
-struct TowerType4Config { string tag; string filepath; int cost; };
-struct TowerType5Config { string tag; string filepath; int cost; };
-struct TowerType6Config { string tag; string filepath; int cost; };
+struct TowerType1Config { string tag; string filepath; int cost; float cooldown; float range; };
+struct TowerType2Config { string tag; string filepath; int cost; float cooldown; float range; };
+struct TowerType3Config { string tag; string filepath; int cost; float cooldown; float range; };
+struct TowerType4Config { string tag; string filepath; int cost; float cooldown; float range; };
+struct TowerType5Config { string tag; string filepath; int cost; float cooldown; float range; };
+struct TowerType6Config { string tag; string filepath; int cost; float cooldown; float range; };
 
 struct WaveConfig {
 	int enemyType1Count = 0;
@@ -111,7 +112,7 @@ class Game
 
 	float m_spawnDelay = 3.f; 
 	float m_spawningTimer = 0.f;
-	float m_spawningDelay = 0.8f;
+	float m_spawningDelay = 0.6f;
 	float m_waveDisplayDuration = 2.0f;
 	float dt = 0;
 
@@ -130,14 +131,14 @@ class Game
 	EntityManager m_entities;
 	string m_selected = "";
 
-	float m_refund = 0.7;
+	float m_refund = 0.6;
 	int m_currentWave = -1;                                                                 // Keep track of current wave
 	int m_mapindex = 0;                                                                     // Default testing - Need to add option to choose map_index
 	int m_coin = 1000;
 	int m_currentFrame = 0;
 	int m_cost = 0;
 
-	vector<float> multiplies = { 1, 1.2, 1.4, 1.6 };
+	vector<float> m_multiplies = { 1, 1.2, 1.4, 1.6 };
 
 	Font m_font;
 	Text m_inputLabel;
@@ -165,7 +166,8 @@ class Game
 	bool m_setting = false;
 	bool m_paused = false;
 	bool m_running = true;
-	bool m_finishWave = false;                                                              
+	bool m_finishWave = false;                    
+	bool m_clickedTower = false;
 
 	void init(const string& config);
 	void loadHeartCoin();
@@ -192,7 +194,10 @@ class Game
 
 	void sSaveGame();
 	void sLoadGame();
-	bool isFileEmpty(const string& filename);
+
+	void RemoveTower(Entity&);
+	void UpgradeTower(Entity&);
+
 	string fileForSave = ""; // File name corresponding to the playing map 
 	mutex saveMutex;  // Protect shared data
 	ofstream writePlayer;

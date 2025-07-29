@@ -26,6 +26,7 @@ public:
 
 	shared_ptr<CHealth> cHealth;
 	shared_ptr<CMovement> cMovement;
+	shared_ptr<CLevel> cLevel;
 	shared_ptr<CSet> cSet;
 	shared_ptr<CPosition> cPosition;
 	shared_ptr<CInput> cInput;

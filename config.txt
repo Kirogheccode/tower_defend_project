@@ -12,8 +12,8 @@ TowerDefense 1920 1080 60 1
 # <FrameWidth>:    Width of a single animation frame
 # <FrameHeight>:   Height of a single animation frame
 # -------------------------------------------------------------------------------------------------------
-Bullet01 IMGS/Bullets/Bullet01.png 40 650 250 1.4
-Bullet02 IMGS/Bullets/PoisonBullet.png 500 600 250 1.2
+Bullet01 IMGS/Bullets/Bullet01.png 40 800 250 1.4
+Bullet02 IMGS/Bullets/PoisonBullet.png 500 800 250 1.2
 
 
 # -------------------------------------------------------------------------------------------------------
@@ -43,12 +43,12 @@ EnemyType3 IMGS/Enemies/Worm.png 1000 30 200 80 1.4 100
 # <Amount>:            Maximum number of this tower type available or allowed
 # <Cost>:			   Cost to place the tower
 # -------------------------------------------------------------------------------------------------------
-Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 800 2.5 50 200
-Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 800 3.0 50 350
-Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 800 3.0 50 600
-Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 800 3.0 50 400
-Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 800 3.0 50 300 
-Tower6 IMGS/TowerImages/Tower6.png 14 1 0.2 800 3.0 50 800
+Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 400 2.5 50 200
+Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 3.0 50 350
+Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 3.0 50 600
+Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 3.0 50 400
+Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 3.0 50 300 
+Tower6 IMGS/TowerImages/Tower6.png 14 1 0.2 400 3.0 50 800
 
 
 # -------------------------------------------------------------------------------------------------------
