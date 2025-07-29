@@ -318,7 +318,7 @@ void Game::sUserInput()
 						tower->cInput->onClick();
 					}
 
-					Vector2f basePos = tower->cPosition->position + Vector2f(100.f, -80.f);
+					Vector2f basePos = tower->cPosition->position + Vector2f(60.f, -80.f);
 
 					for (auto& e : m_scenes[AppState::GamePlay].getEntities())
 					{
@@ -904,7 +904,7 @@ void Game::sSaveGame()
 			
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cLevel->levelindex << " ";
 			isExist = true;
 		}
 	}
@@ -919,7 +919,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cLevel->levelindex << " ";
 			isExist = true;
 		}
 	}
@@ -934,7 +934,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cLevel->levelindex << " "; 
 			isExist = true;
 		}
 	}
@@ -949,7 +949,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cLevel->levelindex << " ";
 			isExist = true;
 		}
 	}
@@ -964,7 +964,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cLevel->levelindex << " ";
 			isExist = true;
 		}
 	}
@@ -979,7 +979,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cLevel->levelindex << " ";
 			isExist = true;
 		}
 	}
@@ -1136,8 +1136,6 @@ void Game::sLoadGame()
 
 			if (!(iss >> x >> y >> index)) break;
 
-			
-
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
@@ -1163,8 +1161,6 @@ void Game::sLoadGame()
 			int index;
 
 			if (!(iss >> x >> y >> index)) break;
-
-			
 
 			Vector2f pos(x, y);
 
@@ -1192,8 +1188,6 @@ void Game::sLoadGame()
 
 			if (!(iss >> x >> y >> index)) break;
 
-			
-
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
@@ -1212,19 +1206,19 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		if (line[0] == '@') break;
 		istringstream iss(line);
-		cout << line << endl;
+		// cout << line << endl;
 		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
 		{
 			float x, y;
+			int index;
 
-			if (!(iss >> x >> y)) break;
-
-			
+			if (!(iss >> x >> y >> index)) break;
 
 			Vector2f pos(x, y);
 
 			tower->cPosition = make_shared<CPosition>(pos);
 			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->cLevel = make_shared<CLevel>(index);
 			tower->active(true);
 		}
 
@@ -1237,18 +1231,19 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		if (line[0] == '@') break;
 		istringstream iss(line);
-		cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType2Config.tag))
+		// cout << line << endl;
+		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
 		{
 			float x, y;
+			int index;
 
-			if (!(iss >> x >> y)) break;
-
+			if (!(iss >> x >> y >> index)) break;
 
 			Vector2f pos(x, y);
 
 			tower->cPosition = make_shared<CPosition>(pos);
 			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->cLevel = make_shared<CLevel>(index);
 			tower->active(true);
 		}
 
@@ -1261,18 +1256,19 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		if (line[0] == '@') break;
 		istringstream iss(line);
-		cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType3Config.tag))
+		// cout << line << endl;
+		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
 		{
 			float x, y;
+			int index;
 
-			if (!(iss >> x >> y)) break;
-
+			if (!(iss >> x >> y >> index)) break;
 
 			Vector2f pos(x, y);
 
 			tower->cPosition = make_shared<CPosition>(pos);
 			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->cLevel = make_shared<CLevel>(index);
 			tower->active(true);
 		}
 
@@ -1285,18 +1281,19 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		if (line[0] == '@') break;
 		istringstream iss(line);
-		cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType4Config.tag))
+		// cout << line << endl;
+		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
 		{
 			float x, y;
+			int index;
 
-			if (!(iss >> x >> y)) break;
-
+			if (!(iss >> x >> y >> index)) break;
 
 			Vector2f pos(x, y);
 
 			tower->cPosition = make_shared<CPosition>(pos);
 			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->cLevel = make_shared<CLevel>(index);
 			tower->active(true);
 		}
 
@@ -1309,18 +1306,19 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		if (line[0] == '@') break;
 		istringstream iss(line);
-		cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType5Config.tag))
+		// cout << line << endl;
+		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
 		{
 			float x, y;
+			int index;
 
-			if (!(iss >> x >> y)) break;
-
+			if (!(iss >> x >> y >> index)) break;
 
 			Vector2f pos(x, y);
 
 			tower->cPosition = make_shared<CPosition>(pos);
 			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->cLevel = make_shared<CLevel>(index);
 			tower->active(true);
 		}
 
@@ -1333,18 +1331,19 @@ void Game::sLoadGame()
 		if (line.empty() || line[0] == '#') continue;
 		if (line[0] == '@') break;
 		istringstream iss(line);
-		cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType6Config.tag))
+		// cout << line << endl;
+		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
 		{
 			float x, y;
+			int index;
 
-			if (!(iss >> x >> y)) break;
-
+			if (!(iss >> x >> y >> index)) break;
 
 			Vector2f pos(x, y);
 
 			tower->cPosition = make_shared<CPosition>(pos);
 			tower->cSet->sprite.setPosition(tower->cPosition->position);
+			tower->cLevel = make_shared<CLevel>(index);
 			tower->active(true);
 		}
 
@@ -1370,6 +1369,8 @@ void Game::sLoadGame()
 	cout << "Game loaded successfully" << endl;
 	readPlayer.close();
 }
+
+
 // --- Kiem tra file co rong khong ---
 bool Game::isFileEmpty(const string& filename) {
 	ifstream file(filename, ios::ate | ios::binary); // mở và nhảy đến cuối file
@@ -1378,6 +1379,7 @@ bool Game::isFileEmpty(const string& filename) {
 
 	return file.tellg() == 0; // nếu vị trí con trỏ là 0 => file rỗng
 }
+
 
 // --- Nâng cấp và xoá tháp ---
 void Game::RemoveTower(Entity& tower)
@@ -1410,7 +1412,7 @@ void Game::UpgradeTower(Entity& tower)
 
 		tower.cLevel->levelindex++;
 
-		Vector2f basePos = tower.cPosition->position + Vector2f(100.f, -80.f);
+		Vector2f basePos = tower.cPosition->position + Vector2f(60.f, -80.f);
 
 		for (auto& e : m_scenes[AppState::GamePlay].getEntities())
 		{
