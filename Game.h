@@ -14,6 +14,7 @@
 #include <mutex>
 #include <ctime>
 #include <cstdio>
+#include <random>
 
 #include "Entity.h"
 #include "EntityManager.h"
@@ -51,7 +52,9 @@ enum class AppState {
 	TowerSelect,	// Chọn tháp 
 	TowerPlace,		// Đặt tháp
 	PauseMenu,      // Pop-up tạm dừng
-	TowerInfo	
+	TowerInfo,
+	Victory,
+	Defeated
 };
 
 struct WindowConfig { unsigned int width; unsigned int height; int fps; int fullscreen; };
