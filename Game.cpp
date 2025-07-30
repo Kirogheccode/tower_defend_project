@@ -1232,7 +1232,7 @@ void Game::sLoadGame()
 		if (line[0] == '@') break;
 		istringstream iss(line);
 		// cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
+		for (auto& tower : m_entities.getEntities(m_towerType2Config.tag))
 		{
 			float x, y;
 			int index;
@@ -1257,7 +1257,7 @@ void Game::sLoadGame()
 		if (line[0] == '@') break;
 		istringstream iss(line);
 		// cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
+		for (auto& tower : m_entities.getEntities(m_towerType3Config.tag))
 		{
 			float x, y;
 			int index;
@@ -1282,7 +1282,7 @@ void Game::sLoadGame()
 		if (line[0] == '@') break;
 		istringstream iss(line);
 		// cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
+		for (auto& tower : m_entities.getEntities(m_towerType4Config.tag))
 		{
 			float x, y;
 			int index;
@@ -1307,7 +1307,7 @@ void Game::sLoadGame()
 		if (line[0] == '@') break;
 		istringstream iss(line);
 		// cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
+		for (auto& tower : m_entities.getEntities(m_towerType5Config.tag))
 		{
 			float x, y;
 			int index;
@@ -1332,7 +1332,7 @@ void Game::sLoadGame()
 		if (line[0] == '@') break;
 		istringstream iss(line);
 		// cout << line << endl;
-		for (auto& tower : m_entities.getEntities(m_towerType1Config.tag))
+		for (auto& tower : m_entities.getEntities(m_towerType6Config.tag))
 		{
 			float x, y;
 			int index;
