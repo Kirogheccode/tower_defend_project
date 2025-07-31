@@ -1,5 +1,39 @@
 ﻿#include "Game.h"
 
+// --- Hàm hỗ trợ logic ---
+bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer)
+{
+	// Check all four corners of the inner rectangle
+	return outer.contains(inner.left, inner.top) &&
+		outer.contains(inner.left + inner.width, inner.top) &&
+		outer.contains(inner.left, inner.top + inner.height) &&
+		outer.contains(inner.left + inner.width, inner.top + inner.height);
+}
+
+FloatRect scaleRect(const FloatRect& rect, float scale = 1.0f)
+{
+	float newWidth = rect.width * scale;
+	float newHeight = rect.height * scale;
+	float centerX = rect.left + rect.width / 2.f;
+	float centerY = rect.top + rect.height / 2.f;
+	return FloatRect(
+		centerX - newWidth / 2.f,
+		centerY - newHeight / 2.f,
+		newWidth,
+		newHeight
+	);
+}
+
+bool collisionDetection(const Entity& entity1, const Entity& entity2)
+{
+	if (!entity1.cSet || !entity2.cSet) return false;
+	FloatRect bounds1 = scaleRect(entity1.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
+	FloatRect bounds2 = scaleRect(entity2.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
+
+	return isContained(bounds1, bounds2);
+}
+
+
 // --- Hệ thống ---
 void Game::sRender(float& deltaTime)
 {
@@ -187,23 +221,6 @@ void Game::sRender(float& deltaTime)
 			if (e->cBound)
 				m_window.draw(e->cBound->rectangle);
 		}
-	}
-
-	// Hiển thị nhập tên
-	if (m_typingName)
-	{
-		Vector2f panelCenter(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
-
-		m_inputLabel.setPosition(panelCenter.x, panelCenter.y - 50);
-		m_inputText.setPosition(panelCenter.x, panelCenter.y);
-
-		FloatRect textRect = m_inputLabel.getLocalBounds();
-		m_inputLabel.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-		textRect = m_inputText.getLocalBounds();
-		m_inputText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-
-		m_window.draw(m_inputLabel);
-		m_window.draw(m_inputText);
 	}
 
 	m_window.display();
@@ -442,31 +459,6 @@ void Game::sUserInput()
 						updateAudioSettings();
 					}
 				}
-			}
-		}
-
-		// --- Input cho NameInput (gõ tên)
-		if(m_typingName)
-		{
-			if (event.type == Event::TextEntered)
-			{
-				if (event.text.unicode == '\b' && !m_playerName.empty())
-				{
-					m_playerName.pop_back();
-				}
-				else if (event.text.unicode == '\r' || event.text.unicode == '\n')
-				{
-					if (!m_playerName.empty())
-					{
-						m_state = AppState::MapSelect;
-						m_typingName = false;
-					}
-				}
-				else if (event.text.unicode >= 32 && event.text.unicode < 128)
-				{
-					m_playerName += static_cast<char>(event.text.unicode);
-				}
-				m_inputText.setString(m_playerName);
 			}
 		}
 
@@ -888,8 +880,6 @@ void Game::sSaveGame()
 {
 
 	cout << "sSaveGame called\n";
-
-	cout << "Saving game for player: " << m_playerName << "\n";
 
 	cout << fileForSave << "\n";
 
@@ -1916,42 +1906,8 @@ void Game::UpgradeTower(Entity& tower)
 }
 
 
-// --- Hàm hỗ trợ logic ---
-bool isContained(const sf::FloatRect& inner, const sf::FloatRect& outer) 
-{
-	// Check all four corners of the inner rectangle
-	return outer.contains(inner.left, inner.top) &&
-		outer.contains(inner.left + inner.width, inner.top) &&
-		outer.contains(inner.left, inner.top + inner.height) &&
-		outer.contains(inner.left + inner.width, inner.top + inner.height);
-}
-
-FloatRect scaleRect(const FloatRect& rect, float scale = 1.0f) 
-{
-	float newWidth = rect.width * scale;
-	float newHeight = rect.height * scale;
-	float centerX = rect.left + rect.width / 2.f;
-	float centerY = rect.top + rect.height / 2.f;
-	return FloatRect(
-		centerX - newWidth / 2.f,
-		centerY - newHeight / 2.f,
-		newWidth,
-		newHeight
-	);
-}
-
-
 // --- Tiện ích ----
-bool collisionDetection(const Entity& entity1, const Entity& entity2)
-{
-	if (!entity1.cSet || !entity2.cSet) return false;
-	FloatRect bounds1 = scaleRect(entity1.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
-	FloatRect bounds2 = scaleRect(entity2.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
-
-	return isContained(bounds1, bounds2);
-}
-
-sf::Vector2f Game::getWindowSize() const {
+Vector2f Game::getWindowSize() const {
 	sf::Vector2u size = m_window.getSize();
 	return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
 }

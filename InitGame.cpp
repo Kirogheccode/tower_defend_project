@@ -104,9 +104,7 @@ void Game::init(const string& path)
 				entity->cMoney = make_shared<CMoney>(m_enemyType1Config.money);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType1Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType1Config.Sscale);
-
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.2f, 1.2f);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 			}
 
@@ -133,7 +131,6 @@ void Game::init(const string& path)
 				entity->cMoney = make_shared<CMoney>(m_enemyType2Config.money);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType2Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType2Config.Sscale);
-
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_enemyType2Config.Sscale, m_enemyType2Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
@@ -162,7 +159,6 @@ void Game::init(const string& path)
 				entity->cMoney = make_shared<CMoney>(m_enemyType3Config.money);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType3Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType3Config.Sscale);
-
 				auto& sprite = entity->cSet->sprite;
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
 			}
@@ -194,7 +190,8 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType1Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setScale(1.4f, 1.4f);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
 					[entity]() {
@@ -233,7 +230,8 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType2Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet02");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setScale(1.4f, 1.4f);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
 					[entity]() {
@@ -272,8 +270,8 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType3Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(0.5, 0.5);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 60.0);
+				sprite.setScale(0.7, 0.7);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
 					[entity]() {
@@ -312,6 +310,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType4Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
+				sprite.setScale(1.7f, 1.7f);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
@@ -351,7 +350,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType5Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.45, 1.45);
+				sprite.setScale(2, 2);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
@@ -391,8 +390,8 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType6Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet02");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(0.5, 0.5);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 80.0);
+				sprite.setScale(0.7, 0.7);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
 					[entity]() {
@@ -768,17 +767,6 @@ void Game::loadFontText()
 	}
 
 	updateAudioSettings();
-
-	m_inputLabel.setFont(m_font);
-	m_inputLabel.setCharacterSize(24);
-	m_inputLabel.setFillColor(Color::White);
-	m_inputLabel.setString("Enter your name");
-	m_inputLabel.setPosition(500, 250);
-
-	m_inputText.setFont(m_font);
-	m_inputText.setCharacterSize(24);
-	m_inputText.setFillColor(Color::Yellow);
-	m_inputText.setPosition(500, 300);
 }
 
 void Game::initUIFlow()
@@ -954,7 +942,6 @@ void Game::initUIFlow()
 					m_state = AppState::PlayMenu;
 					game_state = AppState::Dummy;
 					m_state1 = AppState::Dummy;
-					m_playerName.clear();
 					sReset();
 				},
 				[entity]()
@@ -1258,10 +1245,8 @@ void Game::initUIFlow()
 		newGameButton->cPosition = make_shared<CPosition>(Vector2f(212, 628));
 		newGameButton->cInput = make_shared<CInput>([this]()
 			{
-				m_playerName.clear();
 				cout << "File content cleared successfully\n";
-				m_inputText.setString("|");
-				m_typingName = true;
+				m_state = AppState::MapSelect;
 			},
 			[newGameButton]()
 			{
@@ -1278,7 +1263,6 @@ void Game::initUIFlow()
 		loadGame->cPosition = make_shared<CPosition>(Vector2f(1515, 628));
 		loadGame->cInput = make_shared<CInput>([this]()
 			{
-				m_typingName = false;
 				m_state = AppState::LoadGame;
 			},
 			[loadGame]()
@@ -1297,7 +1281,6 @@ void Game::initUIFlow()
 		back->cInput = make_shared<CInput>([this]()
 			{
 				m_state = AppState::MainMenu;
-				m_typingName = false;
 			},
 			[back]()
 			{

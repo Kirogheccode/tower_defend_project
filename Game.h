@@ -141,11 +141,8 @@ class Game {
 	list<Sound> m_activeSounds;
 
 
-	// --- Font và nhập tên người chơi ---
+	// --- Font ---
 	Font m_font;
-	Text m_inputLabel, m_inputText;
-	string m_playerName;
-	bool m_typingName = false;
 
 
 	// --- Cờ trạng thái ---
