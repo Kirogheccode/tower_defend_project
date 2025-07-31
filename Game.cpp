@@ -234,12 +234,12 @@ void Game::sCollision()
 				playSfx(m_collide, bullet->cPosition->position);
 				if (cur->cHealth)
 				{
-					cout << "[DEBUG] Enenimes health: " << cur->cHealth->hp << endl;
+					// cout << "[DEBUG] Enenimes health: " << cur->cHealth->hp << endl;
 
 					cur->cHealth->hp -= bullet->cDamage->damage;
 
-					cout << "[DEBUG] Damage bullet: " << bullet->cDamage->damage << endl;
-					cout << "[DEBUG] Enenimes health after being shoot: " << cur->cHealth->hp << endl;
+					// cout << "[DEBUG] Damage bullet: " << bullet->cDamage->damage << endl;
+					// cout << "[DEBUG] Enenimes health after being shoot: " << cur->cHealth->hp << endl;
 
 					if (cur->cHealth->hp <= 0)
 					{

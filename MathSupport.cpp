@@ -7,6 +7,7 @@ float MathSupport::Length(const sf::Vector2f& vec)
     return fLength;
 }
 
+
 // --- Chuẩn hóa vector (lấy vector đơn vị) ---
 sf::Vector2f MathSupport::Normalize(const sf::Vector2f& vec)
 {
@@ -15,11 +16,13 @@ sf::Vector2f MathSupport::Normalize(const sf::Vector2f& vec)
     return vUnit;
 }
 
+
 // --- Lấy vị trí của sprite ---
 sf::Vector2f MathSupport::GetPosition(sf::Sprite sprite)
 {
     return sprite.getPosition();
 }
+
 
 // --- Lấy tọa độ ô lưới dựa theo vị trí sprite ---
 sf::Vector2i MathSupport::BoardCoordinates(sf::Sprite sprite)
