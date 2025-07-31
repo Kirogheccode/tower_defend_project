@@ -22,7 +22,7 @@ void Game::init(const string& path)
 	ifstream readconfig(path);
 	string line;
 
-	// --- Đọc config window
+	// ================================================================================ CẤU HÌNH CỬA SỔ ================================================================================
 	{
 		while (getline(readconfig, line)) {
 			if (line.empty() || line[0] == '#') continue;
@@ -36,9 +36,8 @@ void Game::init(const string& path)
 		}
 	}
 
-	// ===================== ĐẠN =====================
-
-	// --- Đọc config đạn loại 1
+	// ================================================================================ ĐẠN ================================================================================
+	// --- Loại 1
 	{
 		while (getline(readconfig, line)) {
 			if (line.empty() || line[0] == '#') continue;
@@ -61,7 +60,7 @@ void Game::init(const string& path)
 		}
 	}
 
-	// --- Đọc config đạn loại 2
+	// --- Loại 2
 	{
 		while (getline(readconfig, line)) {
 			if (line.empty() || line[0] == '#') continue;
@@ -84,9 +83,9 @@ void Game::init(const string& path)
 		}
 	}
 
-	// ===================== QUÁI =====================
+	// ================================================================================ QUÁI ================================================================================
 
-	// --- Đọc config quái loại 1
+	// --- Loại 1
 	{
 		while (getline(readconfig, line)) {
 			if (line.empty() || line[0] == '#') continue;
@@ -105,9 +104,7 @@ void Game::init(const string& path)
 				entity->cMoney = make_shared<CMoney>(m_enemyType1Config.money);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType1Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType1Config.Sscale);
-
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.2f, 1.2f);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 			}
 
@@ -115,7 +112,7 @@ void Game::init(const string& path)
 		}
 	}
 
-	// --- Đọc config quái loại 2
+	// --- Loại 2
 	{
 		while (getline(readconfig, line)) {
 			if (line.empty() || line[0] == '#') continue;
@@ -134,7 +131,6 @@ void Game::init(const string& path)
 				entity->cMoney = make_shared<CMoney>(m_enemyType2Config.money);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType2Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType2Config.Sscale);
-
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_enemyType2Config.Sscale, m_enemyType2Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
@@ -144,7 +140,7 @@ void Game::init(const string& path)
 		}
 	}
 
-	// --- Đọc config quái loại 3
+	// --- Loại 3
 	{
 		while (getline(readconfig, line)) {
 			if (line.empty() || line[0] == '#') continue;
@@ -163,7 +159,6 @@ void Game::init(const string& path)
 				entity->cMoney = make_shared<CMoney>(m_enemyType3Config.money);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType3Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType3Config.Sscale);
-
 				auto& sprite = entity->cSet->sprite;
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
 			}
@@ -172,9 +167,9 @@ void Game::init(const string& path)
 		}
 	}
 
-	// ===================== THÁP =====================
+	// ================================================================================ THÁP ================================================================================
 
-	// --- Đọc config tháp loại 1
+	// --- Loại 1
 	{
 		while (getline(readconfig, line))
 		{
@@ -195,7 +190,8 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType1Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setScale(1.4f, 1.4f);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
 					[entity]() {
@@ -213,7 +209,7 @@ void Game::init(const string& path)
 		}
 	}
 
-	// --- Đọc config tháp loại 2
+	// --- Loại 2
 	{
 		while (getline(readconfig, line))
 		{
@@ -234,7 +230,8 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType2Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet02");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setScale(1.4f, 1.4f);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
 					[entity]() {
@@ -252,7 +249,7 @@ void Game::init(const string& path)
 		}
 	}
 
-	// --- Đọc config tháp loại 3
+	// --- Loại 3
 	{
 		while (getline(readconfig, line))
 		{
@@ -273,8 +270,8 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType3Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(0.5, 0.5);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 60.0);
+				sprite.setScale(0.7, 0.7);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
 					[entity]() {
@@ -292,7 +289,7 @@ void Game::init(const string& path)
 		}
 	}
 
-	// --- Đọc config tháp loại 4
+	// --- Loại 4
 	{
 		while (getline(readconfig, line))
 		{
@@ -313,6 +310,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType4Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
+				sprite.setScale(1.7f, 1.7f);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
@@ -331,7 +329,7 @@ void Game::init(const string& path)
 		}
 	}
 
-	// --- Đọc config tháp loại 5
+	// --- Loại 5
 	{
 		while (getline(readconfig, line))
 		{
@@ -352,7 +350,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType5Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet01");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.45, 1.45);
+				sprite.setScale(2, 2);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
@@ -371,7 +369,7 @@ void Game::init(const string& path)
 		}
 	}
 
-	// --- Đọc config tháp loại 6
+	// --- Loại 6
 	{
 		while (getline(readconfig, line))
 		{
@@ -392,8 +390,8 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType6Config.range);
 				entity->cWeapon = make_shared<CWeapon>("Bullet02");
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(0.5, 0.5);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 80.0);
+				sprite.setScale(0.7, 0.7);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
 					[entity]() {
@@ -411,9 +409,7 @@ void Game::init(const string& path)
 		}
 	}
 
-	// ===================== WAVE =====================
-
-	// --- Đọc config từng wave
+	// ================================================================================ WAVE ================================================================================
 	{
 		while (getline(readconfig, line)) {
 			if (line.empty() || line[0] == '#') continue;
@@ -431,13 +427,17 @@ void Game::init(const string& path)
 	readconfig.close();
 
 	initUIFlow();
-	loadHeartCoin();
 	loadFontText();
+	loadHeartCoinText();
+	loadGuideText();
+	loadTowerUpgradeInfo();
+	loadTowerPirce();
+	loadWaveText();
 }
 
 
 // --- Load những thứ cần thiết cho game ---
-void Game::loadHeartCoin()
+void Game::loadHeartCoinText()
 {
 	// --- Khởi tạo máu người chơi
 	for (int i = 0; i < 5; i++)
@@ -450,7 +450,6 @@ void Game::loadHeartCoin()
 		sprite.setScale(entity->cBoundaryScale->scale, entity->cBoundaryScale->scale);
 		entity->cPosition = make_shared<CPosition>(Vector2f(i * sprite.getGlobalBounds().width, 0));
 	}
-
 
 	// --- Khởi tạo tiền
 	auto coin = m_scenes[AppState::GamePlay].addEntity("Coin");
@@ -466,6 +465,230 @@ void Game::loadHeartCoin()
 	moneyText->cText->text.setCharacterSize(50);
 	moneyText->cText->text.setFillColor(Color::Yellow);
 	moneyText->cText->text.setPosition(Vector2f(sprite.getGlobalBounds().width, sprite.getGlobalBounds().height));
+}
+
+void Game::loadTowerUpgradeInfo()
+{
+	// --- Thông số nâng cấp 
+	auto Rect = m_scenes[AppState::GamePlay].addEntity("rectangle");
+	Rect->cBound = make_shared<CBound>(FloatRect{ 10, 320, 265, 220 });
+
+	auto towerName = m_scenes[AppState::GamePlay].addEntity("towerName");
+	towerName->cText = make_shared<CText>("");
+	towerName->cText->text.setFont(m_font);
+	towerName->cText->text.setPosition(Vector2f(20, 330));
+	towerName->cText->text.setCharacterSize(40);
+	towerName->cText->text.setFillColor(sf::Color::Magenta);
+
+	auto towerLevel = m_scenes[AppState::GamePlay].addEntity("towerLevel");
+	towerLevel->cText = make_shared<CText>("");
+	towerLevel->cText->text.setFont(m_font);
+	towerLevel->cText->text.setPosition(Vector2f(170, 330));
+	towerLevel->cText->text.setCharacterSize(20);
+	towerLevel->cText->text.setFillColor(sf::Color::Yellow);
+
+	auto towerDamage = m_scenes[AppState::GamePlay].addEntity("towerDamage");
+	towerDamage->cText = make_shared<CText>("");
+	towerDamage->cText->text.setFont(m_font);
+	towerDamage->cText->text.setPosition(Vector2f(20, 380));
+	towerDamage->cText->text.setCharacterSize(20);
+	towerDamage->cText->text.setFillColor(sf::Color::White);
+
+	auto towerCooldown = m_scenes[AppState::GamePlay].addEntity("towerCooldown");
+	towerCooldown->cText = make_shared<CText>("");
+	towerCooldown->cText->text.setFont(m_font);
+	towerCooldown->cText->text.setPosition(Vector2f(20, 410));
+	towerCooldown->cText->text.setCharacterSize(20);
+	towerCooldown->cText->text.setFillColor(sf::Color::White);
+
+	auto towerRange = m_scenes[AppState::GamePlay].addEntity("towerRange");
+	towerRange->cText = make_shared<CText>("");
+	towerRange->cText->text.setFont(m_font);
+	towerRange->cText->text.setPosition(Vector2f(20, 440));
+	towerRange->cText->text.setCharacterSize(20);
+	towerRange->cText->text.setFillColor(sf::Color::White);
+
+	auto sellButton = m_scenes[AppState::GamePlay].addEntity("sellButton");
+	sellButton->cText = make_shared<CText>("");
+	sellButton->cText->text.setFont(m_font);
+	sellButton->cText->text.setPosition(Vector2f(20, 480));
+	sellButton->cText->text.setCharacterSize(20);
+	sellButton->cText->text.setFillColor(sf::Color::Red);
+	sellButton->cInput = make_shared<CInput>(
+		[this]() {
+			m_clickedTower = true;
+		},
+		[sellButton]() {
+			sellButton->cText->text.setStyle(Text::Bold);
+		},
+		[sellButton]() {
+			sellButton->cText->text.setStyle(Text::Regular);
+		}
+	);
+
+	auto upgradeButton = m_scenes[AppState::GamePlay].addEntity("upgradeButton");
+	upgradeButton->cText = make_shared<CText>("");
+	upgradeButton->cText->text.setFont(m_font);
+	upgradeButton->cText->text.setPosition(Vector2f(150, 480));
+	upgradeButton->cText->text.setCharacterSize(20);
+	upgradeButton->cText->text.setFillColor(sf::Color::Green);
+	upgradeButton->cInput = make_shared<CInput>(
+		[this]() {
+			m_clickedTower = true;
+		},
+		[upgradeButton]() {
+			upgradeButton->cText->text.setStyle(Text::Bold);
+		},
+		[upgradeButton]() {
+			upgradeButton->cText->text.setStyle(Text::Regular);
+		}
+	);
+
+	// --- Thông số nâng cấp tiếp theo
+	auto towerDamageNext = m_scenes[AppState::GamePlay].addEntity("towerDamageNext");
+	towerDamageNext->cText = make_shared<CText>("");
+	towerDamageNext->cText->text.setFont(m_font);
+	towerDamageNext->cText->text.setPosition(Vector2f(170, 380));
+	towerDamageNext->cText->text.setCharacterSize(20);
+	towerDamageNext->cText->text.setFillColor(sf::Color::Green);
+
+	auto towerCooldownNext = m_scenes[AppState::GamePlay].addEntity("towerCooldownNext");
+	towerCooldownNext->cText = make_shared<CText>("");
+	towerCooldownNext->cText->text.setFont(m_font);
+	towerCooldownNext->cText->text.setPosition(Vector2f(170, 410));
+	towerCooldownNext->cText->text.setCharacterSize(20);
+	towerCooldownNext->cText->text.setFillColor(sf::Color::Green);
+
+	auto towerRangeNext = m_scenes[AppState::GamePlay].addEntity("towerRangeNext");
+	towerRangeNext->cText = make_shared<CText>("");
+	towerRangeNext->cText->text.setFont(m_font);
+	towerRangeNext->cText->text.setPosition(Vector2f(170, 440));
+	towerRangeNext->cText->text.setCharacterSize(20);
+	towerRangeNext->cText->text.setFillColor(sf::Color::Green);
+}
+
+void Game::loadGuideText()
+{
+	// --- Hiển thị độ khó cho từng map
+	auto easyText = m_scenes[AppState::MapSelect].addEntity("easyText");
+	easyText->cText = make_shared<CText>("EASY");
+	easyText->cText->text.setFont(m_font);
+	easyText->cText->text.setPosition(Vector2f(430, 395));
+	easyText->cText->text.setCharacterSize(40);
+	easyText->cText->text.setFillColor(Color::Green);
+
+	auto mediumText = m_scenes[AppState::MapSelect].addEntity("mediumText");
+	mediumText->cText = make_shared<CText>("MEDIUM");
+	mediumText->cText->text.setFont(m_font);
+	mediumText->cText->text.setPosition(Vector2f(130, 343));
+	mediumText->cText->text.setCharacterSize(40);
+	mediumText->cText->text.setFillColor(Color::Yellow);
+
+	auto hardText = m_scenes[AppState::MapSelect].addEntity("hardText");
+	hardText->cText = make_shared<CText>("HARD");
+	hardText->cText->text.setFont(m_font);
+	hardText->cText->text.setPosition(Vector2f(1410, 395));
+	hardText->cText->text.setCharacterSize(40);
+	hardText->cText->text.setFillColor(Color::Red);
+
+	auto extremeText = m_scenes[AppState::MapSelect].addEntity("extremeText");
+	extremeText->cText = make_shared<CText>("EXTREME");
+	extremeText->cText->text.setFont(m_font);
+	extremeText->cText->text.setPosition(Vector2f(1650, 343));
+	extremeText->cText->text.setCharacterSize(40);
+	extremeText->cText->text.setFillColor(Color::Black);
+
+	// --- Hiển thị chỉ dẫn
+	auto chooseMap = m_scenes[AppState::PlayMenu].addEntity("chooseMap");
+	chooseMap->cText = make_shared<CText>("CHOOSE MAP");
+	chooseMap->cText->text.setFont(m_font);
+	chooseMap->cText->text.setPosition(Vector2f(215, 550));
+	chooseMap->cText->text.setCharacterSize(40);
+	chooseMap->cText->text.setFillColor(Color::White);
+
+	auto loadGame = m_scenes[AppState::PlayMenu].addEntity("loadGame");
+	loadGame->cText = make_shared<CText>("LOAD GAME");
+	loadGame->cText->text.setFont(m_font);
+	loadGame->cText->text.setPosition(Vector2f(1510, 565));
+	loadGame->cText->text.setCharacterSize(40);
+	loadGame->cText->text.setFillColor(Color::White);
+}
+
+void Game::loadTowerPirce()
+{
+	// --- Hiển thị giá mua cho từng tháp khi chọn tháp
+	auto Tower1Cost = m_scenes[AppState::TowerSelect].addEntity("Tower1Cost");
+	Tower1Cost->cText = make_shared<CText>(m_towerType1Config.cost);
+	Tower1Cost->cText->text.setFont(m_font);
+	Tower1Cost->cText->text.setPosition(Vector2f(1760, 110));
+	Tower1Cost->cText->text.setCharacterSize(20);
+	Tower1Cost->cText->text.setFillColor(Color::Yellow);
+
+	auto Tower2Cost = m_scenes[AppState::TowerSelect].addEntity("Tower2Cost");
+	Tower2Cost->cText = make_shared<CText>(m_towerType2Config.cost);
+	Tower2Cost->cText->text.setFont(m_font);
+	Tower2Cost->cText->text.setPosition(Vector2f(1850, 110));
+	Tower2Cost->cText->text.setCharacterSize(20);
+	Tower2Cost->cText->text.setFillColor(Color::Yellow);
+
+	auto Tower3Cost = m_scenes[AppState::TowerSelect].addEntity("Tower3Cost");
+	Tower3Cost->cText = make_shared<CText>(m_towerType3Config.cost);
+	Tower3Cost->cText->text.setFont(m_font);
+	Tower3Cost->cText->text.setPosition(Vector2f(1760, 260));
+	Tower3Cost->cText->text.setCharacterSize(20);
+	Tower3Cost->cText->text.setFillColor(Color::Yellow);
+
+	auto Tower4Cost = m_scenes[AppState::TowerSelect].addEntity("Tower4Cost");
+	Tower4Cost->cText = make_shared<CText>(m_towerType4Config.cost);
+	Tower4Cost->cText->text.setFont(m_font);
+	Tower4Cost->cText->text.setPosition(Vector2f(1850, 260));
+	Tower4Cost->cText->text.setCharacterSize(20);
+	Tower4Cost->cText->text.setFillColor(Color::Yellow);
+
+	auto Tower5Cost = m_scenes[AppState::TowerSelect].addEntity("Tower5Cost");
+	Tower5Cost->cText = make_shared<CText>(m_towerType5Config.cost);
+	Tower5Cost->cText->text.setFont(m_font);
+	Tower5Cost->cText->text.setPosition(Vector2f(1760, 410));
+	Tower5Cost->cText->text.setCharacterSize(20);
+	Tower5Cost->cText->text.setFillColor(Color::Yellow);
+
+	auto Tower6Cost = m_scenes[AppState::TowerSelect].addEntity("Tower6Cost");
+	Tower6Cost->cText = make_shared<CText>(m_towerType6Config.cost);
+	Tower6Cost->cText->text.setFont(m_font);
+	Tower6Cost->cText->text.setPosition(Vector2f(1850, 410));
+	Tower6Cost->cText->text.setCharacterSize(20);
+	Tower6Cost->cText->text.setFillColor(Color::Yellow);
+}
+
+void Game::loadWaveText()
+{
+	// --- Khởi tạo WAVE text
+	auto waveEntity = m_scenes[AppState::GamePlay].addEntity("WaveText");
+	waveEntity->cText = make_shared<CText>("WAVE ");
+	waveEntity->cText->text.setFont(m_font);
+	waveEntity->cText->text.setCharacterSize(80);
+	waveEntity->cText->text.setFillColor(Color::Black);
+
+	sf::FloatRect waveBounds = waveEntity->cText->text.getLocalBounds();
+	waveEntity->cText->text.setOrigin(waveBounds.left + waveBounds.width / 2.f,
+		waveBounds.top + waveBounds.height / 2.f);
+
+	auto numEntity = m_scenes[AppState::GamePlay].addEntity("WaveNumber");
+	numEntity->cText = make_shared<CText>(to_string(m_currentWave));
+	numEntity->cText->text.setFont(m_font);
+	numEntity->cText->text.setCharacterSize(80);
+	numEntity->cText->text.setFillColor(Color::Red);
+
+	FloatRect numBounds = numEntity->cText->text.getLocalBounds();
+	numEntity->cText->text.setOrigin(numBounds.left + numBounds.width / 2.f,
+		numBounds.top + numBounds.height / 2.f);
+
+	float totalWidth = waveBounds.width + 20 + numBounds.width;
+	float centerX = m_windowConfig.width / 2.f;
+	float centerY = m_windowConfig.height / 2.f;
+
+	waveEntity->cText->text.setPosition(centerX - totalWidth / 2.f + waveBounds.width / 2.f, centerY);
+	numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY - 10);
 }
 
 void Game::loadFontText()
@@ -544,219 +767,11 @@ void Game::loadFontText()
 	}
 
 	updateAudioSettings();
-
-	m_inputLabel.setFont(m_font);
-	m_inputLabel.setCharacterSize(24);
-	m_inputLabel.setFillColor(Color::White);
-	m_inputLabel.setString("Enter your name");
-	m_inputLabel.setPosition(500, 250);
-
-	m_inputText.setFont(m_font);
-	m_inputText.setCharacterSize(24);
-	m_inputText.setFillColor(Color::Yellow);
-	m_inputText.setPosition(500, 300);
-
-	// -- Hiển thị thông tin tháp
-	auto Rect = m_scenes[AppState::GamePlay].addEntity("rectangle");
-	Rect->cBound = make_shared<CBound>(FloatRect{ 10, 320, 265, 220 }); 
-
-	auto towerName = m_scenes[AppState::GamePlay].addEntity("towerName");
-	towerName->cText = make_shared<CText>("");
-	towerName->cText->text.setFont(m_font);
-	towerName->cText->text.setPosition(Vector2f(20, 330));
-	towerName->cText->text.setCharacterSize(40);
-	towerName->cText->text.setFillColor(sf::Color::Magenta);
-
-	auto towerLevel = m_scenes[AppState::GamePlay].addEntity("towerLevel");
-	towerLevel->cText = make_shared<CText>("");
-	towerLevel->cText->text.setFont(m_font);
-	towerLevel->cText->text.setPosition(Vector2f(170, 330));
-	towerLevel->cText->text.setCharacterSize(20);
-	towerLevel->cText->text.setFillColor(sf::Color::Yellow);
-
-	auto towerDamage = m_scenes[AppState::GamePlay].addEntity("towerDamage");
-	towerDamage->cText = make_shared<CText>("");
-	towerDamage->cText->text.setFont(m_font);
-	towerDamage->cText->text.setPosition(Vector2f(20, 380));
-	towerDamage->cText->text.setCharacterSize(20);
-	towerDamage->cText->text.setFillColor(sf::Color::White);
-
-	auto towerCooldown = m_scenes[AppState::GamePlay].addEntity("towerCooldown");
-	towerCooldown->cText = make_shared<CText>("");
-	towerCooldown->cText->text.setFont(m_font);
-	towerCooldown->cText->text.setPosition(Vector2f(20, 410));
-	towerCooldown->cText->text.setCharacterSize(20);
-	towerCooldown->cText->text.setFillColor(sf::Color::White);
-
-	auto towerRange = m_scenes[AppState::GamePlay].addEntity("towerRange");
-	towerRange->cText = make_shared<CText>("");
-	towerRange->cText->text.setFont(m_font);
-	towerRange->cText->text.setPosition(Vector2f(20, 440));
-	towerRange->cText->text.setCharacterSize(20);
-	towerRange->cText->text.setFillColor(sf::Color::White);
-
-	auto sellButton = m_scenes[AppState::GamePlay].addEntity("sellButton");
-	sellButton->cText = make_shared<CText>("");
-	sellButton->cText->text.setFont(m_font);
-	sellButton->cText->text.setPosition(Vector2f(20, 480));
-	sellButton->cText->text.setCharacterSize(20);
-	sellButton->cText->text.setFillColor(sf::Color::Red);
-	sellButton->cInput = make_shared<CInput>(
-		[this]() {
-			m_clickedTower = true;
-		},
-		[sellButton]() {
-			sellButton->cText->text.setStyle(Text::Bold);
-		},
-		[sellButton]() {
-			sellButton->cText->text.setStyle(Text::Regular);
-		}
-	);
-
-	auto upgradeButton = m_scenes[AppState::GamePlay].addEntity("upgradeButton");
-	upgradeButton->cText = make_shared<CText>("");
-	upgradeButton->cText->text.setFont(m_font);
-	upgradeButton->cText->text.setPosition(Vector2f(150, 480));
-	upgradeButton->cText->text.setCharacterSize(20);
-	upgradeButton->cText->text.setFillColor(sf::Color::Green);
-	upgradeButton->cInput = make_shared<CInput>(
-		[this]() {
-			m_clickedTower = true;
-		},
-		[upgradeButton]() {
-			upgradeButton->cText->text.setStyle(Text::Bold);
-		},
-		[upgradeButton]() {
-			upgradeButton->cText->text.setStyle(Text::Regular);
-		}
-	);
-
-	// --- Thông số nâng cấp tiếp theo của tháp
-	auto towerDamageNext = m_scenes[AppState::GamePlay].addEntity("towerDamageNext");
-	towerDamageNext->cText = make_shared<CText>("");
-	towerDamageNext->cText->text.setFont(m_font);
-	towerDamageNext->cText->text.setPosition(Vector2f(170, 380));
-	towerDamageNext->cText->text.setCharacterSize(20);
-	towerDamageNext->cText->text.setFillColor(sf::Color::Green);
-
-	auto towerCooldownNext = m_scenes[AppState::GamePlay].addEntity("towerCooldownNext");
-	towerCooldownNext->cText = make_shared<CText>("");
-	towerCooldownNext->cText->text.setFont(m_font);
-	towerCooldownNext->cText->text.setPosition(Vector2f(170, 410)); 
-	towerCooldownNext->cText->text.setCharacterSize(20);
-	towerCooldownNext->cText->text.setFillColor(sf::Color::Green);
-
-	auto towerRangeNext = m_scenes[AppState::GamePlay].addEntity("towerRangeNext");
-	towerRangeNext->cText = make_shared<CText>("");
-	towerRangeNext->cText->text.setFont(m_font);
-	towerRangeNext->cText->text.setPosition(Vector2f(170, 440));
-	towerRangeNext->cText->text.setCharacterSize(20);
-	towerRangeNext->cText->text.setFillColor(sf::Color::Green);
-
-	// -- Hiển thị độ khó cho từng map
-	auto easyText = m_scenes[AppState::MapSelect].addEntity("easyText");
-	easyText->cText = make_shared<CText>("EASY");
-	easyText->cText->text.setFont(m_font);
-	easyText->cText->text.setPosition(Vector2f(430, 395));
-	easyText->cText->text.setCharacterSize(40);
-	easyText->cText->text.setFillColor(Color::Green);
-
-	auto mediumText = m_scenes[AppState::MapSelect].addEntity("mediumText");
-	mediumText->cText = make_shared<CText>("MEDIUM");
-	mediumText->cText->text.setFont(m_font);
-	mediumText->cText->text.setPosition(Vector2f(130, 343));
-	mediumText->cText->text.setCharacterSize(40);
-	mediumText->cText->text.setFillColor(Color::Yellow);
-
-	auto hardText = m_scenes[AppState::MapSelect].addEntity("hardText");
-	hardText->cText = make_shared<CText>("HARD");
-	hardText->cText->text.setFont(m_font);
-	hardText->cText->text.setPosition(Vector2f(1410, 395));
-	hardText->cText->text.setCharacterSize(40);
-	hardText->cText->text.setFillColor(Color::Red);
-
-	auto extremeText = m_scenes[AppState::MapSelect].addEntity("extremeText");
-	extremeText->cText = make_shared<CText>("EXTREME");
-	extremeText->cText->text.setFont(m_font);
-	extremeText->cText->text.setPosition(Vector2f(1650, 343));
-	extremeText->cText->text.setCharacterSize(40);
-	extremeText->cText->text.setFillColor(Color::Black);
-
-	// -- Hiển thị giá tiền cho từng tháp
-	auto Tower1Cost = m_scenes[AppState::TowerSelect].addEntity("Tower1Cost");
-	Tower1Cost->cText = make_shared<CText>(m_towerType1Config.cost);
-	Tower1Cost->cText->text.setFont(m_font);
-	Tower1Cost->cText->text.setPosition(Vector2f(1760, 110));
-	Tower1Cost->cText->text.setCharacterSize(20);
-	Tower1Cost->cText->text.setFillColor(Color::Yellow);
-
-	auto Tower2Cost = m_scenes[AppState::TowerSelect].addEntity("Tower2Cost");
-	Tower2Cost->cText = make_shared<CText>(m_towerType2Config.cost);
-	Tower2Cost->cText->text.setFont(m_font);
-	Tower2Cost->cText->text.setPosition(Vector2f(1850, 110));
-	Tower2Cost->cText->text.setCharacterSize(20);
-	Tower2Cost->cText->text.setFillColor(Color::Yellow);
-
-	auto Tower3Cost = m_scenes[AppState::TowerSelect].addEntity("Tower3Cost");
-	Tower3Cost->cText = make_shared<CText>(m_towerType3Config.cost);
-	Tower3Cost->cText->text.setFont(m_font);
-	Tower3Cost->cText->text.setPosition(Vector2f(1760, 260));
-	Tower3Cost->cText->text.setCharacterSize(20);
-	Tower3Cost->cText->text.setFillColor(Color::Yellow);
-
-	auto Tower4Cost = m_scenes[AppState::TowerSelect].addEntity("Tower4Cost");
-	Tower4Cost->cText = make_shared<CText>(m_towerType4Config.cost);
-	Tower4Cost->cText->text.setFont(m_font);
-	Tower4Cost->cText->text.setPosition(Vector2f(1850, 260));
-	Tower4Cost->cText->text.setCharacterSize(20);
-	Tower4Cost->cText->text.setFillColor(Color::Yellow);
-
-	auto Tower5Cost = m_scenes[AppState::TowerSelect].addEntity("Tower5Cost");
-	Tower5Cost->cText = make_shared<CText>(m_towerType5Config.cost);
-	Tower5Cost->cText->text.setFont(m_font);
-	Tower5Cost->cText->text.setPosition(Vector2f(1760, 410));
-	Tower5Cost->cText->text.setCharacterSize(20);
-	Tower5Cost->cText->text.setFillColor(Color::Yellow);
-
-	auto Tower6Cost = m_scenes[AppState::TowerSelect].addEntity("Tower6Cost");
-	Tower6Cost->cText = make_shared<CText>(m_towerType6Config.cost);
-	Tower6Cost->cText->text.setFont(m_font);
-	Tower6Cost->cText->text.setPosition(Vector2f(1850, 410));
-	Tower6Cost->cText->text.setCharacterSize(20);
-	Tower6Cost->cText->text.setFillColor(Color::Yellow);
-
-	// --- Khởi tạo WAVE text
-	auto waveEntity = m_scenes[AppState::GamePlay].addEntity("WaveText");
-	waveEntity->cText = make_shared<CText>("WAVE ");
-	waveEntity->cText->text.setFont(m_font);
-	waveEntity->cText->text.setCharacterSize(80);
-	waveEntity->cText->text.setFillColor(Color::Black);
-
-	sf::FloatRect waveBounds = waveEntity->cText->text.getLocalBounds();
-	waveEntity->cText->text.setOrigin(waveBounds.left + waveBounds.width / 2.f,
-		waveBounds.top + waveBounds.height / 2.f);
-
-	auto numEntity = m_scenes[AppState::GamePlay].addEntity("WaveNumber");
-	numEntity->cText = make_shared<CText>(to_string(m_currentWave));
-	numEntity->cText->text.setFont(m_font);
-	numEntity->cText->text.setCharacterSize(80);
-	numEntity->cText->text.setFillColor(Color::Red);
-
-	FloatRect numBounds = numEntity->cText->text.getLocalBounds();
-	numEntity->cText->text.setOrigin(numBounds.left + numBounds.width / 2.f,
-		numBounds.top + numBounds.height / 2.f);
-
-	float totalWidth = waveBounds.width + 20 + numBounds.width;
-	float centerX = m_windowConfig.width / 2.f;
-	float centerY = m_windowConfig.height / 2.f;
-
-	waveEntity->cText->text.setPosition(centerX - totalWidth / 2.f + waveBounds.width / 2.f, centerY);
-	numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY - 10);
 }
 
 void Game::initUIFlow()
 {
-	// -- Chọn map
+	// -- Load Map ---
 	{
 		ifstream readMapBase("MapBase.txt");
 		string line;
@@ -790,7 +805,6 @@ void Game::initUIFlow()
 			entity->active(true);
 		}
 
-
 		// Map 2
 		entity = m_scenes[AppState::Map2].addEntity("Map2");
 		entity->cSet = make_shared<CSet>("IMGS/Maps/map2.png");
@@ -814,7 +828,6 @@ void Game::initUIFlow()
 			entity->cPosition = make_shared<CPosition>(Base);
 			entity->active(true);
 		}
-
 
 		// Map 3
 		entity = m_scenes[AppState::Map3].addEntity("Map3");
@@ -929,7 +942,6 @@ void Game::initUIFlow()
 					m_state = AppState::PlayMenu;
 					game_state = AppState::Dummy;
 					m_state1 = AppState::Dummy;
-					m_playerName.clear();
 					sReset();
 				},
 				[entity]()
@@ -944,7 +956,7 @@ void Game::initUIFlow()
 		}
 
 
-		// Khởi tạo các chức năng trong game - GamePlay
+		// --- Gameplay ---
 		entity = m_scenes[AppState::GamePlay].addEntity("OptionSetting");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/Option.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
@@ -962,7 +974,6 @@ void Game::initUIFlow()
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
-
 
 		entity = m_scenes[AppState::GamePlay].addEntity("SystemSetting");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/Gear.png");
@@ -983,6 +994,35 @@ void Game::initUIFlow()
 			}
 		);
 
+		entity = m_scenes[AppState::GamePlay].addEntity("SpeedUp");
+		entity->cSet = make_shared<CSet>("IMGS/Buttons/speedup.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(20, 870));
+		entity->cSpriteScale = make_shared<CSpriteScale>(0.3);
+		entity->cSet->sprite.setScale(entity->cSpriteScale->scale, entity->cSpriteScale->scale);
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				if (m_speedup == 1)
+				{
+					m_speedup = 2;
+				}
+				else if (m_speedup == 2)
+				{
+					m_speedup = 3;
+				}
+				else if (m_speedup == 3)
+				{
+					m_speedup = 1;
+				}
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 		// Khởi tạo việc chọn và đặt tháp
 		entity = m_scenes[AppState::GamePlay].addEntity("SelectButton");
@@ -1003,6 +1043,8 @@ void Game::initUIFlow()
 			}
 		);
 
+
+		// --- Tower Select ---
 		entity = m_scenes[AppState::TowerSelect].addEntity("SelectingBar");
 		entity->cSet = make_shared<CSet>("IMGS/GUI/selectingTower.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1720, 0));
@@ -1203,10 +1245,8 @@ void Game::initUIFlow()
 		newGameButton->cPosition = make_shared<CPosition>(Vector2f(212, 628));
 		newGameButton->cInput = make_shared<CInput>([this]()
 			{
-				m_playerName.clear();
 				cout << "File content cleared successfully\n";
-				m_inputText.setString("|");
-				m_typingName = true;
+				m_state = AppState::MapSelect;
 			},
 			[newGameButton]()
 			{
@@ -1223,7 +1263,6 @@ void Game::initUIFlow()
 		loadGame->cPosition = make_shared<CPosition>(Vector2f(1515, 628));
 		loadGame->cInput = make_shared<CInput>([this]()
 			{
-				m_typingName = false;
 				m_state = AppState::LoadGame;
 			},
 			[loadGame]()
@@ -1242,7 +1281,6 @@ void Game::initUIFlow()
 		back->cInput = make_shared<CInput>([this]()
 			{
 				m_state = AppState::MainMenu;
-				m_typingName = false;
 			},
 			[back]()
 			{
