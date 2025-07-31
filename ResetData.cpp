@@ -1,6 +1,6 @@
 ﻿#include "Game.h"
 
-// --- Reset quái, tháp và ??n khi thoát game ---
+// --- Reset toàn bộ dữ liệu ---
 void Game::sReset()
 {
 	// Reset quái
@@ -53,7 +53,7 @@ void Game::sReset()
 }
 
 
-// --- Reset d? li?u ---
+// --- Reset dữ liệu đơn lẻ ---
 void Game::DeactivateEnemy(Entity& enemy)
 {
 	if (!enemy.isActive())
@@ -80,7 +80,7 @@ void Game::DeactivateEnemy(Entity& enemy)
 		}
 	}
 
-	// Reset chuy?n ??ng
+	// Reset tốc độ
 	if (enemy.cMovement)
 	{
 		if (enemy.tag() == "EnemyType1")
@@ -99,7 +99,7 @@ void Game::DeactivateEnemy(Entity& enemy)
 		enemy.cMovement->currentPathindex = 0;
 	}
 
-	// Reset v? trí
+	// Reset vị trí
 	if (enemy.cPosition)
 	{
 		enemy.cPosition->position = Vector2f(-100, -100);
@@ -111,23 +111,23 @@ void Game::DeactivateTower(Entity& tower)
 	if (!tower.isActive())
 		return;
 
-	// Reset dữ liệu
+	// Đặt lại cấp độ của tháp về cấp đầu tiên
 	tower.cLevel->levelindex = 0;
 
-	// Deactivate the tower
+	// Vô hiệu hóa tháp
 	tower.active(false);
 
-	// Reset position if needed (optional)
+	// Xóa vị trí nếu cần (tuỳ chọn)
 	if (tower.cPosition)
-		tower.cPosition = nullptr; // Off-screen or default position
+		tower.cPosition = nullptr;
 
-	// Reset target
+	// Xóa mục tiêu hiện tại
 	if (tower.cTarget)
 		tower.cTarget = nullptr;
 
-	// Reset cooldown timer
+	// Đặt lại đồng hồ bắn
 	if (tower.cCooldown)
-		tower.cCooldown->shootClock.restart(); // Or set to zero elapsed time
+		tower.cCooldown->shootClock.restart();
 }
 
 void Game::DeactivateBullet(Entity& bullet)
@@ -135,10 +135,10 @@ void Game::DeactivateBullet(Entity& bullet)
 	if (!bullet.isActive())
 		return;
 
-	// Deactivate the bullet
+	// Vô hiệu hóa viên đạn
 	bullet.active(false);
 
-	// Reset position off-screen or to a default location
+	// Đặt lại vị trí viên đạn ra ngoài màn hình (hoặc vị trí mặc định)
 	if (bullet.cPosition)
 		bullet.cPosition->position = Vector2f(-100.f, -100.f);
 }
