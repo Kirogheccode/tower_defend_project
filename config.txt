@@ -15,7 +15,7 @@ Bullet02 IMGS/Bullets/PoisonBullet.png 50 800 250 1.2
 Bullet03 IMGS/Bullets/Bullet03.png 60 750 250 1.4
 Bullet04 IMGS/Bullets/ChargeBullet.png 60 750 250 1.4
 Bullet05 IMGS/Bullets/Bullet05.png 60 750 250 2.0
-Bullet06 IMGS/Bullets/Bullet06.png 60 750 250 1.4
+Bullet06 IMGS/Bullets/Bullet06.png 60 750 225 2.6
 
 
 # -------------------------------------------------------------------------------------------------------

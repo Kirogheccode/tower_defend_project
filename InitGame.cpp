@@ -157,7 +157,7 @@ void Game::init(const string& path)
 		while (getline(readconfig, line)) {
 			if (line.empty() || line[0] == '#') continue;
 			istringstream iss(line);
-			iss >> m_bullet02Config.tag >> m_bullet06Config.filepath >> m_bullet06Config.damage >> m_bullet06Config.speed >> m_bullet06Config.Bscale >> m_bullet06Config.Sscale;
+			iss >> m_bullet06Config.tag >> m_bullet06Config.filepath >> m_bullet06Config.damage >> m_bullet06Config.speed >> m_bullet06Config.Bscale >> m_bullet06Config.Sscale;
 
 			for (int i = 0; i < 50; i++)
 			{
