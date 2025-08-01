@@ -6,13 +6,23 @@ Game::Game(const string& config)
 	init(config);
 }
 
-void clearFile(string fileName)
+void Game::clearFile(const string& fileName)
 {
 	ofstream file(fileName, ios::out | ios::trunc);
 	if (!file) {
 		cout << "Error opening file\n";
 	}
 	file.close();
+	string map_name = "Map" + to_string(m_mapindex + 1);
+	for (auto& e : m_scenes[AppState::LoadGame].getEntities())
+	{
+		if (e->tag() == map_name)
+		{
+			if(e->cText)
+			    e->cText = nullptr;
+			break;
+		}
+	}
 }
 
 
@@ -562,7 +572,95 @@ void Game::loadHeartCoinText()
 
 void Game::loadTowerUpgradeInfo()
 {
-	// --- Thông số nâng cấp 
+	// -- Khởi tạo font chữ
+	if (!m_font.loadFromFile("IMGS/Fonts/ARCADECLASSIC.ttf")) {
+		cout << "Failed to load font\n";
+	}
+	if (!m_font1.loadFromFile("IMGS/Fonts/arial.ttf")) {
+		cout << "Failed to load font\n";
+	}
+	// -- Load nhạc
+	if (!m_backgroundMusic.openFromFile("SOUNDS/MainMenuMusic.mp3")) {
+		cout << "Error: Could not load main menu music file.\n";
+	}
+	else
+	{
+		m_backgroundMusic.setLoop(true);
+	}
+
+	if (!m_mapSelect.openFromFile("SOUNDS/freedom.mp3")) {
+		cout << "Error: Could not load map select music file.\n";
+	}
+	else
+	{
+		m_mapSelect.setLoop(true);
+	}
+
+	if (!m_mapMusic[0].openFromFile("SOUNDS/ForestBattle.mp3")) {
+		cout << "Error: Could not load map 1 music file.\n";
+	}
+	else
+	{
+		m_mapMusic[0].setLoop(true);
+	}
+
+	if (!m_mapMusic[1].openFromFile("SOUNDS/DesertBattle.mp3")) {
+		cout << "Error: Could not load map 1 music file.\n";
+	}
+	else
+	{
+		m_mapMusic[1].setLoop(true);
+	}
+
+	if (!m_mapMusic[2].openFromFile("SOUNDS/LavaBattle.mp3")) {
+		cout << "Error: Could not load map 1 music file.\n";
+	}
+	else
+	{
+		m_mapMusic[2].setLoop(true);
+	}
+
+	if (!m_mapMusic[3].openFromFile("SOUNDS/FrozenBattle.mp3")) {
+		cout << "Error: Could not load map 1 music file.\n";
+	}
+	else
+	{
+		m_mapMusic[3].setLoop(true);
+	}
+
+	if (!m_clickBuffer.loadFromFile("SOUNDS/click.mp3")) {
+		cout << "Error: Could not load click sound file.\n";
+	}
+
+	if (!m_constructTower.loadFromFile("SOUNDS/Constructing.mp3"))
+	{
+		cout << "Error: Could not load construct sound file.\n";
+	}
+
+	if (!m_error.loadFromFile("SOUNDS/Error.mp3"))
+	{
+		cout << "Error: Could not load error sound file.\n";
+	}
+
+	if(!m_collide.loadFromFile("SOUNDS/HitSound.mp3"))
+	{
+		cout << "Error: Could not load collide sound file.\n";
+	}
+
+	updateAudioSettings();
+
+	m_inputLabel.setFont(m_font);
+	m_inputLabel.setCharacterSize(24);
+	m_inputLabel.setFillColor(Color::White);
+	m_inputLabel.setString("Enter your name");
+	m_inputLabel.setPosition(500, 250);
+
+	m_inputText.setFont(m_font);
+	m_inputText.setCharacterSize(24);
+	m_inputText.setFillColor(Color::Yellow);
+	m_inputText.setPosition(500, 300);
+
+	// -- Hiển thị thông tin tháp
 	auto Rect = m_scenes[AppState::GamePlay].addEntity("rectangle");
 	Rect->cBound = make_shared<CBound>(FloatRect{ 10, 320, 265, 220 });
 
@@ -1338,6 +1436,9 @@ void Game::initUIFlow()
 		newGameButton->cPosition = make_shared<CPosition>(Vector2f(212, 628));
 		newGameButton->cInput = make_shared<CInput>([this]()
 			{
+				m_playerName.clear();
+				m_inputText.setString("|");
+				m_typingName = true;
 				cout << "File content cleared successfully\n";
 				m_state = AppState::MapSelect;
 			},
@@ -1356,6 +1457,7 @@ void Game::initUIFlow()
 		loadGame->cPosition = make_shared<CPosition>(Vector2f(1515, 628));
 		loadGame->cInput = make_shared<CInput>([this]()
 			{
+				m_typingName = false;
 				m_state = AppState::LoadGame;
 			},
 			[loadGame]()
@@ -1434,6 +1536,15 @@ void Game::initUIFlow()
 				map1->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
+		if (!isFileEmpty("map1.txt"))
+		{
+			ifstream readTime1("map1.txt");
+			if (readTime1.is_open())
+			{
+				setSaveTime(map1, readTime1);
+			}
+			readTime1.close();    
+		}
 
 		auto map2 = m_scenes[AppState::LoadGame].addEntity("Map2");
 		map2->cSet = make_shared<CSet>("IMGS/Maps/map2.png");
@@ -1459,7 +1570,15 @@ void Game::initUIFlow()
 				map2->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
-
+		if (!isFileEmpty("map2.txt"))
+		{
+			ifstream readTime("map2.txt");
+			if (readTime.is_open())
+			{
+				setSaveTime(map2, readTime);
+			}
+			readTime.close();
+		}
 		auto map3 = m_scenes[AppState::LoadGame].addEntity("Map3");
 		map3->cSet = make_shared<CSet>("IMGS/Maps/map3.png");
 		map3->cPosition = make_shared<CPosition>(Vector2f(358, 651));
@@ -1484,7 +1603,15 @@ void Game::initUIFlow()
 				map3->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
-
+		if (!isFileEmpty("map3.txt"))
+		{
+			ifstream readTime("map3.txt");
+			if (readTime.is_open())
+			{
+				setSaveTime(map3, readTime);
+			}
+			readTime.close();
+		}
 		auto map4 = m_scenes[AppState::LoadGame].addEntity("Map4");
 		map4->cSet = make_shared<CSet>("IMGS/Maps/map4.png");
 		map4->cPosition = make_shared<CPosition>(Vector2f(1040, 651));
@@ -1509,6 +1636,15 @@ void Game::initUIFlow()
 				map4->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
+		if (!isFileEmpty("map4.txt"))
+		{
+			ifstream readTime("map4.txt");
+			if (readTime.is_open())
+			{
+				setSaveTime(map4, readTime);
+			}
+			readTime.close();
+		}
 	}
 
 

@@ -16,6 +16,7 @@
 #include <cstdio>
 #include <random>
 #include <functional>
+#include <iomanip>
 
 #include "Entity.h"
 #include "EntityManager.h"
@@ -130,6 +131,12 @@ class Game {
 	int m_currentFrame = 0;
 	vector<float> m_multiplies = { 1, 1.2, 1.4, 1.6 };
 
+	Font m_font;
+	Font m_font1;
+	Text m_inputLabel;
+	Text m_inputText;
+	string m_playerName;
+	bool m_typingName = false;
 
 	// --- Âm thanh ---
 	Music m_backgroundMusic;
@@ -210,6 +217,9 @@ class Game {
 	Vector2f getWindowSize() const;
 	bool isOutOfBounds(const Entity& e, float margin = 50.0f);
 	bool isFileEmpty(const string& filename);
+	bool isFileEmpty(const string& filename);
+	void setSaveTime(shared_ptr<Entity> mapButton, ifstream& in);
+	void clearFile(const string& fileName);
 
 
 	// --- Reset dữ liệu ---
@@ -220,4 +230,15 @@ class Game {
 public:
 	Game(const string& config);
 	void run();
+
+	void Shoot(Entity&);			// Check for collision
+	void TowerAttack();				// Check for collision with enemy and attack
+	void sCollision();				// Check for collision between two entities
+
+	void playSfx(const sf::SoundBuffer& buffer, sf::Vector2f position = { -1, -1 });
+	void queueSave();  // Save game in a separate thread
+	void startWriting(const string& filename);
+	void stopWriting();
+	Vector2f getWindowSize() const;
+	bool isOutOfBounds(const Entity& entity, float margin = 50.0f);
 };
