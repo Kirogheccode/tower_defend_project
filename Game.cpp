@@ -1738,9 +1738,9 @@ void Game::RemoveTower(Entity& tower)
 
 void Game::UpgradeTower(Entity& tower)
 {
-	if (m_coin >= tower.cMoney->money + m_multiplies[tower.cLevel->levelindex + 1])
+	if (m_coin >= tower.cMoney->money * m_multiplies[tower.cLevel->levelindex + 1])
 	{
-		m_coin -= tower.cMoney->money + m_multiplies[tower.cLevel->levelindex + 1];
+		m_coin -= tower.cMoney->money * m_multiplies[tower.cLevel->levelindex + 1];
 
 		tower.cLevel->levelindex++;
 
