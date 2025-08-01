@@ -15,7 +15,7 @@ Bullet02 IMGS/Bullets/PoisonBullet.png 60 800 250 1.2
 Bullet03 IMGS/Bullets/Bullet03.png 85 750 250 1.4
 Bullet04 IMGS/Bullets/ChargeBullet.png 150 750 250 1.4
 Bullet05 IMGS/Bullets/Bullet05.png 120 750 250 2.0
-Bullet06 IMGS/Bullets/Bullet06.png 250 750 225 2.6
+Bullet06 IMGS/Bullets/Bullet06.png 350 750 225 2.6
 
 
 # -------------------------------------------------------------------------------------------------------
@@ -29,9 +29,9 @@ Bullet06 IMGS/Bullets/Bullet06.png 250 750 225 2.6
 # <SpriteScale>:   Scale factor for rendering the sprite
 # <Amount>:        Number of enemies of this type in a wave
 # -------------------------------------------------------------------------------------------------------
-EnemyType1 IMGS/Enemies/Skeleton.png 100 80 100 60 1.2 75
-EnemyType2 IMGS/Enemies/Slime.png 300 50 150 125 2.4 75
-EnemyType3 IMGS/Enemies/Worm.png 1000 30 200 90 1.8 75
+EnemyType1 IMGS/Enemies/Skeleton.png 100 90 100 60 1.2 75
+EnemyType2 IMGS/Enemies/Slime.png 400 60 250 125 2.4 75
+EnemyType3 IMGS/Enemies/Worm.png 900 35 400 90 1.8 75
 
 
 # -------------------------------------------------------------------------------------------------------
@@ -45,12 +45,12 @@ EnemyType3 IMGS/Enemies/Worm.png 1000 30 200 90 1.8 75
 # <Amount>:            Maximum number of this tower type available or allowed
 # <Cost>:			   Cost to place the tower
 # -------------------------------------------------------------------------------------------------------
-Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 400 2 50 200
-Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 2 50 250
-Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 4.0 50 600
-Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 2.5 50 300
-Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 2.5 50 450 
-Tower6 IMGS/TowerImages/Tower6.png 14 1 0.2 400 4.0 50 800
+Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 400 2.0 50 150
+Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 2.0 50 200
+Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 3.5 50 550
+Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 2.0 50 250
+Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 2.3 50 400 
+Tower6 IMGS/TowerImages/Tower6.png 14 1 0.2 400 3.5 50 700
 
 
 # -------------------------------------------------------------------------------------------------------
@@ -61,18 +61,19 @@ Tower6 IMGS/TowerImages/Tower6.png 14 1 0.2 400 4.0 50 800
 # <EnemyType2>:  Quantity of EnemyType2 to spawn
 # <EnemyType3>:  Quantity of EnemyType3 to spawn
 # -------------------------------------------------------------------------------------------------------
-WAVE 1 0 10 5 3
-WAVE 2 0 15 10 3
-WAVE 3 0 18 12 4
+WAVE 1 0 10 4 1
+WAVE 2 0 12 6 2
+WAVE 3 0 15 8 3
 
-WAVE 1 1 15 10 3
-WAVE 2 1 18 12 4
-WAVE 3 1 20 15 5
+WAVE 1 1 12 6 2
+WAVE 2 1 15 8 3
+WAVE 3 1 18 10 4
 
-WAVE 1 2 5 10 3
-WAVE 2 2 10 12 4
-WAVE 3 2 0 0 10
+WAVE 1 2 15 8 3
+WAVE 2 2 18 10 4
+WAVE 3 2 20 12 5
 
-WAVE 1 3 20 10 5
-WAVE 2 3 25 15 10
-WAVE 3 3 30 20 15
+WAVE 1 3 18 10 4
+WAVE 2 3 22 12 6
+WAVE 3 3 25 15 8
+
