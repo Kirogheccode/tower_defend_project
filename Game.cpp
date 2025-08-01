@@ -6,32 +6,7 @@ void Game::sRender(float& deltaTime)
 	m_window.clear();
 
 	// Hiển thị tổng
-	if (m_state == AppState::LoadGame)
-	{
-		Vector2f layout{10.f,10.f};
-		Vector2f TinyMap{ 288.f, 162.f };
-		int indent = 0;
-		for (auto& e : m_scenes[m_state].getEntities())
-		{
-			if (e->tag() == "GameSave")
-			{
-				layout.x = layout.x + TinyMap.x * indent + 20.f;
-				e->cPosition = make_shared<CPosition>(layout);
-				indent++;
-			}
-
-			if (e->cSet && e->cPosition)
-			{
-				e->cSet->sprite.setPosition(e->cPosition->position);
-				m_window.draw(e->cSet->sprite);
-			}
-
-			if (e->cText)
-				m_window.draw(e->cText->text);
-		}
-	}
-	else
-	{
+	
 		for (auto& e : m_scenes[m_state].getEntities())
 		{
 			if (e->cSet && e->cPosition)
@@ -49,87 +24,88 @@ void Game::sRender(float& deltaTime)
 			}
 
 			if (e->cText)
+			{
 				m_window.draw(e->cText->text);
+			}
 
 			if (e->cBound)
 				m_window.draw(e->cBound->rectangle);
 		}
-	}
 
-	if (game_state == AppState::GamePlay)
-	{
-		// Vẽ các entity có sprite
-		for (auto& e : m_scenes[game_state].getEntities())
+		if (game_state == AppState::GamePlay)
 		{
-			if (!e->cSet || !e->cPosition) continue;
-
-			e->cSet->sprite.setPosition(e->cPosition->position);
-
-			if (e->tag() == "Heart")
-			{
-				if (e->isActive())
-					m_window.draw(e->cSet->sprite);
-			}
-			else
-			{
-				m_window.draw(e->cSet->sprite);
-			}
-		}
-
-		// Vẽ tiền
-		for (auto& e : m_scenes[game_state].getEntities("MoneyText"))
-		{
-			if (e->cText)
-			{
-				e->cText->text.setString(to_string(m_coin));
-				m_window.draw(e->cText->text);
-			}
-		}
-
-		// Vẽ Wave nếu cần
-		if (m_showWaveText)
-		{
-			for (auto& e : m_scenes[game_state].getEntities("WaveText"))
-			{
-				if (e->cText)
-					m_window.draw(e->cText->text);
-			}
-
-			for (auto& e : m_scenes[game_state].getEntities("WaveNumber"))
-			{
-				if (e->cText)
-				{
-					e->cText->text.setString(to_string(m_currentWave + 1));
-					m_window.draw(e->cText->text);
-				}
-			}
-
-			if (m_waveClock.getElapsedTime().asSeconds() > m_waveDisplayDuration)
-			{
-				m_showWaveText = false;
-			}
-		}
-
-		// Vẽ UI của tháp được chọn
-		if (m_clickedTower)
-		{
+			// Vẽ các entity có sprite
 			for (auto& e : m_scenes[game_state].getEntities())
 			{
-				if (e->tag() == "towerName" || e->tag() == "towerDamage" || e->tag() == "towerCooldown" ||
-					e->tag() == "towerRange" || e->tag() == "sellButton" || e->tag() == "upgradeButton"||
-					e->tag() == "towerDamageNext" || e->tag() == "towerCooldownNext" ||e->tag() == "towerRangeNext" || e->tag() == "towerLevel")
+				if (!e->cSet || !e->cPosition) continue;
+
+				e->cSet->sprite.setPosition(e->cPosition->position);
+
+				if (e->tag() == "Heart")
 				{
-					if (e->cText) 
+					if (e->isActive())
+						m_window.draw(e->cSet->sprite);
+				}
+				else
+				{
+					m_window.draw(e->cSet->sprite);
+				}
+			}
+
+			// Vẽ tiền
+			for (auto& e : m_scenes[game_state].getEntities("MoneyText"))
+			{
+				if (e->cText)
+				{
+					e->cText->text.setString(to_string(m_coin));
+					m_window.draw(e->cText->text);
+				}
+			}
+
+			// Vẽ Wave nếu cần
+			if (m_showWaveText)
+			{
+				for (auto& e : m_scenes[game_state].getEntities("WaveText"))
+				{
+					if (e->cText)
 						m_window.draw(e->cText->text);
 				}
-				else if (e->tag() == "rectangle")
+
+				for (auto& e : m_scenes[game_state].getEntities("WaveNumber"))
 				{
-					if (e->cBound)
-						m_window.draw(e->cBound->rectangle);
+					if (e->cText)
+					{
+						e->cText->text.setString(to_string(m_currentWave + 1));
+						m_window.draw(e->cText->text);
+					}
+				}
+
+				if (m_waveClock.getElapsedTime().asSeconds() > m_waveDisplayDuration)
+				{
+					m_showWaveText = false;
+				}
+			}
+
+			// Vẽ UI của tháp được chọn
+			if (m_clickedTower)
+			{
+				for (auto& e : m_scenes[game_state].getEntities())
+				{
+					if (e->tag() == "towerName" || e->tag() == "towerDamage" || e->tag() == "towerCooldown" ||
+						e->tag() == "towerRange" || e->tag() == "sellButton" || e->tag() == "upgradeButton" ||
+						e->tag() == "towerDamageNext" || e->tag() == "towerCooldownNext" || e->tag() == "towerRangeNext" || e->tag() == "towerLevel")
+					{
+						if (e->cText)
+							m_window.draw(e->cText->text);
+					}
+					else if (e->tag() == "rectangle")
+					{
+						if (e->cBound)
+							m_window.draw(e->cBound->rectangle);
+					}
 				}
 			}
 		}
-	}
 
 	// Hiển thị quái, đạn và tháp
 	for (auto& e : m_entities.getEntities())
@@ -753,16 +729,72 @@ void Game::sSaveGame()
 	writePlayer.clear();  // Reset any potential error state
 
 	// Helper to check stream after writes
-	auto checkStream = [&]() 
-	{
-		if (writePlayer.fail()) 
+	auto checkStream = [&]()
 		{
-			std::cerr << "Write error occurred. State: " << writePlayer.rdstate() << "\n";
-			writePlayer.clear();  // Attempt to recover
-			return false;
+			if (writePlayer.fail())
+			{
+				cerr << "Write error occurred. State: " << writePlayer.rdstate() << "\n";
+				writePlayer.clear();  // Attempt to recover
+				return false;
+			}
+			return true;
+		};
+	// Lưu tên game save - thời điểm save
+	string map_name = "Map" + to_string(m_mapindex + 1);
+	shared_ptr<Entity> mapButton = nullptr;
+	for (auto& e : m_scenes[AppState::LoadGame].getEntities())
+	{
+		if(e->tag() == map_name)
+		{ 
+			mapButton = e;
+			break;
 		}
-		return true;
-	};
+	}
+
+	if (mapButton)
+	{
+
+		mapButton->cTime = make_shared<CTime>();
+		auto& takeTime = mapButton->cTime;
+		ostringstream oss;
+		oss << setfill('0') << setw(2) << takeTime->local.tm_mday << "/"
+			<< setw(2) << takeTime->local.tm_mon + 1 << "/"
+			<< takeTime->local.tm_year + 1900;
+		string date = oss.str();
+		oss.str("");
+		oss.clear();
+		oss << setfill('0') << setw(2) << takeTime->local.tm_hour << ":"
+			<< setw(2) << takeTime->local.tm_min << ":"
+			<< setw(2) << takeTime->local.tm_sec;
+		string TiMe = oss.str();
+
+		mapButton->cText = make_shared<CText>(m_playerName + " " + date + " " + TiMe);
+		mapButton->cText->text.setFont(m_font1);
+		mapButton->cText->text.setCharacterSize(25);
+		mapButton->cText->text.setFillColor(Color::White);
+		mapButton->cText->text.setStyle(Text::Bold);
+
+		FloatRect bounds = mapButton->cText->text.getLocalBounds();
+		mapButton->cText->text.setOrigin(bounds.left + bounds.width / 2.f, bounds.top);
+		cout << "Saving" << endl;
+		cout << bounds.width << " " << bounds.height << "\n";
+		cout << bounds.left << " " << bounds.top << "\n";
+
+		Vector2f buttonPos = mapButton->cPosition->position;
+		Vector2f buttonSize(1920.f * 0.25f, 1080.f * 0.25f);
+
+		mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 20.f);
+
+		writePlayer << "# Information of game save: " << "\n";
+		writePlayer << m_playerName << " " << date << " " << TiMe << "\n";
+	}
+
+	if (!checkStream())
+	{
+		cerr << "Error writing health data.\n";
+		writePlayer.close();
+		return;
+	}
 
 	// Lưu wave
 	writePlayer << "# Current wave index: " << "\n";
@@ -771,7 +803,7 @@ void Game::sSaveGame()
 
 	// Lưu index của máu còn lại
 	writePlayer << "# Remaining health: " << "\n";
-	for (auto& e: m_scenes[AppState::GamePlay].getEntities("Heart"))
+	for (auto& e : m_scenes[AppState::GamePlay].getEntities("Heart"))
 	{
 		if (e->isActive())
 		{
@@ -799,7 +831,7 @@ void Game::sSaveGame()
 		writePlayer.close();
 		return;
 	}
-		
+
 	// Lưu biến đếm khi spawn
 	writePlayer << "# Spawning timer: " << "\n";
 	writePlayer << m_spawnTimer << " " << m_spawningTimer << "\n";
@@ -815,7 +847,7 @@ void Game::sSaveGame()
 	if (m_spawnStage == SpawnStage::Type1)
 	{
 		writePlayer << "Type1" << "\n";
-	} 
+	}
 	else if (m_spawnStage == SpawnStage::Type2)
 	{
 		writePlayer << "Type2" << "\n";
@@ -841,7 +873,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " <<  entity->cMovement->currentPathindex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
 			isExist = true;
 		}
 	}
@@ -854,7 +886,7 @@ void Game::sSaveGame()
 
 	if (!checkStream())
 	{
-		std::cerr << "Error writing health data.\n";
+		cerr << "Error writing health data.\n";
 		writePlayer.close();
 		return;
 	}
@@ -901,7 +933,7 @@ void Game::sSaveGame()
 	writePlayer << "# Tower position" << "\n";
 	for (auto& entity : m_entities.getEntities(m_towerType1Config.tag))
 	{
-			
+
 		if (entity->isActive())
 		{
 			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cLevel->levelindex << " ";
@@ -934,7 +966,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cLevel->levelindex << " "; 
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cLevel->levelindex << " ";
 			isExist = true;
 		}
 	}
@@ -1005,12 +1037,12 @@ void Game::sSaveGame()
 
 	if (!checkStream())
 	{
-		std::cerr << "Error writing health data.\n";
+		cerr << "Error writing health data.\n";
 		writePlayer.close();
 		return;
 	}
 	if (writePlayer.fail()) {
-		std::cerr << "Error writing to file.\n";
+		cerr << "Error writing to file.\n";
 	}
 
 	cout << "has been written" << endl;
@@ -1038,6 +1070,14 @@ void Game::sLoadGame()
 	}
 
 	string line;
+	while (getline(readPlayer, line))
+	{
+		if (line.empty() || line[0] == '#') continue;
+		istringstream iss(line);
+
+		iss >> m_playerName;
+		break;
+	}
 
 	// Load wave index
 	while (getline(readPlayer, line))
@@ -1379,7 +1419,35 @@ bool Game::isFileEmpty(const string& filename) {
 
 	return file.tellg() == 0; // nếu vị trí con trỏ là 0 => file rỗng
 }
+// --- Dặt thời gian save cho game ---
+void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
+{
+	string date, TiMe, nameSave, tmp;
+	getline(in, tmp);
+	getline(in, tmp);
+	istringstream iss(tmp);
+	iss >> nameSave >> date >> TiMe;
 
+	mapButton->cText = make_shared<CText>(nameSave + " " + date + " " + TiMe);
+
+	mapButton->cText->text.setFont(m_font1);
+	mapButton->cText->text.setCharacterSize(25);
+	mapButton->cText->text.setFillColor(Color::White);
+	mapButton->cText->text.setStyle(Text::Bold);
+
+
+	FloatRect bounds = mapButton->cText->text.getLocalBounds();
+	mapButton->cText->text.setOrigin(bounds.left + bounds.width / 2.f, bounds.top);
+
+	cout << bounds.width << " " << bounds.height << "\n";
+	cout << bounds.left << " " << bounds.top << "\n";
+
+	Vector2f buttonPos = mapButton->cPosition->position;
+	Vector2f buttonSize(1920.f * 0.25f, 1080.f * 0.25f);
+
+	mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 20.f);
+	
+}
 
 // --- Nâng cấp và xoá tháp ---
 void Game::RemoveTower(Entity& tower)

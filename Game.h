@@ -14,6 +14,7 @@
 #include <mutex>
 #include <ctime>
 #include <cstdio>
+#include <iomanip>
 
 #include "Entity.h"
 #include "EntityManager.h"
@@ -141,6 +142,7 @@ class Game
 	vector<float> m_multiplies = { 1, 1.2, 1.4, 1.6 };
 
 	Font m_font;
+	Font m_font1;
 	Text m_inputLabel;
 	Text m_inputText;
 	string m_playerName;
@@ -194,6 +196,9 @@ class Game
 
 	void sSaveGame();
 	void sLoadGame();
+	bool isFileEmpty(const string& filename);
+	void setSaveTime(shared_ptr<Entity> mapButton, ifstream& in);
+	void clearFile(const string& fileName);
 
 	void RemoveTower(Entity&);
 	void UpgradeTower(Entity&);
@@ -216,6 +221,5 @@ public:
 	void stopWriting();
 	Vector2f getWindowSize() const;
 	bool isOutOfBounds(const Entity& entity, float margin = 50.0f);
-	bool isFileEmpty(const string& filename);
 };
 

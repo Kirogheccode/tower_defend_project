@@ -41,6 +41,7 @@ public:
 	shared_ptr<CBoundaryScale> cBoundaryScale;
 	shared_ptr<CSpriteScale> cSpriteScale;
 	shared_ptr<CText> cText;
+	shared_ptr<CTime> cTime;
 
 	bool isActive() const;
 	const string& tag() const;

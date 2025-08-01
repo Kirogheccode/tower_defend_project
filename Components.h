@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <functional>
-
+#include <ctime>
 using namespace std;
 using namespace sf;
 
@@ -95,6 +95,16 @@ struct CMovement
 	}
 };
 
+struct CTime
+{
+	time_t now;
+	tm local;
+	CTime()
+	{
+		now = time(0);
+		localtime_s(&local, &now);
+	}
+};
 struct CPosition
 {
 	Vector2f position;
@@ -337,7 +347,6 @@ struct CText
 	{
 		text.setString(A);
 	}
-
 	CText(const int& A)
 	{
 		text.setString(to_string(A));
