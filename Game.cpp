@@ -1814,28 +1814,6 @@ void Game::TowerAttack()
 	}
 }
 
-void Game::RemoveTower(Entity& tower)
-{
-	bool remove = false;
-	Vector2f removing;
-
-	m_coin += m_refund * tower.cMoney->money * m_multiplies[tower.cLevel->levelindex];
-
-	removing = tower.cPosition->position;
-	DeactivateTower(tower);
-
-	remove = true;
-
-	for (auto& e : m_scenes[m_state].getEntities("Base"))
-	{
-		if (!e->isActive() && e->cSet->sprite.getGlobalBounds().contains(removing))
-		{
-			e->active(true);
-			break;
-		}
-	}
-}
-
 void Game::UpgradeTower(Entity& tower)
 {
 	if (m_coin >= tower.cMoney->money * m_multiplies[tower.cLevel->levelindex + 1])

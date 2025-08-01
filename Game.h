@@ -131,6 +131,7 @@ class Game {
 	int m_currentFrame = 0;
 	vector<float> m_multiplies = { 1, 1.2, 1.4, 1.6 };
 
+	//--- Font ---
 	Font m_font;
 	Font m_font1;
 	Text m_inputLabel;
@@ -148,11 +149,6 @@ class Game {
 	bool m_sfxMuted = false;
 	SoundBuffer m_clickBuffer, m_constructTower, m_error, m_collide;
 	list<Sound> m_activeSounds;
-
-
-	// --- Font ---
-	Font m_font;
-
 
 	// --- Cờ trạng thái ---
 	bool m_setting = false;
@@ -217,7 +213,6 @@ class Game {
 	Vector2f getWindowSize() const;
 	bool isOutOfBounds(const Entity& e, float margin = 50.0f);
 	bool isFileEmpty(const string& filename);
-	bool isFileEmpty(const string& filename);
 	void setSaveTime(shared_ptr<Entity> mapButton, ifstream& in);
 	void clearFile(const string& fileName);
 
@@ -230,15 +225,4 @@ class Game {
 public:
 	Game(const string& config);
 	void run();
-
-	void Shoot(Entity&);			// Check for collision
-	void TowerAttack();				// Check for collision with enemy and attack
-	void sCollision();				// Check for collision between two entities
-
-	void playSfx(const sf::SoundBuffer& buffer, sf::Vector2f position = { -1, -1 });
-	void queueSave();  // Save game in a separate thread
-	void startWriting(const string& filename);
-	void stopWriting();
-	Vector2f getWindowSize() const;
-	bool isOutOfBounds(const Entity& entity, float margin = 50.0f);
 };
