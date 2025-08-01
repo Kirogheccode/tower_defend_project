@@ -1671,6 +1671,14 @@ void Game::Shoot(Entity& tower)
 				bullet->cMovement->velocity = normalized_direction * m_bullet01Config.speed;
 			else if (tower.cWeapon->tag == "Bullet02")
 				bullet->cMovement->velocity = normalized_direction * m_bullet02Config.speed;
+			else if (tower.cWeapon->tag == "Bullet03")
+				bullet->cMovement->velocity = normalized_direction * m_bullet03Config.speed;
+			else if (tower.cWeapon->tag == "Bullet04")
+				bullet->cMovement->velocity = normalized_direction * m_bullet04Config.speed;
+			else if (tower.cWeapon->tag == "Bullet05")
+				bullet->cMovement->velocity = normalized_direction * m_bullet05Config.speed;
+			else if (tower.cWeapon->tag == "Bullet06")
+				bullet->cMovement->velocity = normalized_direction * m_bullet06Config.speed;
 
 			break;
 		}
