@@ -937,6 +937,7 @@ void Game::sSaveGame()
 		writePlayer.close();
 		return;
 	}
+	writePlayer << "\n";
 
 	// Lưu wave
 	writePlayer << "# Current wave index: " << "\n";
@@ -1559,7 +1560,7 @@ bool Game::isFileEmpty(const string& filename) {
 
 	return file.tellg() == 0; // nếu vị trí con trỏ là 0 => file rỗng
 }
-// --- Dặt thời gian save cho game ---
+
 void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 {
 	string date, TiMe, nameSave, tmp;
@@ -1588,6 +1589,7 @@ void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 	mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 20.f);
 	
 }
+
 
 // --- Nâng cấp và xoá tháp ---
 void Game::RemoveTower(Entity& tower)
