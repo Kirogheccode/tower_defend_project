@@ -85,7 +85,7 @@ class Game {
 
 	// --- Cấu hình ---
 	WindowConfig m_windowConfig;
-	BulletConfig m_bullet01Config, m_bullet02Config;
+	BulletConfig m_bullet01Config, m_bullet02Config, m_bullet03Config, m_bullet04Config, m_bullet05Config, m_bullet06Config;
 	EnemyType1Config m_enemyType1Config;
 	EnemyType2Config m_enemyType2Config;
 	EnemyType3Config m_enemyType3Config;

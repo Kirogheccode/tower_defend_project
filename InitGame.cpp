@@ -83,6 +83,99 @@ void Game::init(const string& path)
 		}
 	}
 
+	//--- Loai 3 
+	{
+		while (getline(readconfig, line)) {
+			if (line.empty() || line[0] == '#') continue;
+			istringstream iss(line);
+			iss >> m_bullet03Config.tag >> m_bullet03Config.filepath >> m_bullet03Config.damage >> m_bullet03Config.speed >> m_bullet03Config.Bscale >> m_bullet03Config.Sscale;
+
+			for (int i = 0; i < 50; i++)
+			{
+				auto entity = m_entities.addEntity(m_bullet03Config.tag);
+				entity->cMovement = make_shared<CMovement>(m_bullet03Config.speed);
+				entity->cSet = make_shared<CSet>(m_bullet03Config.filepath, Vector2u(4, 1), 0.1f, 0);
+				entity->cSet->isDynamic = true;
+				entity->cDamage = make_shared<CDamage>(m_bullet03Config.damage);
+				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet03Config.Bscale);
+				auto& sprite = entity->cSet->sprite;
+				sprite.setScale(m_bullet03Config.Sscale, m_bullet03Config.Sscale);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+			}
+			break;
+		}
+	}
+
+	// loai 4
+	{
+		while (getline(readconfig, line)) {
+			if (line.empty() || line[0] == '#') continue;
+			istringstream iss(line);
+			iss >> m_bullet04Config.tag >> m_bullet04Config.filepath >> m_bullet04Config.damage >> m_bullet04Config.speed >> m_bullet04Config.Bscale >> m_bullet04Config.Sscale;
+
+			for (int i = 0; i < 50; i++)
+			{
+				auto entity = m_entities.addEntity(m_bullet04Config.tag);
+				entity->cMovement = make_shared<CMovement>(m_bullet04Config.speed);
+				entity->cSet = make_shared<CSet>(m_bullet04Config.filepath, Vector2u(1, 1), 0.5f, 0);
+				entity->cSet->isDynamic = true;
+				entity->cDamage = make_shared<CDamage>(m_bullet04Config.damage);
+				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet04Config.Bscale);
+				auto& sprite = entity->cSet->sprite;
+				sprite.setScale(m_bullet04Config.Sscale, m_bullet04Config.Sscale);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+			}
+			break;
+		}
+	}
+
+	// loai 5
+	{
+		while (getline(readconfig, line)) {
+			if (line.empty() || line[0] == '#') continue;
+			istringstream iss(line);
+			iss >> m_bullet05Config.tag >> m_bullet05Config.filepath >> m_bullet05Config.damage >> m_bullet05Config.speed >> m_bullet05Config.Bscale >> m_bullet05Config.Sscale;
+
+			for (int i = 0; i < 50; i++)
+			{
+				auto entity = m_entities.addEntity(m_bullet05Config.tag);
+				entity->cMovement = make_shared<CMovement>(m_bullet05Config.speed);
+				entity->cSet = make_shared<CSet>(m_bullet05Config.filepath, Vector2u(4, 1), 0.1f, 0);
+				entity->cSet->isDynamic = true;
+				entity->cDamage = make_shared<CDamage>(m_bullet05Config.damage);
+				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet05Config.Bscale);
+				auto& sprite = entity->cSet->sprite;
+				sprite.setScale(m_bullet05Config.Sscale, m_bullet05Config.Sscale);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+			}
+			break;
+		}
+	}
+
+	//Loai 6
+	{
+		while (getline(readconfig, line)) {
+			if (line.empty() || line[0] == '#') continue;
+			istringstream iss(line);
+			iss >> m_bullet02Config.tag >> m_bullet06Config.filepath >> m_bullet06Config.damage >> m_bullet06Config.speed >> m_bullet06Config.Bscale >> m_bullet06Config.Sscale;
+
+			for (int i = 0; i < 50; i++)
+			{
+				auto entity = m_entities.addEntity(m_bullet06Config.tag);
+				entity->cMovement = make_shared<CMovement>(m_bullet06Config.speed);
+				entity->cSet = make_shared<CSet>(m_bullet06Config.filepath, Vector2u(4, 1), 0.1f, 0);
+				entity->cSet->isDynamic = true;
+				entity->cDamage = make_shared<CDamage>(m_bullet06Config.damage);
+				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet06Config.Bscale);
+				auto& sprite = entity->cSet->sprite;
+				sprite.setScale(m_bullet06Config.Sscale, m_bullet06Config.Sscale);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+			}
+			break;
+		}
+	}
+
+
 	// ================================================================================ QUÁI ================================================================================
 
 	// --- Loại 1
@@ -268,7 +361,7 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType3Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType3Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet01");
+				entity->cWeapon = make_shared<CWeapon>("Bullet03");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(0.7, 0.7);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
@@ -308,7 +401,7 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType4Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType4Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet01");
+				entity->cWeapon = make_shared<CWeapon>("Bullet04");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(1.7f, 1.7f);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
@@ -348,7 +441,7 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType5Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType5Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet01");
+				entity->cWeapon = make_shared<CWeapon>("Bullet05");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(2, 2);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
@@ -388,7 +481,7 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType6Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType6Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet02");
+				entity->cWeapon = make_shared<CWeapon>("Bullet06");
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(0.7, 0.7);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
