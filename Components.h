@@ -259,8 +259,8 @@ struct CDamage
 
 struct CCooldown
 {
-	sf::Time cooldownDuration; // The total time between shots
-	sf::Clock shootClock;      // A persistent clock to track the cooldown
+	Time cooldownDuration; // The total time between shots
+	Clock shootClock;      // A persistent clock to track the cooldown
 
 	// Constructor to set the cooldown
 	CCooldown(float seconds) : cooldownDuration(sf::seconds(seconds)) {}

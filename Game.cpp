@@ -928,7 +928,8 @@ void Game::sSaveGame()
 		mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 20.f);
 
 		writePlayer << "# Information of game save: " << "\n";
-		writePlayer << m_playerName << " " << date << " " << TiMe << "\n";
+		writePlayer << date << " " << TiMe << " "
+			        << bounds.left << " " << bounds.top << " " << bounds.width << " " << bounds.height << "\n";
 	}
 
 	if (!checkStream())
@@ -1211,14 +1212,11 @@ void Game::sLoadGame()
 		cout << "Can't open file or file doesn't exist!" << endl;
 		return;
 	}
-
+	// Bỏ qua 2 dòng đầu
 	string line;
 	while (getline(readPlayer, line))
 	{
 		if (line.empty() || line[0] == '#') continue;
-		istringstream iss(line);
-
-		iss >> m_playerName;
 		break;
 	}
 
@@ -1563,13 +1561,16 @@ bool Game::isFileEmpty(const string& filename) {
 
 void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 {
-	string date, TiMe, nameSave, tmp;
+	string date, TiMe, tmp;
+	FloatRect bounds;
+	
 	getline(in, tmp);
 	getline(in, tmp);
 	istringstream iss(tmp);
-	iss >> nameSave >> date >> TiMe;
+	iss >> date >> TiMe;
+	iss >> bounds.left >> bounds.top >> bounds.width >> bounds.height;
 
-	mapButton->cText = make_shared<CText>(nameSave + " " + date + " " + TiMe);
+	mapButton->cText = make_shared<CText>(date + " " + TiMe);
 
 	mapButton->cText->text.setFont(m_font1);
 	mapButton->cText->text.setCharacterSize(25);
@@ -1577,11 +1578,10 @@ void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 	mapButton->cText->text.setStyle(Text::Bold);
 
 
-	FloatRect bounds = mapButton->cText->text.getLocalBounds();
-	mapButton->cText->text.setOrigin(bounds.left + bounds.width / 2.f, bounds.top);
 
 	cout << bounds.width << " " << bounds.height << "\n";
 	cout << bounds.left << " " << bounds.top << "\n";
+	mapButton->cText->text.setOrigin(bounds.left + bounds.width / 2.f, bounds.top);
 
 	Vector2f buttonPos = mapButton->cPosition->position;
 	Vector2f buttonSize(1920.f * 0.25f, 1080.f * 0.25f);
