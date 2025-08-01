@@ -491,11 +491,18 @@ void Game::sUserInput()
 							}
 							else if (e->tag() == "towerDamage")
 							{
-								if (tower->cMoney && tower->cLevel && tower->cWeapon)
-									if (tower->cWeapon->tag == "Bullet01")
-										e->cText->text.setString("Damage " + to_string((int) (m_bullet01Config.damage * m_multiplies[tower->cLevel->levelindex])));
-									else if (tower->cWeapon->tag == "Bullet02")
-										e->cText->text.setString("Damage " + to_string((int) (m_bullet02Config.damage * m_multiplies[tower->cLevel->levelindex])));
+								if (tower->cWeapon->tag == m_bullet01Config.tag)
+									e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower->cLevel->levelindex])));
+								else if (tower->cWeapon->tag == m_bullet02Config.tag)
+									e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower->cLevel->levelindex])));
+								else if (tower->cWeapon->tag == m_bullet03Config.tag)
+									e->cText->text.setString("Damage " + to_string((int)(m_bullet03Config.damage * m_multiplies[tower->cLevel->levelindex])));
+								else if (tower->cWeapon->tag == m_bullet04Config.tag)
+									e->cText->text.setString("Damage " + to_string((int)(m_bullet04Config.damage * m_multiplies[tower->cLevel->levelindex])));
+								else if (tower->cWeapon->tag == m_bullet05Config.tag)
+									e->cText->text.setString("Damage " + to_string((int)(m_bullet05Config.damage * m_multiplies[tower->cLevel->levelindex])));
+								else if (tower->cWeapon->tag == m_bullet06Config.tag)
+									e->cText->text.setString("Damage " + to_string((int)(m_bullet06Config.damage * m_multiplies[tower->cLevel->levelindex])));
 
 								e->cText->text.setPosition(basePos + Vector2f(10, 60));
 							}
@@ -503,11 +510,18 @@ void Game::sUserInput()
 							{
 								if (tower->cLevel->levelindex < 3)
 								{
-									if (tower->cMoney && tower->cLevel && tower->cWeapon)
-										if (tower->cWeapon->tag == "Bullet01")
-											e->cText->text.setString(to_string((int) (m_bullet01Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
-										else if (tower->cWeapon->tag == "Bullet02")
-											e->cText->text.setString(to_string((int) (m_bullet02Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+									if (tower->cWeapon->tag == m_bullet01Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+									else if (tower->cWeapon->tag == m_bullet02Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+									else if (tower->cWeapon->tag == m_bullet03Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet03Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+									else if (tower->cWeapon->tag == m_bullet04Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet04Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+									else if (tower->cWeapon->tag == m_bullet05Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet05Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+									else if (tower->cWeapon->tag == m_bullet06Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet06Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
 								}
 								else
 								{
@@ -1590,30 +1604,6 @@ void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 	
 }
 
-
-// --- Nâng cấp và xoá tháp ---
-void Game::RemoveTower(Entity& tower)
-{
-	bool remove = false;
-	Vector2f removing;
-
-	m_coin += m_refund * tower.cMoney->money * m_multiplies[tower.cLevel->levelindex];
-
-	removing = tower.cPosition->position;
-	DeactivateTower(tower);
-
-	remove = true;
-
-	for (auto& e : m_scenes[m_state].getEntities("Base"))
-	{
-		if (!e->isActive() && e->cSet->sprite.getGlobalBounds().contains(removing))
-		{
-			e->active(true);
-			break;
-		}
-	}
-}
-
 void Game::startWriting(const string& filename) {
 	writePlayer.open(filename, ios::out | ios::trunc);
 	if (!writePlayer.is_open()) {
@@ -1857,11 +1847,18 @@ void Game::UpgradeTower(Entity& tower)
 				}
 				else if (e->tag() == "towerDamage")
 				{
-					if (tower.cMoney && tower.cLevel && tower.cWeapon)
-						if (tower.cWeapon->tag == "Bullet01")
-							e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower.cLevel->levelindex])));
-						else if (tower.cWeapon->tag == "Bullet02")
-							e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower.cLevel->levelindex])));
+					if (tower.cWeapon->tag == m_bullet01Config.tag)
+						e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower.cLevel->levelindex])));
+					else if (tower.cWeapon->tag == m_bullet02Config.tag)
+						e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower.cLevel->levelindex])));
+					else if (tower.cWeapon->tag == m_bullet03Config.tag) 
+						e->cText->text.setString("Damage " + to_string((int)(m_bullet03Config.damage * m_multiplies[tower.cLevel->levelindex])));
+					else if (tower.cWeapon->tag == m_bullet04Config.tag)
+						e->cText->text.setString("Damage " + to_string((int)(m_bullet04Config.damage * m_multiplies[tower.cLevel->levelindex])));
+					else if (tower.cWeapon->tag == m_bullet05Config.tag)
+						e->cText->text.setString("Damage " + to_string((int)(m_bullet05Config.damage * m_multiplies[tower.cLevel->levelindex])));
+					else if (tower.cWeapon->tag == m_bullet06Config.tag)
+						e->cText->text.setString("Damage " + to_string((int)(m_bullet06Config.damage * m_multiplies[tower.cLevel->levelindex])));
 
 					e->cText->text.setPosition(basePos + Vector2f(10, 60));
 				}
@@ -1869,11 +1866,18 @@ void Game::UpgradeTower(Entity& tower)
 				{
 					if (tower.cLevel->levelindex < 3)
 					{
-						if (tower.cMoney && tower.cLevel && tower.cWeapon)
-							if (tower.cWeapon->tag == "Bullet01")
-								e->cText->text.setString(to_string((int)(m_bullet01Config.damage * m_multiplies[tower.cLevel->levelindex + 1])));
-							else if (tower.cWeapon->tag == "Bullet02")
-								e->cText->text.setString(to_string((int)(m_bullet02Config.damage * m_multiplies[tower.cLevel->levelindex + 1])));
+						if (tower.cWeapon->tag == m_bullet01Config.tag)
+							e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower.cLevel->levelindex + 1])));
+						else if (tower.cWeapon->tag == m_bullet02Config.tag)
+							e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower.cLevel->levelindex + 1])));
+						else if (tower.cWeapon->tag == m_bullet03Config.tag)
+							e->cText->text.setString("Damage " + to_string((int)(m_bullet03Config.damage * m_multiplies[tower.cLevel->levelindex + 1])));
+						else if (tower.cWeapon->tag == m_bullet04Config.tag)
+							e->cText->text.setString("Damage " + to_string((int)(m_bullet04Config.damage * m_multiplies[tower.cLevel->levelindex + 1])));
+						else if (tower.cWeapon->tag == m_bullet05Config.tag)
+							e->cText->text.setString("Damage " + to_string((int)(m_bullet05Config.damage * m_multiplies[tower.cLevel->levelindex + 1])));
+						else if (tower.cWeapon->tag == m_bullet06Config.tag)
+							e->cText->text.setString("Damage " + to_string((int)(m_bullet06Config.damage * m_multiplies[tower.cLevel->levelindex + 1])));
 					}
 					else
 					{
@@ -1985,6 +1989,28 @@ void Game::UpgradeTower(Entity& tower)
 	}
 }
 
+void Game::RemoveTower(Entity& tower)
+{
+	bool remove = false;
+	Vector2f removing;
+
+	m_coin += m_refund * tower.cMoney->money * m_multiplies[tower.cLevel->levelindex];
+
+	removing = tower.cPosition->position;
+	DeactivateTower(tower);
+
+	remove = true;
+
+	for (auto& e : m_scenes[m_state].getEntities("Base"))
+	{
+		if (!e->isActive() && e->cSet->sprite.getGlobalBounds().contains(removing))
+		{
+			e->active(true);
+			break;
+		}
+	}
+}
+
 
 // --- Tiện ích ----
 Vector2f Game::getWindowSize() const {
@@ -2003,7 +2029,6 @@ bool Game::isOutOfBounds(const Entity& entity, float margin) {
 		pos.y < -margin ||
 		pos.y > windowSize.y + margin);
 }
-
 
 int rollDice() {
 	static std::random_device rd;

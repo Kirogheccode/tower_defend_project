@@ -185,9 +185,7 @@ void Game::init(const string& path)
 		}
 	}
 
-
 	// ================================================================================ QUÁI ================================================================================
-
 	// --- Loại 1
 	{
 		while (getline(readconfig, line)) {
@@ -271,7 +269,6 @@ void Game::init(const string& path)
 	}
 
 	// ================================================================================ THÁP ================================================================================
-
 	// --- Loại 1
 	{
 		while (getline(readconfig, line))
@@ -291,21 +288,15 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType1Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType1Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet01");
+				entity->cWeapon = make_shared<CWeapon>(m_bullet01Config.tag);	
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(1.4f, 1.4f);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
-					[entity]() {
-						entity->cInput->isChoosing = true;
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(200, 200, 200));
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(255, 255, 255));
-					}
+					[entity]() { entity->cInput->isChoosing = true; },
+					[entity]() { entity->cSet->sprite.setColor(Color(200, 200, 200)); },
+					[entity]() { entity->cSet->sprite.setColor(Color(255, 255, 255)); }
 				);
 			}
 			break;
@@ -321,7 +312,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType2Config.range >> m_towerType2Config.cooldown >> amount >> m_towerType2Config.cost;;
+			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType2Config.range >> m_towerType2Config.cooldown >> amount >> m_towerType2Config.cost;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -331,21 +322,15 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType2Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType2Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet02");
+				entity->cWeapon = make_shared<CWeapon>(m_bullet02Config.tag); 
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(1.4f, 1.4f);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
-					[entity]() {
-						entity->cInput->isChoosing = true;
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(200, 200, 200));
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(255, 255, 255));
-					}
+					[entity]() { entity->cInput->isChoosing = true; },
+					[entity]() { entity->cSet->sprite.setColor(Color(200, 200, 200)); },
+					[entity]() { entity->cSet->sprite.setColor(Color(255, 255, 255)); }
 				);
 			}
 			break;
@@ -361,7 +346,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType3Config.range >> m_towerType3Config.cooldown >> amount >> m_towerType3Config.cost;;
+			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType3Config.range >> m_towerType3Config.cooldown >> amount >> m_towerType3Config.cost;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -371,21 +356,15 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType3Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType3Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet03");
+				entity->cWeapon = make_shared<CWeapon>(m_bullet03Config.tag);
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(0.7, 0.7);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
-					[entity]() {
-						entity->cInput->isChoosing = true;
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(200, 200, 200));
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(255, 255, 255));
-					}
+					[entity]() { entity->cInput->isChoosing = true; },
+					[entity]() { entity->cSet->sprite.setColor(Color(200, 200, 200)); },
+					[entity]() { entity->cSet->sprite.setColor(Color(255, 255, 255)); }
 				);
 			}
 			break;
@@ -401,7 +380,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType4Config.range >> m_towerType4Config.cooldown >> amount >> m_towerType4Config.cost;;
+			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType4Config.range >> m_towerType4Config.cooldown >> amount >> m_towerType4Config.cost;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -411,21 +390,15 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType4Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType4Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet04");
+				entity->cWeapon = make_shared<CWeapon>(m_bullet04Config.tag);
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(1.7f, 1.7f);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
-					[entity]() {
-						entity->cInput->isChoosing = true;
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(200, 200, 200));
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(255, 255, 255));
-					}
+					[entity]() { entity->cInput->isChoosing = true; },
+					[entity]() { entity->cSet->sprite.setColor(Color(200, 200, 200)); },
+					[entity]() { entity->cSet->sprite.setColor(Color(255, 255, 255)); }
 				);
 			}
 			break;
@@ -451,21 +424,15 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType5Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType5Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet05");
+				entity->cWeapon = make_shared<CWeapon>(m_bullet05Config.tag);
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(2, 2);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
-					[entity]() {
-						entity->cInput->isChoosing = true;
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(200, 200, 200));
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(255, 255, 255));
-					}
+					[entity]() { entity->cInput->isChoosing = true; },
+					[entity]() { entity->cSet->sprite.setColor(Color(200, 200, 200)); },
+					[entity]() { entity->cSet->sprite.setColor(Color(255, 255, 255)); }
 				);
 			}
 			break;
@@ -481,7 +448,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType6Config.range >> m_towerType6Config.cooldown >> amount >> m_towerType6Config.cost;;
+			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType6Config.range >> m_towerType6Config.cooldown >> amount >> m_towerType6Config.cost;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -491,21 +458,15 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType6Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType6Config.range);
-				entity->cWeapon = make_shared<CWeapon>("Bullet06");
+				entity->cWeapon = make_shared<CWeapon>(m_bullet06Config.tag);
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(0.7, 0.7);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
-					[entity]() {
-						entity->cInput->isChoosing = true;
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(200, 200, 200));
-					},
-					[entity]() {
-						entity->cSet->sprite.setColor(Color(255, 255, 255));
-					}
+					[entity]() { entity->cInput->isChoosing = true; },
+					[entity]() { entity->cSet->sprite.setColor(Color(200, 200, 200)); },
+					[entity]() { entity->cSet->sprite.setColor(Color(255, 255, 255)); }
 				);
 			}
 			break;
@@ -572,94 +533,6 @@ void Game::loadHeartCoinText()
 
 void Game::loadTowerUpgradeInfo()
 {
-	// -- Khởi tạo font chữ
-	if (!m_font.loadFromFile("IMGS/Fonts/ARCADECLASSIC.ttf")) {
-		cout << "Failed to load font\n";
-	}
-	if (!m_font1.loadFromFile("IMGS/Fonts/arial.ttf")) {
-		cout << "Failed to load font\n";
-	}
-	// -- Load nhạc
-	if (!m_backgroundMusic.openFromFile("SOUNDS/MainMenuMusic.mp3")) {
-		cout << "Error: Could not load main menu music file.\n";
-	}
-	else
-	{
-		m_backgroundMusic.setLoop(true);
-	}
-
-	if (!m_mapSelect.openFromFile("SOUNDS/freedom.mp3")) {
-		cout << "Error: Could not load map select music file.\n";
-	}
-	else
-	{
-		m_mapSelect.setLoop(true);
-	}
-
-	if (!m_mapMusic[0].openFromFile("SOUNDS/ForestBattle.mp3")) {
-		cout << "Error: Could not load map 1 music file.\n";
-	}
-	else
-	{
-		m_mapMusic[0].setLoop(true);
-	}
-
-	if (!m_mapMusic[1].openFromFile("SOUNDS/DesertBattle.mp3")) {
-		cout << "Error: Could not load map 1 music file.\n";
-	}
-	else
-	{
-		m_mapMusic[1].setLoop(true);
-	}
-
-	if (!m_mapMusic[2].openFromFile("SOUNDS/LavaBattle.mp3")) {
-		cout << "Error: Could not load map 1 music file.\n";
-	}
-	else
-	{
-		m_mapMusic[2].setLoop(true);
-	}
-
-	if (!m_mapMusic[3].openFromFile("SOUNDS/FrozenBattle.mp3")) {
-		cout << "Error: Could not load map 1 music file.\n";
-	}
-	else
-	{
-		m_mapMusic[3].setLoop(true);
-	}
-
-	if (!m_clickBuffer.loadFromFile("SOUNDS/click.mp3")) {
-		cout << "Error: Could not load click sound file.\n";
-	}
-
-	if (!m_constructTower.loadFromFile("SOUNDS/Constructing.mp3"))
-	{
-		cout << "Error: Could not load construct sound file.\n";
-	}
-
-	if (!m_error.loadFromFile("SOUNDS/Error.mp3"))
-	{
-		cout << "Error: Could not load error sound file.\n";
-	}
-
-	if(!m_collide.loadFromFile("SOUNDS/HitSound.mp3"))
-	{
-		cout << "Error: Could not load collide sound file.\n";
-	}
-
-	updateAudioSettings();
-
-	m_inputLabel.setFont(m_font);
-	m_inputLabel.setCharacterSize(24);
-	m_inputLabel.setFillColor(Color::White);
-	m_inputLabel.setString("Enter your name");
-	m_inputLabel.setPosition(500, 250);
-
-	m_inputText.setFont(m_font);
-	m_inputText.setCharacterSize(24);
-	m_inputText.setFillColor(Color::Yellow);
-	m_inputText.setPosition(500, 300);
-
 	// -- Hiển thị thông tin tháp
 	auto Rect = m_scenes[AppState::GamePlay].addEntity("rectangle");
 	Rect->cBound = make_shared<CBound>(FloatRect{ 10, 320, 265, 220 });

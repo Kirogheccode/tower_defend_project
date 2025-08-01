@@ -55,16 +55,13 @@ enum class AppState {
 
 // --- Cấu hình cơ bản ---
 struct WindowConfig { unsigned int width; unsigned int height; int fps; int fullscreen; };
+
 struct BulletConfig { string tag; string filepath; int damage; float speed; float Bscale; float Sscale; };
-struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
-struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
-struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
-struct TowerType1Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType2Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType3Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType4Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType5Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType6Config { string tag; string filepath; int cost; float cooldown; float range; };
+
+struct EnemyTypeConfig { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
+
+struct TowerTypeConfig { string tag; string filepath; int cost; float cooldown; float range; };
+
 struct WaveConfig { int enemyType1Count = 0, enemyType2Count = 0, enemyType3Count = 0; };
 
 
@@ -87,15 +84,15 @@ class Game {
 	// --- Cấu hình ---
 	WindowConfig m_windowConfig;
 	BulletConfig m_bullet01Config, m_bullet02Config, m_bullet03Config, m_bullet04Config, m_bullet05Config, m_bullet06Config;
-	EnemyType1Config m_enemyType1Config;
-	EnemyType2Config m_enemyType2Config;
-	EnemyType3Config m_enemyType3Config;
-	TowerType1Config m_towerType1Config;
-	TowerType2Config m_towerType2Config;
-	TowerType3Config m_towerType3Config;
-	TowerType4Config m_towerType4Config;
-	TowerType5Config m_towerType5Config;
-	TowerType6Config m_towerType6Config;
+	EnemyTypeConfig m_enemyType1Config;
+	EnemyTypeConfig m_enemyType2Config;
+	EnemyTypeConfig m_enemyType3Config;
+	TowerTypeConfig m_towerType1Config;
+	TowerTypeConfig m_towerType2Config;
+	TowerTypeConfig m_towerType3Config;
+	TowerTypeConfig m_towerType4Config;
+	TowerTypeConfig m_towerType5Config;
+	TowerTypeConfig m_towerType6Config;
 
 
 	// --- Wave ---
@@ -131,6 +128,7 @@ class Game {
 	int m_currentFrame = 0;
 	vector<float> m_multiplies = { 1, 1.2, 1.4, 1.6 };
 
+
 	//--- Font ---
 	Font m_font;
 	Font m_font1;
@@ -138,6 +136,7 @@ class Game {
 	Text m_inputText;
 	string m_playerName;
 	bool m_typingName = false;
+
 
 	// --- Âm thanh ---
 	Music m_backgroundMusic;
@@ -149,6 +148,7 @@ class Game {
 	bool m_sfxMuted = false;
 	SoundBuffer m_clickBuffer, m_constructTower, m_error, m_collide;
 	list<Sound> m_activeSounds;
+
 
 	// --- Cờ trạng thái ---
 	bool m_setting = false;
