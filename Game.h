@@ -49,7 +49,9 @@ enum class AppState {
 	TowerSelect,
 	TowerPlace,
 	PauseMenu,
-	TowerInfo
+	TowerInfo,
+	Victory,
+	Defeat
 };
 
 
@@ -142,11 +144,13 @@ class Game {
 	Music m_backgroundMusic;
 	Music m_mapSelect;
 	map<int, Music> m_mapMusic;
+	Music m_victoryMusic;
+	Music m_defeatMusic;
 	float m_musicVolume = 50.f;
 	bool m_musicMuted = false;
 	float m_sfxVolume = 80.f;
 	bool m_sfxMuted = false;
-	SoundBuffer m_clickBuffer, m_constructTower, m_error, m_collide;
+	SoundBuffer m_clickBuffer, m_constructTower, m_error, m_collide, m_sell;
 	list<Sound> m_activeSounds;
 
 

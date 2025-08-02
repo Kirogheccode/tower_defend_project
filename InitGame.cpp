@@ -490,8 +490,8 @@ void Game::init(const string& path)
 
 	readconfig.close();
 
-	initUIFlow();
 	loadFontText();
+	initUIFlow();
 	loadHeartCoinText();
 	loadGuideText();
 	loadTowerUpgradeInfo();
@@ -761,7 +761,10 @@ void Game::loadFontText()
 	if (!m_font.loadFromFile("IMGS/Fonts/ARCADECLASSIC.ttf")) {
 		cout << "Failed to load font\n";
 	}
-
+	if (!m_font1.loadFromFile("IMGS/Fonts/arial.ttf"))
+	{
+		cout << "Failed to load font\n";
+	}
 	// -- Load nhạc
 	if (!m_backgroundMusic.openFromFile("SOUNDS/MainMenuMusic.mp3")) {
 		cout << "Error: Could not load main menu music file.\n";
@@ -811,6 +814,22 @@ void Game::loadFontText()
 		m_mapMusic[3].setLoop(true);
 	}
 
+	if (!m_victoryMusic.openFromFile("SOUNDS/Victory.mp3")) {
+		cout << "Error: Could not victory music file.\n";
+	}
+	else
+	{
+		m_victoryMusic.setLoop(true);
+	}
+	//"C:\Users\ASUS\source\repos\Alpha\SOUNDS\Defeat.mp3"
+	if (!m_defeatMusic.openFromFile("SOUNDS/Defeat.mp3")) {
+		cout << "Error: Could not defeat music file.\n";
+	}
+	else
+	{
+		m_defeatMusic.setLoop(true);
+	}
+	// --- Load sfx
 	if (!m_clickBuffer.loadFromFile("SOUNDS/click.mp3")) {
 		cout << "Error: Could not load click sound file.\n";
 	}
@@ -829,7 +848,10 @@ void Game::loadFontText()
 	{
 		cout << "Error: Could not load collide sound file.\n";
 	}
-
+	if (!m_sell.loadFromFile("SOUNDS/selling.mp3"))
+	{
+		cout << "Error: Could not load selling sound file.\n";
+	}
 	updateAudioSettings();
 }
 
@@ -949,17 +971,10 @@ void Game::initUIFlow()
 			entity->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 			entity->cSet->sprite.setOrigin(entity->cSet->sprite.getLocalBounds().width / 2.f, entity->cSet->sprite.getLocalBounds().height / 2.f);
 
-			entity = m_scenes[AppState::OptionMenu].addEntity("Title");
-			entity->cText = make_shared<CText>("OPTIONS");
-			entity->cText->text.setFont(m_font);
-			entity->cText->text.setCharacterSize(60);
-			entity->cText->text.setFillColor(Color::Black);
-			entity->cText->text.setPosition(Vector2f(839, 273));
 
 			entity = m_scenes[AppState::OptionMenu].addEntity("Resume");
-			entity->cSet = make_shared<CSet>("IMGS/Buttons/play.png");
-			entity->cPosition = make_shared<CPosition>(Vector2f(839, 406));
-			entity->cSet->sprite.setScale(0.6f, 0.6f);
+			entity->cSet = make_shared<CSet>("IMGS/Buttons/continue.png");
+			entity->cPosition = make_shared<CPosition>(Vector2f(810, 391));
 			entity->cInput = make_shared<CInput>([this]()
 				{
 					m_state1 = AppState::Dummy;
@@ -976,9 +991,8 @@ void Game::initUIFlow()
 			);
 
 			entity = m_scenes[AppState::OptionMenu].addEntity("Save");
-			entity->cSet = make_shared<CSet>("IMGS/Buttons/setting.png");
-			entity->cPosition = make_shared<CPosition>(Vector2f(839, 539));
-			entity->cSet->sprite.setScale(0.6f, 0.6f);
+			entity->cSet = make_shared<CSet>("IMGS/Buttons/Save.png");
+			entity->cPosition = make_shared<CPosition>(Vector2f(810, 544));
 			entity->cInput = make_shared<CInput>([this]()
 				{
 					
@@ -997,9 +1011,8 @@ void Game::initUIFlow()
 
 
 			entity = m_scenes[AppState::OptionMenu].addEntity("Quit");
-			entity->cSet = make_shared<CSet>("IMGS/Buttons/quit.png");
-			entity->cPosition = make_shared<CPosition>(Vector2f(839, 672));
-			entity->cSet->sprite.setScale(0.6f, 0.6f);
+			entity->cSet = make_shared<CSet>("IMGS/Buttons/Out.png");
+			entity->cPosition = make_shared<CPosition>(Vector2f(810, 697));
 			entity->cInput = make_shared<CInput>([this]()
 				{
 					prev_state = m_state;
@@ -1698,91 +1711,180 @@ void Game::initUIFlow()
 			{
 				map1->cSet->sprite.setColor(Color(255, 255, 255));
 			}
-		);
+			);
 
-		auto map2 = m_scenes[AppState::MapSelect].addEntity("Map2");
-		map2->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-		map2->cPosition = make_shared<CPosition>(Vector2f(118, 383));
-		map2->cSet->sprite.setScale(1.2f, 1.2f);
-		map2->cInput = make_shared<CInput>([this]()
-			{
-				m_mapindex = 1;
-				clearFile("map2.txt");
-				fileForSave = "map2.txt";
-				m_state = AppState::Map2;
-				game_state = AppState::GamePlay;
-			},
-			[map2]()
-			{
-				map2->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[map2]()
-			{
-				map2->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
+			auto map2 = m_scenes[AppState::MapSelect].addEntity("Map2");
+			map2->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+			map2->cPosition = make_shared<CPosition>(Vector2f(118, 383));
+			map2->cSet->sprite.setScale(1.2f, 1.2f);
+			map2->cInput = make_shared<CInput>([this]()
+				{
+					m_mapindex = 1;
+					clearFile("map2.txt");
+					fileForSave = "map2.txt";
+					m_state = AppState::Map2;
+					game_state = AppState::GamePlay;
+				},
+				[map2]()
+				{
+					map2->cSet->sprite.setColor(Color(200, 200, 200));
+				},
+				[map2]()
+				{
+					map2->cSet->sprite.setColor(Color(255, 255, 255));
+				}
+			);
 
-		auto map3 = m_scenes[AppState::MapSelect].addEntity("Map3");
-		map3->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-		map3->cPosition = make_shared<CPosition>(Vector2f(1388, 436));
-		map3->cSet->sprite.setScale(1.0f, 1.0f);
-		map3->cInput = make_shared<CInput>([this]()
-			{
-				m_mapindex = 2;
-				clearFile("map3.txt");
-				fileForSave = "map3.txt";
-				m_state = AppState::Map3;
-				game_state = AppState::GamePlay;
-			},
-			[map3]()
-			{
-				map3->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[map3]()
-			{
-				map3->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
+			auto map3 = m_scenes[AppState::MapSelect].addEntity("Map3");
+			map3->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+			map3->cPosition = make_shared<CPosition>(Vector2f(1388, 436));
+			map3->cSet->sprite.setScale(1.0f, 1.0f);
+			map3->cInput = make_shared<CInput>([this]()
+				{
+					m_mapindex = 2;
+					clearFile("map3.txt");
+					fileForSave = "map3.txt";
+					m_state = AppState::Map3;
+					game_state = AppState::GamePlay;
+				},
+				[map3]()
+				{
+					map3->cSet->sprite.setColor(Color(200, 200, 200));
+				},
+				[map3]()
+				{
+					map3->cSet->sprite.setColor(Color(255, 255, 255));
+				}
+			);
 
-		auto map4 = m_scenes[AppState::MapSelect].addEntity("Map4");
-		map4->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-		map4->cPosition = make_shared<CPosition>(Vector2f(1648, 383));
-		map4->cSet->sprite.setScale(1.25f, 1.25f);
-		map4->cInput = make_shared<CInput>([this]()
-			{
-				m_mapindex = 3;
-				clearFile("map4.txt");
-				fileForSave = "map4.txt";
-				m_state = AppState::Map4;
-				game_state = AppState::GamePlay;
-			},
-			[map4]()
-			{
-				map4->cSet->sprite.setColor(Color(200, 200, 200));
-			},
-			[map4]()
-			{
-				map4->cSet->sprite.setColor(Color(255, 255, 255));
-			}
-		);
+			auto map4 = m_scenes[AppState::MapSelect].addEntity("Map4");
+			map4->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+			map4->cPosition = make_shared<CPosition>(Vector2f(1648, 383));
+			map4->cSet->sprite.setScale(1.25f, 1.25f);
+			map4->cInput = make_shared<CInput>([this]()
+				{
+					m_mapindex = 3;
+					clearFile("map4.txt");
+					fileForSave = "map4.txt";
+					m_state = AppState::Map4;
+					game_state = AppState::GamePlay;
+				},
+				[map4]()
+				{
+					map4->cSet->sprite.setColor(Color(200, 200, 200));
+				},
+				[map4]()
+				{
+					map4->cSet->sprite.setColor(Color(255, 255, 255));
+				}
+			);
 
 
-		auto back = m_scenes[AppState::MapSelect].addEntity("Back");
-		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
-		back->cInput = make_shared<CInput>([this]()
+			auto back = m_scenes[AppState::MapSelect].addEntity("Back");
+			back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+			back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+			back->cInput = make_shared<CInput>([this]()
+				{
+					m_state = AppState::PlayMenu;
+				},
+				[back]()
+				{
+					back->cSet->sprite.setColor(Color(200, 200, 200));
+				},
+				[back]()
+				{
+					back->cSet->sprite.setColor(Color(255, 255, 255));
+				}
+			);
+
+	}
+	{
+		auto entity = m_scenes[AppState::Defeat].addEntity("DefeatPanel");
+		entity->cSet = make_shared<CSet>("IMGS/GUI/Defeat.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(511, 307));
+
+		entity = m_scenes[AppState::Defeat].addEntity("Exit");
+		entity->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 716));
+		entity->cInput = make_shared<CInput>([this]()
 			{
+				prev_state = m_state;
 				m_state = AppState::PlayMenu;
+				game_state = AppState::Dummy;
+				m_state1 = AppState::Dummy;
+				sReset();
 			},
-			[back]()
+			[entity]()
 			{
-				back->cSet->sprite.setColor(Color(200, 200, 200));
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
 			},
-			[back]()
+			[entity]()
 			{
-				back->cSet->sprite.setColor(Color(255, 255, 255));
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+			);
+
+		entity = m_scenes[AppState::Defeat].addEntity("Retry");
+		entity->cSet = make_shared<CSet>("IMGS/Buttons/Retry.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(708, 716));
+		entity->cInput = make_shared<CInput>([this]()
+			{ 
+				prev_state = m_state;
+				sReset();
+				m_state1 = AppState::Dummy;
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+			);
+
+	    entity = m_scenes[AppState::Victory].addEntity("VictoryPanel");
+		entity->cSet = make_shared<CSet>("IMGS/GUI/Victory.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(511, 307));
+
+		entity = m_scenes[AppState::Victory].addEntity("Exit");
+		entity->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 716));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				prev_state = m_state;
+				m_state = AppState::PlayMenu;
+				game_state = AppState::Dummy;
+				m_state1 = AppState::Dummy;
+				sReset();
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
 
+		entity = m_scenes[AppState::Victory].addEntity("Retry");
+		entity->cSet = make_shared<CSet>("IMGS/Buttons/Retry.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(708, 716));
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				prev_state = m_state;
+				sReset();
+				m_state1 = AppState::Dummy;
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 	}
 }
