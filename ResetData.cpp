@@ -36,7 +36,7 @@ void Game::sReset()
 	}
 
 	// Reset tien (default: 1000)
-	m_coin = 1000;
+	m_coin = initCoin;
 
 	// Reset wave
 	m_currentWave = -1;

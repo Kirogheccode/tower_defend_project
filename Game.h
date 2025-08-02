@@ -26,6 +26,8 @@
 using namespace std;
 using namespace sf;
 
+const int initCoin = 500; // Số tiền khởi tạo
+
 // --- Forward declarations ---
 class EntityManager;
 
@@ -131,7 +133,7 @@ class Game {
 	float m_refund = 0.6f;
 	int m_cost = 0;
 	int m_mapindex = 0;
-	int m_coin = 500;
+	int m_coin = initCoin;
 	int m_currentFrame = 0;
 	vector<float> m_multiplies = { 1, 1.2, 1.4, 1.6 };
 
