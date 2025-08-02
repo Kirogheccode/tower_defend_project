@@ -25,6 +25,18 @@ void Game::clearFile(const string& fileName)
 	}
 }
 
+void Game::sChangeCursor(string tag)
+{
+	for(auto& entity : m_entities.getEntities("Cursor"))
+	{
+		if (entity->tag() == tag)
+		{
+			entity->active(true);
+			m_window.setMouseCursorVisible(false);
+			break;
+		}
+	}	
+}
 
 // --- Đọc file config.txt ---
 void Game::init(const string& path)
@@ -42,6 +54,10 @@ void Game::init(const string& path)
 			Uint32 style = m_windowConfig.fullscreen ? Style::Fullscreen : Style::Default;
 			m_window.create(VideoMode(m_windowConfig.width, m_windowConfig.height), window_name, style);
 			m_window.setFramerateLimit(m_windowConfig.fps);
+			m_cursorImage.loadFromFile("IMGS/GUI/ChillCursor.png");
+			if (cursor.loadFromPixels(m_cursorImage.getPixelsPtr(), m_cursorImage.getSize(), sf::Vector2u(0, 0))) {
+				m_window.setMouseCursor(cursor);
+			}
 			break;
 		}
 	}
@@ -308,6 +324,13 @@ void Game::init(const string& path)
 					}
 				);
 			}
+
+			auto entity = m_entities.addEntity("Cursor01");
+			entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower1_icon.png", Vector2u(1, 1), 0.5f, 0);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(1.f, 1.f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
+
 			break;
 		}
 	}
@@ -348,6 +371,13 @@ void Game::init(const string& path)
 					}
 				);
 			}
+
+			auto entity = m_entities.addEntity("Cursor02");
+			entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower2_icon.png", Vector2u(1, 1), 0.5f, 0);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(1.f, 1.f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
+
 			break;
 		}
 	}
@@ -388,6 +418,13 @@ void Game::init(const string& path)
 					}
 				);
 			}
+
+			auto entity = m_entities.addEntity("Cursor03");
+			entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower3_icon.png", Vector2u(1, 1), 0.5f, 0);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(0.5f, 0.5f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
+
 			break;
 		}
 	}
@@ -428,6 +465,12 @@ void Game::init(const string& path)
 					}
 				);
 			}
+
+			auto entity = m_entities.addEntity("Cursor04");
+			entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower4_icon.png", Vector2u(1, 1), 0.5f, 0);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(1.2f, 1.2f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 			break;
 		}
 	}
@@ -468,6 +511,13 @@ void Game::init(const string& path)
 					}
 				);
 			}
+
+			auto entity = m_entities.addEntity("Cursor05");
+			entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower5_icon.png", Vector2u(1, 1), 0.5f, 0);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(1.4f, 1.4f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
+
 			break;
 		}
 	}
@@ -508,6 +558,13 @@ void Game::init(const string& path)
 					}
 				);
 			}
+
+			auto entity = m_entities.addEntity("Cursor06");
+			entity->cSet = make_shared<CSet>("IMGS/TowerImages/Tower6_icon.png", Vector2u(1, 1), 0.5f, 0);
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(0.5f, 0.5f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
+
 			break;
 		}
 	}
@@ -1248,6 +1305,7 @@ void Game::initUIFlow()
 				m_selected = "Tower1";
 				m_state2 = AppState::TowerPlace;
 				m_cost = m_towerType1Config.cost;
+				sChangeCursor("Cursor01");
 			},
 			[entity]()
 			{
@@ -1267,6 +1325,7 @@ void Game::initUIFlow()
 				m_selected = "Tower2";
 				m_state2 = AppState::TowerPlace;
 				m_cost = m_towerType2Config.cost;
+				sChangeCursor("Cursor02");
 			},
 			[entity]()
 			{
@@ -1287,6 +1346,7 @@ void Game::initUIFlow()
 				m_selected = "Tower3";
 				m_state2 = AppState::TowerPlace;
 				m_cost = m_towerType3Config.cost;
+				sChangeCursor("Cursor03");
 			},
 			[entity]()
 			{
@@ -1307,6 +1367,7 @@ void Game::initUIFlow()
 				m_selected = "Tower4";
 				m_state2 = AppState::TowerPlace;
 				m_cost = m_towerType4Config.cost;
+				sChangeCursor("Cursor04");
 			},
 			[entity]()
 			{
@@ -1327,6 +1388,7 @@ void Game::initUIFlow()
 				m_selected = "Tower5";
 				m_state2 = AppState::TowerPlace;
 				m_cost = m_towerType5Config.cost;
+				sChangeCursor("Cursor05");
 			},
 			[entity]()
 			{
@@ -1347,6 +1409,7 @@ void Game::initUIFlow()
 				m_selected = "Tower6";
 				m_state2 = AppState::TowerPlace;
 				m_cost = m_towerType6Config.cost;
+				sChangeCursor("Cursor06");
 			},
 			[entity]()
 			{

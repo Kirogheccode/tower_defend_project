@@ -197,6 +197,19 @@ void Game::sRender(float& deltaTime)
 			if (e->cBound)
 				m_window.draw(e->cBound->rectangle);
 		}
+
+		if (m_state2 == AppState::TowerPlace)
+		{
+			sf::Vector2f mousePos = m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window));
+			for (auto& e : m_entities.getEntities("Cursor")) 
+			{
+				if (e->isActive())
+				{
+					e->cSet->sprite.setPosition(mousePos);
+					m_window.draw(e->cSet->sprite);
+				}
+			}
+		}
 	}
 
 	m_window.display();
@@ -645,11 +658,11 @@ void Game::sUserInput()
 			if (!clickedSlider)
 			{
 				// Ưu tiên state2 nếu đang chọn tower
-
+				
 				if (m_state2 == AppState::TowerPlace)
 				{
 					bool placed = false;
-					Vector2f placing;
+					Vector2f placing;				
 
 					for (auto& e : m_scenes[m_state].getEntities("Base"))
 					{
@@ -675,8 +688,6 @@ void Game::sUserInput()
 								e->active(true);
 								e->cPosition = make_shared<CPosition>(placing);
 								e->cSet->sprite.setPosition(e->cPosition->position);
-									
-								break;
 							}
 						}
 					}
@@ -685,6 +696,11 @@ void Game::sUserInput()
 						playSfx(m_error);
 					}
 
+					m_window.setMouseCursorVisible(true);
+					for (auto& e : m_entities.getEntities("Cursor"))
+					{
+						e->active(false);
+					}
 					m_state2 = AppState::Dummy;
 				}
 				else
@@ -700,6 +716,16 @@ void Game::sUserInput()
 					if (stateToHandle == AppState::TowerSelect)
 					{
 						bool isOutSide = true;
+
+						for (auto& e : m_scenes[m_state].getEntities("Cursor"))
+						{
+							if (e->isActive())
+							{
+								e->cSet->sprite.setPosition(mousePos);
+								m_window.draw(e->cSet->sprite);
+							}
+						}
+
 						for (auto& e : m_scenes[stateToHandle].getEntities())
 						{
 							if (e->cSet && e->cSet->sprite.getGlobalBounds().contains(mousePos))
@@ -817,7 +843,7 @@ void Game::run()
 	{
 		dt = m_clock.restart().asSeconds();
 
-		sUserInput(); // Always process input (so you can pause/unpause)
+		sUserInput();
 		updateMusicState();
 
 		if (!m_paused)
@@ -835,8 +861,7 @@ void Game::run()
 		}
 		else
 		{
-			// Optionally, render a pause overlay here
-			sRender(dt); // You may want to show a "Paused" message
+			sRender(dt); 
 		}
 	}
 }
@@ -2006,6 +2031,35 @@ bool Game::isOutOfBounds(const Entity& entity, float margin) {
 int rollDice() {
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> distrib(1, 6);
+	std::uniform_int_distribution<int> distrib(1, 4);
 	return distrib(gen);
+}
+
+void Game::sGacha()
+{
+	switch (rollDice())
+	{
+	case 1:
+		m_coin *= 1.5;
+		break;
+
+	case 2:
+		cout << "You got a free tower!" << endl;
+		break;
+
+	case 3:
+		for (auto& tow : m_scenes[game_state].getEntities("Tower"))
+		{
+			if (tow->isActive())
+			{
+				RemoveTower(*tow);
+				break;
+			}
+		}
+		break;
+
+	case 4:
+		cout << "You got a free tower!" << endl;
+		break;
+	}
 }

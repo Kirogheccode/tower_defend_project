@@ -83,6 +83,9 @@ class Game {
 	Clock m_clock;
 	Clock m_waveClock;
 
+	// --- custom cursor ---
+	sf::Image m_cursorImage;
+	sf::Cursor cursor;
 
 	// --- Cấu hình ---
 	WindowConfig m_windowConfig;
@@ -185,7 +188,8 @@ class Game {
 	void sCheckWaveFinished();
 	bool spawnEnemyType(int type, float& dt);
 	void sCollision();
-
+	void sGacha();
+	void sChangeCursor(string);
 
 	// --- Tháp (Tower) ---
 	void RemoveTower(Entity& tower);
