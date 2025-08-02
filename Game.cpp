@@ -322,7 +322,7 @@ void Game::sMovement(float& deltaTime)
 			}
 
 			// Tính toán đường đi đến điểm tiếp theo
-			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex];
+			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex][entity->cMovement->pathIndex];
 			Vector2f direction = target - entity->cPosition->position;
 			float distance = MathSupport::Length(direction);
 
@@ -348,8 +348,8 @@ void Game::sMovement(float& deltaTime)
 
 				if (nextIndex < (int)entity->cMovement->paths[m_mapindex].size())
 				{
-					Vector2f currentTarget = entity->cMovement->paths[m_mapindex][currentIndex];
-					Vector2f nextTarget = entity->cMovement->paths[m_mapindex][nextIndex];
+					Vector2f currentTarget = entity->cMovement->paths[m_mapindex][currentIndex][entity->cMovement->pathIndex];
+					Vector2f nextTarget = entity->cMovement->paths[m_mapindex][nextIndex][entity->cMovement->pathIndex];
 
 					float dx = nextTarget.x - currentTarget.x;
 

@@ -7,360 +7,245 @@
 using namespace std;
 using namespace sf;
 
-struct CMoney
-{
+// Tiền 
+struct CMoney {
 	int money = 0;
-
 	CMoney() {}
-	CMoney(const int& m)
-	{
-		money = m;
-	}
+	CMoney(const int& m) : money(m) {}
 };
 
-struct CHealth
-{
+
+// Máu
+struct CHealth {
 	int hp = 0;
-
-	CHealth() {};
-	CHealth(const int& h)
-	{
-		hp = h;
-	}
+	CHealth() {}
+	CHealth(const int& h) : hp(h) {}
 };
 
-struct CLevel
-{
+
+// Level nâng cấp của tower
+struct CLevel {
 	int levelindex = 0;
-
-	CLevel() {};
-	CLevel(const int& h)
-	{
-		levelindex = h;
-	}
+	CLevel() {}
+	CLevel(const int& h) : levelindex(h) {}
 };
 
-struct CMovement
-{
+
+// Di chuyển của quái: bao gồm tốc độ, vị trí hiện tại, và đường đi theo từng map
+struct CMovement {
 	float speed = 0.f;
 	unsigned int currentPathindex = 0;
-	sf::Vector2f velocity = { 0.f, 0.f };
+	Vector2f velocity = { 0.f, 0.f };
+	unsigned int pathIndex = 0;
 
-	// Starting positions for each map
-	// +500f starting delay
-	std::vector<sf::Vector2f> starting_pos = {
-		{1165.f, 1580.f},   // Map 1
-		{-500.f,   500.f},  // Map 2
-		{1252.f, 1575.f},   // Map 3
-		{0.f,   500.f}      // Map 4
+	vector<Vector2f> starting_pos = {	// Vị trí bắt đầu cho từng map
+		{1165.f, 1580.f}, { -500.f, 500.f }, { 1252.f, 1575.f }, { 0.f, 500.f }
 	};
 
-	// Path coordinates for each map
-	std::vector<std::vector<sf::Vector2f>> paths = {
-		{   // Map 1
-			{1165.f, 880.f},
-			{940.f,  880.f},
-			{940.f,  730.f},
-			{285.f,  730.f},
-			{285.f,  330.f},
-			{1770.f, 330.f},
-			{1770.f, 0.f}
-		},
-		{   // Map 2
-			{465.f,  500.f},
-			{465.f,  385.f},
-			{715.f,  385.f},
-			{715.f,  220.f},
-			{1265.f, 220.f},
-			{1265.f, 580.f},
-			{955.f,  580.f},
-			{955.f,  890.f},
-			{1560.f, 890.f},
-			{1560.f, 265.f}
-		},
-		{   // Map 3
-			{1252.f, 755.f},
-			{1055.f, 755.f},
-			{1055.f, 330.f},
-			{770.f,  330.f},
-			{770.f,  550.f},
-			{300.f,  550.f},
-			{300.f,  90.f},
-		},
-		{   // Map 4
-			{600.f,  500.f},
-			{600.f,  700.f},
-			{1200.f, 700.f},
-			{1200.f, 400.f},
-			{1920.f, 400.f}
-		}
+	// Đường đi cho mỗi map (có thể có nhiều đường)
+	vector<vector<vector<Vector2f>>> paths = {
+		{{ {1165.f,880.f}, {940.f,880.f}, {940.f,730.f}, {285.f,730.f}, {285.f,330.f}, {1770.f,330.f}, {1770.f,0.f} }},
+		{{ {465.f,500.f}, {465.f,385.f}, {715.f,385.f}, {715.f,220.f}, {1265.f,220.f}, {1265.f,580.f}, {955.f,580.f}, {955.f,890.f}, {1560.f,890.f}, {1560.f,265.f} }},
+		{{ {1252.f,755.f}, {1055.f,755.f}, {1055.f,330.f}, {770.f,330.f}, {770.f,550.f}, {300.f,550.f}, {300.f,90.f} }},
+		{{ {600.f,500.f}, {600.f,700.f}, {1200.f,700.f}, {1200.f,400.f}, {1920.f,400.f} }}
 	};
 
 	CMovement() = default;
-	explicit CMovement(const float& v)
-		: speed(v) {
-	}
+	explicit CMovement(const float& v) : speed(v) {}
 };
 
-struct CTime
-{
+
+// Thời gian hệ thống thực tại
+struct CTime {
 	time_t now;
 	tm local;
-	CTime()
-	{
+
+	CTime() {
 		now = time(0);
 		localtime_s(&local, &now);
 	}
 };
-struct CPosition
-{
-	Vector2f position;
 
+
+// Vị tr
+struct CPosition {
+	Vector2f position;
 	CPosition() {}
 	CPosition(const Vector2f& A) : position(A) {}
 };
 
-struct CSet
-{
+
+// Hiển thị hình ảnh (sprite)
+struct CSet {
 	Texture texture;
 	Sprite sprite;
 
 	Vector2u ImgCount;
 	Vector2u CurrImg;
-
 	bool isDynamic = false;
-
 	int row = 0;
 
 	float totalTime = 0.0f;
 	float switchTime = 0.0f;
-
 	IntRect uvRect;
 
-	CSet() {}
-
-	CSet(const string& filepath) // For static entitiy (background,...)
-	{
-		if (!texture.loadFromFile(filepath))
-		{
+	// Static sprite (không hoạt ảnh)
+	CSet(const string& filepath) {
+		if (!texture.loadFromFile(filepath)) {
 			cout << "Error! Can't load filepath" << endl;
 			return;
 		}
-
 		sprite.setTexture(texture);
-		if (sprite.getTextureRect().width == 0 || sprite.getTextureRect().height == 0)
-		{
+		if (sprite.getTextureRect().width == 0 || sprite.getTextureRect().height == 0) {
 			cout << "Error! Can't load sprite" << endl;
 			return;
 		}
 	}
 
-	CSet(const string& filepath, const Vector2u& ImgCount, const float& switchTime, const int& row) // For dynamic entitiy
-	{
-		if (!texture.loadFromFile(filepath))
-		{
+	// Dynamic sprite (có hoạt ảnh)
+	CSet(const string& filepath, const Vector2u& ImgCount, const float& switchTime, const int& row) {
+		if (!texture.loadFromFile(filepath)) {
 			cout << "Error! Can't load filepath" << endl;
 			return;
 		}
-
 		sprite.setTexture(texture);
-		if (sprite.getTextureRect().width == 0 || sprite.getTextureRect().height == 0)
-		{
-			cout << "Error! Can't load sprite" << endl;
-			return;
-		}
-
 		this->ImgCount = ImgCount;
 		this->switchTime = switchTime;
-
-		totalTime = 0.0f;
+		this->row = row;
+		isDynamic = true;
 		CurrImg.x = 0;
-
 		uvRect.width = texture.getSize().x / float(ImgCount.x);
 		uvRect.height = texture.getSize().y / float(ImgCount.y);
-
-		isDynamic = true;
-		this->row = row;
-		sprite.setOrigin( (texture.getSize().x / ImgCount.x) / 2.f, (texture.getSize().y / ImgCount.y) / 2.f);
-
+		sprite.setOrigin(uvRect.width / 2.f, uvRect.height / 2.f);
 		sprite.setTextureRect(uvRect);
 	}
 };
 
-struct CBound
-{
-	enum shapeType { Circle, Rectangle } shape = Rectangle; // Mặc định là Rectangle
 
+// Vùng va chạm (boundary) để xử lý phạm vi, collision,...
+struct CBound {
+	enum shapeType { Circle, Rectangle } shape = Rectangle;
 	sf::CircleShape circle;
 	sf::RectangleShape rectangle;
+	float radius = 0;
+	FloatRect rect;
 
-	float radius = 0;        // Dùng để cập nhật lại circle khi cần
-	FloatRect rect;          // Dùng để cập nhật lại rectangle khi cần
-
-	// Constructor cho hình tròn
-	CBound(float r) : radius(r), shape(Circle)
-	{
+	// Hình tròn
+	CBound(float r) : radius(r), shape(Circle) {
 		circle.setRadius(radius);
 		circle.setOrigin(radius, radius);
 		circle.setFillColor(sf::Color(0, 0, 0, 40));
-		circle.setOutlineThickness(0.f);
-
 	}
 
-	// Constructor cho hình chữ nhật
-	CBound(const FloatRect& r) : rect(r), shape(Rectangle)
-	{
+	// Hình chữ nhật
+	CBound(const FloatRect& r) : rect(r), shape(Rectangle) {
 		rectangle.setSize({ rect.width, rect.height });
 		rectangle.setPosition(rect.left, rect.top);
 		rectangle.setFillColor(sf::Color(255, 255, 255, 20));
-		rectangle.setOutlineThickness(0.f);
 	}
 };
 
-struct CBoundaryScale
-{
-	float scale;
-	CBoundaryScale() : scale(1.0f) {}
+
+// Scale vùng va chạm
+struct CBoundaryScale {
+	float scale = 1.0f;
+	CBoundaryScale() {}
 	CBoundaryScale(float r) : scale(r) {}
 };
 
-struct CSpriteScale
-{
-	float scale;
-	CSpriteScale() : scale(1.0f) {}
+
+// Scale hình ảnh (sprite)
+struct CSpriteScale {
+	float scale = 1.0f;
+	CSpriteScale() {}
 	CSpriteScale(float r) : scale(r) {}
 };
 
-struct CInput
-{
+
+// Xử lý input
+struct CInput {
 	function<void()> onClick;
 	function<void()> onHover;
 	function<void()> offHover;
-
 	bool isChoosing = false;
 	bool isHovered = false;
 
 	CInput() = default;
-	CInput(function<void()> clickFunc,
-		function<void()> hoverFunc = nullptr,
-		function<void()> unhoverFunc = nullptr)
+	CInput(function<void()> clickFunc, function<void()> hoverFunc = nullptr, function<void()> unhoverFunc = nullptr)
 		: onClick(clickFunc), onHover(hoverFunc), offHover(unhoverFunc) {
 	}
 };
 
-struct CState
-{
-	bool isActive = false;
-	CState() = default;
-};
 
-struct CDamage
-{
-	int damage;
+// Sát thương 
+struct CDamage {
+	int damage = 0;
 	CDamage() = default;
-	CDamage(const int& d)
-	{
-		damage = d;
-	}
+	CDamage(const int& d) : damage(d) {}
 };
 
-struct CCooldown
-{
-	Time cooldownDuration; // The total time between shots
-	Clock shootClock;      // A persistent clock to track the cooldown
 
-	// Constructor to set the cooldown
+// Tốc độ bắn và thời gian cooldown
+struct CCooldown {
+	Time cooldownDuration;
+	Clock shootClock;
 	CCooldown(float seconds) : cooldownDuration(sf::seconds(seconds)) {}
 };
 
+
+// Slider để điều chỉnh thông số
 struct CSlider {
-	/*sf::RectangleShape track;
-	sf::RectangleShape handle;*/
-	Texture trackTexture;
-	Texture handleTexture;
-	Sprite track;
-	Sprite handle;
+	Texture trackTexture, handleTexture;
+	Sprite track, handle;
 	float* valueToControl = nullptr;
 	bool isDragging = false;
 
-	CSlider(float* valuePtr, Vector2f position, const string& handlePath, const string& trackPath) 
-	{
+	CSlider(float* valuePtr, Vector2f position, const string& handlePath, const string& trackPath) {
 		valueToControl = valuePtr;
-
-
-		if (!handleTexture.loadFromFile(handlePath))
-		{
-			cout << "Error loading handle texture" << endl;
-			return;
-		}
-		if (!trackTexture.loadFromFile(trackPath))
-		{
-			cout << "Error loading track texture" << endl;
-			return;
-		}
+		handleTexture.loadFromFile(handlePath);
+		trackTexture.loadFromFile(trackPath);
 		track.setTexture(trackTexture);
 		handle.setTexture(handleTexture);
-
-		// Thiết lập thanh trượt
 		track.setOrigin(trackTexture.getSize().x / 2.f, trackTexture.getSize().y / 2.f);
 		track.setPosition(position);
-	    
-
-		// Thiết lập nút kéo
 		handle.setOrigin(handleTexture.getSize().x / 2.f, handleTexture.getSize().y / 2.f);
-		
-
-		// Đặt vị trí ban đầu của nút kéo dựa trên giá trị âm lượng
 		updateHandlePosition();
 	}
 
-	// Cập nhật vị trí của nút kéo dựa trên giá trị âm lượng
 	void updateHandlePosition() {
 		if (!valueToControl) return;
-		float percent = *valueToControl / 100.f; // Chuyển giá trị (0-100) thành tỷ lệ (0.0-1.0)
+		float percent = *valueToControl / 100.f;
 		float trackLeft = track.getPosition().x - trackTexture.getSize().x / 2.f;
 		float newX = trackLeft + (trackTexture.getSize().x * percent);
 		handle.setPosition(newX, track.getPosition().y);
 	}
 
-	// Cập nhật giá trị âm lượng dựa trên vị trí của nút kéo
 	void updateValueFromHandle(float mouseX) {
 		if (!valueToControl) return;
 		float trackLeft = track.getPosition().x - trackTexture.getSize().x / 2.f;
 		float trackRight = track.getPosition().x + trackTexture.getSize().x / 2.f;
-
-		// Giới hạn vị trí chuột trong phạm vi thanh trượt
 		mouseX = std::max(trackLeft, std::min(mouseX, trackRight));
-
 		float percent = (mouseX - trackLeft) / trackTexture.getSize().x;
 		*valueToControl = percent * 100.f;
-
-		updateHandlePosition(); // Cập nhật lại vị trí handle cho chính xác
+		updateHandlePosition();
 	}
 };
 
-struct CWeapon
-{
+
+// Loại đạn mà tower đang dùng (dựa vào tag)
+struct CWeapon {
 	string tag;
+
+	CWeapon() {}
+	CWeapon(const string& A) { tag = A; }
 };
 
-struct CText
-{
-	sf::Text text;
 
+// Hiển thị văn bản lên màn hình
+struct CText {
+	Text text;
 	CText() {}
-
-	CText(const string& A)
-	{
-		text.setString(A);
-	}
-	CText(const int& A)
-	{
-		text.setString(to_string(A));
-	}
-
-	CText(const float& A)
-	{
-		text.setString(to_string(A));
-	}
+	CText(const string& A) { text.setString(A); }
+	CText(const int& A) { text.setString(to_string(A)); }
+	CText(const float& A) { text.setString(to_string(A)); }
 };
