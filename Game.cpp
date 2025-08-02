@@ -346,7 +346,7 @@ void Game::sMovement(float& deltaTime)
 				int currentIndex = entity->cMovement->currentPathindex;
 				int nextIndex = currentIndex + 1;
 
-				if (nextIndex < (int)entity->cMovement->paths[m_mapindex].size())
+				if (nextIndex < (int)entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex].size())
 				{
 					Vector2f currentTarget = entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex][currentIndex];
 					Vector2f nextTarget = entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex][nextIndex];
