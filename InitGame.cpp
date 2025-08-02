@@ -1830,7 +1830,6 @@ void Game::initUIFlow()
 			}
 		);
 
-
 		auto back = m_scenes[AppState::MapSelect].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));

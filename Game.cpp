@@ -725,8 +725,8 @@ void Game::sUserInput()
 							m_coin -= m_cost;
 							e->active(false);
 							placed = true;
-							placing.x = e->cSet->sprite.getGlobalBounds().left + e->cSet->sprite.getGlobalBounds().width/ 2.f;
-							placing.y = e->cSet->sprite.getGlobalBounds().top + e->cSet->sprite.getGlobalBounds().height/ 2.f;
+							placing.x = e->cSet->sprite.getGlobalBounds().left + e->cSet->sprite.getGlobalBounds().width / 2.f;
+							placing.y = e->cSet->sprite.getGlobalBounds().top + e->cSet->sprite.getGlobalBounds().height / 2.f;
 
 							playSfx(m_constructTower);
 							break;
@@ -742,6 +742,8 @@ void Game::sUserInput()
 								e->active(true);
 								e->cPosition = make_shared<CPosition>(placing);
 								e->cSet->sprite.setPosition(e->cPosition->position);
+
+								break;
 							}
 						}
 					}
@@ -749,18 +751,16 @@ void Game::sUserInput()
 					{
 						playSfx(m_error);
 					}
-
-					m_window.setMouseCursorVisible(true);
 					for (auto& e : m_entities.getEntities("Cursor"))
 					{
 						e->active(false);
 					}
+					m_window.setMouseCursorVisible(true);
 					m_state2 = AppState::Dummy;
 				}
 				else
 				{
 					// Xử lý click cho m_state1 nếu đang hiện overlay chọn tháp
-
 					AppState stateToHandle = m_state;
 					if (m_state1 != AppState::Dummy)
 						stateToHandle = m_state1;
@@ -770,15 +770,6 @@ void Game::sUserInput()
 					if (stateToHandle == AppState::TowerSelect)
 					{
 						bool isOutSide = true;
-
-						for (auto& e : m_scenes[m_state].getEntities("Cursor"))
-						{
-							if (e->isActive())
-							{
-								e->cSet->sprite.setPosition(mousePos);
-								m_window.draw(e->cSet->sprite);
-							}
-						}
 
 						for (auto& e : m_scenes[stateToHandle].getEntities())
 						{
