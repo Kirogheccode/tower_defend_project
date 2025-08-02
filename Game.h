@@ -100,8 +100,8 @@ class Game {
 	// --- Wave ---
 	map<int, map<int, WaveConfig>> m_waveConfigs;
 	SpawnStage m_spawnStage = SpawnStage::None;
-	float m_spawnTimer = 3.f;
-	float m_spawnDelay = 3.f;
+	float m_spawnTimer = 2.f;
+	float m_spawnDelay = 2.f;
 	float m_spawningTimer = 0.f;
 	float m_spawningDelay = 0.6f;
 	float m_waveDisplayDuration = 2.0f;
@@ -126,7 +126,7 @@ class Game {
 	float m_refund = 0.6f;
 	int m_cost = 0;
 	int m_mapindex = 0;
-	int m_coin = 1000;
+	int m_coin = 400;
 	int m_currentFrame = 0;
 	vector<float> m_multiplies = { 1, 1.2, 1.4, 1.6 };
 
