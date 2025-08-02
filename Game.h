@@ -17,6 +17,7 @@
 #include <random>
 #include <functional>
 #include <iomanip>
+#include <algorithm>
 
 #include "Entity.h"
 #include "EntityManager.h"
@@ -36,6 +37,7 @@ enum class SpawnStage { None, Type1, Type2, Type3, Done };
 enum class AppState {
 	Dummy,
 	MainMenu,
+	StoryScene,
 	PlayMenu,
 	NameInput,
 	SettingsMenu,
@@ -55,16 +57,13 @@ enum class AppState {
 
 // --- Cấu hình cơ bản ---
 struct WindowConfig { unsigned int width; unsigned int height; int fps; int fullscreen; };
+
 struct BulletConfig { string tag; string filepath; int damage; float speed; float Bscale; float Sscale; };
-struct EnemyType1Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
-struct EnemyType2Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
-struct EnemyType3Config { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
-struct TowerType1Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType2Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType3Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType4Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType5Config { string tag; string filepath; int cost; float cooldown; float range; };
-struct TowerType6Config { string tag; string filepath; int cost; float cooldown; float range; };
+
+struct EnemyTypeConfig { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
+
+struct TowerTypeConfig { string tag; string filepath; int cost; float cooldown; float range; };
+
 struct WaveConfig { int enemyType1Count = 0, enemyType2Count = 0, enemyType3Count = 0; };
 
 
@@ -90,22 +89,22 @@ class Game {
 	// --- Cấu hình ---
 	WindowConfig m_windowConfig;
 	BulletConfig m_bullet01Config, m_bullet02Config, m_bullet03Config, m_bullet04Config, m_bullet05Config, m_bullet06Config;
-	EnemyType1Config m_enemyType1Config;
-	EnemyType2Config m_enemyType2Config;
-	EnemyType3Config m_enemyType3Config;
-	TowerType1Config m_towerType1Config;
-	TowerType2Config m_towerType2Config;
-	TowerType3Config m_towerType3Config;
-	TowerType4Config m_towerType4Config;
-	TowerType5Config m_towerType5Config;
-	TowerType6Config m_towerType6Config;
+	EnemyTypeConfig m_enemyType1Config;
+	EnemyTypeConfig m_enemyType2Config;
+	EnemyTypeConfig m_enemyType3Config;
+	TowerTypeConfig m_towerType1Config;
+	TowerTypeConfig m_towerType2Config;
+	TowerTypeConfig m_towerType3Config;
+	TowerTypeConfig m_towerType4Config;
+	TowerTypeConfig m_towerType5Config;
+	TowerTypeConfig m_towerType6Config;
 
 
 	// --- Wave ---
 	map<int, map<int, WaveConfig>> m_waveConfigs;
 	SpawnStage m_spawnStage = SpawnStage::None;
-	float m_spawnTimer = 3.f;
-	float m_spawnDelay = 3.f;
+	float m_spawnTimer = 2.f;
+	float m_spawnDelay = 2.f;
 	float m_spawningTimer = 0.f;
 	float m_spawningDelay = 0.6f;
 	float m_waveDisplayDuration = 2.0f;
@@ -130,9 +129,10 @@ class Game {
 	float m_refund = 0.6f;
 	int m_cost = 0;
 	int m_mapindex = 0;
-	int m_coin = 1000;
+	int m_coin = 400;
 	int m_currentFrame = 0;
 	vector<float> m_multiplies = { 1, 1.2, 1.4, 1.6 };
+
 
 	//--- Font ---
 	Font m_font;
@@ -141,6 +141,7 @@ class Game {
 	Text m_inputText;
 	string m_playerName;
 	bool m_typingName = false;
+
 
 	// --- Âm thanh ---
 	Music m_backgroundMusic;
@@ -152,6 +153,13 @@ class Game {
 	bool m_sfxMuted = false;
 	SoundBuffer m_clickBuffer, m_constructTower, m_error, m_collide;
 	list<Sound> m_activeSounds;
+
+	// --- Story ---
+	int m_storyIndex = 0;
+	AppState m_nextStateAfterStory = AppState::Dummy;
+	std::vector<std::pair<std::string, std::string>> m_storyQueue;
+	std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_storyBlocks;
+
 
 	// --- Cờ trạng thái ---
 	bool m_setting = false;
@@ -225,6 +233,11 @@ class Game {
 	void DeactivateEnemy(Entity& enemy);
 	void DeactivateTower(Entity& tower);
 	void DeactivateBullet(Entity& bullet);
+
+	// --- Xử lí Story ---
+	void loadStoryFromFile(const string& filename);
+	void initStoryScene();
+	void playStoryBlock(const string& blockName, AppState nextState);
 
 public:
 	Game(const string& config);

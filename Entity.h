@@ -34,7 +34,7 @@ public:
 	shared_ptr<CBound> cBound;
 	shared_ptr<CDamage> cDamage;
 	shared_ptr<CCooldown> cCooldown;
-	shared_ptr<Entity> cTarget; //nearest enemies or leader enemy 
+	shared_ptr<Entity> cTarget;
 	shared_ptr<Entity> cSource;
 	shared_ptr<CSlider> cSlider;
 	shared_ptr<CWeapon> cWeapon;
@@ -49,12 +49,12 @@ public:
 	void active(const bool&);
 	void destroy();
 
-	sf::Vector2f GetPosition();
-	sf::Texture GetTexture();
-	sf::FloatRect GetRect();
+	Vector2f GetPosition();
+	Texture GetTexture();
+	FloatRect GetRect();
 	float GetRadius();
 	
-	void MotionProcess(Entity&, sf::Vector2f);
+	void MotionProcess(Entity&, Vector2f);
 	bool ReadyShoot();
 };
 
