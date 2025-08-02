@@ -335,7 +335,9 @@ void Game::sMovement(float& deltaTime)
 
 				if (heartvector.size() - index == 5)
 				{
-					m_window.close();
+					m_state1 = AppState::Defeat;
+					m_paused = true;
+					heartvector[index]->active(false);
 					// LOSE
 				}
 				else
@@ -494,219 +496,228 @@ void Game::sUserInput()
 		// --- Click chuột trái
 		if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 		{
-			m_clickedTower = false;
-
-			for (auto& tower : m_entities.getEntities("Tower"))
+			if (!(m_state1 == AppState::OptionMenu || m_state1 == AppState::SettingsMenu))
 			{
-				if (tower->isActive() && tower->cSet->sprite.getGlobalBounds().contains(mousePos))
+				m_clickedTower = false;
+
+				for (auto& tower : m_entities.getEntities("Tower"))
 				{
-					// Reset hiển thị range hết tháp để chỉ hiển thị một tháp
-					for (auto& other : m_entities.getEntities("Tower"))
+					if (tower->isActive() && tower->cSet->sprite.getGlobalBounds().contains(mousePos))
 					{
-						if (other->cInput) other->cInput->isChoosing = false;
-					}
-
-					if (tower->cInput)
-					{
-						tower->cInput->onClick();
-					}
-
-					Vector2f basePos = tower->cPosition->position + Vector2f(60.f, -80.f);
-
-					for (auto& e : m_scenes[AppState::GamePlay].getEntities())
-					{
-						if (e->tag() == "rectangle" && e->cBound)
+						// Reset hiển thị range hết tháp để chỉ hiển thị một tháp
+						for (auto& other : m_entities.getEntities("Tower"))
 						{
-							e->cBound->rect.left = basePos.x;
-							e->cBound->rect.top = basePos.y;	
-
-							e->cBound->rectangle.setPosition(e->cBound->rect.left, e->cBound->rect.top);
+							if (other->cInput) other->cInput->isChoosing = false;
 						}
-						else if (e->cText)
+
+						if (tower->cInput)
 						{
-							if (e->tag() == "towerName")
-							{
-								e->cText->text.setString(tower->tag());
-								e->cText->text.setPosition(basePos + Vector2f(10, 10));
-							}
-							else if (e->tag() == "towerLevel")
-							{
-								if (tower->cLevel->levelindex < 3)
-								{
-									e->cText->text.setString("LEVEL " + to_string(tower->cLevel->levelindex + 1));
-								}
-								else
-								{
-									e->cText->text.setString("LEVEL MAX");
-								}
+							tower->cInput->onClick();
+						}
 
-								e->cText->text.setPosition(basePos + Vector2f(160, 25));
-							}
-							else if (e->tag() == "towerDamage")
-							{
-								if (tower->cWeapon->tag == m_bullet01Config.tag)
-									e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower->cLevel->levelindex])));
-								else if (tower->cWeapon->tag == m_bullet02Config.tag)
-									e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower->cLevel->levelindex])));
-								else if (tower->cWeapon->tag == m_bullet03Config.tag)
-									e->cText->text.setString("Damage " + to_string((int)(m_bullet03Config.damage * m_multiplies[tower->cLevel->levelindex])));
-								else if (tower->cWeapon->tag == m_bullet04Config.tag)
-									e->cText->text.setString("Damage " + to_string((int)(m_bullet04Config.damage * m_multiplies[tower->cLevel->levelindex])));
-								else if (tower->cWeapon->tag == m_bullet05Config.tag)
-									e->cText->text.setString("Damage " + to_string((int)(m_bullet05Config.damage * m_multiplies[tower->cLevel->levelindex])));
-								else if (tower->cWeapon->tag == m_bullet06Config.tag)
-									e->cText->text.setString("Damage " + to_string((int)(m_bullet06Config.damage * m_multiplies[tower->cLevel->levelindex])));
+						Vector2f basePos = tower->cPosition->position + Vector2f(60.f, -80.f);
 
-								e->cText->text.setPosition(basePos + Vector2f(10, 60));
-							}
-							else if (e->tag() == "towerDamageNext")
+						for (auto& e : m_scenes[AppState::GamePlay].getEntities())
+						{
+							if (e->tag() == "rectangle" && e->cBound)
 							{
-								if (tower->cLevel->levelindex < 3)
+								e->cBound->rect.left = basePos.x;
+								e->cBound->rect.top = basePos.y;
+
+								e->cBound->rectangle.setPosition(e->cBound->rect.left, e->cBound->rect.top);
+							}
+							else if (e->cText)
+							{
+								if (e->tag() == "towerName")
 								{
-									if (tower->cWeapon->tag == m_bullet01Config.tag)
-										e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
-									else if (tower->cWeapon->tag == m_bullet02Config.tag)
-										e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
-									else if (tower->cWeapon->tag == m_bullet03Config.tag)
-										e->cText->text.setString("Damage " + to_string((int)(m_bullet03Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
-									else if (tower->cWeapon->tag == m_bullet04Config.tag)
-										e->cText->text.setString("Damage " + to_string((int)(m_bullet04Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
-									else if (tower->cWeapon->tag == m_bullet05Config.tag)
-										e->cText->text.setString("Damage " + to_string((int)(m_bullet05Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
-									else if (tower->cWeapon->tag == m_bullet06Config.tag)
-										e->cText->text.setString("Damage " + to_string((int)(m_bullet06Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+									e->cText->text.setString(tower->tag());
+									e->cText->text.setPosition(basePos + Vector2f(10, 10));
 								}
-								else
-								{
-									e->cText->text.setString("MAX");
-								}
-
-								e->cText->text.setPosition(basePos + Vector2f(160, 60));
-							}
-							else if (e->tag() == "towerRange")
-							{
-								if (tower->cBound && tower->cLevel)
-									e->cText->text.setString("Range " + to_string((int) (tower->cBound->radius * m_multiplies[tower->cLevel->levelindex])));
-
-								e->cText->text.setPosition(basePos + Vector2f(10, 120));
-							}
-							else if (e->tag() == "towerRangeNext")
-							{
-								if (tower->cLevel->levelindex < 3)
-								{
-									if (tower->cBound && tower->cLevel)
-										e->cText->text.setString(to_string((int) (tower->cBound->radius * m_multiplies[tower->cLevel->levelindex + 1])));
-								}
-								else
-								{
-									e->cText->text.setString("MAX");
-								}
-
-								e->cText->text.setPosition(basePos + Vector2f(160, 120));
-							}
-							else if (e->tag() == "towerCooldown")
-							{
-								if (tower->cCooldown && tower->cLevel)
-								{
-									float baseSeconds = tower->cCooldown->cooldownDuration.asSeconds();
-									int realSeconds = (int)(baseSeconds / m_multiplies[tower->cLevel->levelindex]);
-
-									e->cText->text.setString("Cooldown " + to_string(realSeconds));
-								}
-
-								e->cText->text.setPosition(basePos + Vector2f(10, 90));
-							}
-							else if (e->tag() == "towerCooldownNext")
-							{
-								if (tower->cCooldown && tower->cLevel)
+								else if (e->tag() == "towerLevel")
 								{
 									if (tower->cLevel->levelindex < 3)
 									{
-										float baseSeconds = tower->cCooldown->cooldownDuration.asSeconds();
-										int nextSeconds = (int)(baseSeconds / m_multiplies[tower->cLevel->levelindex + 1]);
+										e->cText->text.setString("LEVEL " + to_string(tower->cLevel->levelindex + 1));
+									}
+									else
+									{
+										e->cText->text.setString("LEVEL MAX");
+									}
 
-										e->cText->text.setString(to_string(nextSeconds));
+									e->cText->text.setPosition(basePos + Vector2f(160, 25));
+								}
+								else if (e->tag() == "towerDamage")
+								{
+									if (tower->cWeapon->tag == m_bullet01Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower->cLevel->levelindex])));
+									else if (tower->cWeapon->tag == m_bullet02Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower->cLevel->levelindex])));
+									else if (tower->cWeapon->tag == m_bullet03Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet03Config.damage * m_multiplies[tower->cLevel->levelindex])));
+									else if (tower->cWeapon->tag == m_bullet04Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet04Config.damage * m_multiplies[tower->cLevel->levelindex])));
+									else if (tower->cWeapon->tag == m_bullet05Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet05Config.damage * m_multiplies[tower->cLevel->levelindex])));
+									else if (tower->cWeapon->tag == m_bullet06Config.tag)
+										e->cText->text.setString("Damage " + to_string((int)(m_bullet06Config.damage * m_multiplies[tower->cLevel->levelindex])));
+
+									e->cText->text.setPosition(basePos + Vector2f(10, 60));
+								}
+								else if (e->tag() == "towerDamageNext")
+								{
+									if (tower->cLevel->levelindex < 3)
+									{
+										if (tower->cWeapon->tag == m_bullet01Config.tag)
+											e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+										else if (tower->cWeapon->tag == m_bullet02Config.tag)
+											e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+										else if (tower->cWeapon->tag == m_bullet03Config.tag)
+											e->cText->text.setString("Damage " + to_string((int)(m_bullet03Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+										else if (tower->cWeapon->tag == m_bullet04Config.tag)
+											e->cText->text.setString("Damage " + to_string((int)(m_bullet04Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+										else if (tower->cWeapon->tag == m_bullet05Config.tag)
+											e->cText->text.setString("Damage " + to_string((int)(m_bullet05Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
+										else if (tower->cWeapon->tag == m_bullet06Config.tag)
+											e->cText->text.setString("Damage " + to_string((int)(m_bullet06Config.damage * m_multiplies[tower->cLevel->levelindex + 1])));
 									}
 									else
 									{
 										e->cText->text.setString("MAX");
 									}
+
+									e->cText->text.setPosition(basePos + Vector2f(160, 60));
 								}
-
-								e->cText->text.setPosition(basePos + Vector2f(160, 90));
-							}
-							else if (e->tag() == "sellButton")
-							{
-								if (e->cInput)
-									e->cInput->onClick = [this, tower]() {
-										RemoveTower(*tower);
-										};
-
-								if (tower->cMoney && tower->cLevel)
+								else if (e->tag() == "towerRange")
 								{
-									int sellValue = tower->cMoney->money * m_multiplies[tower->cLevel->levelindex] * m_refund;
-									e->cText->text.setString("SELL " + to_string(sellValue));
-								}
+									if (tower->cBound && tower->cLevel)
+										e->cText->text.setString("Range " + to_string((int)(tower->cBound->radius * m_multiplies[tower->cLevel->levelindex])));
 
-								e->cText->text.setPosition(basePos + Vector2f(10, 160));
-							}
-							else if (e->tag() == "upgradeButton")
-							{
-								if (tower->cLevel)
+									e->cText->text.setPosition(basePos + Vector2f(10, 120));
+								}
+								else if (e->tag() == "towerRangeNext")
 								{
 									if (tower->cLevel->levelindex < 3)
 									{
-										int upgradecost = tower->cMoney->money * m_multiplies[tower->cLevel->levelindex + 1];
-
-										e->cText->text.setString("UPGRADE " + to_string(upgradecost));
-
-										e->cText->text.setPosition(basePos + Vector2f(140, 160));
-
-										if (e->cInput)
-											e->cInput->onClick = [this, tower]() {
-											m_clickedTower = true;
-											UpgradeTower(*tower);
-											};
+										if (tower->cBound && tower->cLevel)
+											e->cText->text.setString(to_string((int)(tower->cBound->radius * m_multiplies[tower->cLevel->levelindex + 1])));
 									}
 									else
 									{
-										e->cText->text.setString("UPGRADE MAX");
+										e->cText->text.setString("MAX");
+									}
 
-										e->cText->text.setPosition(basePos + Vector2f(140, 160));
+									e->cText->text.setPosition(basePos + Vector2f(160, 120));
+								}
+								else if (e->tag() == "towerCooldown")
+								{
+									if (tower->cCooldown && tower->cLevel)
+									{
+										float baseSeconds = tower->cCooldown->cooldownDuration.asSeconds();
+										int realSeconds = (int)(baseSeconds / m_multiplies[tower->cLevel->levelindex]);
 
-										if (e->cInput)
-											e->cInput->onClick = [this, &tower]() {
-											m_clickedTower = true;
-											};
+										e->cText->text.setString("Cooldown " + to_string(realSeconds));
+									}
+
+									e->cText->text.setPosition(basePos + Vector2f(10, 90));
+								}
+								else if (e->tag() == "towerCooldownNext")
+								{
+									if (tower->cCooldown && tower->cLevel)
+									{
+										if (tower->cLevel->levelindex < 3)
+										{
+											float baseSeconds = tower->cCooldown->cooldownDuration.asSeconds();
+											int nextSeconds = (int)(baseSeconds / m_multiplies[tower->cLevel->levelindex + 1]);
+
+											e->cText->text.setString(to_string(nextSeconds));
+										}
+										else
+										{
+											e->cText->text.setString("MAX");
+										}
+									}
+
+									e->cText->text.setPosition(basePos + Vector2f(160, 90));
+								}
+								else if (e->tag() == "sellButton")
+								{
+									if (e->cInput)
+										e->cInput->onClick = [this, tower]() {
+										RemoveTower(*tower);
+										};
+
+									if (tower->cMoney && tower->cLevel)
+									{
+										int sellValue = tower->cMoney->money * m_multiplies[tower->cLevel->levelindex] * m_refund;
+										e->cText->text.setString("SELL " + to_string(sellValue));
+									}
+
+									e->cText->text.setPosition(basePos + Vector2f(10, 160));
+								}
+								else if (e->tag() == "upgradeButton")
+								{
+									if (tower->cLevel)
+									{
+										if (tower->cLevel->levelindex < 3)
+										{
+											int upgradecost = tower->cMoney->money * m_multiplies[tower->cLevel->levelindex + 1];
+
+											e->cText->text.setString("UPGRADE " + to_string(upgradecost));
+
+											e->cText->text.setPosition(basePos + Vector2f(140, 160));
+
+											if (e->cInput)
+												e->cInput->onClick = [this, tower]() {
+												m_clickedTower = true;
+												UpgradeTower(*tower);
+												};
+										}
+										else
+										{
+											e->cText->text.setString("UPGRADE MAX");
+
+											e->cText->text.setPosition(basePos + Vector2f(140, 160));
+
+											if (e->cInput)
+												e->cInput->onClick = [this, &tower]() {
+												m_clickedTower = true;
+												};
+										}
 									}
 								}
 							}
 						}
+
+						m_clickedTower = true;
+						break;
 					}
-
-					m_clickedTower = true;
-					break;
 				}
-			}
-
-			for (auto& e : m_scenes[AppState::GamePlay].getEntities())
-			{
-				if (e->cText && e->cInput && e->cText->text.getGlobalBounds().contains(mousePos))
+				for (auto& e : m_scenes[AppState::GamePlay].getEntities())
 				{
-					playSfx(m_clickBuffer);
-					e->cInput->onClick();
+					if (e->cText && e->cInput && e->cText->text.getGlobalBounds().contains(mousePos))
+					{
+						if (e->tag() == "sellButton")
+						{
+							playSfx(m_sell);
+						}
+						else
+						{
+						   playSfx(m_clickBuffer);
+						}
+						e->cInput->onClick();
+					}
 				}
-			}
 
-			// Reset hiển thị range nếu bấm ra ngoài tháp
-			if (!m_clickedTower)
-			{
-				for (auto& tower : m_entities.getEntities("Tower"))
+
+				// Reset hiển thị range nếu bấm ra ngoài tháp
+				if (!m_clickedTower)
 				{
-					if (tower->cInput) tower->cInput->isChoosing = false;
+					for (auto& tower : m_entities.getEntities("Tower"))
+					{
+						if (tower->cInput) tower->cInput->isChoosing = false;
+					}
 				}
 			}
-
 			bool clickedSlider = false;
 
 			if (!clickedSlider)
@@ -838,46 +849,49 @@ void Game::sUserInput()
 			e->cInput->isHovered = hovering;
 		}
 	}
-
-	for (auto& e : m_entities.getEntities())
+	if (!(hoverState == AppState::OptionMenu || hoverState == AppState::SettingsMenu))
 	{
-		if (e->cSet && e->cInput)
+
+		for (auto& e : m_entities.getEntities())
 		{
-			bool hovering = e->cSet->sprite.getGlobalBounds().contains(mousePos);
-
-			if (hovering && !e->cInput->isHovered && e->cInput->onHover)
+			if (e->cSet && e->cInput)
 			{
-				e->cInput->onHover();
-				e->cInput->isHovered = true;
-			}
-			else if (!hovering && e->cInput->isHovered && e->cInput->offHover)
-			{
-				e->cInput->offHover();
-				e->cInput->isHovered = false;
-			}
+				bool hovering = e->cSet->sprite.getGlobalBounds().contains(mousePos);
 
-			e->cInput->isHovered = hovering;
+				if (hovering && !e->cInput->isHovered && e->cInput->onHover)
+				{
+					e->cInput->onHover();
+					e->cInput->isHovered = true;
+				}
+				else if (!hovering && e->cInput->isHovered && e->cInput->offHover)
+				{
+					e->cInput->offHover();
+					e->cInput->isHovered = false;
+				}
+
+				e->cInput->isHovered = hovering;
+			}
 		}
-	}
 
-	for (auto& e : m_scenes[AppState::GamePlay].getEntities())
-	{
-		if (e->cText && e->cInput)
+		for (auto& e : m_scenes[AppState::GamePlay].getEntities())
 		{
-			bool hovering = e->cText->text.getGlobalBounds().contains(mousePos);
-
-			if (hovering && !e->cInput->isHovered && e->cInput->onHover)
+			if (e->cText && e->cInput)
 			{
-				e->cInput->onHover();
-				e->cInput->isHovered = true;
-			}
-			else if (!hovering && e->cInput->isHovered && e->cInput->offHover)
-			{
-				e->cInput->offHover();
-				e->cInput->isHovered = false;
-			}
+				bool hovering = e->cText->text.getGlobalBounds().contains(mousePos);
 
-			e->cInput->isHovered = hovering;
+				if (hovering && !e->cInput->isHovered && e->cInput->onHover)
+				{
+					e->cInput->onHover();
+					e->cInput->isHovered = true;
+				}
+				else if (!hovering && e->cInput->isHovered && e->cInput->offHover)
+				{
+					e->cInput->offHover();
+					e->cInput->isHovered = false;
+				}
+
+				e->cInput->isHovered = hovering;
+			}
 		}
 	}
 }
@@ -956,8 +970,8 @@ void Game::sSaveGame()
 	shared_ptr<Entity> mapButton = nullptr;
 	for (auto& e : m_scenes[AppState::LoadGame].getEntities())
 	{
-		if(e->tag() == map_name)
-		{ 
+		if (e->tag() == map_name)
+		{
 			mapButton = e;
 			break;
 		}
@@ -980,7 +994,7 @@ void Game::sSaveGame()
 			<< setw(2) << takeTime->local.tm_sec;
 		string TiMe = oss.str();
 
-		mapButton->cText = make_shared<CText>(m_playerName + " " + date + " " + TiMe);
+		mapButton->cText = make_shared<CText>(date + " " + TiMe);
 		mapButton->cText->text.setFont(m_font1);
 		mapButton->cText->text.setCharacterSize(25);
 		mapButton->cText->text.setFillColor(Color::White);
@@ -988,9 +1002,9 @@ void Game::sSaveGame()
 
 		FloatRect bounds = mapButton->cText->text.getLocalBounds();
 		mapButton->cText->text.setOrigin(bounds.left + bounds.width / 2.f, bounds.top);
-		cout << "Saving" << endl;
+		/*cout << "Saving" << endl;
 		cout << bounds.width << " " << bounds.height << "\n";
-		cout << bounds.left << " " << bounds.top << "\n";
+		cout << bounds.left << " " << bounds.top << "\n";*/
 
 		Vector2f buttonPos = mapButton->cPosition->position;
 		Vector2f buttonSize(1920.f * 0.25f, 1080.f * 0.25f);
@@ -998,8 +1012,7 @@ void Game::sSaveGame()
 		mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 20.f);
 
 		writePlayer << "# Information of game save: " << "\n";
-		writePlayer << date << " " << TiMe << " "
-			        << bounds.left << " " << bounds.top << " " << bounds.width << " " << bounds.height << "\n";
+		writePlayer << date << " " << TiMe << "\n";
 	}
 
 	if (!checkStream())
@@ -1638,7 +1651,6 @@ void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 	getline(in, tmp);
 	istringstream iss(tmp);
 	iss >> date >> TiMe;
-	iss >> bounds.left >> bounds.top >> bounds.width >> bounds.height;
 
 	mapButton->cText = make_shared<CText>(date + " " + TiMe);
 
@@ -1648,10 +1660,10 @@ void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 	mapButton->cText->text.setStyle(Text::Bold);
 
 
-
-	cout << bounds.width << " " << bounds.height << "\n";
-	cout << bounds.left << " " << bounds.top << "\n";
-	mapButton->cText->text.setOrigin(bounds.left + bounds.width / 2.f, bounds.top);
+	FloatRect bounds1 = mapButton->cText->text.getLocalBounds();
+	/*cout << bounds.width << " " << bounds.height << "\n";
+	cout << bounds.left << " " << bounds.top << "\n";*/
+	mapButton->cText->text.setOrigin(bounds1.left + bounds1.width / 2.f, bounds1.top);
 
 	Vector2f buttonPos = mapButton->cPosition->position;
 	Vector2f buttonSize(1920.f * 0.25f, 1080.f * 0.25f);
@@ -1727,6 +1739,10 @@ void Game::updateMusicState() {
 
 		if (m_mapSelect.getStatus() == sf::Music::Playing)
 			m_mapSelect.stop();
+		if (m_victoryMusic.getStatus() == Music::Playing)
+			m_victoryMusic.stop();
+		if (m_defeatMusic.getStatus() == Music::Playing)
+			m_defeatMusic.stop();
 
 		if (m_backgroundMusic.getStatus() != sf::Music::Playing)
 			m_backgroundMusic.play();
@@ -1740,15 +1756,39 @@ void Game::updateMusicState() {
 
 		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
 			m_backgroundMusic.stop();
+		if (m_victoryMusic.getStatus() == Music::Playing)
+			m_victoryMusic.stop();
+		if (m_defeatMusic.getStatus() == Music::Playing)
+			m_defeatMusic.stop();
 
 		if (m_mapSelect.getStatus() != sf::Music::Playing)
 			m_mapSelect.play();
+	}
+	else if (m_state1 == AppState::Defeat || m_state1 == AppState::Victory)
+	{
+		if (m_mapMusic[m_mapindex].getStatus() == Music::Playing)
+			m_mapMusic[m_mapindex].stop();
+		if (m_backgroundMusic.getStatus() == Music::Playing)
+			m_backgroundMusic.stop();
+		if (m_mapSelect.getStatus() == Music::Playing)
+			m_mapSelect.stop();
+
+
+		if (m_state1 == AppState::Defeat && m_defeatMusic.getStatus() != Music::Playing)
+			m_defeatMusic.play();
+		else if (m_state1 == AppState::Victory && m_victoryMusic.getStatus() != Music::Playing)
+			m_victoryMusic.play();
+		
 	}
 	else if (m_state == AppState::Map1) {
 		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
 			m_backgroundMusic.stop();
 		if (m_mapSelect.getStatus() == sf::Music::Playing)
 			m_mapSelect.stop();
+		if (m_victoryMusic.getStatus() == Music::Playing)
+			m_victoryMusic.stop();
+		if (m_defeatMusic.getStatus() == Music::Playing)
+			m_defeatMusic.stop();
 		playMapMusic(0);
 	}
 	else if (m_state == AppState::Map2) {
@@ -1763,6 +1803,10 @@ void Game::updateMusicState() {
 			m_backgroundMusic.stop();
 		if (m_mapSelect.getStatus() == sf::Music::Playing)
 			m_mapSelect.stop();
+		if (m_victoryMusic.getStatus() == Music::Playing)
+			m_victoryMusic.stop();
+		if (m_defeatMusic.getStatus() == Music::Playing)
+			m_defeatMusic.stop();
 		playMapMusic(2);
 	}
 	else if (m_state == AppState::Map4) {
@@ -1770,6 +1814,10 @@ void Game::updateMusicState() {
 			m_backgroundMusic.stop();
 		if (m_mapSelect.getStatus() == sf::Music::Playing)
 			m_mapSelect.stop();
+		if (m_victoryMusic.getStatus() == Music::Playing)
+			m_victoryMusic.stop();
+		if (m_defeatMusic.getStatus() == Music::Playing)
+			m_defeatMusic.stop();
 		playMapMusic(3);
 	}
 	else {
@@ -1778,6 +1826,10 @@ void Game::updateMusicState() {
 			m_backgroundMusic.stop();
 		if (m_mapSelect.getStatus() == sf::Music::Playing)
 			m_mapSelect.stop();
+		if (m_victoryMusic.getStatus() == Music::Playing)
+			m_victoryMusic.stop();
+		if (m_defeatMusic.getStatus() == Music::Playing)
+			m_defeatMusic.stop();
 		for (auto& [idx, music] : m_mapMusic) {
 			if (music.getStatus() == sf::Music::Playing) {
 				music.stop();
