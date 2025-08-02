@@ -296,7 +296,7 @@ void Game::sMovement(float& deltaTime)
 		else if (entity->tag().find("Enemy") != string::npos)
 		{
 			// Nếu như quái đi hết đường đi
-			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex].size())
+			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex].size())
 			{
 				auto heartvector = m_scenes[AppState::GamePlay].getEntities("Heart");
 				int index = static_cast<int>(heartvector.size()) - 1;
@@ -322,7 +322,7 @@ void Game::sMovement(float& deltaTime)
 			}
 
 			// Tính toán đường đi đến điểm tiếp theo
-			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->currentPathindex][entity->cMovement->pathIndex];
+			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex][entity->cMovement->currentPathindex];
 			Vector2f direction = target - entity->cPosition->position;
 			float distance = MathSupport::Length(direction);
 
@@ -348,8 +348,8 @@ void Game::sMovement(float& deltaTime)
 
 				if (nextIndex < (int)entity->cMovement->paths[m_mapindex].size())
 				{
-					Vector2f currentTarget = entity->cMovement->paths[m_mapindex][currentIndex][entity->cMovement->pathIndex];
-					Vector2f nextTarget = entity->cMovement->paths[m_mapindex][nextIndex][entity->cMovement->pathIndex];
+					Vector2f currentTarget = entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex][currentIndex];
+					Vector2f nextTarget = entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex][nextIndex];
 
 					float dx = nextTarget.x - currentTarget.x;
 
@@ -1734,36 +1734,33 @@ void Game::updateMusicState() {
 // --- Tháp (Tower) ---
 void Game::Shoot(Entity& tower)
 {
-	if (!tower.cTarget) { return; }
+	if (!tower.cTarget) return;
 
 	for (auto& bullet : m_entities.getEntities(tower.cWeapon->tag))
 	{
 		if (!bullet->isActive())
 		{
 			bullet->cPosition = make_shared<CPosition>(tower.cPosition->position);
-
 			bullet->cSet->sprite.setPosition(tower.cPosition->position);
 
 			bullet->cDamage->damage = bullet->cDamage->damage * m_multiplies[tower.cLevel->levelindex];
 
-			bullet->active(true);
-
 			Vector2f direction = tower.cTarget->cPosition->position - tower.cPosition->position;
 			Vector2f normalized_direction = MathSupport::Normalize(direction);
 
-			if (tower.cWeapon->tag == "Bullet01")
-				bullet->cMovement->velocity = normalized_direction * m_bullet01Config.speed;
-			else if (tower.cWeapon->tag == "Bullet02")
-				bullet->cMovement->velocity = normalized_direction * m_bullet02Config.speed;
-			else if (tower.cWeapon->tag == "Bullet03")
-				bullet->cMovement->velocity = normalized_direction * m_bullet03Config.speed;
-			else if (tower.cWeapon->tag == "Bullet04")
-				bullet->cMovement->velocity = normalized_direction * m_bullet04Config.speed;
-			else if (tower.cWeapon->tag == "Bullet05")
-				bullet->cMovement->velocity = normalized_direction * m_bullet05Config.speed;
-			else if (tower.cWeapon->tag == "Bullet06")
-				bullet->cMovement->velocity = normalized_direction * m_bullet06Config.speed;
+			float speed = 0.f;
+			const string& tag = tower.cWeapon->tag;
 
+			if (tag == m_bullet01Config.tag) speed = m_bullet01Config.speed;
+			else if (tag == m_bullet02Config.tag) speed = m_bullet02Config.speed;
+			else if (tag == m_bullet03Config.tag) speed = m_bullet03Config.speed;
+			else if (tag == m_bullet04Config.tag) speed = m_bullet04Config.speed;
+			else if (tag == m_bullet05Config.tag) speed = m_bullet05Config.speed;
+			else if (tag == m_bullet06Config.tag) speed = m_bullet06Config.speed;
+
+			bullet->cMovement->velocity = normalized_direction * (speed * m_speedup);
+
+			bullet->active(true);
 			break;
 		}
 	}

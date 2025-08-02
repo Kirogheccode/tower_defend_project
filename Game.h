@@ -124,7 +124,7 @@ class Game {
 	float m_refund = 0.6f;
 	int m_cost = 0;
 	int m_mapindex = 0;
-	int m_coin = 1000;
+	int m_coin = 200;
 	int m_currentFrame = 0;
 	vector<float> m_multiplies = { 1, 1.2, 1.4, 1.6 };
 
