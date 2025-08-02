@@ -294,6 +294,7 @@
     <Text Include="map2.txt" />
     <Text Include="map3.txt" />
     <Text Include="map4.txt" />
+    <Text Include="story.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="tower_defend_project.rc">

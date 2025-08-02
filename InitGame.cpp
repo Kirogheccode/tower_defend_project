@@ -497,8 +497,9 @@ void Game::init(const string& path)
 	loadTowerUpgradeInfo();
 	loadTowerPirce();
 	loadWaveText();
+	initStoryScene();
+	loadStoryFromFile("story.txt");
 }
-
 
 // --- Load những thứ cần thiết cho game ---
 void Game::loadHeartCoinText()
@@ -1246,7 +1247,7 @@ void Game::initUIFlow()
 		play->cSet->sprite.setScale(0.7f, 0.7f);
 		play->cInput = make_shared<CInput>([this]()
 			{
-				m_state = (AppState::PlayMenu);
+				playStoryBlock("intro", AppState::PlayMenu);
 			},
 			[play]()
 			{
@@ -1785,4 +1786,75 @@ void Game::initUIFlow()
 		);
 
 	}
+}
+
+// --- Load Story ---
+string trimBOM(const string& line)
+{
+	if (line.size() >= 3 &&
+		(unsigned char)line[0] == 0xEF &&
+		(unsigned char)line[1] == 0xBB &&
+		(unsigned char)line[2] == 0xBF)
+	{
+		return line.substr(3);
+	}
+	return line;
+}
+
+void Game::loadStoryFromFile(const string& filename)
+{
+	m_storyBlocks.clear();
+	ifstream in(filename);
+	if (!in)
+	{
+		cerr << "Can not open file story: " << filename << "\n";
+		return;
+	}
+
+	string line, currentBlock;
+	while (getline(in, line))
+	{
+		line = trimBOM(line);
+
+		if (line.empty() || line[0] == '#') continue;
+
+		if (line.front() == '[' && line.back() == ']')
+		{
+			currentBlock = line.substr(1, line.size() - 2);
+			m_storyBlocks[currentBlock] = {};
+			continue;
+		}
+
+		if (currentBlock.empty()) continue;
+
+		size_t sep = line.find('|');
+		if (sep == std::string::npos) continue;
+
+		string img = line.substr(0, sep);
+		string text = line.substr(sep + 1);
+		m_storyBlocks[currentBlock].push_back({ img, text });
+	}
+
+	std::cerr << "Loaded block:\n";
+	for (auto& [k, v] : m_storyBlocks)
+		std::cerr << "- [" << k << "] (" << v.size() << " scene) length=" << k.length() << "\n";
+
+	in.close();
+}
+
+void Game::initStoryScene()
+{
+	auto bg = m_scenes[AppState::StoryScene].addEntity("StoryBG");
+	bg->cSet = make_shared<CSet>("IMGS/Story/scene1.png");
+	bg->cPosition = make_shared<CPosition>(Vector2f(0.f, 0.f));
+	bg->cSet->sprite.setPosition(bg->cPosition->position);
+	bg->cSet->sprite.setScale(1.f, 1.f);
+	bg->cSet->sprite.setOrigin(0.f, 0.f);
+
+	auto text = m_scenes[AppState::StoryScene].addEntity("StoryText");
+	text->cText = make_shared<CText>("...");
+	text->cText->text.setFont(m_font);
+	text->cText->text.setCharacterSize(36);
+	text->cText->text.setFillColor(sf::Color::Black);
+	text->cText->text.setPosition(100.f, 500.f);
 }

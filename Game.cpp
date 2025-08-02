@@ -66,6 +66,19 @@ void Game::sRender(float& deltaTime)
 				m_window.draw(e->cBound->rectangle);
 		}
 
+		if (m_state == AppState::StoryScene)
+		{
+			m_window.clear();
+			for (auto& e : m_scenes[m_state].getEntities())
+			{
+				if (e->cSet)  m_window.draw(e->cSet->sprite);
+				if (e->cText) m_window.draw(e->cText->text);
+			}
+			m_window.display();
+			return;
+		}
+
+
 		if (game_state == AppState::GamePlay)
 		{
 			// Vẽ các entity có sprite
@@ -384,6 +397,33 @@ void Game::sUserInput()
 		{
 			m_running = false;
 			m_window.close();
+		}
+
+		if (m_state == AppState::StoryScene)
+		{
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+			{
+				m_storyIndex++;
+				if (m_storyIndex < m_storyQueue.size())
+				{
+					auto bgList = m_scenes[AppState::StoryScene].getEntities("StoryBG");
+					auto textList = m_scenes[AppState::StoryScene].getEntities("StoryText");
+
+					if (bgList.empty() || textList.empty()) return;
+
+					auto& bg = bgList.front();
+					auto& text = textList.front();
+
+
+					bg->cSet->texture.loadFromFile(m_storyQueue[m_storyIndex].first);
+					text->cText->text.setString(m_storyQueue[m_storyIndex].second);
+				}
+				else
+				{
+					m_state = m_nextStateAfterStory;
+				}
+			}
+			return;
 		}
 
 		// --- Input cho SettingsMenu (Slider + Icon)
@@ -1729,6 +1769,98 @@ void Game::updateMusicState() {
 		}
 	}
 }
+
+// --- Xử lí Story ---
+//void Game::playStoryBlock(const string& blockName, AppState nextState)
+//{
+//	auto it = m_storyBlocks.find(blockName);
+//	if (it == m_storyBlocks.end() || it->second.empty())
+//	{
+//		std::cerr << "Can not file Block story: " << blockName << "\n";
+//		m_state = nextState;
+//		return;
+//	}
+//
+//	m_storyQueue = it->second;
+//	m_storyIndex = 0;
+//	m_nextStateAfterStory = nextState;
+//	m_state = AppState::StoryScene;
+//
+//	auto& bg = m_scenes[AppState::StoryScene].getEntities("StoryBG").front();
+//	auto& text = m_scenes[AppState::StoryScene].getEntities("StoryText").front();
+//
+//	bg->cSet->texture.loadFromFile(m_storyQueue[0].first);
+//	text->cText->text.setString(m_storyQueue[0].second);
+//}
+
+void Game::playStoryBlock(const std::string& blockName, AppState nextState)
+{
+	std::cerr << "[DEBUG] playStoryBlock: " << blockName << "\n";
+
+	// Kiểm tra block tồn tại
+	auto it = m_storyBlocks.find(blockName);
+	if (it == m_storyBlocks.end() || it->second.empty())
+	{
+		std::cerr << "[ERROR] Block not found or empty: " << blockName << "\n";
+		m_state = nextState;
+		return;
+	}
+
+	// Thiết lập dữ liệu truyện
+	m_storyQueue = it->second;
+	m_storyIndex = 0;
+	m_nextStateAfterStory = nextState;
+	m_state = AppState::StoryScene;
+
+	// Lấy entity
+	auto bgList = m_scenes[AppState::StoryScene].getEntities("StoryBG");
+	auto textList = m_scenes[AppState::StoryScene].getEntities("StoryText");
+
+	if (bgList.empty() || textList.empty())
+	{
+		std::cerr << "[FATAL] StoryBG or StoryText entity missing!\n";
+		m_state = nextState;
+		return;
+	}
+
+	auto& bg = bgList.front();
+	auto& text = textList.front();
+
+	// Kiểm tra hợp lệ
+	if (!bg->cSet)
+	{
+		std::cerr << "[FATAL] StoryBG entity missing cSet!\n";
+		m_state = nextState;
+		return;
+	}
+
+	if (!text->cText)
+	{
+		std::cerr << "[FATAL] StoryText entity missing cText!\n";
+		m_state = nextState;
+		return;
+	}
+
+	const std::string& imgPath = m_storyQueue[0].first;
+	const std::string& storyText = m_storyQueue[0].second;
+
+	std::cerr << "[DEBUG] Loading image: " << imgPath << "\n";
+
+	// Load ảnh
+	if (!bg->cSet->texture.loadFromFile(imgPath))
+	{
+		std::cerr << "[ERROR] Failed to load image: " << imgPath << "\n";
+	}
+	else
+	{
+		bg->cSet->sprite.setTexture(bg->cSet->texture, true);
+	}
+	std::cerr << "[DEBUG] m_storyQueue.size(): " << m_storyQueue.size() << "\n";
+
+	// Gán lời thoại
+	text->cText->text.setString(storyText);
+}
+
 
 
 // --- Tháp (Tower) ---

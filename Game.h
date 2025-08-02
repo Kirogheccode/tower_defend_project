@@ -17,6 +17,7 @@
 #include <random>
 #include <functional>
 #include <iomanip>
+#include <algorithm>
 
 #include "Entity.h"
 #include "EntityManager.h"
@@ -36,6 +37,7 @@ enum class SpawnStage { None, Type1, Type2, Type3, Done };
 enum class AppState {
 	Dummy,
 	MainMenu,
+	StoryScene,
 	PlayMenu,
 	NameInput,
 	SettingsMenu,
@@ -149,6 +151,12 @@ class Game {
 	SoundBuffer m_clickBuffer, m_constructTower, m_error, m_collide;
 	list<Sound> m_activeSounds;
 
+	// --- Story ---
+	int m_storyIndex = 0;
+	AppState m_nextStateAfterStory = AppState::Dummy;
+	std::vector<std::pair<std::string, std::string>> m_storyQueue;
+	std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_storyBlocks;
+
 
 	// --- Cờ trạng thái ---
 	bool m_setting = false;
@@ -221,6 +229,11 @@ class Game {
 	void DeactivateEnemy(Entity& enemy);
 	void DeactivateTower(Entity& tower);
 	void DeactivateBullet(Entity& bullet);
+
+	// --- Xử lí Story ---
+	void loadStoryFromFile(const string& filename);
+	void initStoryScene();
+	void playStoryBlock(const string& blockName, AppState nextState);
 
 public:
 	Game(const string& config);
