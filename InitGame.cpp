@@ -816,7 +816,7 @@ void Game::loadWaveText()
 void Game::loadFontText()
 {
 	// -- Khởi tạo font chữ
-	if (!m_font.loadFromFile("IMGS/Fonts/ARCADECLASSIC.ttf")) {
+	if (!m_font.loadFromFile("IMGS/Fonts/VT323-Regular.ttf")) {
 		cout << "Failed to load font\n";
 	}
 	if (!m_font1.loadFromFile("IMGS/Fonts/arial.ttf"))
@@ -1913,11 +1913,21 @@ void Game::loadStoryFromFile(const string& filename)
 	{
 		auto entity = m_scenes[AppState::Defeat].addEntity("DefeatPanel");
 		entity->cSet = make_shared<CSet>("IMGS/GUI/Defeat.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(511, 307));
+		entity->cPosition = make_shared<CPosition>(Vector2f(511, 257));
+
+		auto addText = m_scenes[AppState::Defeat].addEntity("DefeatText");
+		addText->cText = make_shared<CText>("The stronghold falls… but the war isn’t over. Stand again! Fight again!");
+		addText->cText->text.setFont(m_font);
+		addText->cText->text.setCharacterSize(40);
+		addText->cText->text.setFillColor(Color::White);
+		addText->cText->text.setOutlineColor(Color::Black);
+		addText->cText->text.setOutlineThickness(2.f);
+		addText->cText->text.setPosition(400.f, 700.f);
+
 
 		entity = m_scenes[AppState::Defeat].addEntity("Exit");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 716));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 816));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
@@ -1938,7 +1948,7 @@ void Game::loadStoryFromFile(const string& filename)
 
 		entity = m_scenes[AppState::Defeat].addEntity("Retry");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/Retry.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(708, 716));
+		entity->cPosition = make_shared<CPosition>(Vector2f(708, 816));
 		entity->cInput = make_shared<CInput>([this]()
 			{ 
 				prev_state = m_state;
@@ -1959,9 +1969,18 @@ void Game::loadStoryFromFile(const string& filename)
 		entity->cSet = make_shared<CSet>("IMGS/GUI/Victory.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(511, 307));
 
+		addText = m_scenes[AppState::Victory].addEntity("VictoryText");
+		addText->cText = make_shared<CText>("You held the line. You turned the tide. This war is over - because you never gave up.");
+		addText->cText->text.setFont(m_font);
+		addText->cText->text.setCharacterSize(40);
+		addText->cText->text.setFillColor(Color::White);
+		addText->cText->text.setOutlineColor(Color::Black);
+		addText->cText->text.setOutlineThickness(2.f);
+		addText->cText->text.setPosition(300.f, 700.f);
+
 		entity = m_scenes[AppState::Victory].addEntity("Exit");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 716));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 816));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
@@ -1982,7 +2001,7 @@ void Game::loadStoryFromFile(const string& filename)
 
 		entity = m_scenes[AppState::Victory].addEntity("Retry");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/Retry.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(708, 716));
+		entity->cPosition = make_shared<CPosition>(Vector2f(708, 816));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
@@ -2000,17 +2019,13 @@ void Game::loadStoryFromFile(const string& filename)
 		);
 	}
 
-	std::cerr << "Loaded block:\n";
-	for (auto& [k, v] : m_storyBlocks)
-		std::cerr << "- [" << k << "] (" << v.size() << " scene) length=" << k.length() << "\n";
-
 	in.close();
 }
 
 void Game::initStoryScene()
 {
 	auto bg = m_scenes[AppState::StoryScene].addEntity("StoryBG");
-	bg->cSet = make_shared<CSet>("IMGS/Story/scene1.png");
+	bg->cSet = make_shared<CSet>("IMGS/Story/cut1.jpg");
 	bg->cPosition = make_shared<CPosition>(Vector2f(0.f, 0.f));
 	bg->cSet->sprite.setPosition(bg->cPosition->position);
 	bg->cSet->sprite.setScale(1.f, 1.f);
@@ -2019,7 +2034,29 @@ void Game::initStoryScene()
 	auto text = m_scenes[AppState::StoryScene].addEntity("StoryText");
 	text->cText = make_shared<CText>("...");
 	text->cText->text.setFont(m_font);
-	text->cText->text.setCharacterSize(36);
-	text->cText->text.setFillColor(sf::Color::Black);
-	text->cText->text.setPosition(100.f, 500.f);
+	text->cText->text.setCharacterSize(40);
+	text->cText->text.setFillColor(sf::Color::White);
+	text->cText->text.setPosition(300.f, 800.f);
+
+	auto skipText = m_scenes[AppState::StoryScene].addEntity("SkipButton");
+	skipText->cText = make_shared<CText>("SKIP");
+	skipText->cText->text.setFont(m_font);
+	skipText->cText->text.setCharacterSize(36);
+	skipText->cText->text.setFillColor(Color::White);
+	skipText->cText->text.setPosition(1600.f, 950.f);
+	skipText->cText->text.setOutlineColor(Color::Black);
+	skipText->cText->text.setOutlineThickness(1.f);
+
+	skipText->cInput = make_shared<CInput>();
+
+	skipText->cInput->onClick = [this]() {
+		m_state = m_nextStateAfterStory;
+		};
+	skipText->cInput->onHover = [skipText]() {
+		skipText->cText->text.setFillColor(Color::Yellow);
+		};
+	skipText->cInput->offHover = [skipText]() {
+		skipText->cText->text.setFillColor(Color::White);
+		};
+
 }

@@ -41,118 +41,42 @@ void Game::sRender(float& deltaTime)
 
 	// Hiển thị tổng
 	
+	for (auto& e : m_scenes[m_state].getEntities())
+	{
+		if (e->cSet && e->cPosition)
+			e->cSet->sprite.setPosition(e->cPosition->position);
+
+		if (e->tag() == "Base")
+		{
+			if (e->isActive())
+				m_window.draw(e->cSet->sprite);
+		}
+		else
+		{
+			if (e->cSet)
+				m_window.draw(e->cSet->sprite);
+		}
+
+		if (e->cText)
+		{
+			m_window.draw(e->cText->text);
+		}
+
+		if (e->cBound)
+			m_window.draw(e->cBound->rectangle);
+	}
+
+	if (m_state == AppState::StoryScene)
+	{
+		m_window.clear();
 		for (auto& e : m_scenes[m_state].getEntities())
 		{
-			if (e->cSet && e->cPosition)
-				e->cSet->sprite.setPosition(e->cPosition->position);
-
-			if (e->tag() == "Base")
-			{
-				if (e->isActive())
-					m_window.draw(e->cSet->sprite);
-			}
-			else
-			{
-				if (e->cSet)
-					m_window.draw(e->cSet->sprite);
-			}
-
-			if (e->cText)
-			{
-				m_window.draw(e->cText->text);
-			}
-
-			if (e->cBound)
-				m_window.draw(e->cBound->rectangle);
+			if (e->cSet)  m_window.draw(e->cSet->sprite);
+			if (e->cText) m_window.draw(e->cText->text);
 		}
-
-		if (m_state == AppState::StoryScene)
-		{
-			m_window.clear();
-			for (auto& e : m_scenes[m_state].getEntities())
-			{
-				if (e->cSet)  m_window.draw(e->cSet->sprite);
-				if (e->cText) m_window.draw(e->cText->text);
-			}
-			m_window.display();
-			return;
-		}
-
-
-		if (game_state == AppState::GamePlay)
-		{
-			// Vẽ các entity có sprite
-			for (auto& e : m_scenes[game_state].getEntities())
-			{
-				if (!e->cSet || !e->cPosition) continue;
-
-				e->cSet->sprite.setPosition(e->cPosition->position);
-
-				if (e->tag() == "Heart")
-				{
-					if (e->isActive())
-						m_window.draw(e->cSet->sprite);
-				}
-				else
-				{
-					m_window.draw(e->cSet->sprite);
-				}
-			}
-
-			// Vẽ tiền
-			for (auto& e : m_scenes[game_state].getEntities("MoneyText"))
-			{
-				if (e->cText)
-				{
-					e->cText->text.setString(to_string(m_coin));
-					m_window.draw(e->cText->text);
-				}
-			}
-
-			// Vẽ Wave nếu cần
-			if (m_showWaveText)
-			{
-				for (auto& e : m_scenes[game_state].getEntities("WaveText"))
-				{
-					if (e->cText)
-						m_window.draw(e->cText->text);
-				}
-
-				for (auto& e : m_scenes[game_state].getEntities("WaveNumber"))
-				{
-					if (e->cText)
-					{
-						e->cText->text.setString(to_string(m_currentWave + 1));
-						m_window.draw(e->cText->text);
-					}
-				}
-
-				if (m_waveClock.getElapsedTime().asSeconds() > m_waveDisplayDuration)
-				{
-					m_showWaveText = false;
-				}
-			}
-
-			// Vẽ UI của tháp được chọn
-			if (m_clickedTower)
-			{
-				for (auto& e : m_scenes[game_state].getEntities())
-				{
-					if (e->tag() == "towerName" || e->tag() == "towerDamage" || e->tag() == "towerCooldown" ||
-						e->tag() == "towerRange" || e->tag() == "sellButton" || e->tag() == "upgradeButton" ||
-						e->tag() == "towerDamageNext" || e->tag() == "towerCooldownNext" || e->tag() == "towerRangeNext" || e->tag() == "towerLevel")
-					{
-						if (e->cText)
-							m_window.draw(e->cText->text);
-					}
-					else if (e->tag() == "rectangle")
-					{
-						if (e->cBound)
-							m_window.draw(e->cBound->rectangle);
-					}
-				}
-			}
-		}
+		m_window.display();
+		return;
+	}
 
 	// Hiển thị quái, đạn và tháp
 	for (auto& e : m_entities.getEntities())
@@ -173,7 +97,7 @@ void Game::sRender(float& deltaTime)
 				{
 					float trueRadius = e->cBound->radius * m_multiplies[e->cLevel->levelindex];
 					e->cBound->circle.setRadius(trueRadius);
-					e->cBound->circle.setOrigin(trueRadius, trueRadius); 
+					e->cBound->circle.setOrigin(trueRadius, trueRadius);
 					e->cBound->circle.setPosition(e->cPosition->position);
 					m_window.draw(e->cBound->circle);
 
@@ -182,6 +106,81 @@ void Game::sRender(float& deltaTime)
 
 			if (e->cText)
 				m_window.draw(e->cText->text);
+		}
+	}
+
+	if (game_state == AppState::GamePlay)
+	{
+		// Vẽ các entity có sprite
+		for (auto& e : m_scenes[game_state].getEntities())
+		{
+			if (!e->cSet || !e->cPosition) continue;
+
+			e->cSet->sprite.setPosition(e->cPosition->position);
+
+			if (e->tag() == "Heart")
+			{
+				if (e->isActive())
+					m_window.draw(e->cSet->sprite);
+			}
+			else
+			{
+				m_window.draw(e->cSet->sprite);
+			}
+		}
+
+		// Vẽ tiền
+		for (auto& e : m_scenes[game_state].getEntities("MoneyText"))
+		{
+			if (e->cText)
+			{
+				e->cText->text.setString(to_string(m_coin));
+				m_window.draw(e->cText->text);
+			}
+		}
+
+		// Vẽ Wave nếu cần
+		if (m_showWaveText && m_currentWave <= 3)
+		{
+			for (auto& e : m_scenes[game_state].getEntities("WaveText"))
+			{
+				if (e->cText)
+					m_window.draw(e->cText->text);
+			}
+
+			for (auto& e : m_scenes[game_state].getEntities("WaveNumber"))
+			{
+				if (e->cText)
+				{
+					e->cText->text.setString(to_string(m_currentWave + 1));
+					m_window.draw(e->cText->text);
+				}
+			}
+
+			if (m_waveClock.getElapsedTime().asSeconds() > m_waveDisplayDuration)
+			{
+				m_showWaveText = false;
+			}
+		}
+
+		// Vẽ UI của tháp được chọn
+		if (m_clickedTower)
+		{
+			for (auto& e : m_scenes[game_state].getEntities())
+			{
+				if (e->tag() == "towerName" || e->tag() == "towerDamage" || e->tag() == "towerCooldown" ||
+					e->tag() == "towerRange" || e->tag() == "sellButton" || e->tag() == "upgradeButton" ||
+					e->tag() == "towerDamageNext" || e->tag() == "towerCooldownNext" || e->tag() == "towerRangeNext" || e->tag() == "towerLevel")
+				{
+					if (e->cText)
+						m_window.draw(e->cText->text);
+				}
+				else if (e->tag() == "rectangle")
+				{
+					if (e->cBound)
+						m_window.draw(e->cBound->rectangle);
+				}
+			}
 		}
 	}
 
@@ -418,6 +417,16 @@ void Game::sUserInput()
 		{
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
 			{
+				for (auto& e : m_scenes[AppState::StoryScene].getEntities("SkipButton"))
+				{
+					if (e->cText && e->cInput && e->cText->text.getGlobalBounds().contains(mousePos))
+					{
+						if (e->cInput->onClick)
+							e->cInput->onClick();
+						return;
+					}
+				}
+
 				m_storyIndex++;
 				if (m_storyIndex < m_storyQueue.size())
 				{
@@ -431,7 +440,7 @@ void Game::sUserInput()
 
 
 					bg->cSet->texture.loadFromFile(m_storyQueue[m_storyIndex].first);
-					text->cText->text.setString(m_storyQueue[m_storyIndex].second);
+					setStoryTextWrapped(m_storyQueue[m_storyIndex].second);
 				}
 				else
 				{
@@ -848,6 +857,23 @@ void Game::sUserInput()
 
 			e->cInput->isHovered = hovering;
 		}
+		else if (e->cText && e->cInput)
+		{
+			bool hovering = e->cText->text.getGlobalBounds().contains(mousePos);
+
+			if (hovering && !e->cInput->isHovered && e->cInput->onHover)
+			{
+				e->cInput->onHover();
+				e->cInput->isHovered = true;
+			}
+			else if (!hovering && e->cInput->isHovered && e->cInput->offHover)
+			{
+				e->cInput->offHover();
+				e->cInput->isHovered = false;
+			}
+
+			e->cInput->isHovered = hovering;
+		}
 	}
 	if (!(hoverState == AppState::OptionMenu || hoverState == AppState::SettingsMenu))
 	{
@@ -1099,7 +1125,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1121,7 +1147,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1144,7 +1170,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1396,15 +1422,16 @@ void Game::sLoadGame()
 		{
 			float x, y;
 			int index;
+			int path;
 
-			if (!(iss >> x >> y >> index)) break;
+			if (!(iss >> x >> y >> index >> path)) break;
 
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
+			enemy->cMovement->pathIndex = path;
 			enemy->active(true);
-
 			enemy->cMovement->currentPathindex = index;
 		}
 
@@ -1422,15 +1449,16 @@ void Game::sLoadGame()
 		{
 			float x, y;
 			int index;
+			int path;
 
-			if (!(iss >> x >> y >> index)) break;
+			if (!(iss >> x >> y >> index >> path)) break;
 
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
 			enemy->active(true);
-
+			enemy->cMovement->pathIndex = path;
 			enemy->cMovement->currentPathindex = index;
 		}
 
@@ -1448,15 +1476,15 @@ void Game::sLoadGame()
 		{
 			float x, y;
 			int index;
+			int path;
 
-			if (!(iss >> x >> y >> index)) break;
+			if (!(iss >> x >> y >> index >> path)) break;
 
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
 			enemy->active(true);
-
 			enemy->cMovement->currentPathindex = index;
 		}
 
@@ -1837,34 +1865,62 @@ void Game::updateMusicState() {
 	}
 }
 
-// --- Xử lí Story ---
-//void Game::playStoryBlock(const string& blockName, AppState nextState)
-//{
-//	auto it = m_storyBlocks.find(blockName);
-//	if (it == m_storyBlocks.end() || it->second.empty())
-//	{
-//		std::cerr << "Can not file Block story: " << blockName << "\n";
-//		m_state = nextState;
-//		return;
-//	}
-//
-//	m_storyQueue = it->second;
-//	m_storyIndex = 0;
-//	m_nextStateAfterStory = nextState;
-//	m_state = AppState::StoryScene;
-//
-//	auto& bg = m_scenes[AppState::StoryScene].getEntities("StoryBG").front();
-//	auto& text = m_scenes[AppState::StoryScene].getEntities("StoryText").front();
-//
-//	bg->cSet->texture.loadFromFile(m_storyQueue[0].first);
-//	text->cText->text.setString(m_storyQueue[0].second);
-//}
+//// --- Xử lí Story ---
+std::string wrapText(const std::string& text, sf::Font& font, unsigned int characterSize, float maxWidth)
+{
+	sf::Text test;
+	test.setFont(font);
+	test.setCharacterSize(characterSize);
+
+	std::istringstream iss(text);
+	std::string word, line, result;
+
+	while (iss >> word)
+	{
+		std::string tempLine = line + (line.empty() ? "" : " ") + word;
+		test.setString(tempLine);
+
+		if (test.getLocalBounds().width > maxWidth)
+		{
+			result += line + "\n";
+			line = word;
+		}
+		else
+		{
+			line = tempLine;
+		}
+	}
+
+	if (!line.empty())
+		result += line;
+
+	return result;
+}
+
+void Game::setStoryTextWrapped(const std::string& str)
+{
+	auto textList = m_scenes[AppState::StoryScene].getEntities("StoryText");
+
+	if (textList.empty())
+	{
+		std::cerr << "[FATAL] setStoryTextWrapped: No StoryText entity found!\n";
+		return;
+	}
+
+	auto& text = textList.front();
+
+	if (!text->cText)
+	{
+		std::cerr << "[FATAL] setStoryTextWrapped: Missing cText!\n";
+		return;
+	}
+
+	std::string wrapped = wrapText(str, m_font, text->cText->text.getCharacterSize(), 1500.f);
+	text->cText->text.setString(wrapped);
+}
 
 void Game::playStoryBlock(const std::string& blockName, AppState nextState)
 {
-	std::cerr << "[DEBUG] playStoryBlock: " << blockName << "\n";
-
-	// Kiểm tra block tồn tại
 	auto it = m_storyBlocks.find(blockName);
 	if (it == m_storyBlocks.end() || it->second.empty())
 	{
@@ -1879,7 +1935,6 @@ void Game::playStoryBlock(const std::string& blockName, AppState nextState)
 	m_nextStateAfterStory = nextState;
 	m_state = AppState::StoryScene;
 
-	// Lấy entity
 	auto bgList = m_scenes[AppState::StoryScene].getEntities("StoryBG");
 	auto textList = m_scenes[AppState::StoryScene].getEntities("StoryText");
 
@@ -1893,7 +1948,6 @@ void Game::playStoryBlock(const std::string& blockName, AppState nextState)
 	auto& bg = bgList.front();
 	auto& text = textList.front();
 
-	// Kiểm tra hợp lệ
 	if (!bg->cSet)
 	{
 		std::cerr << "[FATAL] StoryBG entity missing cSet!\n";
@@ -1903,17 +1957,14 @@ void Game::playStoryBlock(const std::string& blockName, AppState nextState)
 
 	if (!text->cText)
 	{
-		std::cerr << "[FATAL] StoryText entity missing cText!\n";
+		cerr << "[FATAL] StoryText entity missing cText!\n";
 		m_state = nextState;
 		return;
 	}
 
-	const std::string& imgPath = m_storyQueue[0].first;
-	const std::string& storyText = m_storyQueue[0].second;
+	const string& imgPath = m_storyQueue[0].first;
+	const string& storyText = m_storyQueue[0].second;
 
-	std::cerr << "[DEBUG] Loading image: " << imgPath << "\n";
-
-	// Load ảnh
 	if (!bg->cSet->texture.loadFromFile(imgPath))
 	{
 		std::cerr << "[ERROR] Failed to load image: " << imgPath << "\n";
@@ -1922,13 +1973,15 @@ void Game::playStoryBlock(const std::string& blockName, AppState nextState)
 	{
 		bg->cSet->sprite.setTexture(bg->cSet->texture, true);
 	}
-	std::cerr << "[DEBUG] m_storyQueue.size(): " << m_storyQueue.size() << "\n";
 
 	// Gán lời thoại
-	text->cText->text.setString(storyText);
+	float maxTextWidth = 1500.f;
+	unsigned int charSize = 40;
+
+	string wrapped = wrapText(m_storyQueue[m_storyIndex].second, m_font, charSize, maxTextWidth);
+	text->cText->text.setString(wrapped);
+
 }
-
-
 
 // --- Tháp (Tower) ---
 void Game::Shoot(Entity& tower)

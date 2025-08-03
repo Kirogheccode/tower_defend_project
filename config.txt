@@ -45,12 +45,12 @@ EnemyType3 IMGS/Enemies/Worm.png 900 35 400 65 1.8 50
 # <Amount>:            Maximum number of this tower type available or allowed
 # <Cost>:			   Cost to place the tower
 # -------------------------------------------------------------------------------------------------------
-Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 400 1.7 50 150
-Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 2.0 50 200
-Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 2.5 50 550
-Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 2.0 50 250
-Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 2.5 50 400 
-Tower6 IMGS/TowerImages/Tower6.png 14 1 0.2 400 2.6 50 700
+Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 400 4.0 50 150
+Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 4.0 50 200
+Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 5.5 50 550
+Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 4.0 50 250
+Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 4.3 50 400 
+Tower6 IMGS/TowerImages/Tower6.png 14 1 0.2 400 6 50 700
 
 
 # -------------------------------------------------------------------------------------------------------

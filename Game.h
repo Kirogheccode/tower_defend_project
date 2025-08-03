@@ -245,6 +245,7 @@ class Game {
 	void loadStoryFromFile(const string& filename);
 	void initStoryScene();
 	void playStoryBlock(const string& blockName, AppState nextState);
+	void setStoryTextWrapped(const std::string& str);
 
 public:
 	Game(const string& config);
