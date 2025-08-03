@@ -979,7 +979,6 @@ void Game::sSaveGame()
 
 	if (mapButton)
 	{
-
 		mapButton->cTime = make_shared<CTime>();
 		auto& takeTime = mapButton->cTime;
 		ostringstream oss;
@@ -2234,8 +2233,27 @@ int rollDice() {
 	return distrib(gen);
 }
 
+
+void Game::sHealthRecover()
+{
+	auto heartvector = m_scenes[AppState::GamePlay].getEntities("Heart");
+	int index = static_cast<int> (heartvector.size()) - 1;
+
+	while (index >= 0 && !heartvector[index]->isActive())
+	{
+		index--;
+	}
+
+	if (heartvector.size() - index == 1)
+		return;
+
+	heartvector[index + 1]->active(true);
+}
+
+
 void Game::sGacha()
 {
+	cout << "[DEBUG]: " << rollDice() << endl;
 	switch (rollDice())
 	{
 	case 1:
@@ -2243,7 +2261,7 @@ void Game::sGacha()
 		break;
 
 	case 2:
-		cout << "You got a free tower!" << endl;
+		sHealthRecover();
 		break;
 
 	case 3:
@@ -2258,7 +2276,7 @@ void Game::sGacha()
 		break;
 
 	case 4:
-		cout << "You got a free tower!" << endl;
+		//save for special effect
 		break;
 	}
 }

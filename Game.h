@@ -204,6 +204,7 @@ class Game {
 	void sCollision();
 	void sGacha();
 	void sChangeCursor(string);
+	void sHealthRecover();
 
 	// --- Tháp (Tower) ---
 	void RemoveTower(Entity& tower);
