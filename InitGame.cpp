@@ -1913,11 +1913,21 @@ void Game::loadStoryFromFile(const string& filename)
 	{
 		auto entity = m_scenes[AppState::Defeat].addEntity("DefeatPanel");
 		entity->cSet = make_shared<CSet>("IMGS/GUI/Defeat.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(511, 307));
+		entity->cPosition = make_shared<CPosition>(Vector2f(511, 257));
+
+		auto addText = m_scenes[AppState::Defeat].addEntity("DefeatText");
+		addText->cText = make_shared<CText>("The stronghold falls… but the war isn’t over. Stand again! Fight again!");
+		addText->cText->text.setFont(m_font);
+		addText->cText->text.setCharacterSize(40);
+		addText->cText->text.setFillColor(Color::White);
+		addText->cText->text.setOutlineColor(Color::Black);
+		addText->cText->text.setOutlineThickness(2.f);
+		addText->cText->text.setPosition(400.f, 700.f);
+
 
 		entity = m_scenes[AppState::Defeat].addEntity("Exit");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 716));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 816));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
@@ -1938,7 +1948,7 @@ void Game::loadStoryFromFile(const string& filename)
 
 		entity = m_scenes[AppState::Defeat].addEntity("Retry");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/Retry.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(708, 716));
+		entity->cPosition = make_shared<CPosition>(Vector2f(708, 816));
 		entity->cInput = make_shared<CInput>([this]()
 			{ 
 				prev_state = m_state;
@@ -1959,9 +1969,18 @@ void Game::loadStoryFromFile(const string& filename)
 		entity->cSet = make_shared<CSet>("IMGS/GUI/Victory.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(511, 307));
 
+		addText = m_scenes[AppState::Victory].addEntity("VictoryText");
+		addText->cText = make_shared<CText>("You held the line. You turned the tide. This war is over - because you never gave up.");
+		addText->cText->text.setFont(m_font);
+		addText->cText->text.setCharacterSize(40);
+		addText->cText->text.setFillColor(Color::White);
+		addText->cText->text.setOutlineColor(Color::Black);
+		addText->cText->text.setOutlineThickness(2.f);
+		addText->cText->text.setPosition(300.f, 700.f);
+
 		entity = m_scenes[AppState::Victory].addEntity("Exit");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 716));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 816));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
@@ -1982,7 +2001,7 @@ void Game::loadStoryFromFile(const string& filename)
 
 		entity = m_scenes[AppState::Victory].addEntity("Retry");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/Retry.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(708, 716));
+		entity->cPosition = make_shared<CPosition>(Vector2f(708, 816));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
