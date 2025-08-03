@@ -41,118 +41,42 @@ void Game::sRender(float& deltaTime)
 
 	// Hiển thị tổng
 	
+	for (auto& e : m_scenes[m_state].getEntities())
+	{
+		if (e->cSet && e->cPosition)
+			e->cSet->sprite.setPosition(e->cPosition->position);
+
+		if (e->tag() == "Base")
+		{
+			if (e->isActive())
+				m_window.draw(e->cSet->sprite);
+		}
+		else
+		{
+			if (e->cSet)
+				m_window.draw(e->cSet->sprite);
+		}
+
+		if (e->cText)
+		{
+			m_window.draw(e->cText->text);
+		}
+
+		if (e->cBound)
+			m_window.draw(e->cBound->rectangle);
+	}
+
+	if (m_state == AppState::StoryScene)
+	{
+		m_window.clear();
 		for (auto& e : m_scenes[m_state].getEntities())
 		{
-			if (e->cSet && e->cPosition)
-				e->cSet->sprite.setPosition(e->cPosition->position);
-
-			if (e->tag() == "Base")
-			{
-				if (e->isActive())
-					m_window.draw(e->cSet->sprite);
-			}
-			else
-			{
-				if (e->cSet)
-					m_window.draw(e->cSet->sprite);
-			}
-
-			if (e->cText)
-			{
-				m_window.draw(e->cText->text);
-			}
-
-			if (e->cBound)
-				m_window.draw(e->cBound->rectangle);
+			if (e->cSet)  m_window.draw(e->cSet->sprite);
+			if (e->cText) m_window.draw(e->cText->text);
 		}
-
-		if (m_state == AppState::StoryScene)
-		{
-			m_window.clear();
-			for (auto& e : m_scenes[m_state].getEntities())
-			{
-				if (e->cSet)  m_window.draw(e->cSet->sprite);
-				if (e->cText) m_window.draw(e->cText->text);
-			}
-			m_window.display();
-			return;
-		}
-
-
-		if (game_state == AppState::GamePlay)
-		{
-			// Vẽ các entity có sprite
-			for (auto& e : m_scenes[game_state].getEntities())
-			{
-				if (!e->cSet || !e->cPosition) continue;
-
-				e->cSet->sprite.setPosition(e->cPosition->position);
-
-				if (e->tag() == "Heart")
-				{
-					if (e->isActive())
-						m_window.draw(e->cSet->sprite);
-				}
-				else
-				{
-					m_window.draw(e->cSet->sprite);
-				}
-			}
-
-			// Vẽ tiền
-			for (auto& e : m_scenes[game_state].getEntities("MoneyText"))
-			{
-				if (e->cText)
-				{
-					e->cText->text.setString(to_string(m_coin));
-					m_window.draw(e->cText->text);
-				}
-			}
-
-			// Vẽ Wave nếu cần
-			if (m_showWaveText)
-			{
-				for (auto& e : m_scenes[game_state].getEntities("WaveText"))
-				{
-					if (e->cText)
-						m_window.draw(e->cText->text);
-				}
-
-				for (auto& e : m_scenes[game_state].getEntities("WaveNumber"))
-				{
-					if (e->cText)
-					{
-						e->cText->text.setString(to_string(m_currentWave + 1));
-						m_window.draw(e->cText->text);
-					}
-				}
-
-				if (m_waveClock.getElapsedTime().asSeconds() > m_waveDisplayDuration)
-				{
-					m_showWaveText = false;
-				}
-			}
-
-			// Vẽ UI của tháp được chọn
-			if (m_clickedTower)
-			{
-				for (auto& e : m_scenes[game_state].getEntities())
-				{
-					if (e->tag() == "towerName" || e->tag() == "towerDamage" || e->tag() == "towerCooldown" ||
-						e->tag() == "towerRange" || e->tag() == "sellButton" || e->tag() == "upgradeButton" ||
-						e->tag() == "towerDamageNext" || e->tag() == "towerCooldownNext" || e->tag() == "towerRangeNext" || e->tag() == "towerLevel")
-					{
-						if (e->cText)
-							m_window.draw(e->cText->text);
-					}
-					else if (e->tag() == "rectangle")
-					{
-						if (e->cBound)
-							m_window.draw(e->cBound->rectangle);
-					}
-				}
-			}
-		}
+		m_window.display();
+		return;
+	}
 
 	// Hiển thị quái, đạn và tháp
 	for (auto& e : m_entities.getEntities())
@@ -173,7 +97,7 @@ void Game::sRender(float& deltaTime)
 				{
 					float trueRadius = e->cBound->radius * m_multiplies[e->cLevel->levelindex];
 					e->cBound->circle.setRadius(trueRadius);
-					e->cBound->circle.setOrigin(trueRadius, trueRadius); 
+					e->cBound->circle.setOrigin(trueRadius, trueRadius);
 					e->cBound->circle.setPosition(e->cPosition->position);
 					m_window.draw(e->cBound->circle);
 
@@ -182,6 +106,81 @@ void Game::sRender(float& deltaTime)
 
 			if (e->cText)
 				m_window.draw(e->cText->text);
+		}
+	}
+
+	if (game_state == AppState::GamePlay)
+	{
+		// Vẽ các entity có sprite
+		for (auto& e : m_scenes[game_state].getEntities())
+		{
+			if (!e->cSet || !e->cPosition) continue;
+
+			e->cSet->sprite.setPosition(e->cPosition->position);
+
+			if (e->tag() == "Heart")
+			{
+				if (e->isActive())
+					m_window.draw(e->cSet->sprite);
+			}
+			else
+			{
+				m_window.draw(e->cSet->sprite);
+			}
+		}
+
+		// Vẽ tiền
+		for (auto& e : m_scenes[game_state].getEntities("MoneyText"))
+		{
+			if (e->cText)
+			{
+				e->cText->text.setString(to_string(m_coin));
+				m_window.draw(e->cText->text);
+			}
+		}
+
+		// Vẽ Wave nếu cần
+		if (m_showWaveText && m_currentWave <= 3)
+		{
+			for (auto& e : m_scenes[game_state].getEntities("WaveText"))
+			{
+				if (e->cText)
+					m_window.draw(e->cText->text);
+			}
+
+			for (auto& e : m_scenes[game_state].getEntities("WaveNumber"))
+			{
+				if (e->cText)
+				{
+					e->cText->text.setString(to_string(m_currentWave + 1));
+					m_window.draw(e->cText->text);
+				}
+			}
+
+			if (m_waveClock.getElapsedTime().asSeconds() > m_waveDisplayDuration)
+			{
+				m_showWaveText = false;
+			}
+		}
+
+		// Vẽ UI của tháp được chọn
+		if (m_clickedTower)
+		{
+			for (auto& e : m_scenes[game_state].getEntities())
+			{
+				if (e->tag() == "towerName" || e->tag() == "towerDamage" || e->tag() == "towerCooldown" ||
+					e->tag() == "towerRange" || e->tag() == "sellButton" || e->tag() == "upgradeButton" ||
+					e->tag() == "towerDamageNext" || e->tag() == "towerCooldownNext" || e->tag() == "towerRangeNext" || e->tag() == "towerLevel")
+				{
+					if (e->cText)
+						m_window.draw(e->cText->text);
+				}
+				else if (e->tag() == "rectangle")
+				{
+					if (e->cBound)
+						m_window.draw(e->cBound->rectangle);
+				}
+			}
 		}
 	}
 
@@ -1100,7 +1099,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1122,7 +1121,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1145,7 +1144,7 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1397,15 +1396,16 @@ void Game::sLoadGame()
 		{
 			float x, y;
 			int index;
+			int path;
 
-			if (!(iss >> x >> y >> index)) break;
+			if (!(iss >> x >> y >> index >> path)) break;
 
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
+			enemy->cMovement->pathIndex = path;
 			enemy->active(true);
-
 			enemy->cMovement->currentPathindex = index;
 		}
 
@@ -1423,15 +1423,16 @@ void Game::sLoadGame()
 		{
 			float x, y;
 			int index;
+			int path;
 
-			if (!(iss >> x >> y >> index)) break;
+			if (!(iss >> x >> y >> index >> path)) break;
 
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
 			enemy->active(true);
-
+			enemy->cMovement->pathIndex = path;
 			enemy->cMovement->currentPathindex = index;
 		}
 
@@ -1449,15 +1450,15 @@ void Game::sLoadGame()
 		{
 			float x, y;
 			int index;
+			int path;
 
-			if (!(iss >> x >> y >> index)) break;
+			if (!(iss >> x >> y >> index >> path)) break;
 
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
 			enemy->active(true);
-
 			enemy->cMovement->currentPathindex = index;
 		}
 

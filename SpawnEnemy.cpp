@@ -37,6 +37,7 @@ void Game::sCheckWaveFinished()
 	if (allInactive)
 	{
 		m_currentWave++;
+
 		if (m_currentWave == 4)
 		{
 			m_state1 = AppState::Victory;
@@ -44,6 +45,7 @@ void Game::sCheckWaveFinished()
 			m_showWaveText = false;
 			return;
 		}
+
 		m_finishWave = true;
 		m_showWaveText = true;
 		m_waveClock.restart();
@@ -117,6 +119,16 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 			{
 				m_spawningTimer = 0;
 
+				if (m_mapindex == 3)
+				{
+					static random_device rd;
+					static mt19937 gen(rd());
+					static uniform_int_distribution<> dis(0, 3);
+					int pathIndex = dis(gen);
+
+					e->cMovement->pathIndex = pathIndex;
+				}
+
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
 				e->cHealth->hp = e->cHealth->hp * m_multiplies[m_mapindex];
 				e->cMovement->speed = e->cMovement->speed * m_multiplies[m_mapindex];
@@ -142,6 +154,16 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 			{
 				m_spawningTimer = 0;
 
+				if (m_mapindex == 3)
+				{
+					static random_device rd;
+					static mt19937 gen(rd());
+					static uniform_int_distribution<> dis(0, 3);
+					int pathIndex = dis(gen);
+
+					e->cMovement->pathIndex = pathIndex;
+				}
+
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
 				e->cHealth->hp = e->cHealth->hp * m_multiplies[m_mapindex];
 				e->cMovement->speed = e->cMovement->speed * m_multiplies[m_mapindex];
@@ -166,6 +188,16 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 			if (!e->isActive())
 			{
 				m_spawningTimer = 0;
+
+				if (m_mapindex == 3)
+				{
+					static random_device rd;
+					static mt19937 gen(rd());
+					static uniform_int_distribution<> dis(0, 3);
+					int pathIndex = dis(gen);
+
+					e->cMovement->pathIndex = pathIndex;
+				}
 
 				e->cPosition = make_shared<CPosition>(e->cMovement->starting_pos[m_mapindex]);
 				e->cHealth->hp = e->cHealth->hp * m_multiplies[m_mapindex];
