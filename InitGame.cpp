@@ -695,28 +695,28 @@ void Game::loadGuideText()
 	auto easyText = m_scenes[AppState::MapSelect].addEntity("easyText");
 	easyText->cText = make_shared<CText>("EASY");
 	easyText->cText->text.setFont(m_font);
-	easyText->cText->text.setPosition(Vector2f(430, 395));
+	easyText->cText->text.setPosition(Vector2f(280, 400));
 	easyText->cText->text.setCharacterSize(40);
 	easyText->cText->text.setFillColor(Color::Green);
 
 	auto mediumText = m_scenes[AppState::MapSelect].addEntity("mediumText");
 	mediumText->cText = make_shared<CText>("MEDIUM");
 	mediumText->cText->text.setFont(m_font);
-	mediumText->cText->text.setPosition(Vector2f(130, 343));
+	mediumText->cText->text.setPosition(Vector2f(65, 380));
 	mediumText->cText->text.setCharacterSize(40);
 	mediumText->cText->text.setFillColor(Color::Yellow);
 
 	auto hardText = m_scenes[AppState::MapSelect].addEntity("hardText");
 	hardText->cText = make_shared<CText>("HARD");
 	hardText->cText->text.setFont(m_font);
-	hardText->cText->text.setPosition(Vector2f(1410, 395));
+	hardText->cText->text.setPosition(Vector2f(1525, 410));
 	hardText->cText->text.setCharacterSize(40);
 	hardText->cText->text.setFillColor(Color::Red);
 
 	auto extremeText = m_scenes[AppState::MapSelect].addEntity("extremeText");
 	extremeText->cText = make_shared<CText>("EXTREME");
 	extremeText->cText->text.setFont(m_font);
-	extremeText->cText->text.setPosition(Vector2f(1650, 343));
+	extremeText->cText->text.setPosition(Vector2f(1707, 370));
 	extremeText->cText->text.setCharacterSize(40);
 	extremeText->cText->text.setFillColor(Color::Black);
 
@@ -724,14 +724,14 @@ void Game::loadGuideText()
 	auto chooseMap = m_scenes[AppState::PlayMenu].addEntity("chooseMap");
 	chooseMap->cText = make_shared<CText>("CHOOSE MAP");
 	chooseMap->cText->text.setFont(m_font);
-	chooseMap->cText->text.setPosition(Vector2f(215, 550));
+	chooseMap->cText->text.setPosition(Vector2f(135, 510));
 	chooseMap->cText->text.setCharacterSize(40);
 	chooseMap->cText->text.setFillColor(Color::White);
 
 	auto loadGame = m_scenes[AppState::PlayMenu].addEntity("loadGame");
 	loadGame->cText = make_shared<CText>("LOAD GAME");
 	loadGame->cText->text.setFont(m_font);
-	loadGame->cText->text.setPosition(Vector2f(1510, 565));
+	loadGame->cText->text.setPosition(Vector2f(1515, 520));
 	loadGame->cText->text.setCharacterSize(40);
 	loadGame->cText->text.setFillColor(Color::White);
 }
@@ -816,10 +816,14 @@ void Game::loadWaveText()
 void Game::loadFontText()
 {
 	// -- Khởi tạo font chữ
-	if (!m_font.loadFromFile("IMGS/Fonts/VT323-Regular.ttf")) {
+	if (!m_font.loadFromFile("IMGS/Fonts/ARCADECLASSIC.TTF")) {
 		cout << "Failed to load font\n";
 	}
 	if (!m_font1.loadFromFile("IMGS/Fonts/arial.ttf"))
+	{
+		cout << "Failed to load font\n";
+	}
+	if (!m_font2.loadFromFile("IMGS/Fonts/VT323-Regular.ttf"))
 	{
 		cout << "Failed to load font\n";
 	}
@@ -1130,10 +1134,8 @@ void Game::initUIFlow()
 		);
 
 		entity = m_scenes[AppState::GamePlay].addEntity("SpeedUp");
-		entity->cSet = make_shared<CSet>("IMGS/Buttons/speedup.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(20, 870));
-		entity->cSpriteScale = make_shared<CSpriteScale>(0.3);
-		entity->cSet->sprite.setScale(entity->cSpriteScale->scale, entity->cSpriteScale->scale);
+		entity->cSet = make_shared<CSet>("IMGS/Buttons/speedup1.png");
+		entity->cPosition = make_shared<CPosition>(Vector2f(16, 865));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				if (m_speedup == 1)
@@ -1319,8 +1321,7 @@ void Game::initUIFlow()
 
 		auto play = m_scenes[AppState::MainMenu].addEntity("Play");
 		play->cSet = make_shared<CSet>("IMGS/Buttons/play.png");
-		play->cPosition = make_shared<CPosition>(Vector2f(800, 425));
-		play->cSet->sprite.setScale(0.7f, 0.7f);
+		play->cPosition = make_shared<CPosition>(Vector2f(770, 450));
 		play->cInput = make_shared<CInput>([this]()
 			{
 				playStoryBlock("intro", AppState::PlayMenu);
@@ -1337,8 +1338,7 @@ void Game::initUIFlow()
 
 		auto settingsButton = m_scenes[AppState::MainMenu].addEntity("SettingsButton");
 		settingsButton->cSet = make_shared<CSet>("IMGS/Buttons/setting.png");
-		settingsButton->cPosition = make_shared<CPosition>(Vector2f(1150, 400));
-		settingsButton->cSet->sprite.setScale(0.7f, 0.7f);
+		settingsButton->cPosition = make_shared<CPosition>(Vector2f(1170, 450));
 		settingsButton->cInput = make_shared<CInput>([this]()
 			{
 				m_setting = true;
@@ -1356,8 +1356,7 @@ void Game::initUIFlow()
 
 		auto exit = m_scenes[AppState::MainMenu].addEntity("Exit");
 		exit->cSet = make_shared<CSet>("IMGS/Buttons/quit.png");
-		exit->cPosition = make_shared<CPosition>(Vector2f(1500, 400));
-		exit->cSet->sprite.setScale(0.7f, 0.7f);
+		exit->cPosition = make_shared<CPosition>(Vector2f(1570, 450));
 		exit->cInput = make_shared<CInput>([this]()
 			{
 				m_window.close();
@@ -1378,12 +1377,12 @@ void Game::initUIFlow()
 	// -- PlayMenu --
 	{
 		auto bg = m_scenes[AppState::PlayMenu].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/Background/playchoose.jpg");
+		bg->cSet = make_shared<CSet>("IMGS/Background/playmenu.jpg");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto newGameButton = m_scenes[AppState::PlayMenu].addEntity("New");
-		newGameButton->cSet = make_shared<CSet>("IMGS/GUI/dark.png");
-		newGameButton->cPosition = make_shared<CPosition>(Vector2f(212, 628));
+		newGameButton->cSet = make_shared<CSet>("IMGS/GUI/dark1.jpg");
+		newGameButton->cPosition = make_shared<CPosition>(Vector2f(209, 618));
 		newGameButton->cInput = make_shared<CInput>([this]()
 			{
 				m_playerName.clear();
@@ -1403,8 +1402,8 @@ void Game::initUIFlow()
 		);
 
 		auto loadGame = m_scenes[AppState::PlayMenu].addEntity("Load");
-		loadGame->cSet = make_shared<CSet>("IMGS/GUI/dark.png");
-		loadGame->cPosition = make_shared<CPosition>(Vector2f(1515, 628));
+		loadGame->cSet = make_shared<CSet>("IMGS/GUI/dark2.jpg");
+		loadGame->cPosition = make_shared<CPosition>(Vector2f(1563, 630));
 		loadGame->cInput = make_shared<CInput>([this]()
 			{
 				m_typingName = false;
@@ -1757,7 +1756,7 @@ void Game::initUIFlow()
 
 		auto map1 = m_scenes[AppState::MapSelect].addEntity("Map1");
 		map1->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-		map1->cPosition = make_shared<CPosition>(Vector2f(408, 436));
+		map1->cPosition = make_shared<CPosition>(Vector2f(253, 450));
 		map1->cSet->sprite.setScale(1.0f, 1.0f);
 		map1->cInput = make_shared<CInput>([this]()
 			{
@@ -1779,7 +1778,7 @@ void Game::initUIFlow()
 
 			auto map2 = m_scenes[AppState::MapSelect].addEntity("Map2");
 			map2->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-			map2->cPosition = make_shared<CPosition>(Vector2f(118, 383));
+			map2->cPosition = make_shared<CPosition>(Vector2f(50, 427));
 			map2->cSet->sprite.setScale(1.2f, 1.2f);
 			map2->cInput = make_shared<CInput>([this]()
 				{
@@ -1801,7 +1800,7 @@ void Game::initUIFlow()
 
 			auto map3 = m_scenes[AppState::MapSelect].addEntity("Map3");
 			map3->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-			map3->cPosition = make_shared<CPosition>(Vector2f(1388, 436));
+			map3->cPosition = make_shared<CPosition>(Vector2f(1505, 450));
 			map3->cSet->sprite.setScale(1.0f, 1.0f);
 			map3->cInput = make_shared<CInput>([this]()
 				{
@@ -1823,7 +1822,7 @@ void Game::initUIFlow()
 
 			auto map4 = m_scenes[AppState::MapSelect].addEntity("Map4");
 			map4->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-			map4->cPosition = make_shared<CPosition>(Vector2f(1648, 383));
+			map4->cPosition = make_shared<CPosition>(Vector2f(1700, 420));
 			map4->cSet->sprite.setScale(1.25f, 1.25f);
 			map4->cInput = make_shared<CInput>([this]()
 				{
@@ -1916,18 +1915,18 @@ void Game::loadStoryFromFile(const string& filename)
 		entity->cPosition = make_shared<CPosition>(Vector2f(511, 257));
 
 		auto addText = m_scenes[AppState::Defeat].addEntity("DefeatText");
-		addText->cText = make_shared<CText>("The stronghold falls… but the war isn’t over. Stand again! Fight again!");
-		addText->cText->text.setFont(m_font);
+		addText->cText = make_shared<CText>("The stronghold falls... but the war isn't over. Stand again! Fight again!");
+		addText->cText->text.setFont(m_font2);
 		addText->cText->text.setCharacterSize(40);
 		addText->cText->text.setFillColor(Color::White);
 		addText->cText->text.setOutlineColor(Color::Black);
 		addText->cText->text.setOutlineThickness(2.f);
-		addText->cText->text.setPosition(400.f, 700.f);
+		addText->cText->text.setPosition(400.f, 625.f);
 
 
 		entity = m_scenes[AppState::Defeat].addEntity("Exit");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 816));
+		entity->cPosition = make_shared<CPosition>(Vector2f(688, 750));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
@@ -1948,7 +1947,7 @@ void Game::loadStoryFromFile(const string& filename)
 
 		entity = m_scenes[AppState::Defeat].addEntity("Retry");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/Retry.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(708, 816));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1076, 750));
 		entity->cInput = make_shared<CInput>([this]()
 			{ 
 				prev_state = m_state;
@@ -1971,16 +1970,16 @@ void Game::loadStoryFromFile(const string& filename)
 
 		addText = m_scenes[AppState::Victory].addEntity("VictoryText");
 		addText->cText = make_shared<CText>("You held the line. You turned the tide. This war is over - because you never gave up.");
-		addText->cText->text.setFont(m_font);
+		addText->cText->text.setFont(m_font2);
 		addText->cText->text.setCharacterSize(40);
 		addText->cText->text.setFillColor(Color::White);
 		addText->cText->text.setOutlineColor(Color::Black);
 		addText->cText->text.setOutlineThickness(2.f);
-		addText->cText->text.setPosition(300.f, 700.f);
+		addText->cText->text.setPosition(300.f, 625.f);
 
 		entity = m_scenes[AppState::Victory].addEntity("Exit");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(1056, 816));
+		entity->cPosition = make_shared<CPosition>(Vector2f(688, 750));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
@@ -2001,7 +2000,7 @@ void Game::loadStoryFromFile(const string& filename)
 
 		entity = m_scenes[AppState::Victory].addEntity("Retry");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/Retry.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(708, 816));
+		entity->cPosition = make_shared<CPosition>(Vector2f(1076, 750));
 		entity->cInput = make_shared<CInput>([this]()
 			{
 				prev_state = m_state;
@@ -2033,30 +2032,31 @@ void Game::initStoryScene()
 
 	auto text = m_scenes[AppState::StoryScene].addEntity("StoryText");
 	text->cText = make_shared<CText>("...");
-	text->cText->text.setFont(m_font);
+	text->cText->text.setFont(m_font2);
 	text->cText->text.setCharacterSize(40);
 	text->cText->text.setFillColor(sf::Color::White);
 	text->cText->text.setPosition(300.f, 800.f);
 
 	auto skipText = m_scenes[AppState::StoryScene].addEntity("SkipButton");
 	skipText->cText = make_shared<CText>("SKIP");
-	skipText->cText->text.setFont(m_font);
+	skipText->cText->text.setFont(m_font2);
 	skipText->cText->text.setCharacterSize(36);
 	skipText->cText->text.setFillColor(Color::White);
 	skipText->cText->text.setPosition(1600.f, 950.f);
 	skipText->cText->text.setOutlineColor(Color::Black);
 	skipText->cText->text.setOutlineThickness(1.f);
 
-	skipText->cInput = make_shared<CInput>();
-
-	skipText->cInput->onClick = [this]() {
+	skipText->cInput = make_shared<CInput>([this]() 
+		{
 		m_state = m_nextStateAfterStory;
-		};
-	skipText->cInput->onHover = [skipText]() {
-		skipText->cText->text.setFillColor(Color::Yellow);
-		};
-	skipText->cInput->offHover = [skipText]() {
-		skipText->cText->text.setFillColor(Color::White);
-		};
+		},
+		[skipText]() 
+		{
+			skipText->cText->text.setFillColor(Color::Yellow);
+		},
+		[skipText]() 
+		{
+			skipText->cText->text.setFillColor(Color::White);
+		});
 
 }

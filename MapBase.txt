@@ -1,5 +1,5 @@
 # Load Map1 Base: <tag> <filepath> <amount>
-Base IMGS/Bases/Base.png 15
+Base IMGS/Bases/ForestBase.png 15
 
 
 # Coordination of Map1 Base: <x> <y>

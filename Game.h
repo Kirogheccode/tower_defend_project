@@ -141,6 +141,8 @@ class Game {
 	//--- Font ---
 	Font m_font;
 	Font m_font1;
+	Font m_font2;
+	
 	Text m_inputLabel;
 	Text m_inputText;
 	string m_playerName;

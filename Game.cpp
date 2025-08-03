@@ -140,7 +140,7 @@ void Game::sRender(float& deltaTime)
 		}
 
 		// Vẽ Wave nếu cần
-		if (m_showWaveText && m_currentWave <= 3)
+		if (m_showWaveText && m_currentWave < 3)
 		{
 			for (auto& e : m_scenes[game_state].getEntities("WaveText"))
 			{
@@ -505,7 +505,7 @@ void Game::sUserInput()
 		// --- Click chuột trái
 		if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 		{
-			if (!(m_state1 == AppState::OptionMenu || m_state1 == AppState::SettingsMenu))
+			if (!(m_state1 == AppState::OptionMenu || m_state1 == AppState::SettingsMenu || m_state1 == AppState::Defeat || m_state1 == AppState::Victory))
 			{
 				m_clickedTower = false;
 
@@ -711,7 +711,7 @@ void Game::sUserInput()
 						}
 						else
 						{
-						   playSfx(m_clickBuffer);
+							playSfx(m_clickBuffer);
 						}
 						e->cInput->onClick();
 					}
@@ -732,11 +732,11 @@ void Game::sUserInput()
 			if (!clickedSlider)
 			{
 				// Ưu tiên state2 nếu đang chọn tower
-				
+
 				if (m_state2 == AppState::TowerPlace)
 				{
 					bool placed = false;
-					Vector2f placing;				
+					Vector2f placing;
 
 					for (auto& e : m_scenes[m_state].getEntities("Base"))
 					{
@@ -786,7 +786,7 @@ void Game::sUserInput()
 						stateToHandle = m_state1;
 					else if (game_state != AppState::Dummy)
 						stateToHandle = game_state;
-					
+
 					if (stateToHandle == AppState::TowerSelect)
 					{
 						bool isOutSide = true;
@@ -875,7 +875,7 @@ void Game::sUserInput()
 			e->cInput->isHovered = hovering;
 		}
 	}
-	if (!(hoverState == AppState::OptionMenu || hoverState == AppState::SettingsMenu))
+	if (!(hoverState == AppState::OptionMenu || hoverState == AppState::SettingsMenu || hoverState == AppState::Defeat || hoverState == AppState::Victory))
 	{
 
 		for (auto& e : m_entities.getEntities())
@@ -1732,11 +1732,15 @@ void Game::updateAudioSettings() {
 		m_backgroundMusic.setVolume(0);
 		m_mapMusic[m_mapindex].setVolume(0);
 		m_mapSelect.setVolume(0);
+		m_defeatMusic.setVolume(0);
+		m_victoryMusic.setVolume(0);
 	}
 	else {
 		m_backgroundMusic.setVolume(m_musicVolume);
 		m_mapMusic[m_mapindex].setVolume(m_musicVolume);
 		m_mapSelect.setVolume(m_musicVolume);
+		m_defeatMusic.setVolume(m_musicVolume);
+		m_victoryMusic.setVolume(m_musicVolume);
 	}
 }
 
