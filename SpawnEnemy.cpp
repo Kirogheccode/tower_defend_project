@@ -37,14 +37,14 @@ void Game::sCheckWaveFinished()
 	if (allInactive)
 	{
 		m_currentWave++;
-
-		if (m_currentWave == 4)
+		if (m_currentWave == 3)
 		{
 			m_state1 = AppState::Victory;
 			m_paused = true;
 			m_showWaveText = false;
 			return;
 		}
+
 
 		m_finishWave = true;
 		m_showWaveText = true;

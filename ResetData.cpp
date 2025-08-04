@@ -5,7 +5,9 @@ void Game::sReset()
 {
 	// Reset quái
 	for (auto& enemy : m_entities.getEntities("Enemy"))
+	{
 		DeactivateEnemy(*enemy);
+	}
 
 	m_finishWave = true;
 	m_spawnStage = SpawnStage::None;
@@ -100,6 +102,27 @@ void Game::DeactivateEnemy(Entity& enemy)
 		}
 
 		enemy.cMovement->currentPathindex = 0;
+		enemy.cMovement->pathIndex = 0;
+	}
+
+	// Reset hướng di chuyển
+	if (enemy.cSet)
+	{
+		if (enemy.tag() == "EnemyType1")
+		{
+			enemy.cSet->sprite.setScale(m_enemyType1Config.Sscale, m_enemyType1Config.Sscale);
+		}
+		else if (enemy.tag() == "EnemyType2")
+		{
+			enemy.cSet->sprite.setScale(m_enemyType2Config.Sscale, m_enemyType2Config.Sscale);
+		}
+		else if (enemy.tag() == "EnemyType3")
+		{
+			enemy.cSet->sprite.setScale(m_enemyType3Config.Sscale, m_enemyType3Config.Sscale);
+		}
+
+		enemy.cMovement->currentPathindex = 0;
+		enemy.cMovement->pathIndex = 0;
 	}
 
 	// Reset vị trí
