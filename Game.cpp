@@ -524,7 +524,7 @@ void Game::sUserInput()
 							tower->cInput->onClick();
 						}
 
-						Vector2f basePos = tower->cPosition->position + Vector2f(60.f, -80.f);
+						Vector2f basePos = tower->cPosition->position + Vector2f(60.f, -140.f);
 
 						for (auto& e : m_scenes[AppState::GamePlay].getEntities())
 						{
@@ -1126,7 +1126,9 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
+			Vector2f originalScale = entity->cSet->sprite.getScale();
+
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << originalScale.x << " " << originalScale.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1148,7 +1150,9 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
+			Vector2f originalScale = entity->cSet->sprite.getScale();
+
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << originalScale.x << " " << originalScale.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1171,7 +1175,9 @@ void Game::sSaveGame()
 	{
 		if (entity->isActive())
 		{
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
+			Vector2f originalScale = entity->cSet->sprite.getScale();
+
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << originalScale.x << " " << originalScale.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1424,13 +1430,15 @@ void Game::sLoadGame()
 			float x, y;
 			int index;
 			int path;
+			float scaleX, scaleY;
 
-			if (!(iss >> x >> y >> index >> path)) break;
+			if (!(iss >> x >> y >> scaleX >> scaleY >> index >> path)) break;
 
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
+			enemy->cSet->sprite.setScale(scaleX, scaleY);
 			enemy->cMovement->pathIndex = path;
 			enemy->active(true);
 			enemy->cMovement->currentPathindex = index;
@@ -1451,13 +1459,15 @@ void Game::sLoadGame()
 			float x, y;
 			int index;
 			int path;
+			float scaleX, scaleY;
 
-			if (!(iss >> x >> y >> index >> path)) break;
+			if (!(iss >> x >> y >> scaleX >> scaleY >> index >> path)) break;
 
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
+			enemy->cSet->sprite.setScale(scaleX, scaleY);
 			enemy->active(true);
 			enemy->cMovement->pathIndex = path;
 			enemy->cMovement->currentPathindex = index;
@@ -1478,13 +1488,15 @@ void Game::sLoadGame()
 			float x, y;
 			int index;
 			int path;
+			float scaleX, scaleY;
 
-			if (!(iss >> x >> y >> index >> path)) break;
+			if (!(iss >> x >> y >> scaleX >> scaleY >> index >> path)) break;
 
 			Vector2f pos(x, y);
 
 			enemy->cPosition = make_shared<CPosition>(pos);
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
+			enemy->cSet->sprite.setScale(scaleX, scaleY);
 			enemy->active(true);
 			enemy->cMovement->currentPathindex = index;
 		}
@@ -1870,7 +1882,8 @@ void Game::updateMusicState() {
 	}
 }
 
-//// --- Xử lí Story ---
+
+// --- Xử lí Story ---
 std::string wrapText(const std::string& text, sf::Font& font, unsigned int characterSize, float maxWidth)
 {
 	sf::Text test;
@@ -1988,6 +2001,7 @@ void Game::playStoryBlock(const std::string& blockName, AppState nextState)
 
 }
 
+
 // --- Tháp (Tower) ---
 void Game::Shoot(Entity& tower)
 {
@@ -2068,7 +2082,7 @@ void Game::UpgradeTower(Entity& tower)
 
 		tower.cLevel->levelindex++;
 
-		Vector2f basePos = tower.cPosition->position + Vector2f(60.f, -80.f);
+		Vector2f basePos = tower.cPosition->position + Vector2f(60.f, -140.f);
 
 		for (auto& e : m_scenes[AppState::GamePlay].getEntities())
 		{
