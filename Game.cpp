@@ -1771,7 +1771,8 @@ void Game::playMapMusic(int mapIdx) {
 
 void Game::updateMusicState() {
 	bool isMenuState = (m_state == AppState::MainMenu ||
-		m_state == AppState::SettingsMenu);
+		m_state == AppState::SettingsMenu ||
+		m_state ==  AppState::StoryScene);
 
 	if (isMenuState) {
 		// Nếu chưa phát menuMusic thì bật, đồng thời tắt gameplayMusic
@@ -1810,8 +1811,11 @@ void Game::updateMusicState() {
 	}
 	else if (m_state1 == AppState::Defeat || m_state1 == AppState::Victory)
 	{
-		if (m_mapMusic[m_mapindex].getStatus() == Music::Playing)
-			m_mapMusic[m_mapindex].stop();
+		for (auto& [idx, music] : m_mapMusic) {
+			if (music.getStatus() == sf::Music::Playing) {
+				music.stop();
+			}
+		}
 		if (m_backgroundMusic.getStatus() == Music::Playing)
 			m_backgroundMusic.stop();
 		if (m_mapSelect.getStatus() == Music::Playing)
@@ -1834,13 +1838,19 @@ void Game::updateMusicState() {
 		if (m_defeatMusic.getStatus() == Music::Playing)
 			m_defeatMusic.stop();
 		playMapMusic(0);
+		updateAudioSettings();
 	}
 	else if (m_state == AppState::Map2) {
 		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
 			m_backgroundMusic.stop();
 		if (m_mapSelect.getStatus() == sf::Music::Playing)
 			m_mapSelect.stop();
+		if (m_victoryMusic.getStatus() == Music::Playing)
+			m_victoryMusic.stop();
+		if (m_defeatMusic.getStatus() == Music::Playing)
+			m_defeatMusic.stop();
 		playMapMusic(1);
+		updateAudioSettings();
 	}
 	else if (m_state == AppState::Map3) {
 		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
@@ -1852,6 +1862,7 @@ void Game::updateMusicState() {
 		if (m_defeatMusic.getStatus() == Music::Playing)
 			m_defeatMusic.stop();
 		playMapMusic(2);
+		updateAudioSettings();
 	}
 	else if (m_state == AppState::Map4) {
 		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
@@ -1863,6 +1874,7 @@ void Game::updateMusicState() {
 		if (m_defeatMusic.getStatus() == Music::Playing)
 			m_defeatMusic.stop();
 		playMapMusic(3);
+		updateAudioSettings();
 	}
 	else {
 		// Các state khác thì dừng hết
