@@ -117,9 +117,6 @@ void Game::DeactivateTower(Entity& tower)
 	// Đặt lại cấp độ của tháp về cấp đầu tiên
 	tower.cLevel->levelindex = 0;
 
-	// Reset lại đường đi
-	tower.cMovement->pathIndex = 0;
-
 	// Vô hiệu hóa tháp
 	tower.active(false);
 
