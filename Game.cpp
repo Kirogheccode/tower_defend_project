@@ -1840,6 +1840,10 @@ void Game::updateMusicState() {
 			m_backgroundMusic.stop();
 		if (m_mapSelect.getStatus() == sf::Music::Playing)
 			m_mapSelect.stop();
+		if (m_victoryMusic.getStatus() == Music::Playing)
+			m_victoryMusic.stop();
+		if (m_defeatMusic.getStatus() == Music::Playing)
+			m_defeatMusic.stop();
 		playMapMusic(1);
 	}
 	else if (m_state == AppState::Map3) {
