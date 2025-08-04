@@ -727,6 +727,7 @@ void Game::sUserInput()
 					}
 				}
 			}
+
 			bool clickedSlider = false;
 
 			if (!clickedSlider)
