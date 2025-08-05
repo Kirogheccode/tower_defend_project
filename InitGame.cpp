@@ -38,6 +38,7 @@ void Game::sChangeCursor(string tag)
 	}	
 }
 
+
 // --- Đọc file config.txt ---
 void Game::init(const string& path)
 {
@@ -557,6 +558,7 @@ void Game::init(const string& path)
 	initStoryScene();
 	loadStoryFromFile("story.txt");
 }
+
 
 // --- Load những thứ cần thiết cho game ---
 void Game::loadHeartCoinText()
@@ -1862,6 +1864,7 @@ void Game::initUIFlow()
 
 	}
 }
+
 
 // --- Load Story ---
 string trimBOM(const string& line)
