@@ -55,6 +55,9 @@ void Game::sReset()
 	
 	// Reset tốc độ
 	m_speedup = 1;
+
+	//Reset việc chọn tháp
+	m_clickedTower = false;
 }
 
 
