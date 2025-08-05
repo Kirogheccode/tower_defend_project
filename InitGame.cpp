@@ -1609,8 +1609,8 @@ void Game::initUIFlow()
 		panel->cSet->sprite.setScale(1.5f, 1.5f);
 
 		Vector2f panelCenter = panel->cPosition->position;
-		float row1_y = panelCenter.y - 25.f;
-		float row2_y = panelCenter.y + 50.f;
+		float row1_y = panelCenter.y - 10.f;
+		float row2_y = panelCenter.y + 65.f;
 		float icon_x = panelCenter.x - 170.f;
 		float slider_x = panelCenter.x + 50.f;
 
@@ -1643,7 +1643,7 @@ void Game::initUIFlow()
 
 		auto back = m_scenes[AppState::SettingsMenu].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x, panelCenter.y + 115.f));
+		back->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x, panelCenter.y + 155.f));
 		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
 		back->cInput = make_shared<CInput>([this]()
 			{
@@ -1663,7 +1663,7 @@ void Game::initUIFlow()
 
 		auto aboutButton = m_scenes[AppState::SettingsMenu].addEntity("AboutButton");
 		aboutButton->cSet = make_shared<CSet>("IMGS/Buttons/aboutus.png");
-		aboutButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x - 100.f, panelCenter.y + 115.f));
+		aboutButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x - 100.f, panelCenter.y + 155.f));
 		aboutButton->cSet->sprite.setOrigin(aboutButton->cSet->sprite.getLocalBounds().width / 2.f, aboutButton->cSet->sprite.getLocalBounds().height / 2.f);
 		aboutButton->cSet->sprite.setScale(4.0f, 4.0f);
 		aboutButton->cInput = make_shared<CInput>([this]() {
@@ -1679,7 +1679,7 @@ void Game::initUIFlow()
 
 		auto rulesButton = m_scenes[AppState::SettingsMenu].addEntity("RulesButton");
 		rulesButton->cSet = make_shared<CSet>("IMGS/Buttons/rules.png");
-		rulesButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x + 100.f, panelCenter.y + 115.f));
+		rulesButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x + 100.f, panelCenter.y + 155.f));
 		rulesButton->cSet->sprite.setOrigin(rulesButton->cSet->sprite.getLocalBounds().width / 2.f, rulesButton->cSet->sprite.getLocalBounds().height / 2.f);
 		rulesButton->cSet->sprite.setScale(4.0f, 4.0f);
 		rulesButton->cInput = make_shared<CInput>([this]() {
@@ -1701,12 +1701,12 @@ void Game::initUIFlow()
 		panel->cSet = make_shared<CSet>("IMGS/GUI/About.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
-		panel->cSet->sprite.setScale(1.5f, 1.5f);
+		panel->cSet->sprite.setScale(2.5f, 2.5f);
 
 
 		auto backBtn = m_scenes[AppState::AboutUs].addEntity("BackAbout");
 		backBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
+		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 350.f));
 		backBtn->cInput = make_shared<CInput>([this]()
 			{
 				m_state1 = AppState::SettingsMenu;
@@ -1729,11 +1729,11 @@ void Game::initUIFlow()
 		panel->cSet = make_shared<CSet>("IMGS/GUI/GameRules.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
-		panel->cSet->sprite.setScale(1.5f, 1.5f);
+		panel->cSet->sprite.setScale(2.5f, 2.5f);
 
 		auto backBtn = m_scenes[AppState::Rules].addEntity("BackRules");
 		backBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
+		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 300.f));
 		backBtn->cInput = make_shared<CInput>([this]()
 			{
 				m_state1 = AppState::SettingsMenu;
