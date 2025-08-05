@@ -1,5 +1,5 @@
 # Window format: <Name> <Width> <Height> <FPS> <FullScreen>
-TowerDefense 1920 1080 60 0
+TowerDefense 1920 1080 60 1
 
 # -------------------------------------------------------------------------------------------------------
 # Bullet format: BULLET <Tag> <Filepath> <Damage> <Speed> <Boundary Scale> <Sprite Scale>

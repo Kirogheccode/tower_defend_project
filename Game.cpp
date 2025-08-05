@@ -321,7 +321,7 @@ void Game::sMovement(float& deltaTime)
 		else if (entity->tag().find("Enemy") != string::npos)
 		{
 			// Nếu như quái đi hết đường đi
-			if (entity->cMovement->currentPathindex >= entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex].size())
+			if (entity->cMovement->currentDes >= entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex].size())
 			{
 				auto heartvector = m_scenes[AppState::GamePlay].getEntities("Heart");
 				int index = static_cast<int>(heartvector.size()) - 1;
@@ -349,14 +349,14 @@ void Game::sMovement(float& deltaTime)
 			}
 
 			// Tính toán đường đi đến điểm tiếp theo
-			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex][entity->cMovement->currentPathindex];
+			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex][entity->cMovement->currentDes];
 			Vector2f direction = target - entity->cPosition->position;
 			float distance = MathSupport::Length(direction);
 
 			// Kiểm tra xem nếu đủ gần điểm thì chuyển tiếp điểm khác
 			if (distance < 5.f)
 			{
-				entity->cMovement->currentPathindex++;
+				entity->cMovement->currentDes++;
 			}
 			else
 			{
@@ -370,7 +370,7 @@ void Game::sMovement(float& deltaTime)
 				if (entity->cSpriteScale) baseScale = entity->cSpriteScale->scale;
 
 				// Tính toán để dự đoán hướng quay mặt tiếp theo
-				int currentIndex = entity->cMovement->currentPathindex;
+				int currentIndex = entity->cMovement->currentDes;
 				int nextIndex = currentIndex + 1;
 
 				if (nextIndex < (int)entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex].size())
@@ -727,6 +727,7 @@ void Game::sUserInput()
 					}
 				}
 			}
+
 			bool clickedSlider = false;
 
 			if (!clickedSlider)
@@ -1128,7 +1129,7 @@ void Game::sSaveGame()
 		{
 			Vector2f originalScale = entity->cSet->sprite.getScale();
 
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << originalScale.x << " " << originalScale.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << originalScale.x << " " << originalScale.y << " " << entity->cMovement->currentDes << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1152,7 +1153,7 @@ void Game::sSaveGame()
 		{
 			Vector2f originalScale = entity->cSet->sprite.getScale();
 
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << originalScale.x << " " << originalScale.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << originalScale.x << " " << originalScale.y << " " << entity->cMovement->currentDes << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1177,7 +1178,7 @@ void Game::sSaveGame()
 		{
 			Vector2f originalScale = entity->cSet->sprite.getScale();
 
-			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << originalScale.x << " " << originalScale.y << " " << entity->cMovement->currentPathindex << " " << entity->cMovement->pathIndex << " ";
+			writePlayer << entity->cPosition->position.x << " " << entity->cPosition->position.y << " " << originalScale.x << " " << originalScale.y << " " << entity->cMovement->currentDes << " " << entity->cMovement->pathIndex << " ";
 			isExist = true;
 		}
 	}
@@ -1441,7 +1442,7 @@ void Game::sLoadGame()
 			enemy->cSet->sprite.setScale(scaleX, scaleY);
 			enemy->cMovement->pathIndex = path;
 			enemy->active(true);
-			enemy->cMovement->currentPathindex = index;
+			enemy->cMovement->currentDes = index;
 		}
 
 		break;
@@ -1470,7 +1471,7 @@ void Game::sLoadGame()
 			enemy->cSet->sprite.setScale(scaleX, scaleY);
 			enemy->active(true);
 			enemy->cMovement->pathIndex = path;
-			enemy->cMovement->currentPathindex = index;
+			enemy->cMovement->currentDes = index;
 		}
 
 		break;
@@ -1498,7 +1499,7 @@ void Game::sLoadGame()
 			enemy->cSet->sprite.setPosition(enemy->cPosition->position);
 			enemy->cSet->sprite.setScale(scaleX, scaleY);
 			enemy->active(true);
-			enemy->cMovement->currentPathindex = index;
+			enemy->cMovement->currentDes = index;
 		}
 
 		break;
