@@ -165,8 +165,8 @@ class Game {
 	// --- Story ---
 	int m_storyIndex = 0;
 	AppState m_nextStateAfterStory = AppState::Dummy;
-	std::vector<std::pair<std::string, std::string>> m_storyQueue;
-	std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_storyBlocks;
+	vector<pair<string, string>> m_storyQueue;
+	map<string, vector<pair<string, string>>> m_storyBlocks;
 
 
 	// --- Cờ trạng thái ---

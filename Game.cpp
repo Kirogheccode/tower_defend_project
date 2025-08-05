@@ -1897,14 +1897,14 @@ void Game::updateMusicState() {
 
 
 // --- Xử lí Story ---
-std::string wrapText(const std::string& text, sf::Font& font, unsigned int characterSize, float maxWidth)
+string wrapText(const string& text, Font& font, unsigned int characterSize, float maxWidth)
 {
 	sf::Text test;
 	test.setFont(font);
 	test.setCharacterSize(characterSize);
 
-	std::istringstream iss(text);
-	std::string word, line, result;
+	istringstream iss(text);
+	string word, line, result;
 
 	while (iss >> word)
 	{
@@ -1928,7 +1928,7 @@ std::string wrapText(const std::string& text, sf::Font& font, unsigned int chara
 	return result;
 }
 
-void Game::setStoryTextWrapped(const std::string& str)
+void Game::setStoryTextWrapped(const string& str)
 {
 	auto textList = m_scenes[AppState::StoryScene].getEntities("StoryText");
 
@@ -1946,11 +1946,11 @@ void Game::setStoryTextWrapped(const std::string& str)
 		return;
 	}
 
-	std::string wrapped = wrapText(str, m_font, text->cText->text.getCharacterSize(), 1500.f);
+	string wrapped = wrapText(str, m_font, text->cText->text.getCharacterSize(), 1500.f);
 	text->cText->text.setString(wrapped);
 }
 
-void Game::playStoryBlock(const std::string& blockName, AppState nextState)
+void Game::playStoryBlock(const string& blockName, AppState nextState)
 {
 	auto it = m_storyBlocks.find(blockName);
 	if (it == m_storyBlocks.end() || it->second.empty())
