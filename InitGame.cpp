@@ -1966,7 +1966,7 @@ void Game::loadStoryFromFile(const string& filename)
 
 	    entity = m_scenes[AppState::Victory].addEntity("VictoryPanel");
 		entity->cSet = make_shared<CSet>("IMGS/GUI/Victory.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(511, 307));
+		entity->cPosition = make_shared<CPosition>(Vector2f(511, 257));
 
 		addText = m_scenes[AppState::Victory].addEntity("VictoryText");
 		addText->cText = make_shared<CText>("You held the line. You turned the tide. This war is over - because you never gave up.");
