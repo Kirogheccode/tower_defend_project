@@ -78,6 +78,15 @@ void Game::sRender(float& deltaTime)
 		return;
 	}
 
+	/*if (m_state == AppState::Catalog)
+	{
+		for (auto& e : m_scenes[AppState::Catalog].getEntities())
+		{
+			if (e->cSet) m_window.draw(e->cSet->sprite);
+		}
+	}*/
+
+
 	// Hiển thị quái, đạn và tháp
 	for (auto& e : m_entities.getEntities())
 	{
@@ -448,6 +457,16 @@ void Game::sUserInput()
 				}
 			}
 			return;
+		}
+
+		for (auto& e : m_scenes[AppState::MainMenu].getEntities("Catalog"))
+		{
+			if (e->cSet && e->cInput && e->cSet->sprite.getGlobalBounds().contains(mousePos))
+			{
+				if (e->cInput->onClick)
+					e->cInput->onClick();
+				return;
+			}
 		}
 
 		// --- Input cho SettingsMenu (Slider + Icon)
@@ -2012,6 +2031,45 @@ void Game::playStoryBlock(const string& blockName, AppState nextState)
 	string wrapped = wrapText(m_storyQueue[m_storyIndex].second, m_font, charSize, maxTextWidth);
 	text->cText->text.setString(wrapped);
 
+}
+
+//// --- xử lí Catalog ---
+//void Game::updateCatalogDisplay()
+//{
+//	if (m_catalog.empty()) return;
+//
+//	const auto& entry = m_catalog[m_currentCatalog];
+//
+//	// Cập nhật sprite ảnh tháp
+//	auto& tower = m_scenes[AppState::Catalog].getEntities("TowerSprite").front();
+//
+//	if (!tower->cSet) tower->cSet = std::make_shared<CSet>(entry.towerPath);
+//	else tower->cSet->texture.loadFromFile(entry.towerPath);
+//
+//	tower->cSet->sprite.setTexture(tower->cSet->texture, true);
+//}
+
+void Game::updateCatalogDisplay()
+{
+	if (m_catalog.empty()) return;
+
+	const auto& entry = m_catalog[m_currentCatalog];
+
+	auto towerList = m_scenes[AppState::Catalog].getEntities("TowerSprite");
+	if (towerList.empty())
+	{
+		std::cerr << "[ERROR] TowerSprite entity is missing!\n";
+		return;
+	}
+
+	auto& tower = towerList.front();
+
+	if (!tower->cSet)
+		tower->cSet = std::make_shared<CSet>(entry.towerPath);
+	else
+		tower->cSet->texture.loadFromFile(entry.towerPath);
+
+	tower->cSet->sprite.setTexture(tower->cSet->texture, true);
 }
 
 

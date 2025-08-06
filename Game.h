@@ -42,6 +42,7 @@ enum class AppState {
 	StoryScene,
 	PlayMenu,
 	NameInput,
+	Catalog,
 	SettingsMenu,
 	OptionMenu,
 	AboutUs,
@@ -77,6 +78,10 @@ struct SaveGame {
 	int mapIndex;
 };
 
+struct catalogImg {
+	string bgPath;
+	string towerPath;
+};
 
 // --- Class Game chính ---
 class Game {
@@ -168,6 +173,9 @@ class Game {
 	vector<pair<string, string>> m_storyQueue;
 	map<string, vector<pair<string, string>>> m_storyBlocks;
 
+	// --- Catalog ---
+	vector<catalogImg> m_catalog;
+	int m_currentCatalog = 0;
 
 	// --- Cờ trạng thái ---
 	bool m_setting = false;
@@ -247,6 +255,9 @@ class Game {
 	void initStoryScene();
 	void playStoryBlock(const string& blockName, AppState nextState);
 	void setStoryTextWrapped(const std::string& str);
+
+	// --- Xử lí Catalog ---
+	void updateCatalogDisplay();
 
 public:
 	Game(const string& config);

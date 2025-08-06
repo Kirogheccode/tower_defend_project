@@ -1403,6 +1403,26 @@ void Game::initUIFlow()
 			}
 		);
 
+		auto catalogButton = m_scenes[AppState::PlayMenu].addEntity("Catalog");
+		catalogButton->cSet = make_shared<CSet>("IMGS/GUI/dark2.jpg");
+		catalogButton->cPosition = make_shared<CPosition>(Vector2f(906, 631));
+		catalogButton->cInput = make_shared<CInput>([this]()
+			{
+				m_typingName = false;
+				m_state1 = AppState::Catalog;
+				m_currentCatalog = 0;
+				updateCatalogDisplay();
+			},
+			[catalogButton]()
+			{
+				catalogButton->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[catalogButton]()
+			{
+				catalogButton->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
 		auto loadGame = m_scenes[AppState::PlayMenu].addEntity("Load");
 		loadGame->cSet = make_shared<CSet>("IMGS/GUI/dark2.jpg");
 		loadGame->cPosition = make_shared<CPosition>(Vector2f(1563, 630));
@@ -2026,40 +2046,106 @@ void Game::loadStoryFromFile(const string& filename)
 
 void Game::initStoryScene()
 {
-	auto bg = m_scenes[AppState::StoryScene].addEntity("StoryBG");
-	bg->cSet = make_shared<CSet>("IMGS/Story/cut1.jpg");
-	bg->cPosition = make_shared<CPosition>(Vector2f(0.f, 0.f));
-	bg->cSet->sprite.setPosition(bg->cPosition->position);
-	bg->cSet->sprite.setScale(1.f, 1.f);
-	bg->cSet->sprite.setOrigin(0.f, 0.f);
+	// Story
+	{
+		auto bg = m_scenes[AppState::StoryScene].addEntity("StoryBG");
+		bg->cSet = make_shared<CSet>("IMGS/Story/cut1.jpg");
+		bg->cPosition = make_shared<CPosition>(Vector2f(0.f, 0.f));
+		bg->cSet->sprite.setPosition(bg->cPosition->position);
+		bg->cSet->sprite.setScale(1.f, 1.f);
+		bg->cSet->sprite.setOrigin(0.f, 0.f);
 
-	auto text = m_scenes[AppState::StoryScene].addEntity("StoryText");
-	text->cText = make_shared<CText>("...");
-	text->cText->text.setFont(m_font2);
-	text->cText->text.setCharacterSize(40);
-	text->cText->text.setFillColor(sf::Color::White);
-	text->cText->text.setPosition(300.f, 800.f);
+		auto text = m_scenes[AppState::StoryScene].addEntity("StoryText");
+		text->cText = make_shared<CText>("...");
+		text->cText->text.setFont(m_font2);
+		text->cText->text.setCharacterSize(40);
+		text->cText->text.setFillColor(sf::Color::White);
+		text->cText->text.setPosition(300.f, 800.f);
 
-	auto skipText = m_scenes[AppState::StoryScene].addEntity("SkipButton");
-	skipText->cText = make_shared<CText>("SKIP");
-	skipText->cText->text.setFont(m_font2);
-	skipText->cText->text.setCharacterSize(36);
-	skipText->cText->text.setFillColor(Color::White);
-	skipText->cText->text.setPosition(1600.f, 950.f);
-	skipText->cText->text.setOutlineColor(Color::Black);
-	skipText->cText->text.setOutlineThickness(1.f);
+		auto skipText = m_scenes[AppState::StoryScene].addEntity("SkipButton");
+		skipText->cText = make_shared<CText>("SKIP");
+		skipText->cText->text.setFont(m_font2);
+		skipText->cText->text.setCharacterSize(36);
+		skipText->cText->text.setFillColor(Color::White);
+		skipText->cText->text.setPosition(1600.f, 950.f);
+		skipText->cText->text.setOutlineColor(Color::Black);
+		skipText->cText->text.setOutlineThickness(1.f);
 
-	skipText->cInput = make_shared<CInput>([this]() 
-		{
-		m_state = m_nextStateAfterStory;
-		},
-		[skipText]() 
-		{
-			skipText->cText->text.setFillColor(Color::Yellow);
-		},
-		[skipText]() 
-		{
-			skipText->cText->text.setFillColor(Color::White);
-		});
+		skipText->cInput = make_shared<CInput>([this]()
+			{
+				m_state = m_nextStateAfterStory;
+			},
+			[skipText]()
+			{
+				skipText->cText->text.setFillColor(Color::Yellow);
+			},
+			[skipText]()
+			{
+				skipText->cText->text.setFillColor(Color::White);
+			});
+	}
 
+	// catalog
+	{
+		m_catalog = {
+			{ "IMGS/Catalog/tower1.png", "IMGS/TowerImages/tower1.png" },
+			{ "IMGS/Catalog/t2.jpg", "IMGS/TowerImages/tower2.png" },
+			{ "IMGS/Catalog/tower1.png", "IMGS/TowerImages/tower3.png" },
+			{ "IMGS/Catalog/t2.jpg", "IMGS/TowerImages/tower4.png" }
+		};
+
+		auto bg = m_scenes[AppState::Catalog].addEntity("CatalogBG");
+		bg->cSet = make_shared<CSet>("IMGS/Catalog/tower1.png");
+		bg->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		bg->cSet->sprite.setOrigin(bg->cSet->sprite.getLocalBounds().width / 2.f, bg->cSet->sprite.getLocalBounds().height / 2.f);
+		bg->cSet->sprite.setScale(1.5f, 1.5f);
+
+		Vector2f bgCenter = bg->cPosition->position;
+		float row = bgCenter.y;
+		float col = bgCenter.x;
+
+		auto towerSprite = m_scenes[AppState::Catalog].addEntity("TowerSprite");
+		towerSprite->cSet = make_shared<CSet>(m_catalog[0].towerPath);
+		towerSprite->cPosition = make_shared<CPosition>(Vector2f(col, row - 350.0f));
+
+
+		auto leftBtn = m_scenes[AppState::Catalog].addEntity("LeftButton");
+		leftBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		leftBtn->cPosition = make_shared<CPosition>(Vector2f(col, row - 700.f));
+		leftBtn->cInput = make_shared<CInput>();
+		leftBtn->cInput->onClick = [this]() {
+			m_currentCatalog--;
+			if (m_currentCatalog < 0) m_currentCatalog = m_catalog.size() - 1;
+			updateCatalogDisplay();
+			};
+
+		auto rightBtn = m_scenes[AppState::Catalog].addEntity("RightButton");
+		rightBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		rightBtn->cPosition = make_shared<CPosition>(Vector2f(col, row + 700.f));
+		rightBtn->cInput = make_shared<CInput>();
+		rightBtn->cInput->onClick = [this]() {
+			m_currentCatalog = (m_currentCatalog + 1) % m_catalog.size();
+			updateCatalogDisplay();
+			};
+
+		auto back = m_scenes[AppState::Catalog].addEntity("Back");
+		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		back->cPosition = make_shared<CPosition>(Vector2f(col - 500.f, row));
+		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
+		back->cInput = make_shared<CInput>([this]()
+			{
+				m_currentCatalog = 0;
+				m_state1 = AppState::Dummy;
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+		updateCatalogDisplay();
+	}
 }
