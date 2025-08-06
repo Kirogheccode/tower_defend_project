@@ -2055,6 +2055,15 @@ void Game::updateCatalogDisplay()
 
 	const auto& entry = m_catalog[m_currentCatalog];
 
+	// Cập nhật background
+	auto bgList = m_scenes[AppState::Catalog].getEntities("CatalogBG");
+	if (!bgList.empty() && bgList.front()->cSet)
+	{
+		bgList.front()->cSet->texture.loadFromFile(entry.bgPath);
+		bgList.front()->cSet->sprite.setTexture(bgList.front()->cSet->texture, true);
+	}
+
+	// Cập nhật tháp (spritesheet động)
 	auto towerList = m_scenes[AppState::Catalog].getEntities("TowerSprite");
 	if (towerList.empty())
 	{
@@ -2064,14 +2073,23 @@ void Game::updateCatalogDisplay()
 
 	auto& tower = towerList.front();
 
+	// Reset lại cSet nếu chưa có
 	if (!tower->cSet)
-		tower->cSet = std::make_shared<CSet>(entry.towerPath);
+	{
+		tower->cSet = std::make_shared<CSet>(entry.config.filepath, entry.imgCount, entry.switchTime, 0);
+		tower->cSet->isDynamic = true;
+	}
 	else
-		tower->cSet->texture.loadFromFile(entry.towerPath);
+	{
+		tower->cSet->texture.loadFromFile(entry.config.filepath);
+		tower->cSet->sprite.setTexture(tower->cSet->texture, true);
 
-	tower->cSet->sprite.setTexture(tower->cSet->texture, true);
+		tower->cSet->ImgCount = entry.imgCount;
+		tower->cSet->switchTime = entry.switchTime;
+		tower->cSet->totalTime = 0.f;
+		tower->cSet->isDynamic = true;
+	}
 }
-
 
 // --- Tháp (Tower) ---
 void Game::Shoot(Entity& tower)

@@ -80,7 +80,9 @@ struct SaveGame {
 
 struct catalogImg {
 	string bgPath;
-	string towerPath;
+	TowerTypeConfig config;
+	Vector2u imgCount;
+	float switchTime;
 };
 
 // --- Class Game chính ---

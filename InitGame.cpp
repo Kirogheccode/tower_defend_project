@@ -2088,49 +2088,69 @@ void Game::initStoryScene()
 	// catalog
 	{
 		m_catalog = {
-			{ "IMGS/Catalog/tower1.png", "IMGS/TowerImages/tower1.png" },
-			{ "IMGS/Catalog/t2.jpg", "IMGS/TowerImages/tower2.png" },
-			{ "IMGS/Catalog/tower1.png", "IMGS/TowerImages/tower3.png" },
-			{ "IMGS/Catalog/t2.jpg", "IMGS/TowerImages/tower4.png" }
+			{ "IMGS/Catalog/tower1.png", m_towerType1Config, Vector2u(11, 1), 0.2f},
+			{ "IMGS/Catalog/t2.jpg", m_towerType2Config, Vector2u(8, 1), 0.2f },
+			{ "IMGS/Catalog/tower1.png", m_towerType3Config, Vector2u(13, 1), 0.2f },
+			{ "IMGS/Catalog/t2.jpg", m_towerType4Config, Vector2u(8, 1), 0.2f }
 		};
 
 		auto bg = m_scenes[AppState::Catalog].addEntity("CatalogBG");
 		bg->cSet = make_shared<CSet>("IMGS/Catalog/tower1.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		bg->cSet->sprite.setOrigin(bg->cSet->sprite.getLocalBounds().width / 2.f, bg->cSet->sprite.getLocalBounds().height / 2.f);
-		bg->cSet->sprite.setScale(1.5f, 1.5f);
+		bg->cSet->sprite.setScale(0.5f, 0.5f);
 
-		Vector2f bgCenter = bg->cPosition->position;
-		float row = bgCenter.y;
-		float col = bgCenter.x;
+		Vector2f center = Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
+		float x = center.x;
+		float y = center.y;
 
 		auto towerSprite = m_scenes[AppState::Catalog].addEntity("TowerSprite");
-		towerSprite->cSet = make_shared<CSet>(m_catalog[0].towerPath);
-		towerSprite->cPosition = make_shared<CPosition>(Vector2f(col, row - 350.0f));
+		towerSprite->cSet = std::make_shared<CSet>(m_catalog[0].config.filepath, m_catalog[0].imgCount, m_catalog[0].switchTime, 0);
+		towerSprite->cSet->isDynamic = true;
+		towerSprite->cPosition = std::make_shared<CPosition>(Vector2f(x, y - 350.0f));
 
 
 		auto leftBtn = m_scenes[AppState::Catalog].addEntity("LeftButton");
 		leftBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		leftBtn->cPosition = make_shared<CPosition>(Vector2f(col, row - 700.f));
-		leftBtn->cInput = make_shared<CInput>();
-		leftBtn->cInput->onClick = [this]() {
-			m_currentCatalog--;
-			if (m_currentCatalog < 0) m_currentCatalog = m_catalog.size() - 1;
-			updateCatalogDisplay();
-			};
+		leftBtn->cPosition = make_shared<CPosition>(Vector2f(x - 500, y));
+		leftBtn->cInput = make_shared<CInput>([this]()
+			{
+				m_currentCatalog--;
+				if (m_currentCatalog < 0) m_currentCatalog = m_catalog.size() - 1;
+				updateCatalogDisplay();
+			},
+			[leftBtn]()
+			{
+				leftBtn->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[leftBtn]()
+			{
+				leftBtn->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 		auto rightBtn = m_scenes[AppState::Catalog].addEntity("RightButton");
 		rightBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		rightBtn->cPosition = make_shared<CPosition>(Vector2f(col, row + 700.f));
-		rightBtn->cInput = make_shared<CInput>();
-		rightBtn->cInput->onClick = [this]() {
-			m_currentCatalog = (m_currentCatalog + 1) % m_catalog.size();
-			updateCatalogDisplay();
-			};
+		rightBtn->cPosition = make_shared<CPosition>(Vector2f(x + 500, y));
+		rightBtn->cInput = make_shared<CInput>([this]() 
+			{
+				m_currentCatalog = (m_currentCatalog + 1) % m_catalog.size();
+				updateCatalogDisplay();
+			},
+			[rightBtn]()
+			{
+				rightBtn->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[rightBtn]()
+			{
+				rightBtn->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
 
 		auto back = m_scenes[AppState::Catalog].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(col - 500.f, row));
+		back->cPosition = make_shared<CPosition>(Vector2f(x, y + 300));
 		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
 		back->cInput = make_shared<CInput>([this]()
 			{
