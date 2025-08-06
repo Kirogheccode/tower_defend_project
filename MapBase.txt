@@ -19,10 +19,10 @@ Base IMGS/Bases/SandBase.png 8
 # Coordination of Map2 Base: <x> <y>
 1393 979
 653 486
-748 661
+748 732
 1160 725
 1365 567
-1093 409
+1132 105
 901 330
 541 218
 

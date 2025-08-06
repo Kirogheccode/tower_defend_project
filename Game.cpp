@@ -102,7 +102,7 @@ void Game::sRender(float& deltaTime)
 
 			if (e->cInput)
 			{
-				if (e->cInput->isChoosing)
+				if (e->cInput->isChoosing && m_state1 != AppState::Victory && m_state1 != AppState::Defeat)
 				{
 					float trueRadius = e->cBound->radius * m_multiplies[e->cLevel->levelindex];
 					e->cBound->circle.setRadius(trueRadius);
@@ -173,7 +173,7 @@ void Game::sRender(float& deltaTime)
 		}
 
 		// Vẽ UI của tháp được chọn
-		if (m_clickedTower)
+		if (m_clickedTower && m_state1 != AppState::Defeat && m_state1 != AppState::Victory)
 		{
 			for (auto& e : m_scenes[game_state].getEntities())
 			{
