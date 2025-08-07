@@ -52,7 +52,6 @@ Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 4.0 50 250
 Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 4.3 50 400 
 Tower6 IMGS/TowerImages/Tower62.png 14 1 0.2 400 6 50 700
 
-
 # -------------------------------------------------------------------------------------------------------
 # Wave format: <WaveNumber> <MapIndex> <EnemyType1> <EnemyType2> <EnemyType3>
 # <WaveNumber>:  Number of the wave (1, 2, 3, etc.)
