@@ -197,7 +197,7 @@ void Game::sRender(float& deltaTime)
 	{
 		for (auto& e : m_scenes[m_state1].getEntities())
 		{
-			if (e->cSet->isDynamic)
+			if (e->cSet && e->cSet->isDynamic)
 			{
 				sAnimation(e, deltaTime);
 			}
@@ -207,8 +207,8 @@ void Game::sRender(float& deltaTime)
 
 			if (e->cSet)
 				m_window.draw(e->cSet->sprite);
-			if (e->cText)
-				m_window.draw(e->cText->text);
+			/*if (e->cText)
+				m_window.draw(e->cText->text);*/
 
 			if (e->cSlider)
 			{
