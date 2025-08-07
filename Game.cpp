@@ -92,7 +92,6 @@ void Game::sRender(float& deltaTime)
 	{
 		if (e->isActive())
 		{
-
 			if (e->cSet->isDynamic)
 			{
 				sAnimation(e, deltaTime);
@@ -198,6 +197,11 @@ void Game::sRender(float& deltaTime)
 	{
 		for (auto& e : m_scenes[m_state1].getEntities())
 		{
+			if (e->cSet->isDynamic)
+			{
+				sAnimation(e, deltaTime);
+			}
+
 			if (e->cSet && e->cPosition)
 				e->cSet->sprite.setPosition(e->cPosition->position);
 

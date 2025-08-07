@@ -2089,9 +2089,11 @@ void Game::initStoryScene()
 	{
 		m_catalog = {
 			{ "IMGS/Catalog/tower1.png", m_towerType1Config, Vector2u(11, 1), 0.2f},
-			{ "IMGS/Catalog/t2.jpg", m_towerType2Config, Vector2u(8, 1), 0.2f },
+			{ "IMGS/Catalog/tower1.png", m_towerType2Config, Vector2u(8, 1), 0.2f },
 			{ "IMGS/Catalog/tower1.png", m_towerType3Config, Vector2u(13, 1), 0.2f },
-			{ "IMGS/Catalog/t2.jpg", m_towerType4Config, Vector2u(8, 1), 0.2f }
+			{ "IMGS/Catalog/tower1.png", m_towerType4Config, Vector2u(8, 1), 0.2f },
+			{ "IMGS/Catalog/tower1.png", m_towerType5Config, Vector2u(14, 1), 0.2f },
+			{ "IMGS/Catalog/tower1.png", m_towerType6Config, Vector2u(14, 1), 0.2f }
 		};
 
 		auto bg = m_scenes[AppState::Catalog].addEntity("CatalogBG");
@@ -2108,7 +2110,6 @@ void Game::initStoryScene()
 		towerSprite->cSet = std::make_shared<CSet>(m_catalog[0].config.filepath, m_catalog[0].imgCount, m_catalog[0].switchTime, 0);
 		towerSprite->cSet->isDynamic = true;
 		towerSprite->cPosition = std::make_shared<CPosition>(Vector2f(x, y - 350.0f));
-
 
 		auto leftBtn = m_scenes[AppState::Catalog].addEntity("LeftButton");
 		leftBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
