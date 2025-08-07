@@ -2100,7 +2100,7 @@ void Game::initStoryScene()
 		bg->cSet = make_shared<CSet>("IMGS/Catalog/tower1.png");
 		bg->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		bg->cSet->sprite.setOrigin(bg->cSet->sprite.getLocalBounds().width / 2.f, bg->cSet->sprite.getLocalBounds().height / 2.f);
-		bg->cSet->sprite.setScale(0.5f, 0.5f);
+		bg->cSet->sprite.setScale(1.2f, 1.2f);
 
 		Vector2f center = Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
 		float x = center.x;
@@ -2109,7 +2109,8 @@ void Game::initStoryScene()
 		auto towerSprite = m_scenes[AppState::Catalog].addEntity("TowerSprite");
 		towerSprite->cSet = std::make_shared<CSet>(m_catalog[0].config.filepath, m_catalog[0].imgCount, m_catalog[0].switchTime, 0);
 		towerSprite->cSet->isDynamic = true;
-		towerSprite->cPosition = std::make_shared<CPosition>(Vector2f(x, y - 350.0f));
+		towerSprite->cPosition = std::make_shared<CPosition>(Vector2f(x - 128.0f, y));
+		towerSprite->cSet->sprite.setScale(2.0f, 2.0f);
 
 		auto leftBtn = m_scenes[AppState::Catalog].addEntity("LeftButton");
 		leftBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
@@ -2150,9 +2151,10 @@ void Game::initStoryScene()
 
 
 		auto back = m_scenes[AppState::Catalog].addEntity("Back");
-		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		back->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
 		back->cPosition = make_shared<CPosition>(Vector2f(x, y + 300));
 		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
+		back->cSet->sprite.setScale(0.5f, 0.5f);
 		back->cInput = make_shared<CInput>([this]()
 			{
 				m_currentCatalog = 0;
