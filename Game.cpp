@@ -2077,13 +2077,10 @@ void Game::updateCatalogDisplay()
 
 	auto& tower = towerList.front();
 
-	// Reset lại cSet nếu chưa có
-	if (!tower->cSet)
-	{
-		tower->cSet = std::make_shared<CSet>(entry.config.filepath, entry.imgCount, entry.switchTime, 0);
-		tower->cSet->isDynamic = true;
-	}
-	else
+	//if(!tower->cSet)
+	tower->cSet = make_shared<CSet>(entry.config.filepath, entry.imgCount, entry.switchTime, 0);
+	tower->cSet->isDynamic = true;
+	/*else
 	{
 		tower->cSet->texture.loadFromFile(entry.config.filepath);
 		tower->cSet->sprite.setTexture(tower->cSet->texture, true);
@@ -2092,7 +2089,7 @@ void Game::updateCatalogDisplay()
 		tower->cSet->switchTime = entry.switchTime;
 		tower->cSet->totalTime = 0.f;
 		tower->cSet->isDynamic = true;
-	}
+	}*/
 }
 
 // --- Tháp (Tower) ---

@@ -2107,9 +2107,9 @@ void Game::initStoryScene()
 		float y = center.y;
 
 		auto towerSprite = m_scenes[AppState::Catalog].addEntity("TowerSprite");
-		towerSprite->cSet = std::make_shared<CSet>(m_catalog[0].config.filepath, m_catalog[0].imgCount, m_catalog[0].switchTime, 0);
+		towerSprite->cSet = make_shared<CSet>(m_catalog[0].config.filepath, m_catalog[0].imgCount, m_catalog[0].switchTime, 0);
 		towerSprite->cSet->isDynamic = true;
-		towerSprite->cPosition = std::make_shared<CPosition>(Vector2f(x - 128.0f, y));
+		towerSprite->cPosition = make_shared<CPosition>(Vector2f(x - 128.0f, y));
 		towerSprite->cSet->sprite.setScale(2.0f, 2.0f);
 
 		auto leftBtn = m_scenes[AppState::Catalog].addEntity("LeftButton");
