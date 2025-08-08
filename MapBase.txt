@@ -1,85 +1,57 @@
 # Load Map1 Base: <tag> <filepath> <amount>
-Base IMGS/Bases/ForestBase.png 15
+Base IMGS/Bases/ForestBase.png 7
 
 
 # Coordination of Map1 Base: <x> <y>
-420 185
-120 538
-662 384
-1315 384
-603 589
-1020 594
-1561 178
-1679 415
-440 508
-253 800
-120 328
-719 181
-1322 181
-479 809
-1261 924
+468 154
+69 307
+70 699
+255 850
+1043 570
+1286 441
+669 441
 
 
 # Load Map2 Base: <tag> <filepath> <amount>
-Base IMGS/Bases/SandBase.png 16
+Base IMGS/Bases/SandBase.png 8
 
 
 # Coordination of Map2 Base: <x> <y>
-950 485
-1111 355
-833 313
-659 464
-1042 653
-810 611
-828 791
-1129 789
-1360 784
-1253 961
-1450 961
-1429 374
-1341 492
-1071 104
-801 105
-454 287
+1393 979
+653 486
+748 732
+1160 725
+1365 567
+1132 105
+901 330
+541 218
 
 
 # Load Map3 Base: <tag> <filepath> <amount>
-Base IMGS/Bases/LavaBase.png 16
+Base IMGS/Bases/LavaBase.png 7
 
 
 # Coordination of Map3 Base: <x> <y>
-905 641
-457 420
-891 425
-1132 411
-1306 223
-755 217
-1028 225
-1555 331
-1202 644
-403 234
-143 370
-473 628
-224 627
-690 766
-1089 986
-1335 826
+455 217
+101 396
+358 646
+666 645
+1053 841
+879 473
+1236 622
 
 
 # Load Map4 Base: <tag> <filepath> <amount>
-Base IMGS/Bases/SnowBase.png 12
+Base IMGS/Bases/SnowBase.png 9
 
 
 # Coordination of Map4 Base: <x> <y>
-537 738
-509 888
-813 987
-812 597
-727 105
-328 94
-528 119
-1359 307
-1152 970
-700 326
-1072 99
-1373 932
+663 85
+340 80
+126 597
+1397 298
+1320 954
+895 980
+495 811
+821 583
+700 325

@@ -2,4 +2,3 @@
 IMGS/Story/cut1.jpg|The darkness came without warning. A forgotten army surged from the deep, devouring kingdoms in its path. Fortress after fortress fell... until only one remained.
 IMGS/Story/cut2.jpg|Grotesque creatures surged forth, unleashing chaos and devastation across the land.
 IMGS/Story/cut3.jpg|You are the last of a hidden bloodline - part mage, part warrior, part engineer - awakened only when all else has fallen. You command no army. Your weapon is the ancient towers - forgotten machines of war, reborn by your power. This is your battlefield. And you are its final defense.
-

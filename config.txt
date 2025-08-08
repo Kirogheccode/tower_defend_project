@@ -1,5 +1,6 @@
 # Window format: <Name> <Width> <Height> <FPS> <FullScreen>
-TowerDefense 1920 1080 60 0
+TowerDefense 1920 1080 60 1
+
 
 # -------------------------------------------------------------------------------------------------------
 # Bullet format: BULLET <Tag> <Filepath> <Damage> <Speed> <Boundary Scale> <Sprite Scale>
@@ -45,12 +46,12 @@ EnemyType3 IMGS/Enemies/Worm.png 900 35 400 65 1.8 50
 # <Amount>:            Maximum number of this tower type available or allowed
 # <Cost>:			   Cost to place the tower
 # -------------------------------------------------------------------------------------------------------
-Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 400 4.0 50 150
-Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 4.0 50 200
-Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 5.5 50 550
-Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 4.0 50 250
-Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 4.3 50 400 
-Tower6 IMGS/TowerImages/Tower6.png 14 1 0.2 400 6 50 700
+Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 400 4.0 50 150 1.4
+Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 4.0 50 200 1.4
+Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 5.5 50 550 0.7
+Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 4.0 50 250 1.7
+Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 4.3 50 400 2
+Tower6 IMGS/TowerImages/Tower62.png 14 1 0.2 400 6 50 700 0.7
 
 
 # -------------------------------------------------------------------------------------------------------

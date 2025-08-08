@@ -38,6 +38,7 @@ void Game::sChangeCursor(string tag)
 	}	
 }
 
+
 // --- Đọc file config.txt ---
 void Game::init(const string& path)
 {
@@ -294,7 +295,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType1Config.tag >> m_towerType1Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType1Config.range >> m_towerType1Config.cooldown >> amount >> m_towerType1Config.cost;
+			iss >> m_towerType1Config.tag >> m_towerType1Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType1Config.range >> m_towerType1Config.cooldown >> amount >> m_towerType1Config.cost >> m_towerType1Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -306,7 +307,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType1Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet01Config.tag);	
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.4f, 1.4f);
+				sprite.setScale(m_towerType1Config.Sscale, m_towerType1Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
@@ -335,7 +336,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType2Config.range >> m_towerType2Config.cooldown >> amount >> m_towerType2Config.cost;
+			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType2Config.range >> m_towerType2Config.cooldown >> amount >> m_towerType2Config.cost >> m_towerType2Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -347,7 +348,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType2Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet02Config.tag); 
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.4f, 1.4f);
+				sprite.setScale(m_towerType2Config.Sscale, m_towerType2Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
@@ -376,7 +377,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType3Config.range >> m_towerType3Config.cooldown >> amount >> m_towerType3Config.cost;
+			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType3Config.range >> m_towerType3Config.cooldown >> amount >> m_towerType3Config.cost >> m_towerType3Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -388,7 +389,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType3Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet03Config.tag);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(0.7, 0.7);
+				sprite.setScale(m_towerType3Config.Sscale, m_towerType3Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
@@ -417,7 +418,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType4Config.range >> m_towerType4Config.cooldown >> amount >> m_towerType4Config.cost;
+			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType4Config.range >> m_towerType4Config.cooldown >> amount >> m_towerType4Config.cost >> m_towerType4Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -429,7 +430,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType4Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet04Config.tag);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.7f, 1.7f);
+				sprite.setScale(m_towerType4Config.Sscale, m_towerType4Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
@@ -457,7 +458,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType5Config.tag >> m_towerType5Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType5Config.range >> m_towerType5Config.cooldown >> amount >> m_towerType5Config.cost;
+			iss >> m_towerType5Config.tag >> m_towerType5Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType5Config.range >> m_towerType5Config.cooldown >> amount >> m_towerType5Config.cost >> m_towerType5Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -469,7 +470,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType5Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet05Config.tag);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(2, 2);
+				sprite.setScale(m_towerType5Config.Sscale, m_towerType5Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
@@ -498,7 +499,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType6Config.range >> m_towerType6Config.cooldown >> amount >> m_towerType6Config.cost;
+			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType6Config.range >> m_towerType6Config.cooldown >> amount >> m_towerType6Config.cost >> m_towerType6Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -510,7 +511,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType6Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet06Config.tag);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(0.7, 0.7);
+				sprite.setScale(m_towerType6Config.Sscale, m_towerType6Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
@@ -557,6 +558,7 @@ void Game::init(const string& path)
 	initStoryScene();
 	loadStoryFromFile("story.txt");
 }
+
 
 // --- Load những thứ cần thiết cho game ---
 void Game::loadHeartCoinText()
@@ -811,6 +813,22 @@ void Game::loadWaveText()
 
 	waveEntity->cText->text.setPosition(centerX - totalWidth / 2.f + waveBounds.width / 2.f, centerY);
 	numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY - 10);
+
+	// --- Khởi tạo wave đisplay
+	auto waveDisplay = m_scenes[AppState::GamePlay].addEntity("WaveDisplay");
+	waveDisplay->cText = make_shared<CText>("WAVE " + to_string(m_currentWave + 1));
+	waveDisplay->cText->text.setFont(m_font);
+	waveDisplay->cText->text.setCharacterSize(40);
+	waveDisplay->cText->text.setFillColor(Color::Green);
+	waveDisplay->cText->text.setPosition(15, 130);
+
+	// --- Khởi tạo speed up
+	auto speedup = m_scenes[AppState::GamePlay].addEntity("SpeedUp");
+	speedup->cText = make_shared<CText>('x' + to_string(m_speedup));
+	speedup->cText->text.setFont(m_font);
+	speedup->cText->text.setCharacterSize(40);
+	speedup->cText->text.setFillColor(Color::White);
+	speedup->cText->text.setPosition(28, 820);
 }
 
 void Game::loadFontText()
@@ -914,6 +932,7 @@ void Game::loadFontText()
 	{
 		cout << "Error: Could not load selling sound file.\n";
 	}
+
 	updateAudioSettings();
 }
 
@@ -1401,6 +1420,26 @@ void Game::initUIFlow()
 			}
 		);
 
+		auto catalogButton = m_scenes[AppState::PlayMenu].addEntity("Catalog");
+		catalogButton->cSet = make_shared<CSet>("IMGS/GUI/dark2.jpg");
+		catalogButton->cPosition = make_shared<CPosition>(Vector2f(906, 631));
+		catalogButton->cInput = make_shared<CInput>([this]()
+			{
+				m_typingName = false;
+				m_state1 = AppState::Catalog;
+				m_currentCatalog = 0;
+				updateCatalogDisplay();
+			},
+			[catalogButton]()
+			{
+				catalogButton->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[catalogButton]()
+			{
+				catalogButton->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
 		auto loadGame = m_scenes[AppState::PlayMenu].addEntity("Load");
 		loadGame->cSet = make_shared<CSet>("IMGS/GUI/dark2.jpg");
 		loadGame->cPosition = make_shared<CPosition>(Vector2f(1563, 630));
@@ -1607,8 +1646,8 @@ void Game::initUIFlow()
 		panel->cSet->sprite.setScale(1.5f, 1.5f);
 
 		Vector2f panelCenter = panel->cPosition->position;
-		float row1_y = panelCenter.y - 25.f;
-		float row2_y = panelCenter.y + 50.f;
+		float row1_y = panelCenter.y - 10.f;
+		float row2_y = panelCenter.y + 65.f;
 		float icon_x = panelCenter.x - 170.f;
 		float slider_x = panelCenter.x + 50.f;
 
@@ -1641,7 +1680,7 @@ void Game::initUIFlow()
 
 		auto back = m_scenes[AppState::SettingsMenu].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x, panelCenter.y + 115.f));
+		back->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x, panelCenter.y + 155.f));
 		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
 		back->cInput = make_shared<CInput>([this]()
 			{
@@ -1661,7 +1700,7 @@ void Game::initUIFlow()
 
 		auto aboutButton = m_scenes[AppState::SettingsMenu].addEntity("AboutButton");
 		aboutButton->cSet = make_shared<CSet>("IMGS/Buttons/aboutus.png");
-		aboutButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x - 100.f, panelCenter.y + 115.f));
+		aboutButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x - 100.f, panelCenter.y + 155.f));
 		aboutButton->cSet->sprite.setOrigin(aboutButton->cSet->sprite.getLocalBounds().width / 2.f, aboutButton->cSet->sprite.getLocalBounds().height / 2.f);
 		aboutButton->cSet->sprite.setScale(4.0f, 4.0f);
 		aboutButton->cInput = make_shared<CInput>([this]() {
@@ -1677,7 +1716,7 @@ void Game::initUIFlow()
 
 		auto rulesButton = m_scenes[AppState::SettingsMenu].addEntity("RulesButton");
 		rulesButton->cSet = make_shared<CSet>("IMGS/Buttons/rules.png");
-		rulesButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x + 100.f, panelCenter.y + 115.f));
+		rulesButton->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x + 100.f, panelCenter.y + 155.f));
 		rulesButton->cSet->sprite.setOrigin(rulesButton->cSet->sprite.getLocalBounds().width / 2.f, rulesButton->cSet->sprite.getLocalBounds().height / 2.f);
 		rulesButton->cSet->sprite.setScale(4.0f, 4.0f);
 		rulesButton->cInput = make_shared<CInput>([this]() {
@@ -1699,12 +1738,12 @@ void Game::initUIFlow()
 		panel->cSet = make_shared<CSet>("IMGS/GUI/About.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
-		panel->cSet->sprite.setScale(1.5f, 1.5f);
+		panel->cSet->sprite.setScale(2.5f, 2.5f);
 
 
 		auto backBtn = m_scenes[AppState::AboutUs].addEntity("BackAbout");
 		backBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
+		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 350.f));
 		backBtn->cInput = make_shared<CInput>([this]()
 			{
 				m_state1 = AppState::SettingsMenu;
@@ -1727,11 +1766,11 @@ void Game::initUIFlow()
 		panel->cSet = make_shared<CSet>("IMGS/GUI/GameRules.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
-		panel->cSet->sprite.setScale(1.5f, 1.5f);
+		panel->cSet->sprite.setScale(2.5f, 2.5f);
 
 		auto backBtn = m_scenes[AppState::Rules].addEntity("BackRules");
 		backBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 200.f));
+		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 300.f));
 		backBtn->cInput = make_shared<CInput>([this]()
 			{
 				m_state1 = AppState::SettingsMenu;
@@ -1863,6 +1902,7 @@ void Game::initUIFlow()
 	}
 }
 
+
 // --- Load Story ---
 string trimBOM(const string& line)
 {
@@ -1966,7 +2006,7 @@ void Game::loadStoryFromFile(const string& filename)
 
 	    entity = m_scenes[AppState::Victory].addEntity("VictoryPanel");
 		entity->cSet = make_shared<CSet>("IMGS/GUI/Victory.png");
-		entity->cPosition = make_shared<CPosition>(Vector2f(511, 307));
+		entity->cPosition = make_shared<CPosition>(Vector2f(511, 257));
 
 		addText = m_scenes[AppState::Victory].addEntity("VictoryText");
 		addText->cText = make_shared<CText>("You held the line. You turned the tide. This war is over - because you never gave up.");
@@ -2023,40 +2063,131 @@ void Game::loadStoryFromFile(const string& filename)
 
 void Game::initStoryScene()
 {
-	auto bg = m_scenes[AppState::StoryScene].addEntity("StoryBG");
-	bg->cSet = make_shared<CSet>("IMGS/Story/cut1.jpg");
-	bg->cPosition = make_shared<CPosition>(Vector2f(0.f, 0.f));
-	bg->cSet->sprite.setPosition(bg->cPosition->position);
-	bg->cSet->sprite.setScale(1.f, 1.f);
-	bg->cSet->sprite.setOrigin(0.f, 0.f);
+	// Story
+	{
+		auto bg = m_scenes[AppState::StoryScene].addEntity("StoryBG");
+		bg->cSet = make_shared<CSet>("IMGS/Story/cut1.jpg");
+		bg->cPosition = make_shared<CPosition>(Vector2f(0.f, 0.f));
+		bg->cSet->sprite.setPosition(bg->cPosition->position);
+		bg->cSet->sprite.setScale(1.f, 1.f);
+		bg->cSet->sprite.setOrigin(0.f, 0.f);
 
-	auto text = m_scenes[AppState::StoryScene].addEntity("StoryText");
-	text->cText = make_shared<CText>("...");
-	text->cText->text.setFont(m_font2);
-	text->cText->text.setCharacterSize(40);
-	text->cText->text.setFillColor(sf::Color::White);
-	text->cText->text.setPosition(300.f, 800.f);
+		auto text = m_scenes[AppState::StoryScene].addEntity("StoryText");
+		text->cText = make_shared<CText>("...");
+		text->cText->text.setFont(m_font2);
+		text->cText->text.setCharacterSize(40);
+		text->cText->text.setFillColor(sf::Color::White);
+		text->cText->text.setPosition(300.f, 800.f);
 
-	auto skipText = m_scenes[AppState::StoryScene].addEntity("SkipButton");
-	skipText->cText = make_shared<CText>("SKIP");
-	skipText->cText->text.setFont(m_font2);
-	skipText->cText->text.setCharacterSize(36);
-	skipText->cText->text.setFillColor(Color::White);
-	skipText->cText->text.setPosition(1600.f, 950.f);
-	skipText->cText->text.setOutlineColor(Color::Black);
-	skipText->cText->text.setOutlineThickness(1.f);
+		auto skipText = m_scenes[AppState::StoryScene].addEntity("SkipButton");
+		skipText->cText = make_shared<CText>("SKIP");
+		skipText->cText->text.setFont(m_font2);
+		skipText->cText->text.setCharacterSize(36);
+		skipText->cText->text.setFillColor(Color::White);
+		skipText->cText->text.setPosition(1600.f, 950.f);
+		skipText->cText->text.setOutlineColor(Color::Black);
+		skipText->cText->text.setOutlineThickness(1.f);
 
-	skipText->cInput = make_shared<CInput>([this]() 
-		{
-		m_state = m_nextStateAfterStory;
-		},
-		[skipText]() 
-		{
-			skipText->cText->text.setFillColor(Color::Yellow);
-		},
-		[skipText]() 
-		{
-			skipText->cText->text.setFillColor(Color::White);
-		});
+		skipText->cInput = make_shared<CInput>([this]()
+			{
+				m_state = m_nextStateAfterStory;
+			},
+			[skipText]()
+			{
+				skipText->cText->text.setFillColor(Color::Yellow);
+			},
+			[skipText]()
+			{
+				skipText->cText->text.setFillColor(Color::White);
+			});
+	}
 
+	// catalog
+	{
+		m_catalog = {
+			{ "IMGS/Catalog/tower1.png", m_towerType1Config, Vector2u(11, 1), 0.2f},
+			{ "IMGS/Catalog/tower1.png", m_towerType2Config, Vector2u(8, 1), 0.2f },
+			{ "IMGS/Catalog/tower1.png", m_towerType3Config, Vector2u(13, 1), 0.2f },
+			{ "IMGS/Catalog/tower1.png", m_towerType4Config, Vector2u(8, 1), 0.2f },
+			{ "IMGS/Catalog/tower1.png", m_towerType5Config, Vector2u(14, 1), 0.2f },
+			{ "IMGS/Catalog/tower1.png", m_towerType6Config, Vector2u(14, 1), 0.2f }
+		};
+
+		auto bg = m_scenes[AppState::Catalog].addEntity("CatalogBG");
+		bg->cSet = make_shared<CSet>("IMGS/Catalog/tower1.png");
+		bg->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		bg->cSet->sprite.setOrigin(bg->cSet->sprite.getLocalBounds().width / 2.f, bg->cSet->sprite.getLocalBounds().height / 2.f);
+		bg->cSet->sprite.setScale(1.2f, 1.2f);
+
+		Vector2f center = Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f);
+		float x = center.x;
+		float y = center.y;
+
+		auto towerSprite = m_scenes[AppState::Catalog].addEntity("TowerSprite");
+		towerSprite->cSet = make_shared<CSet>(m_catalog[0].config.filepath, m_catalog[0].imgCount, m_catalog[0].switchTime, 0);
+		auto& sprite = towerSprite->cSet->sprite;
+		sprite.setScale(m_catalog[0].config.Sscale, m_catalog[0].config.Sscale);
+		towerSprite->cSet->isDynamic = true;
+		towerSprite->cPosition = make_shared<CPosition>(Vector2f(x - 128.0f, y));
+		towerSprite->cSet->sprite.setScale(2.0f, 2.0f);
+
+		auto leftBtn = m_scenes[AppState::Catalog].addEntity("LeftButton");
+		leftBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		leftBtn->cPosition = make_shared<CPosition>(Vector2f(x - 500, y));
+		leftBtn->cInput = make_shared<CInput>([this]()
+			{
+				m_currentCatalog--;
+				if (m_currentCatalog < 0) m_currentCatalog = m_catalog.size() - 1;
+				updateCatalogDisplay();
+			},
+			[leftBtn]()
+			{
+				leftBtn->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[leftBtn]()
+			{
+				leftBtn->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+		auto rightBtn = m_scenes[AppState::Catalog].addEntity("RightButton");
+		rightBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		rightBtn->cPosition = make_shared<CPosition>(Vector2f(x + 500, y));
+		rightBtn->cInput = make_shared<CInput>([this]() 
+			{
+				m_currentCatalog = (m_currentCatalog + 1) % m_catalog.size();
+				updateCatalogDisplay();
+			},
+			[rightBtn]()
+			{
+				rightBtn->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[rightBtn]()
+			{
+				rightBtn->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+
+
+		auto back = m_scenes[AppState::Catalog].addEntity("Back");
+		back->cSet = make_shared<CSet>("IMGS/Buttons/exit.png");
+		back->cPosition = make_shared<CPosition>(Vector2f(x, y + 300));
+		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
+		back->cSet->sprite.setScale(0.5f, 0.5f);
+		back->cInput = make_shared<CInput>([this]()
+			{
+				m_currentCatalog = 0;
+				m_state1 = AppState::Dummy;
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+		updateCatalogDisplay();
+	}
 }

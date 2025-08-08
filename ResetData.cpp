@@ -55,6 +55,9 @@ void Game::sReset()
 	
 	// Reset tốc độ
 	m_speedup = 1;
+
+	//Reset việc chọn tháp
+	m_clickedTower = false;
 }
 
 
@@ -101,7 +104,7 @@ void Game::DeactivateEnemy(Entity& enemy)
 			enemy.cMovement->speed = m_enemyType3Config.speed;
 		}
 
-		enemy.cMovement->currentPathindex = 0;
+		enemy.cMovement->currentDes = 0;
 		enemy.cMovement->pathIndex = 0;
 	}
 
@@ -121,7 +124,7 @@ void Game::DeactivateEnemy(Entity& enemy)
 			enemy.cSet->sprite.setScale(m_enemyType3Config.Sscale, m_enemyType3Config.Sscale);
 		}
 
-		enemy.cMovement->currentPathindex = 0;
+		enemy.cMovement->currentDes = 0;
 		enemy.cMovement->pathIndex = 0;
 	}
 

@@ -42,6 +42,7 @@ enum class AppState {
 	StoryScene,
 	PlayMenu,
 	NameInput,
+	Catalog,
 	SettingsMenu,
 	OptionMenu,
 	AboutUs,
@@ -66,7 +67,7 @@ struct BulletConfig { string tag; string filepath; int damage; float speed; floa
 
 struct EnemyTypeConfig { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 
-struct TowerTypeConfig { string tag; string filepath; int cost; float cooldown; float range; };
+struct TowerTypeConfig { string tag; string filepath; int cost; float cooldown; float range; float Sscale; };
 
 struct WaveConfig { int enemyType1Count = 0, enemyType2Count = 0, enemyType3Count = 0; };
 
@@ -77,6 +78,13 @@ struct SaveGame {
 	int mapIndex;
 };
 
+struct catalogImg {
+	string bgPath;
+	TowerTypeConfig config;
+	Vector2u imgCount;
+	float switchTime;
+	float scale;
+};
 
 // --- Class Game chính ---
 class Game {
@@ -165,9 +173,12 @@ class Game {
 	// --- Story ---
 	int m_storyIndex = 0;
 	AppState m_nextStateAfterStory = AppState::Dummy;
-	std::vector<std::pair<std::string, std::string>> m_storyQueue;
-	std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_storyBlocks;
+	vector<pair<string, string>> m_storyQueue;
+	map<string, vector<pair<string, string>>> m_storyBlocks;
 
+	// --- Catalog ---
+	vector<catalogImg> m_catalog;
+	int m_currentCatalog = 0;
 
 	// --- Cờ trạng thái ---
 	bool m_setting = false;
@@ -248,6 +259,9 @@ class Game {
 	void initStoryScene();
 	void playStoryBlock(const string& blockName, AppState nextState);
 	void setStoryTextWrapped(const std::string& str);
+
+	// --- Xử lí Catalog ---
+	void updateCatalogDisplay();
 
 public:
 	Game(const string& config);
