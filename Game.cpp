@@ -156,7 +156,7 @@ void Game::sRender(float& deltaTime)
 
 				if (m_currentWave == 3)
 				{
-					e->cText->text.setString("FINISH");
+					e->cText->text.setString(" ");
 				}
 
 				m_window.draw(e->cText->text);
@@ -340,7 +340,7 @@ void Game::sMovement(float& deltaTime)
 {
 	for (auto& entity : m_entities.getEntities())
 	{
-		if (!entity->isActive() || !entity->cMovement || !entity->cPosition) continue;
+		if (!entity->isActive() || !entity->cMovement || !entity->cPosition || entity->tag() != "Tornado") continue;
 
 		// Chuyển động đạn
 		if (entity->tag().find("Bullet") != std::string::npos)
@@ -432,6 +432,35 @@ void Game::sMovement(float& deltaTime)
 					else if (movement.x > 0.1f)
 						entity->cSet->sprite.setScale(baseScale, baseScale);
 				}
+			}
+
+			// Cập nhật hình ảnh và vị trí
+			entity->cSet->sprite.setPosition(entity->cPosition->position);
+		}
+	}
+}
+
+void Game::sReversedMovement(float& deltaTime)
+{
+	for (auto& entity : m_entities.getEntities())
+	{
+		if (entity->tag() == "Tornado")
+		{
+			// Tính toán đường đi đến điểm tiếp theo
+			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex][entity->cMovement->currentDes];
+			Vector2f direction = target - entity->cPosition->position;
+			float distance = MathSupport::Length(direction);
+
+			// Kiểm tra xem nếu đủ gần điểm thì chuyển tiếp điểm khác
+			if (distance < 5.f)
+			{
+				entity->cMovement->currentDes--;
+			}
+			else
+			{
+				// Di chuyển quái đến điểm
+				Vector2f movement = MathSupport::Normalize(direction);
+				entity->cPosition->position += movement * (entity->cMovement->speed * m_speedup) * deltaTime;
 			}
 
 			// Cập nhật hình ảnh và vị trí
@@ -985,6 +1014,7 @@ void Game::run()
 		if (!m_paused)
 		{
 			sMovement(dt);
+			sReversedMovement(dt);
 			sRender(dt);
 			TowerAttack();
 			sCollision();
