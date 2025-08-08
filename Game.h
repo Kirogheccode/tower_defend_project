@@ -67,7 +67,7 @@ struct BulletConfig { string tag; string filepath; int damage; float speed; floa
 
 struct EnemyTypeConfig { string tag; string filepath; int hp; float speed; int money; float Bscale; float Sscale; };
 
-struct TowerTypeConfig { string tag; string filepath; int cost; float cooldown; float range; };
+struct TowerTypeConfig { string tag; string filepath; int cost; float cooldown; float range; float Sscale; };
 
 struct WaveConfig { int enemyType1Count = 0, enemyType2Count = 0, enemyType3Count = 0; };
 
@@ -83,6 +83,7 @@ struct catalogImg {
 	TowerTypeConfig config;
 	Vector2u imgCount;
 	float switchTime;
+	float scale;
 };
 
 // --- Class Game chính ---

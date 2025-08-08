@@ -147,6 +147,33 @@ void Game::sRender(float& deltaTime)
 			}
 		}
 
+		// Hiện wave hiện tại
+		for (auto& e : m_scenes[game_state].getEntities("WaveDisplay"))
+		{
+			if (e->cText)
+			{
+				e->cText->text.setString("WAVE " + to_string(m_currentWave + 1));
+
+				if (m_currentWave == 3)
+				{
+					e->cText->text.setString("FINISH");
+				}
+
+				m_window.draw(e->cText->text);
+			}
+		}
+
+		// Hiện thông tin speed up
+		for (auto& e : m_scenes[game_state].getEntities("SpeedUp"))
+		{
+			if (e->cText)
+			{
+				e->cText->text.setString('x' + to_string(m_speedup));
+
+				m_window.draw(e->cText->text);
+			}
+		}
+
 		// Vẽ Wave nếu cần
 		if (m_showWaveText && m_currentWave < 3)
 		{
@@ -2080,6 +2107,8 @@ void Game::updateCatalogDisplay()
 	//if(!tower->cSet)
 	tower->cSet = make_shared<CSet>(entry.config.filepath, entry.imgCount, entry.switchTime, 0);
 	tower->cSet->isDynamic = true;
+	auto& sprite = tower->cSet->sprite;
+	sprite.setScale(entry.config.Sscale, entry.config.Sscale);
 	/*else
 	{
 		tower->cSet->texture.loadFromFile(entry.config.filepath);

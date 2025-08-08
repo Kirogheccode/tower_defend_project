@@ -295,7 +295,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType1Config.tag >> m_towerType1Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType1Config.range >> m_towerType1Config.cooldown >> amount >> m_towerType1Config.cost;
+			iss >> m_towerType1Config.tag >> m_towerType1Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType1Config.range >> m_towerType1Config.cooldown >> amount >> m_towerType1Config.cost >> m_towerType1Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -307,7 +307,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType1Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet01Config.tag);	
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.4f, 1.4f);
+				sprite.setScale(m_towerType1Config.Sscale, m_towerType1Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
@@ -336,7 +336,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType2Config.range >> m_towerType2Config.cooldown >> amount >> m_towerType2Config.cost;
+			iss >> m_towerType2Config.tag >> m_towerType2Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType2Config.range >> m_towerType2Config.cooldown >> amount >> m_towerType2Config.cost >> m_towerType2Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -348,7 +348,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType2Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet02Config.tag); 
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.4f, 1.4f);
+				sprite.setScale(m_towerType2Config.Sscale, m_towerType2Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
@@ -377,7 +377,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType3Config.range >> m_towerType3Config.cooldown >> amount >> m_towerType3Config.cost;
+			iss >> m_towerType3Config.tag >> m_towerType3Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType3Config.range >> m_towerType3Config.cooldown >> amount >> m_towerType3Config.cost >> m_towerType3Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -389,7 +389,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType3Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet03Config.tag);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(0.7, 0.7);
+				sprite.setScale(m_towerType3Config.Sscale, m_towerType3Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
@@ -418,7 +418,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType4Config.range >> m_towerType4Config.cooldown >> amount >> m_towerType4Config.cost;
+			iss >> m_towerType4Config.tag >> m_towerType4Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType4Config.range >> m_towerType4Config.cooldown >> amount >> m_towerType4Config.cost >> m_towerType4Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -430,7 +430,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType4Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet04Config.tag);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(1.7f, 1.7f);
+				sprite.setScale(m_towerType4Config.Sscale, m_towerType4Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
@@ -458,7 +458,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType5Config.tag >> m_towerType5Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType5Config.range >> m_towerType5Config.cooldown >> amount >> m_towerType5Config.cost;
+			iss >> m_towerType5Config.tag >> m_towerType5Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType5Config.range >> m_towerType5Config.cooldown >> amount >> m_towerType5Config.cost >> m_towerType5Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -470,7 +470,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType5Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet05Config.tag);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(2, 2);
+				sprite.setScale(m_towerType5Config.Sscale, m_towerType5Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 
 				entity->cInput = make_shared<CInput>(
@@ -499,7 +499,7 @@ void Game::init(const string& path)
 			Vector2u imgCount;
 			float switchTime, range, cooldown;
 			int amount;
-			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType6Config.range >> m_towerType6Config.cooldown >> amount >> m_towerType6Config.cost;
+			iss >> m_towerType6Config.tag >> m_towerType6Config.filepath >> imgCount.x >> imgCount.y >> switchTime >> m_towerType6Config.range >> m_towerType6Config.cooldown >> amount >> m_towerType6Config.cost >> m_towerType6Config.Sscale;
 
 			for (int i = 0; i < amount; i++)
 			{
@@ -511,7 +511,7 @@ void Game::init(const string& path)
 				entity->cBound = make_shared<CBound>(m_towerType6Config.range);
 				entity->cWeapon = make_shared<CWeapon>(m_bullet06Config.tag);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(0.7, 0.7);
+				sprite.setScale(m_towerType6Config.Sscale, m_towerType6Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
 
 				entity->cInput = make_shared<CInput>(
@@ -813,6 +813,22 @@ void Game::loadWaveText()
 
 	waveEntity->cText->text.setPosition(centerX - totalWidth / 2.f + waveBounds.width / 2.f, centerY);
 	numEntity->cText->text.setPosition(waveEntity->cText->text.getPosition().x + waveBounds.width / 2.f + 20 + numBounds.width / 2.f, centerY - 10);
+
+	// --- Khởi tạo wave đisplay
+	auto waveDisplay = m_scenes[AppState::GamePlay].addEntity("WaveDisplay");
+	waveDisplay->cText = make_shared<CText>("WAVE " + to_string(m_currentWave + 1));
+	waveDisplay->cText->text.setFont(m_font);
+	waveDisplay->cText->text.setCharacterSize(40);
+	waveDisplay->cText->text.setFillColor(Color::Green);
+	waveDisplay->cText->text.setPosition(15, 130);
+
+	// --- Khởi tạo speed up
+	auto speedup = m_scenes[AppState::GamePlay].addEntity("SpeedUp");
+	speedup->cText = make_shared<CText>('x' + to_string(m_speedup));
+	speedup->cText->text.setFont(m_font);
+	speedup->cText->text.setCharacterSize(40);
+	speedup->cText->text.setFillColor(Color::White);
+	speedup->cText->text.setPosition(28, 820);
 }
 
 void Game::loadFontText()
@@ -916,6 +932,7 @@ void Game::loadFontText()
 	{
 		cout << "Error: Could not load selling sound file.\n";
 	}
+
 	updateAudioSettings();
 }
 
@@ -2108,6 +2125,8 @@ void Game::initStoryScene()
 
 		auto towerSprite = m_scenes[AppState::Catalog].addEntity("TowerSprite");
 		towerSprite->cSet = make_shared<CSet>(m_catalog[0].config.filepath, m_catalog[0].imgCount, m_catalog[0].switchTime, 0);
+		auto& sprite = towerSprite->cSet->sprite;
+		sprite.setScale(m_catalog[0].config.Sscale, m_catalog[0].config.Sscale);
 		towerSprite->cSet->isDynamic = true;
 		towerSprite->cPosition = make_shared<CPosition>(Vector2f(x - 128.0f, y));
 		towerSprite->cSet->sprite.setScale(2.0f, 2.0f);
