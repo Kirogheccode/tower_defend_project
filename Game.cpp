@@ -252,13 +252,7 @@ void Game::sCollision()
 				playSfx(m_collide, bullet->cPosition->position);
 				if (cur->cHealth)
 				{
-					// cout << "[DEBUG] Enenimes health: " << cur->cHealth->hp << endl;
-
-					cur->cHealth->hp -= bullet->cDamage->damage;
-
-					// cout << "[DEBUG] Damage bullet: " << bullet->cDamage->damage << endl;
-					// cout << "[DEBUG] Enenimes health after being shoot: " << cur->cHealth->hp << endl;
-
+					cur->cHealth->hp -= bullet->cDamage->damage;	
 					if (cur->cHealth->hp <= 0)
 					{
 						m_coin += cur->cMoney->money;
@@ -969,14 +963,8 @@ void Game::sSaveGame()
 
 	cout << fileForSave << "\n";
 
-	//std::ofstream writePlayer(fileName, std::ios::out | std::ios::trunc);
-	//if (!writePlayer.is_open()) {
-	//	std::cerr << "Error opening file: " << fileName << " (check permissions or path).\n";
-	//	return;
-	//}
-
 	cout << "[DEBUG] Before write: State " << writePlayer.rdstate() << " (0 = good)\n";
-	startWriting(fileForSave);  // Start writing to the file
+	startWriting(fileForSave);  
 
 	writePlayer.clear();  // Reset any potential error state
 

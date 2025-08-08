@@ -26,7 +26,7 @@
 using namespace std;
 using namespace sf;
 
-const int initCoin = 500; // Số tiền khởi tạo
+const int initCoin = 10000; // Số tiền khởi tạo
 
 // --- Forward declarations ---
 class EntityManager;
