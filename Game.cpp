@@ -40,7 +40,7 @@ void Game::sRender(float& deltaTime)
 	m_window.clear();
 
 	// Hiển thị tổng
-	
+
 	for (auto& e : m_scenes[m_state].getEntities())
 	{
 		if (e->cSet && e->cPosition)
@@ -77,15 +77,6 @@ void Game::sRender(float& deltaTime)
 		m_window.display();
 		return;
 	}
-
-	/*if (m_state == AppState::Catalog)
-	{
-		for (auto& e : m_scenes[AppState::Catalog].getEntities())
-		{
-			if (e->cSet) m_window.draw(e->cSet->sprite);
-		}
-	}*/
-
 
 	// Hiển thị quái, đạn và tháp
 	for (auto& e : m_entities.getEntities())
@@ -253,7 +244,7 @@ void Game::sRender(float& deltaTime)
 		if (m_state2 == AppState::TowerPlace)
 		{
 			sf::Vector2f mousePos = m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window));
-			for (auto& e : m_entities.getEntities("Cursor")) 
+			for (auto& e : m_entities.getEntities("Cursor"))
 			{
 				if (e->isActive())
 				{
@@ -314,6 +305,35 @@ void Game::sCollision()
 				DeactivateBullet(*bullet);
 			}
 		}
+
+		for (auto& tornado : m_entities.getEntities("Tornado"))
+		{
+			if (!tornado->isActive()) continue;
+
+			if (isOutOfBounds(*tornado, 100.0f))
+			{
+				DeactivateBullet(*tornado);
+			}
+
+			if (collisionDetection(*tornado, *cur))
+			{
+				if (cur->cHealth)
+				{
+					cout << "[DEBUG] Enenimes health: " << cur->cHealth->hp << endl;
+
+					cur->cHealth->hp -= tornado->cDamage->damage;
+
+					cout << "[DEBUG] Damage bullet: " << tornado->cDamage->damage << endl;
+					cout << "[DEBUG] Enenimes health after being shoot: " << cur->cHealth->hp << endl;
+
+					if (cur->cHealth->hp <= 0)
+					{
+						m_coin += cur->cMoney->money;
+						DeactivateEnemy(*cur);
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -340,7 +360,7 @@ void Game::sMovement(float& deltaTime)
 {
 	for (auto& entity : m_entities.getEntities())
 	{
-		if (!entity->isActive() || !entity->cMovement || !entity->cPosition || entity->tag() != "Tornado") continue;
+		if (!entity->isActive() || !entity->cMovement || !entity->cPosition || entity->tag() == "Tornado") continue;
 
 		// Chuyển động đạn
 		if (entity->tag().find("Bullet") != std::string::npos)
@@ -444,28 +464,58 @@ void Game::sReversedMovement(float& deltaTime)
 {
 	for (auto& entity : m_entities.getEntities())
 	{
-		if (entity->tag() == "Tornado")
+		if (!entity->isActive() || !entity->cMovement || !entity->cPosition) continue;
+		if (entity->tag() != "Tornado") continue;
+
+		auto& move = entity->cMovement;
+		auto& pos = entity->cPosition->position;
+		Vector2f target;
+
+		if (move->currentDes >= 0)
 		{
-			// Tính toán đường đi đến điểm tiếp theo
-			Vector2f target = entity->cMovement->paths[m_mapindex][entity->cMovement->pathIndex][entity->cMovement->currentDes];
-			Vector2f direction = target - entity->cPosition->position;
-			float distance = MathSupport::Length(direction);
-
-			// Kiểm tra xem nếu đủ gần điểm thì chuyển tiếp điểm khác
-			if (distance < 5.f)
-			{
-				entity->cMovement->currentDes--;
-			}
-			else
-			{
-				// Di chuyển quái đến điểm
-				Vector2f movement = MathSupport::Normalize(direction);
-				entity->cPosition->position += movement * (entity->cMovement->speed * m_speedup) * deltaTime;
-			}
-
-			// Cập nhật hình ảnh và vị trí
-			entity->cSet->sprite.setPosition(entity->cPosition->position);
+			auto& path = move->paths[m_mapindex][move->pathIndex];
+			target = path[move->currentDes];
 		}
+		else if (move->currentDes == -1)
+		{
+			// Tiếp tục di chuyển đến starting_pos
+			target = move->starting_pos[m_mapindex];
+		}
+		else
+		{
+			entity->active(false);
+			DeactivateEnemy(*entity);
+
+			continue;
+		}
+
+		Vector2f direction = target - pos;
+		float distance = MathSupport::Length(direction);
+		float step = move->speed * m_speedup * deltaTime;
+
+		if (distance <= step)
+		{
+			pos = target;
+
+			if (move->currentDes >= 0)
+			{
+				move->currentDes--;
+			}
+			else if (move->currentDes == -1)
+			{
+				entity->active(false);
+				DeactivateEnemy(*entity);
+
+				continue;
+			}
+		}
+		else
+		{
+			Vector2f movement = MathSupport::Normalize(direction);
+			pos += movement * step;
+		}
+
+		entity->cSet->sprite.setPosition(pos);
 	}
 }
 
@@ -1027,7 +1077,7 @@ void Game::run()
 		}
 		else
 		{
-			sRender(dt); 
+			sRender(dt);
 		}
 	}
 }
@@ -1401,7 +1451,7 @@ void Game::sLoadGame()
 	string fileName = fileForSave;
 	cout << fileName << endl;
 	ifstream readPlayer(fileName);
-	
+
 	if (!readPlayer.is_open())
 	{
 		// thông báo trên màn hình 
@@ -1767,7 +1817,7 @@ void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 {
 	string date, TiMe, tmp;
 	FloatRect bounds;
-	
+
 	getline(in, tmp);
 	getline(in, tmp);
 	istringstream iss(tmp);
@@ -1790,7 +1840,7 @@ void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 	Vector2f buttonSize(1920.f * 0.25f, 1080.f * 0.25f);
 
 	mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 20.f);
-	
+
 }
 
 void Game::startWriting(const string& filename) {
@@ -1853,7 +1903,7 @@ void Game::playMapMusic(int mapIdx) {
 void Game::updateMusicState() {
 	bool isMenuState = (m_state == AppState::MainMenu ||
 		m_state == AppState::SettingsMenu ||
-		m_state ==  AppState::StoryScene);
+		m_state == AppState::StoryScene);
 
 	if (isMenuState) {
 		// Nếu chưa phát menuMusic thì bật, đồng thời tắt gameplayMusic
@@ -1907,7 +1957,7 @@ void Game::updateMusicState() {
 			m_defeatMusic.play();
 		else if (m_state1 == AppState::Victory && m_victoryMusic.getStatus() != Music::Playing)
 			m_victoryMusic.play();
-		
+
 	}
 	else if (m_state == AppState::Map1) {
 		if (m_backgroundMusic.getStatus() == sf::Music::Playing)
@@ -2094,22 +2144,6 @@ void Game::playStoryBlock(const string& blockName, AppState nextState)
 
 }
 
-//// --- xử lí Catalog ---
-//void Game::updateCatalogDisplay()
-//{
-//	if (m_catalog.empty()) return;
-//
-//	const auto& entry = m_catalog[m_currentCatalog];
-//
-//	// Cập nhật sprite ảnh tháp
-//	auto& tower = m_scenes[AppState::Catalog].getEntities("TowerSprite").front();
-//
-//	if (!tower->cSet) tower->cSet = std::make_shared<CSet>(entry.towerPath);
-//	else tower->cSet->texture.loadFromFile(entry.towerPath);
-//
-//	tower->cSet->sprite.setTexture(tower->cSet->texture, true);
-//}
-
 void Game::updateCatalogDisplay()
 {
 	if (m_catalog.empty()) return;
@@ -2150,6 +2184,7 @@ void Game::updateCatalogDisplay()
 		tower->cSet->isDynamic = true;
 	}*/
 }
+
 
 // --- Tháp (Tower) ---
 void Game::Shoot(Entity& tower)
@@ -2268,7 +2303,7 @@ void Game::UpgradeTower(Entity& tower)
 						e->cText->text.setString("Damage " + to_string((int)(m_bullet01Config.damage * m_multiplies[tower.cLevel->levelindex])));
 					else if (tower.cWeapon->tag == m_bullet02Config.tag)
 						e->cText->text.setString("Damage " + to_string((int)(m_bullet02Config.damage * m_multiplies[tower.cLevel->levelindex])));
-					else if (tower.cWeapon->tag == m_bullet03Config.tag) 
+					else if (tower.cWeapon->tag == m_bullet03Config.tag)
 						e->cText->text.setString("Damage " + to_string((int)(m_bullet03Config.damage * m_multiplies[tower.cLevel->levelindex])));
 					else if (tower.cWeapon->tag == m_bullet04Config.tag)
 						e->cText->text.setString("Damage " + to_string((int)(m_bullet04Config.damage * m_multiplies[tower.cLevel->levelindex])));

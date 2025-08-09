@@ -34,9 +34,9 @@ struct CLevel {
 // Di chuyển của quái: bao gồm tốc độ, vị trí hiện tại, và đường đi theo từng map
 struct CMovement {
 	float speed = 0.f;
-	unsigned int currentDes = 0;
+	int currentDes = 0;
 	Vector2f velocity = { 0.f, 0.f };
-	unsigned int pathIndex = 0;
+	int pathIndex = 0;
 
 	vector<Vector2f> starting_pos = {	// Vị trí bắt đầu cho từng map
 		{1165.f, 1580.f}, { -500.f, 500.f }, { 1252.f, 1575.f }, { 700.f, 1575.f }

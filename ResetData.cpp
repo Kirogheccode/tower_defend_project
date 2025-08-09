@@ -9,8 +9,11 @@ void Game::sReset()
 		DeactivateEnemy(*enemy);
 	}
 
-	m_finishWave = true;
-	m_spawnStage = SpawnStage::None;
+	// Reset quái
+	for (auto& enemy : m_entities.getEntities("Tornado"))
+	{
+		DeactivateEnemy(*enemy);
+	}
 
 	// Reset tháp
 	for (auto& tower : m_entities.getEntities("Tower"))
@@ -36,6 +39,10 @@ void Game::sReset()
 		if (!heart->isActive())
 			heart->active(true);
 	}
+
+	// Reset spawning stage
+	m_finishWave = true;
+	m_spawnStage = SpawnStage::None;
 
 	// Reset tien (default: 1000)
 	m_coin = initCoin;
