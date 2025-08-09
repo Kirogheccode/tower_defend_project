@@ -305,35 +305,6 @@ void Game::sCollision()
 				DeactivateBullet(*bullet);
 			}
 		}
-
-		for (auto& tornado : m_entities.getEntities("Tornado"))
-		{
-			if (!tornado->isActive()) continue;
-
-			if (isOutOfBounds(*tornado, 100.0f))
-			{
-				DeactivateBullet(*tornado);
-			}
-
-			if (collisionDetection(*tornado, *cur))
-			{
-				if (cur->cHealth)
-				{
-					cout << "[DEBUG] Enenimes health: " << cur->cHealth->hp << endl;
-
-					cur->cHealth->hp -= tornado->cDamage->damage;
-
-					cout << "[DEBUG] Damage bullet: " << tornado->cDamage->damage << endl;
-					cout << "[DEBUG] Enenimes health after being shoot: " << cur->cHealth->hp << endl;
-
-					if (cur->cHealth->hp <= 0)
-					{
-						m_coin += cur->cMoney->money;
-						DeactivateEnemy(*cur);
-					}
-				}
-			}
-		}
 	}
 }
 
