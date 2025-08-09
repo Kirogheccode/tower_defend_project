@@ -208,6 +208,7 @@ class Game {
 	// --- Hệ thống ---
 	void sRender(float& dt);
 	void sMovement(float& dt);
+	void sReversedMovement(float& dt);
 	void sAnimation(shared_ptr<Entity>& entity, float& dt);
 	void sUserInput();
 	void sReset();

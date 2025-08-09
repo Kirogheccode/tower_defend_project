@@ -18,8 +18,8 @@ void Game::clearFile(const string& fileName)
 	{
 		if (e->tag() == map_name)
 		{
-			if(e->cText)
-			    e->cText = nullptr;
+			if (e->cText)
+				e->cText = nullptr;
 			break;
 		}
 	}
@@ -27,7 +27,7 @@ void Game::clearFile(const string& fileName)
 
 void Game::sChangeCursor(string tag)
 {
-	for(auto& entity : m_entities.getEntities("Cursor"))
+	for (auto& entity : m_entities.getEntities("Cursor"))
 	{
 		if (entity->tag() == tag)
 		{
@@ -35,7 +35,7 @@ void Game::sChangeCursor(string tag)
 			m_window.setMouseCursorVisible(false);
 			break;
 		}
-	}	
+	}
 }
 
 
@@ -305,7 +305,7 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType1Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType1Config.range);
-				entity->cWeapon = make_shared<CWeapon>(m_bullet01Config.tag);	
+				entity->cWeapon = make_shared<CWeapon>(m_bullet01Config.tag);
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_towerType1Config.Sscale, m_towerType1Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
@@ -346,7 +346,7 @@ void Game::init(const string& path)
 				entity->cLevel = make_shared<CLevel>(0);
 				entity->cMoney = make_shared<CMoney>(m_towerType2Config.cost);
 				entity->cBound = make_shared<CBound>(m_towerType2Config.range);
-				entity->cWeapon = make_shared<CWeapon>(m_bullet02Config.tag); 
+				entity->cWeapon = make_shared<CWeapon>(m_bullet02Config.tag);
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_towerType2Config.Sscale, m_towerType2Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
@@ -545,8 +545,24 @@ void Game::init(const string& path)
 		}
 	}
 
-
 	readconfig.close();
+
+	// ================================================================================ EFFECT ================================================================================
+	{
+		for (int i = 0; i < 25; i++)
+		{
+			auto entity = m_entities.addEntity("Tornado");
+			entity->cMovement = make_shared<CMovement>(300);
+			entity->cSet = make_shared<CSet>("IMGS/Effects/tornadoMoving.png", Vector2u(5, 1), 0.2f, 0);
+			entity->cBoundaryScale = make_shared<CBoundaryScale>(100);
+			entity->cDamage = make_shared<CDamage>(100);
+			entity->cPosition = make_shared<CPosition>(Vector2f(0, 0));
+
+			auto& sprite = entity->cSet->sprite;
+			sprite.setScale(0.8f, 0.8f);
+			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 60);
+		}
+	}
 
 	loadFontText();
 	initUIFlow();
@@ -924,7 +940,7 @@ void Game::loadFontText()
 		cout << "Error: Could not load error sound file.\n";
 	}
 
-	if(!m_collide.loadFromFile("SOUNDS/HitSound.mp3"))
+	if (!m_collide.loadFromFile("SOUNDS/HitSound.mp3"))
 	{
 		cout << "Error: Could not load collide sound file.\n";
 	}
@@ -1076,7 +1092,7 @@ void Game::initUIFlow()
 			entity->cPosition = make_shared<CPosition>(Vector2f(810, 544));
 			entity->cInput = make_shared<CInput>([this]()
 				{
-					
+
 					queueSave();
 					this_thread::sleep_for(chrono::milliseconds(50));
 				},
@@ -1168,6 +1184,28 @@ void Game::initUIFlow()
 				else if (m_speedup == 3)
 				{
 					m_speedup = 1;
+				}
+
+				for (auto& e : m_entities.getEntities())
+				{
+					if (e->tag() == "Tornado" && !e->isActive())
+					{
+						if (m_mapindex == 3)
+						{
+							static random_device rd;
+							static mt19937 gen(rd());
+							static uniform_int_distribution<> dis(0, 3);
+							e->cMovement->pathIndex = dis(gen);
+						}
+
+						auto& path = e->cMovement->paths[m_mapindex][e->cMovement->pathIndex];
+						if (path.empty()) continue;
+
+						e->active(true);
+						e->cMovement->currentDes = (int)path.size() - 1;
+						e->cPosition->position = path.back();
+						break;
+					}
 				}
 			},
 			[entity]()
@@ -1531,7 +1569,7 @@ void Game::initUIFlow()
 			{
 				setSaveTime(map1, readTime1);
 			}
-			readTime1.close();    
+			readTime1.close();
 		}
 
 		auto map2 = m_scenes[AppState::LoadGame].addEntity("Map2");
@@ -1813,91 +1851,91 @@ void Game::initUIFlow()
 			{
 				map1->cSet->sprite.setColor(Color(255, 255, 255));
 			}
-			);
+		);
 
-			auto map2 = m_scenes[AppState::MapSelect].addEntity("Map2");
-			map2->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-			map2->cPosition = make_shared<CPosition>(Vector2f(50, 427));
-			map2->cSet->sprite.setScale(1.2f, 1.2f);
-			map2->cInput = make_shared<CInput>([this]()
-				{
-					m_mapindex = 1;
-					clearFile("map2.txt");
-					fileForSave = "map2.txt";
-					m_state = AppState::Map2;
-					game_state = AppState::GamePlay;
-				},
-				[map2]()
-				{
-					map2->cSet->sprite.setColor(Color(200, 200, 200));
-				},
-				[map2]()
-				{
-					map2->cSet->sprite.setColor(Color(255, 255, 255));
-				}
-			);
+		auto map2 = m_scenes[AppState::MapSelect].addEntity("Map2");
+		map2->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+		map2->cPosition = make_shared<CPosition>(Vector2f(50, 427));
+		map2->cSet->sprite.setScale(1.2f, 1.2f);
+		map2->cInput = make_shared<CInput>([this]()
+			{
+				m_mapindex = 1;
+				clearFile("map2.txt");
+				fileForSave = "map2.txt";
+				m_state = AppState::Map2;
+				game_state = AppState::GamePlay;
+			},
+			[map2]()
+			{
+				map2->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map2]()
+			{
+				map2->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
-			auto map3 = m_scenes[AppState::MapSelect].addEntity("Map3");
-			map3->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-			map3->cPosition = make_shared<CPosition>(Vector2f(1505, 450));
-			map3->cSet->sprite.setScale(1.0f, 1.0f);
-			map3->cInput = make_shared<CInput>([this]()
-				{
-					m_mapindex = 2;
-					clearFile("map3.txt");
-					fileForSave = "map3.txt";
-					m_state = AppState::Map3;
-					game_state = AppState::GamePlay;
-				},
-				[map3]()
-				{
-					map3->cSet->sprite.setColor(Color(200, 200, 200));
-				},
-				[map3]()
-				{
-					map3->cSet->sprite.setColor(Color(255, 255, 255));
-				}
-			);
+		auto map3 = m_scenes[AppState::MapSelect].addEntity("Map3");
+		map3->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+		map3->cPosition = make_shared<CPosition>(Vector2f(1505, 450));
+		map3->cSet->sprite.setScale(1.0f, 1.0f);
+		map3->cInput = make_shared<CInput>([this]()
+			{
+				m_mapindex = 2;
+				clearFile("map3.txt");
+				fileForSave = "map3.txt";
+				m_state = AppState::Map3;
+				game_state = AppState::GamePlay;
+			},
+			[map3]()
+			{
+				map3->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map3]()
+			{
+				map3->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
-			auto map4 = m_scenes[AppState::MapSelect].addEntity("Map4");
-			map4->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
-			map4->cPosition = make_shared<CPosition>(Vector2f(1700, 420));
-			map4->cSet->sprite.setScale(1.25f, 1.25f);
-			map4->cInput = make_shared<CInput>([this]()
-				{
-					m_mapindex = 3;
-					clearFile("map4.txt");
-					fileForSave = "map4.txt";
-					m_state = AppState::Map4;
-					game_state = AppState::GamePlay;
-				},
-				[map4]()
-				{
-					map4->cSet->sprite.setColor(Color(200, 200, 200));
-				},
-				[map4]()
-				{
-					map4->cSet->sprite.setColor(Color(255, 255, 255));
-				}
-			);
+		auto map4 = m_scenes[AppState::MapSelect].addEntity("Map4");
+		map4->cSet = make_shared<CSet>("IMGS/GUI/globe.png");
+		map4->cPosition = make_shared<CPosition>(Vector2f(1700, 420));
+		map4->cSet->sprite.setScale(1.25f, 1.25f);
+		map4->cInput = make_shared<CInput>([this]()
+			{
+				m_mapindex = 3;
+				clearFile("map4.txt");
+				fileForSave = "map4.txt";
+				m_state = AppState::Map4;
+				game_state = AppState::GamePlay;
+			},
+			[map4]()
+			{
+				map4->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[map4]()
+			{
+				map4->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 
-			auto back = m_scenes[AppState::MapSelect].addEntity("Back");
-			back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-			back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
-			back->cInput = make_shared<CInput>([this]()
-				{
-					m_state = AppState::PlayMenu;
-				},
-				[back]()
-				{
-					back->cSet->sprite.setColor(Color(200, 200, 200));
-				},
-				[back]()
-				{
-					back->cSet->sprite.setColor(Color(255, 255, 255));
-				}
-			);
+		auto back = m_scenes[AppState::MapSelect].addEntity("Back");
+		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		back->cInput = make_shared<CInput>([this]()
+			{
+				m_state = AppState::PlayMenu;
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[back]()
+			{
+				back->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 
 	}
 }
@@ -1983,13 +2021,13 @@ void Game::loadStoryFromFile(const string& filename)
 			{
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
-			);
+		);
 
 		entity = m_scenes[AppState::Defeat].addEntity("Retry");
 		entity->cSet = make_shared<CSet>("IMGS/Buttons/Retry.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(1076, 750));
 		entity->cInput = make_shared<CInput>([this]()
-			{ 
+			{
 				prev_state = m_state;
 				sReset();
 				m_state1 = AppState::Dummy;
@@ -2002,9 +2040,9 @@ void Game::loadStoryFromFile(const string& filename)
 			{
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
-			);
+		);
 
-	    entity = m_scenes[AppState::Victory].addEntity("VictoryPanel");
+		entity = m_scenes[AppState::Victory].addEntity("VictoryPanel");
 		entity->cSet = make_shared<CSet>("IMGS/GUI/Victory.png");
 		entity->cPosition = make_shared<CPosition>(Vector2f(511, 257));
 
@@ -2153,7 +2191,7 @@ void Game::initStoryScene()
 		auto rightBtn = m_scenes[AppState::Catalog].addEntity("RightButton");
 		rightBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		rightBtn->cPosition = make_shared<CPosition>(Vector2f(x + 500, y));
-		rightBtn->cInput = make_shared<CInput>([this]() 
+		rightBtn->cInput = make_shared<CInput>([this]()
 			{
 				m_currentCatalog = (m_currentCatalog + 1) % m_catalog.size();
 				updateCatalogDisplay();
