@@ -277,7 +277,7 @@ void Game::sCollision()
 		{
 			if (!bullet->isActive()) continue;
 
-			if (isOutOfBounds(*bullet, 100.0f))
+			if (isOutOfBounds(*bullet, 10.0f))
 			{
 				if (bullet->tag() == m_bullet01Config.tag)
 					bullet->cDamage->damage = m_bullet01Config.damage;
