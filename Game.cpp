@@ -33,6 +33,15 @@ bool collisionDetection(const Entity& entity1, const Entity& entity2)
 	return isContained(bounds1, bounds2);
 }
 
+bool specialCollision(const Entity& entity1, const Entity& entity2)
+{
+	if (!entity1.cSet || !entity2.cSet) return false;
+	FloatRect bounds1 = scaleRect(entity1.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
+	FloatRect bounds2 = scaleRect(entity2.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
+
+	return bounds1.intersects(bounds2);
+}
+
 
 // --- Hệ thống ---
 void Game::sRender(float& deltaTime)
@@ -290,17 +299,31 @@ void Game::sCollision()
 						DeactivateEnemy(*cur);
 					}
 				}
-
-				if (bullet->tag() == m_bullet01Config.tag)
-					bullet->cDamage->damage = m_bullet01Config.damage;
-				else if (bullet->tag() == m_bullet02Config.tag)
-					bullet->cDamage->damage = m_bullet02Config.damage;
-
 				DeactivateBullet(*bullet);
+			}
+		}
+
+		for (auto& eff : m_entities.getEntities("Tornado"))
+		{
+			if (!eff->isActive()) continue;
+			if (specialCollision(*cur, *eff))
+			{
+				playSfx(m_collide, eff->cPosition->position);
+				if (cur->cHealth)
+				{
+					cur->cHealth->hp -= eff->cDamage->damage;
+					if (cur->cHealth->hp <= 0)
+					{
+						m_coin += cur->cMoney->money;
+						DeactivateEnemy(*cur);
+					}
+				}
 			}
 		}
 	}
 }
+
+
 
 void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
 {
@@ -2468,29 +2491,31 @@ void Game::sHealthRecover()
 void Game::sGacha()
 {
 	cout << "[DEBUG]: " << rollDice() << endl;
+
+	if (m_coin < 5000)
+		return;
+	else
+		m_coin -= 5000;
+
+
+	m_paused = true;
+
 	switch (rollDice())
 	{
 	case 1:
-		m_coin *= 1.5;
+		m_state1 = AppState::Effect1;
 		break;
 
 	case 2:
-		sHealthRecover();
+		m_state1 = AppState::Effect2;
 		break;
 
 	case 3:
-		for (auto& tow : m_scenes[game_state].getEntities("Tower"))
-		{
-			if (tow->isActive())
-			{
-				RemoveTower(*tow);
-				break;
-			}
-		}
+		m_state1 = AppState::Effect3;
 		break;
 
 	case 4:
-		//save for special effect
+		m_state1 = AppState::Effect4;
 		break;
 	}
 }

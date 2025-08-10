@@ -4,7 +4,7 @@ TowerDefense 1920 1080 60 1
 
 # -------------------------------------------------------------------------------------------------------
 # Bullet format: BULLET <Tag> <Filepath> <Damage> <Speed> <Boundary Scale> <Sprite Scale>
-# <Tag>:           Unique name for this bullet type (e.g., "MachineGunBullet")
+# <Tag>:           Unique name for this bullet type 
 # <Filepath>:      Path to the bullet's spritesheet
 # <Damage>:        Amount of damage it deals
 # <Speed>:         Movement speed in pixels per second
@@ -16,7 +16,7 @@ Bullet02 IMGS/Bullets/PoisonBullet.png 60 800 250 1.2
 Bullet03 IMGS/Bullets/Bullet03.png 85 750 250 1.4
 Bullet04 IMGS/Bullets/ChargeBullet.png 150 750 250 1.4
 Bullet05 IMGS/Bullets/Bullet05.png 120 750 250 2.0
-Bullet06 IMGS/Bullets/Bullet06.png 350 750 200 2.6
+Bullet06 IMGS/Bullets/Bullet06.png 350 750 150 3.0
 
 
 # -------------------------------------------------------------------------------------------------------
@@ -31,8 +31,8 @@ Bullet06 IMGS/Bullets/Bullet06.png 350 750 200 2.6
 # <Amount>:        Number of enemies of this type in a wave
 # -------------------------------------------------------------------------------------------------------
 EnemyType1 IMGS/Enemies/Skeleton.png 100 75 100 80 1.2 75
-EnemyType2 IMGS/Enemies/Slime.png 400 60 250 90 2.45 50
-EnemyType3 IMGS/Enemies/Worm.png 900 35 400 65 1.8 50
+EnemyType2 IMGS/Enemies/Slime.png 400 60 250 120 2.45 50
+EnemyType3 IMGS/Enemies/Worm.png 900 35 400 80 2.1 50
 
 
 # -------------------------------------------------------------------------------------------------------
@@ -46,12 +46,12 @@ EnemyType3 IMGS/Enemies/Worm.png 900 35 400 65 1.8 50
 # <Amount>:            Maximum number of this tower type available or allowed
 # <Cost>:			   Cost to place the tower
 # -------------------------------------------------------------------------------------------------------
-Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 400 4.0 50 150 1.4
-Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 4.0 50 200 1.4
-Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 5.5 50 550 0.7
-Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 4.0 50 250 1.7
-Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 4.3 50 400 2
-Tower6 IMGS/TowerImages/Tower62.png 14 1 0.2 400 6 50 700 0.7
+Tower1 IMGS/TowerImages/Tower1.png 11 1 0.2 400 1.5 50 150 1.4
+Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 2.0 50 200 1.4
+Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 2.8 50 550 0.7
+Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 2.4 50 250 1.7
+Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 3.0 50 400 2
+Tower6 IMGS/TowerImages/Tower62.png 14 1 0.2 400 3.2 50 700 0.7
 
 
 # -------------------------------------------------------------------------------------------------------

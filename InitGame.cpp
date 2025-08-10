@@ -223,7 +223,7 @@ void Game::init(const string& path)
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType1Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType1Config.Sscale);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setOrigin(sprite.getLocalBounds().width/2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
 			}
 
 			break;
@@ -250,8 +250,8 @@ void Game::init(const string& path)
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType2Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType2Config.Sscale);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setScale(m_enemyType2Config.Sscale, m_enemyType2Config.Sscale);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
+				//sprite.setScale(m_enemyType2Config.Sscale, m_enemyType2Config.Sscale);
+				sprite.setOrigin((sprite.getLocalBounds().width / 2.f) - 5 , (sprite.getLocalBounds().height / 2.f) + 5);
 			}
 
 			break;
@@ -278,7 +278,7 @@ void Game::init(const string& path)
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType3Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType3Config.Sscale);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
+				sprite.setOrigin((sprite.getLocalBounds().width / 2.f) - 5, (sprite.getLocalBounds().height / 2.f));
 			}
 
 			break;
@@ -549,7 +549,7 @@ void Game::init(const string& path)
 
 	// ================================================================================ EFFECT ================================================================================
 	{
-		for (int i = 0; i < 25; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			auto entity = m_entities.addEntity("Tornado");
 			entity->cMovement = make_shared<CMovement>(300);
@@ -557,12 +557,25 @@ void Game::init(const string& path)
 			entity->cBoundaryScale = make_shared<CBoundaryScale>(100);
 			entity->cDamage = make_shared<CDamage>(100);
 			entity->cPosition = make_shared<CPosition>(Vector2f(0, 0));
-
+			
 			auto& sprite = entity->cSet->sprite;
 			sprite.setScale(0.8f, 0.8f);
 			sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 60);
 		}
 	}
+
+	//{
+	//	auto entity = m_entities.addEntity("GeneralDice");
+	//	entity->cMovement = make_shared<CMovement>();
+	//	entity->cSet = make_shared<CSet>("IMGS/Effects/DiceSpriteSheet.png", Vector2u(4, 1), 0.05f, 0);
+	//	//entity->cBoundaryScale = make_shared<CBoundaryScale>(100);
+	//	entity->cPosition = make_shared<CPosition>(Vector2f(0, 0));
+
+	//	auto& sprite = entity->cSet->sprite;
+	//	sprite.setScale(0.8f, 0.8f);
+	//	sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 60);
+	//}
+
 
 	loadFontText();
 	initUIFlow();
@@ -1186,27 +1199,6 @@ void Game::initUIFlow()
 					m_speedup = 1;
 				}
 
-				for (auto& e : m_entities.getEntities())
-				{
-					if (e->tag() == "Tornado" && !e->isActive())
-					{
-						if (m_mapindex == 3)
-						{
-							static random_device rd;
-							static mt19937 gen(rd());
-							static uniform_int_distribution<> dis(0, 3);
-							e->cMovement->pathIndex = dis(gen);
-						}
-
-						auto& path = e->cMovement->paths[m_mapindex][e->cMovement->pathIndex];
-						if (path.empty()) continue;
-
-						e->active(true);
-						e->cMovement->currentDes = (int)path.size() - 1;
-						e->cPosition->position = path.back();
-						break;
-					}
-				}
 			},
 			[entity]()
 			{
@@ -1367,7 +1359,32 @@ void Game::initUIFlow()
 				entity->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
+
+		entity = m_scenes[AppState::TowerSelect].addEntity("DiceButton");
+		entity->cSet = make_shared<CSet>("IMGS/Effects/DiceSpriteSheet.png", Vector2u(4, 1), 0.25f, 0);
+		entity->cSet->isDynamic = true;
+
+		auto& sprite = entity->cSet->sprite;
+		sprite.setScale(0.8, 0.8);
+		sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 20);
+		entity->cPosition = make_shared<CPosition>(Vector2f(1820, 600));
+
+		entity->cInput = make_shared<CInput>([this]()
+			{
+				sGacha();
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[entity]()
+			{
+				entity->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
 	}
+
+
 
 
 	// -- MainMenu --
@@ -1820,6 +1837,156 @@ void Game::initUIFlow()
 			[backBtn]()
 			{
 				backBtn->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+	}
+
+
+	// --- Special effect pop up---
+
+	//Effect 1 Button 
+	{
+		auto panel = m_scenes[AppState::Effect1].addEntity("EffectPanel");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/Rounded.png");
+		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
+		panel->cSet->sprite.setScale(2.5f, 2.5f);
+
+
+		auto Eff1 = m_scenes[AppState::Effect1].addEntity("Effect1");
+		Eff1->cSet = make_shared<CSet>("IMGS/Effects/RecoverEff.png");
+		Eff1->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f - 20, m_windowConfig.height / 2.f - 40));
+		Eff1->cInput = make_shared<CInput>([this]()
+			{
+				m_state1 = AppState::Dummy;
+				m_paused = false;
+				sHealthRecover(); // Effect 1 applied
+			},
+			[Eff1]()
+			{
+				Eff1->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[Eff1]()
+			{
+				Eff1->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+	}
+
+	//Effect 2 Button 
+	{
+		auto panel = m_scenes[AppState::Effect2].addEntity("EffectPanel");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/Rounded.png");
+		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f - 20, panel->cSet->sprite.getLocalBounds().height / 2.f - 40);
+		panel->cSet->sprite.setScale(2.5f, 2.5f);
+
+
+		auto Eff2 = m_scenes[AppState::Effect2].addEntity("Effect2");
+		Eff2->cSet = make_shared<CSet>("IMGS/Effects/CoinAddEff.png");
+		Eff2->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f - 40));
+		Eff2->cInput = make_shared<CInput>([this]()
+			{
+				m_state1 = AppState::Dummy;
+				m_paused = false;
+				m_coin *= 1.5; // Effect 2 applied
+			},
+			[Eff2]()
+			{
+				Eff2->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[Eff2]()
+			{
+				Eff2->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+	}
+
+	//Effect 3 Button 
+	{
+		auto panel = m_scenes[AppState::Effect3].addEntity("EffectPanel");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/Rounded.png");
+		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f - 40);
+		panel->cSet->sprite.setScale(2.5f, 2.5f);
+
+
+		auto Eff3 = m_scenes[AppState::Effect3].addEntity("Effect3");
+		Eff3->cSet = make_shared<CSet>("IMGS/Effects/DeadEff.png");
+		Eff3->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f - 20, m_windowConfig.height / 2.f));
+		Eff3->cInput = make_shared<CInput>([this]()
+			{
+				m_state1 = AppState::Dummy;
+				m_paused = false;			
+
+				for (auto& tow : m_scenes[game_state].getEntities("Tower"))
+				{
+					if (tow->isActive())
+					{
+						RemoveTower(*tow);
+						break;
+					}
+				}
+
+				m_coin = 0; // Effect 3 applied
+			},
+			[Eff3]()
+			{
+				Eff3->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[Eff3]()
+			{
+				Eff3->cSet->sprite.setColor(Color(255, 255, 255));
+			}
+		);
+	}
+
+	//Effect 4 Button 
+	{
+		auto panel = m_scenes[AppState::Effect4].addEntity("EffectPanel");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/Rounded.png");
+		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f - 20, panel->cSet->sprite.getLocalBounds().height / 2.f - 40);
+		panel->cSet->sprite.setScale(2.5f, 2.5f);
+
+		auto Eff4 = m_scenes[AppState::Effect4].addEntity("Effect4");
+		Eff4->cSet = make_shared<CSet>("IMGS/Effects/MagicEff.png");
+		Eff4->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		Eff4->cInput = make_shared<CInput>([this]()
+			{
+				m_state1 = AppState::Dummy;
+				m_paused = false;
+
+				for (auto& e : m_entities.getEntities())
+				{
+					if (e->tag() == "Tornado" && !e->isActive())
+					{
+						if (m_mapindex == 3)
+						{
+							static random_device rd;
+							static mt19937 gen(rd());
+							static uniform_int_distribution<> dis(0, 3);
+							e->cMovement->pathIndex = dis(gen);
+						}
+
+						auto& path = e->cMovement->paths[m_mapindex][e->cMovement->pathIndex];
+						if (path.empty()) continue;
+
+						e->active(true);
+						e->cMovement->currentDes = (int)path.size() - 1;
+						e->cPosition->position = path.back();
+						break;
+					}
+				}
+				// Effect 4 applied
+			},
+			[Eff4]()
+			{
+				Eff4->cSet->sprite.setColor(Color(200, 200, 200));
+			},
+			[Eff4]()
+			{
+				Eff4->cSet->sprite.setColor(Color(255, 255, 255));
 			}
 		);
 	}

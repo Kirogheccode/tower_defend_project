@@ -56,7 +56,11 @@ enum class AppState {
 	PauseMenu,
 	TowerInfo,
 	Victory,
-	Defeat
+	Defeat,
+	Effect1,
+	Effect2,
+	Effect3,
+	Effect4
 };
 
 
