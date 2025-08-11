@@ -1361,7 +1361,7 @@ void Game::initUIFlow()
 		);
 
 		entity = m_scenes[AppState::TowerSelect].addEntity("DiceButton");
-		entity->cSet = make_shared<CSet>("IMGS/Effects/DiceSpriteSheet.png", Vector2u(4, 1), 0.25f, 0);
+		entity->cSet = make_shared<CSet>("IMGS/Effects/DiceSpriteSheet2.png", Vector2u(4, 1), 0.25f, 0);
 		entity->cSet->isDynamic = true;
 
 		auto& sprite = entity->cSet->sprite;
