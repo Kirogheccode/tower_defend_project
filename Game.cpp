@@ -298,16 +298,8 @@ void Game::sCollision()
 				playSfx(m_collide, bullet->cPosition->position);
 				if (cur->cHealth)
 				{
-					cur->cHealth->hp -= bullet->cDamage->damage;	
-					if (cur->cHealth->hp <= 0)
-					{
-						m_coin += cur->cMoney->money;
-						DeactivateEnemy(*cur);
-					}
-				}
-				DeactivateBullet(*bullet);
-			}
-		}
+
+					cur->cHealth->hp -= bullet->cDamage->damage;
 
 					if (cur->cHealth->hp > 0)
 					{
@@ -330,8 +322,47 @@ void Game::sCollision()
 						cur->cHealth->healthbar.setSize(Vector2f(0, 5));
 					}
 
-					// cout << "[DEBUG] Damage bullet: " << bullet->cDamage->damage << endl;
-					// cout << "[DEBUG] Enenimes health after being shoot: " << cur->cHealth->hp << endl;
+					if (cur->cHealth->hp <= 0)
+					{
+						m_coin += cur->cMoney->money;
+						DeactivateEnemy(*cur);
+					}
+				}
+
+				DeactivateBullet(*bullet);
+			}
+		}
+
+		for (auto& eff : m_entities.getEntities("Tornado"))
+		{
+			if (!eff->isActive()) continue;
+			if (specialCollision(*cur, *eff))
+			{
+				playSfx(m_collide, eff->cPosition->position);
+				if (cur->cHealth)
+				{
+					cur->cHealth->hp -= eff->cDamage->damage;
+
+					if (cur->cHealth->hp > 0)
+					{
+						int max_health = 0;
+
+						if (cur->tag() == "EnemyType1")
+							max_health = m_enemyType1Config.hp;
+						else if (cur->tag() == "EnemyType2")
+							max_health = m_enemyType2Config.hp;
+						else if (cur->tag() == "EnemyType3")
+							max_health = m_enemyType3Config.hp;
+
+						float healthRatio = static_cast<float>(cur->cHealth->hp) / max_health;
+						float sizeX = 40.f * healthRatio;
+
+						cur->cHealth->healthbar.setSize(Vector2f(sizeX, 5));
+					}
+					else
+					{
+						cur->cHealth->healthbar.setSize(Vector2f(0, 5));
+					}
 
 					if (cur->cHealth->hp <= 0)
 					{

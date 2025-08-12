@@ -79,9 +79,11 @@ void Game::init(const string& path)
 				entity->cSet->isDynamic = true;
 				entity->cDamage = make_shared<CDamage>(m_bullet01Config.damage);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet01Config.Bscale);
+				entity->cSpriteScale = make_shared<CSpriteScale>(m_bullet01Config.Sscale);
+
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_bullet01Config.Sscale, m_bullet01Config.Sscale);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
 			}
 			break;
 		}
@@ -102,9 +104,11 @@ void Game::init(const string& path)
 				entity->cSet->isDynamic = true;
 				entity->cDamage = make_shared<CDamage>(m_bullet02Config.damage);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet02Config.Bscale);
+				entity->cSpriteScale = make_shared<CSpriteScale>(m_bullet02Config.Sscale);
+
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_bullet02Config.Sscale, m_bullet02Config.Sscale);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
 			}
 			break;
 		}
@@ -125,6 +129,8 @@ void Game::init(const string& path)
 				entity->cSet->isDynamic = true;
 				entity->cDamage = make_shared<CDamage>(m_bullet03Config.damage);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet03Config.Bscale);
+				entity->cSpriteScale = make_shared<CSpriteScale>(m_bullet03Config.Sscale);
+
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_bullet03Config.Sscale, m_bullet03Config.Sscale);
 				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
@@ -148,9 +154,11 @@ void Game::init(const string& path)
 				entity->cSet->isDynamic = true;
 				entity->cDamage = make_shared<CDamage>(m_bullet04Config.damage);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet04Config.Bscale);
+				entity->cSpriteScale = make_shared<CSpriteScale>(m_bullet04Config.Sscale);
+
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_bullet04Config.Sscale, m_bullet04Config.Sscale);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
 			}
 			break;
 		}
@@ -171,9 +179,12 @@ void Game::init(const string& path)
 				entity->cSet->isDynamic = true;
 				entity->cDamage = make_shared<CDamage>(m_bullet05Config.damage);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet05Config.Bscale);
+				entity->cSpriteScale = make_shared<CSpriteScale>(m_bullet06Config.Sscale);
+
+
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_bullet05Config.Sscale, m_bullet05Config.Sscale);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
 			}
 			break;
 		}
@@ -194,9 +205,11 @@ void Game::init(const string& path)
 				entity->cSet->isDynamic = true;
 				entity->cDamage = make_shared<CDamage>(m_bullet06Config.damage);
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_bullet06Config.Bscale);
+				entity->cSpriteScale = make_shared<CSpriteScale>(m_bullet06Config.Sscale);
+
 				auto& sprite = entity->cSet->sprite;
 				sprite.setScale(m_bullet06Config.Sscale, m_bullet06Config.Sscale);
-				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setOrigin(sprite.getLocalBounds().width / 2.f, (sprite.getLocalBounds().height / 2.f));
 			}
 			break;
 		}
@@ -223,7 +236,7 @@ void Game::init(const string& path)
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType1Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType1Config.Sscale);
 				auto& sprite = entity->cSet->sprite;
-				sprite.setOrigin(sprite.getLocalBounds().width/2.f, (sprite.getLocalBounds().height / 2.f) + 20.0);
+				sprite.setOrigin(sprite.getLocalBounds().width/2.f, (sprite.getLocalBounds().height / 2.f));
 			}
 
 			break;
@@ -250,8 +263,7 @@ void Game::init(const string& path)
 				entity->cBoundaryScale = make_shared<CBoundaryScale>(m_enemyType2Config.Bscale);
 				entity->cSpriteScale = make_shared<CSpriteScale>(m_enemyType2Config.Sscale);
 				auto& sprite = entity->cSet->sprite;
-				//sprite.setScale(m_enemyType2Config.Sscale, m_enemyType2Config.Sscale);
-				sprite.setOrigin((sprite.getLocalBounds().width / 2.f) - 5 , (sprite.getLocalBounds().height / 2.f) + 5);
+				sprite.setOrigin((sprite.getLocalBounds().width / 2.f), (sprite.getLocalBounds().height / 2.f) + 8);
 			}
 
 			break;

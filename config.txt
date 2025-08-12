@@ -16,7 +16,7 @@ Bullet02 IMGS/Bullets/PoisonBullet.png 60 800 250 1.2
 Bullet03 IMGS/Bullets/Bullet03.png 85 750 250 1.4
 Bullet04 IMGS/Bullets/ChargeBullet.png 150 750 250 1.4
 Bullet05 IMGS/Bullets/Bullet05.png 120 750 250 2.0
-Bullet06 IMGS/Bullets/Bullet06.png 350 750 150 3.0
+Bullet06 IMGS/Bullets/Bullet06.png 350 900 40 3.0
 
 
 # -------------------------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ Bullet06 IMGS/Bullets/Bullet06.png 350 750 150 3.0
 # <Amount>:        Number of enemies of this type in a wave
 # -------------------------------------------------------------------------------------------------------
 EnemyType1 IMGS/Enemies/Skeleton.png 100 75 100 80 1.2 75
-EnemyType2 IMGS/Enemies/Slime.png 400 60 250 120 2.45 50
+EnemyType2 IMGS/Enemies/Slime.png 400 60 250 120 2.7 50
 EnemyType3 IMGS/Enemies/Worm.png 900 35 400 80 2.1 50
 
 
@@ -51,7 +51,7 @@ Tower2 IMGS/TowerImages/Tower2.png 8 1 0.2 400 2.0 50 200 1.4
 Tower3 IMGS/TowerImages/Tower3.png 13 1 0.2 400 2.8 50 550 0.7
 Tower4 IMGS/TowerImages/Tower4.png 8 1 0.2 400 2.4 50 250 1.7
 Tower5 IMGS/TowerImages/Tower5.png 14 1 0.2 400 3.0 50 400 2
-Tower6 IMGS/TowerImages/Tower62.png 14 1 0.2 400 3.2 50 700 0.7
+Tower6 IMGS/TowerImages/Tower6.png 14 1 0.2 400 2.2 50 700 0.7
 
 
 # -------------------------------------------------------------------------------------------------------
