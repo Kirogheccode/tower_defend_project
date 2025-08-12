@@ -283,7 +283,7 @@ void Game::sCollision()
 		{
 			if (!bullet->isActive()) continue;
 
-			if (isOutOfBounds(*bullet, 100.0f))
+			if (isOutOfBounds(*bullet, 10.0f))
 			{
 				if (bullet->tag() == m_bullet01Config.tag)
 					bullet->cDamage->damage = m_bullet01Config.damage;
@@ -2550,6 +2550,29 @@ void Game::sGacha()
 
 	case 4:
 		m_state1 = AppState::Effect4;
+		break;
+
+	case 5:
+		m_state1 = AppState::Effect1;
+		break;
+
+	case 6:
+		m_state1 = AppState::Effect2;
+		break;
+
+	case 7:
+		m_state1 = AppState::Effect3;
+		break;
+	case 8:
+		m_state1 = AppState::Effect1;
+		break;
+
+	case 9:
+		m_state1 = AppState::Effect2;
+		break;
+
+	case 10:
+		m_state1 = AppState::Effect3;
 		break;
 	}
 }

@@ -1361,7 +1361,7 @@ void Game::initUIFlow()
 		);
 
 		entity = m_scenes[AppState::TowerSelect].addEntity("DiceButton");
-		entity->cSet = make_shared<CSet>("IMGS/Effects/DiceSpriteSheet.png", Vector2u(4, 1), 0.25f, 0);
+		entity->cSet = make_shared<CSet>("IMGS/Effects/DiceSpriteSheet2.png", Vector2u(4, 1), 0.25f, 0);
 		entity->cSet->isDynamic = true;
 
 		auto& sprite = entity->cSet->sprite;
@@ -1847,15 +1847,15 @@ void Game::initUIFlow()
 	//Effect 1 Button 
 	{
 		auto panel = m_scenes[AppState::Effect1].addEntity("EffectPanel");
-		panel->cSet = make_shared<CSet>("IMGS/GUI/Rounded.png");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/Eff1Panel.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
 		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
-		panel->cSet->sprite.setScale(2.5f, 2.5f);
+		panel->cSet->sprite.setScale(0.75f, 0.75f);
 
 
 		auto Eff1 = m_scenes[AppState::Effect1].addEntity("Effect1");
 		Eff1->cSet = make_shared<CSet>("IMGS/Effects/RecoverEff.png");
-		Eff1->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f - 20, m_windowConfig.height / 2.f - 40));
+		Eff1->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f - 64, m_windowConfig.height / 2.f - 128));
 		Eff1->cInput = make_shared<CInput>([this]()
 			{
 				m_state1 = AppState::Dummy;
@@ -1876,15 +1876,15 @@ void Game::initUIFlow()
 	//Effect 2 Button 
 	{
 		auto panel = m_scenes[AppState::Effect2].addEntity("EffectPanel");
-		panel->cSet = make_shared<CSet>("IMGS/GUI/Rounded.png");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/Eff2Panel.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
-		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f - 20, panel->cSet->sprite.getLocalBounds().height / 2.f - 40);
-		panel->cSet->sprite.setScale(2.5f, 2.5f);
+		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
+		panel->cSet->sprite.setScale(0.75f, 0.75f);
 
 
 		auto Eff2 = m_scenes[AppState::Effect2].addEntity("Effect2");
 		Eff2->cSet = make_shared<CSet>("IMGS/Effects/CoinAddEff.png");
-		Eff2->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f - 40));
+		Eff2->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f - 64, m_windowConfig.height / 2.f - 128));
 		Eff2->cInput = make_shared<CInput>([this]()
 			{
 				m_state1 = AppState::Dummy;
@@ -1905,15 +1905,15 @@ void Game::initUIFlow()
 	//Effect 3 Button 
 	{
 		auto panel = m_scenes[AppState::Effect3].addEntity("EffectPanel");
-		panel->cSet = make_shared<CSet>("IMGS/GUI/Rounded.png");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/Eff3Panel.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
-		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f - 40);
-		panel->cSet->sprite.setScale(2.5f, 2.5f);
+		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
+		panel->cSet->sprite.setScale(0.75f, 0.75f);
 
 
 		auto Eff3 = m_scenes[AppState::Effect3].addEntity("Effect3");
 		Eff3->cSet = make_shared<CSet>("IMGS/Effects/DeadEff.png");
-		Eff3->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f - 20, m_windowConfig.height / 2.f));
+		Eff3->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f - 64, m_windowConfig.height / 2.f - 128));
 		Eff3->cInput = make_shared<CInput>([this]()
 			{
 				m_state1 = AppState::Dummy;
@@ -1944,14 +1944,14 @@ void Game::initUIFlow()
 	//Effect 4 Button 
 	{
 		auto panel = m_scenes[AppState::Effect4].addEntity("EffectPanel");
-		panel->cSet = make_shared<CSet>("IMGS/GUI/Rounded.png");
+		panel->cSet = make_shared<CSet>("IMGS/GUI/Eff4Panel.png");
 		panel->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
-		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f - 20, panel->cSet->sprite.getLocalBounds().height / 2.f - 40);
-		panel->cSet->sprite.setScale(2.5f, 2.5f);
+		panel->cSet->sprite.setOrigin(panel->cSet->sprite.getLocalBounds().width / 2.f, panel->cSet->sprite.getLocalBounds().height / 2.f);
+		panel->cSet->sprite.setScale(0.75f, 0.75f);
 
 		auto Eff4 = m_scenes[AppState::Effect4].addEntity("Effect4");
 		Eff4->cSet = make_shared<CSet>("IMGS/Effects/MagicEff.png");
-		Eff4->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f));
+		Eff4->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f - 64, m_windowConfig.height / 2.f - 128));
 		Eff4->cInput = make_shared<CInput>([this]()
 			{
 				m_state1 = AppState::Dummy;
