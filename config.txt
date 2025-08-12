@@ -30,9 +30,9 @@ Bullet06 IMGS/Bullets/Bullet06.png 350 750 225 2.6
 # <SpriteScale>:   Scale factor for rendering the sprite
 # <Amount>:        Number of enemies of this type in a wave
 # -------------------------------------------------------------------------------------------------------
-EnemyType1 IMGS/Enemies/Skeleton.png 100 75 50 80 1.2 75
-EnemyType2 IMGS/Enemies/Slime.png 400 60 100 80 2.4 75
-EnemyType3 IMGS/Enemies/Worm.png 1500 35 150 125 1.8 75
+EnemyType1 IMGS/Enemies/Skeleton.png 50 75 50 80 1.2 75
+EnemyType2 IMGS/Enemies/Slime.png 100 60 100 80 2.4 75
+EnemyType3 IMGS/Enemies/Worm.png 400 35 150 125 1.8 75
 
 
 # -------------------------------------------------------------------------------------------------------
