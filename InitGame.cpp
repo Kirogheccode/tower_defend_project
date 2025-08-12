@@ -752,6 +752,13 @@ void Game::loadGuideText()
 	loadGame->cText->text.setPosition(Vector2f(1515, 520));
 	loadGame->cText->text.setCharacterSize(40);
 	loadGame->cText->text.setFillColor(Color::White);
+
+	auto catalog = m_scenes[AppState::PlayMenu].addEntity("showCatalog");
+	catalog->cText = make_shared<CText>("CATALOG");
+	catalog->cText->text.setFont(m_font);
+	catalog->cText->text.setPosition(Vector2f(863, 535));
+	catalog->cText->text.setCharacterSize(40);
+	catalog->cText->text.setFillColor(Color::White);
 }
 
 void Game::loadTowerPirce()
