@@ -26,7 +26,7 @@
 using namespace std;
 using namespace sf;
 
-const int initCoin = 500; // Số tiền khởi tạo
+const int initCoin = 10000; // Số tiền khởi tạo
 
 // --- Forward declarations ---
 class EntityManager;
@@ -56,7 +56,11 @@ enum class AppState {
 	PauseMenu,
 	TowerInfo,
 	Victory,
-	Defeat
+	Defeat,
+	Effect1,
+	Effect2,
+	Effect3,
+	Effect4
 };
 
 
@@ -218,6 +222,7 @@ class Game {
 	void sCollision();
 	void sGacha();
 	void sChangeCursor(string);
+	void sHealthRecover();
 
 	// --- Tháp (Tower) ---
 	void RemoveTower(Entity& tower);

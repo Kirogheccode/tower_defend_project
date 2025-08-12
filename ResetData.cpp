@@ -79,7 +79,7 @@ void Game::DeactivateEnemy(Entity& enemy)
 	enemy.active(false);
 
 	// Reset máu
-	if (!enemy.cHealth)
+	if (enemy.cHealth)
 	{
 		if (enemy.tag() == "EnemyType1")
 		{
@@ -93,6 +93,9 @@ void Game::DeactivateEnemy(Entity& enemy)
 		{
 			enemy.cHealth->hp = m_enemyType3Config.hp;
 		}
+
+		enemy.cHealth->healthbar.setSize(Vector2f(40, 5));
+		enemy.cHealth->outline.setSize(Vector2f(40, 5));
 	}
 
 	// Reset tốc độ

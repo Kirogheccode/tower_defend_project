@@ -33,6 +33,15 @@ bool collisionDetection(const Entity& entity1, const Entity& entity2)
 	return isContained(bounds1, bounds2);
 }
 
+bool specialCollision(const Entity& entity1, const Entity& entity2)
+{
+	if (!entity1.cSet || !entity2.cSet) return false;
+	FloatRect bounds1 = scaleRect(entity1.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
+	FloatRect bounds2 = scaleRect(entity2.cSet->sprite.getGlobalBounds(), entity2.cBoundaryScale->scale / 100.0f);
+
+	return bounds1.intersects(bounds2);
+}
+
 
 // --- Hệ thống ---
 void Game::sRender(float& deltaTime)
@@ -105,6 +114,12 @@ void Game::sRender(float& deltaTime)
 
 			if (e->cText)
 				m_window.draw(e->cText->text);
+
+			if (e->cHealth)
+			{
+				m_window.draw(e->cHealth->healthbar);
+				m_window.draw(e->cHealth->outline);
+			}
 		}
 	}
 
@@ -268,7 +283,7 @@ void Game::sCollision()
 		{
 			if (!bullet->isActive()) continue;
 
-			if (isOutOfBounds(*bullet, 100.0f))
+			if (isOutOfBounds(*bullet, 10.0f))
 			{
 				if (bullet->tag() == m_bullet01Config.tag)
 					bullet->cDamage->damage = m_bullet01Config.damage;
@@ -283,12 +298,29 @@ void Game::sCollision()
 				playSfx(m_collide, bullet->cPosition->position);
 				if (cur->cHealth)
 				{
-					// cout << "[DEBUG] Enenimes health: " << cur->cHealth->hp << endl;
 
 					cur->cHealth->hp -= bullet->cDamage->damage;
 
-					// cout << "[DEBUG] Damage bullet: " << bullet->cDamage->damage << endl;
-					// cout << "[DEBUG] Enenimes health after being shoot: " << cur->cHealth->hp << endl;
+					if (cur->cHealth->hp > 0)
+					{
+						int max_health = 0;
+
+						if (cur->tag() == "EnemyType1")
+							max_health = m_enemyType1Config.hp;
+						else if (cur->tag() == "EnemyType2")
+							max_health = m_enemyType2Config.hp;
+						else if (cur->tag() == "EnemyType3")
+							max_health = m_enemyType3Config.hp;
+
+						float healthRatio = static_cast<float>(cur->cHealth->hp) / max_health;
+						float sizeX = 40.f * healthRatio;
+
+						cur->cHealth->healthbar.setSize(Vector2f(sizeX, 5));
+					}
+					else
+					{
+						cur->cHealth->healthbar.setSize(Vector2f(0, 5));
+					}
 
 					if (cur->cHealth->hp <= 0)
 					{
@@ -297,16 +329,53 @@ void Game::sCollision()
 					}
 				}
 
-				if (bullet->tag() == m_bullet01Config.tag)
-					bullet->cDamage->damage = m_bullet01Config.damage;
-				else if (bullet->tag() == m_bullet02Config.tag)
-					bullet->cDamage->damage = m_bullet02Config.damage;
-
 				DeactivateBullet(*bullet);
+			}
+		}
+
+		for (auto& eff : m_entities.getEntities("Tornado"))
+		{
+			if (!eff->isActive()) continue;
+			if (specialCollision(*cur, *eff))
+			{
+				playSfx(m_collide, eff->cPosition->position);
+				if (cur->cHealth)
+				{
+					cur->cHealth->hp -= eff->cDamage->damage;
+
+					if (cur->cHealth->hp > 0)
+					{
+						int max_health = 0;
+
+						if (cur->tag() == "EnemyType1")
+							max_health = m_enemyType1Config.hp;
+						else if (cur->tag() == "EnemyType2")
+							max_health = m_enemyType2Config.hp;
+						else if (cur->tag() == "EnemyType3")
+							max_health = m_enemyType3Config.hp;
+
+						float healthRatio = static_cast<float>(cur->cHealth->hp) / max_health;
+						float sizeX = 40.f * healthRatio;
+
+						cur->cHealth->healthbar.setSize(Vector2f(sizeX, 5));
+					}
+					else
+					{
+						cur->cHealth->healthbar.setSize(Vector2f(0, 5));
+					}
+
+					if (cur->cHealth->hp <= 0)
+					{
+						m_coin += cur->cMoney->money;
+						DeactivateEnemy(*cur);
+					}
+				}
 			}
 		}
 	}
 }
+
+
 
 void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
 {
@@ -336,7 +405,7 @@ void Game::sMovement(float& deltaTime)
 		// Chuyển động đạn
 		if (entity->tag().find("Bullet") != std::string::npos)
 		{
-			entity->cPosition->position += entity->cMovement->velocity * deltaTime;
+			entity->cPosition->position += entity->cMovement->velocity * (deltaTime * m_speedup);
 			entity->cSet->sprite.setPosition(entity->cPosition->position);
 
 			Vector2f pos = entity->cPosition->position;
@@ -427,6 +496,19 @@ void Game::sMovement(float& deltaTime)
 
 			// Cập nhật hình ảnh và vị trí
 			entity->cSet->sprite.setPosition(entity->cPosition->position);
+
+			sf::FloatRect spriteBounds = entity->cSet->sprite.getGlobalBounds();
+
+			sf::Vector2f hbSize = entity->cHealth->healthbar.getSize();
+			float offsetY = 5.f;
+
+			sf::Vector2f hbPos;
+			hbPos.x = spriteBounds.left + (spriteBounds.width / 2.f) - (hbSize.x / 2.f);
+			hbPos.y = spriteBounds.top - hbSize.y + offsetY;
+
+			entity->cHealth->healthbar.setPosition(hbPos);
+			entity->cHealth->outline.setPosition(hbPos);
+
 		}
 	}
 }
@@ -1071,14 +1153,8 @@ void Game::sSaveGame()
 
 	cout << fileForSave << "\n";
 
-	//std::ofstream writePlayer(fileName, std::ios::out | std::ios::trunc);
-	//if (!writePlayer.is_open()) {
-	//	std::cerr << "Error opening file: " << fileName << " (check permissions or path).\n";
-	//	return;
-	//}
-
 	cout << "[DEBUG] Before write: State " << writePlayer.rdstate() << " (0 = good)\n";
-	startWriting(fileForSave);  // Start writing to the file
+	startWriting(fileForSave);  
 
 	writePlayer.clear();  // Reset any potential error state
 
@@ -1107,7 +1183,6 @@ void Game::sSaveGame()
 
 	if (mapButton)
 	{
-
 		mapButton->cTime = make_shared<CTime>();
 		auto& takeTime = mapButton->cTime;
 		ostringstream oss;
@@ -2460,31 +2535,75 @@ int rollDice() {
 	return distrib(gen);
 }
 
+
+void Game::sHealthRecover()
+{
+	auto heartvector = m_scenes[AppState::GamePlay].getEntities("Heart");
+	int index = static_cast<int> (heartvector.size()) - 1;
+
+	while (index >= 0 && !heartvector[index]->isActive())
+	{
+		index--;
+	}
+
+	if (heartvector.size() - index == 1)
+		return;
+
+	heartvector[index + 1]->active(true);
+}
+
+
 void Game::sGacha()
 {
+	cout << "[DEBUG]: " << rollDice() << endl;
+
+	if (m_coin < 5000)
+		return;
+	else
+		m_coin -= 5000;
+
+
+	m_paused = true;
+
 	switch (rollDice())
 	{
 	case 1:
-		m_coin *= 1.5;
+		m_state1 = AppState::Effect1;
 		break;
 
 	case 2:
-		cout << "You got a free tower!" << endl;
+		m_state1 = AppState::Effect2;
 		break;
 
 	case 3:
-		for (auto& tow : m_scenes[game_state].getEntities("Tower"))
-		{
-			if (tow->isActive())
-			{
-				RemoveTower(*tow);
-				break;
-			}
-		}
+		m_state1 = AppState::Effect3;
 		break;
 
 	case 4:
-		cout << "You got a free tower!" << endl;
+		m_state1 = AppState::Effect4;
+		break;
+
+	case 5:
+		m_state1 = AppState::Effect1;
+		break;
+
+	case 6:
+		m_state1 = AppState::Effect2;
+		break;
+
+	case 7:
+		m_state1 = AppState::Effect3;
+		break;
+	case 8:
+		m_state1 = AppState::Effect1;
+		break;
+
+	case 9:
+		m_state1 = AppState::Effect2;
+		break;
+
+	case 10:
+		m_state1 = AppState::Effect3;
 		break;
 	}
 }
