@@ -13,6 +13,7 @@ sf::Vector2f MathSupport::Normalize(const sf::Vector2f& vec)
 {
     float fLength = Length(vec);
     sf::Vector2f vUnit(vec.x / fLength, vec.y / fLength);
+
     return vUnit;
 }
 

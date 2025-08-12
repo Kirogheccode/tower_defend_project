@@ -114,6 +114,12 @@ void Game::sRender(float& deltaTime)
 
 			if (e->cText)
 				m_window.draw(e->cText->text);
+
+			if (e->cHealth)
+			{
+				m_window.draw(e->cHealth->healthbar);
+				m_window.draw(e->cHealth->outline);
+			}
 		}
 	}
 
@@ -303,15 +309,30 @@ void Game::sCollision()
 			}
 		}
 
-		for (auto& eff : m_entities.getEntities("Tornado"))
-		{
-			if (!eff->isActive()) continue;
-			if (specialCollision(*cur, *eff))
-			{
-				playSfx(m_collide, eff->cPosition->position);
-				if (cur->cHealth)
-				{
-					cur->cHealth->hp -= eff->cDamage->damage;
+					if (cur->cHealth->hp > 0)
+					{
+						int max_health = 0;
+
+						if (cur->tag() == "EnemyType1")
+							max_health = m_enemyType1Config.hp;
+						else if (cur->tag() == "EnemyType2")
+							max_health = m_enemyType2Config.hp;
+						else if (cur->tag() == "EnemyType3")
+							max_health = m_enemyType3Config.hp;
+
+						float healthRatio = static_cast<float>(cur->cHealth->hp) / max_health;
+						float sizeX = 40.f * healthRatio;
+
+						cur->cHealth->healthbar.setSize(Vector2f(sizeX, 5));
+					}
+					else
+					{
+						cur->cHealth->healthbar.setSize(Vector2f(0, 5));
+					}
+
+					// cout << "[DEBUG] Damage bullet: " << bullet->cDamage->damage << endl;
+					// cout << "[DEBUG] Enenimes health after being shoot: " << cur->cHealth->hp << endl;
+
 					if (cur->cHealth->hp <= 0)
 					{
 						m_coin += cur->cMoney->money;
@@ -353,7 +374,7 @@ void Game::sMovement(float& deltaTime)
 		// Chuyển động đạn
 		if (entity->tag().find("Bullet") != std::string::npos)
 		{
-			entity->cPosition->position += entity->cMovement->velocity * deltaTime;
+			entity->cPosition->position += entity->cMovement->velocity * (deltaTime * m_speedup);
 			entity->cSet->sprite.setPosition(entity->cPosition->position);
 
 			Vector2f pos = entity->cPosition->position;
@@ -444,6 +465,19 @@ void Game::sMovement(float& deltaTime)
 
 			// Cập nhật hình ảnh và vị trí
 			entity->cSet->sprite.setPosition(entity->cPosition->position);
+
+			sf::FloatRect spriteBounds = entity->cSet->sprite.getGlobalBounds();
+
+			sf::Vector2f hbSize = entity->cHealth->healthbar.getSize();
+			float offsetY = 5.f;
+
+			sf::Vector2f hbPos;
+			hbPos.x = spriteBounds.left + (spriteBounds.width / 2.f) - (hbSize.x / 2.f);
+			hbPos.y = spriteBounds.top - hbSize.y + offsetY;
+
+			entity->cHealth->healthbar.setPosition(hbPos);
+			entity->cHealth->outline.setPosition(hbPos);
+
 		}
 	}
 }

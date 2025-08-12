@@ -18,8 +18,21 @@ struct CMoney {
 // Máu
 struct CHealth {
 	int hp = 0;
-	CHealth() {}
-	CHealth(const int& h) : hp(h) {}
+
+	RectangleShape outline;
+	RectangleShape healthbar;
+
+	CHealth(const int& h)
+		: hp(h),
+		outline(Vector2f(40.f, 5.f)),
+		healthbar(Vector2f(40.f, 5.f))
+	{
+		outline.setFillColor(sf::Color::Transparent);
+		outline.setOutlineColor(sf::Color::Black);
+		outline.setOutlineThickness(2.f);
+
+		healthbar.setFillColor(sf::Color::Red);
+	}
 };
 
 

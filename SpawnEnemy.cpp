@@ -71,9 +71,9 @@ void Game::sSpawnWave(float& deltaTime)
 		return;
 	}
 
-	m_spawnTimer += deltaTime;
+	m_spawnTimer += deltaTime * m_speedup;
 
-	if (m_spawnTimer < (m_spawnDelay / m_speedup)) return;
+	if (m_spawnTimer < m_spawnDelay) return;
 
 	if (m_spawnStage == SpawnStage::Type1)
 	{
@@ -105,7 +105,7 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 {
 	WaveConfig& wave = m_waveConfigs[m_mapindex][m_currentWave];
 
-	m_spawningTimer += deltaTime;
+	m_spawningTimer += deltaTime * m_speedup;
 
 	if (type == 1)
 	{
@@ -113,7 +113,7 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 
 		for (auto& e : m_entities.getEntities(m_enemyType1Config.tag))
 		{
-			if (m_spawningTimer < (m_spawningDelay / m_speedup)) return false;
+			if (m_spawningTimer < m_spawningDelay + 0.1f) return false;
 
 			if (!e->isActive())
 			{
@@ -148,7 +148,7 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 
 		for (auto& e : m_entities.getEntities(m_enemyType2Config.tag))
 		{
-			if (m_spawningTimer < (m_spawningDelay / m_speedup) + 0.25f) return false;
+			if (m_spawningTimer < (m_spawningDelay) + 0.25f) return false;
 
 			if (!e->isActive())
 			{
@@ -183,7 +183,7 @@ bool Game::spawnEnemyType(int type, float& deltaTime)
 
 		for (auto& e : m_entities.getEntities(m_enemyType3Config.tag))
 		{
-			if (m_spawningTimer < (m_spawningDelay / m_speedup) + 0.5f) return false;
+			if (m_spawningTimer < (m_spawningDelay) + 0.5f) return false;
 
 			if (!e->isActive())
 			{

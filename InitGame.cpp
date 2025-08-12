@@ -2311,11 +2311,11 @@ void Game::initStoryScene()
 	{
 		m_catalog = {
 			{ "IMGS/Catalog/tower1.png", m_towerType1Config, Vector2u(11, 1), 0.2f},
-			{ "IMGS/Catalog/tower1.png", m_towerType2Config, Vector2u(8, 1), 0.2f },
-			{ "IMGS/Catalog/tower1.png", m_towerType3Config, Vector2u(13, 1), 0.2f },
-			{ "IMGS/Catalog/tower1.png", m_towerType4Config, Vector2u(8, 1), 0.2f },
-			{ "IMGS/Catalog/tower1.png", m_towerType5Config, Vector2u(14, 1), 0.2f },
-			{ "IMGS/Catalog/tower1.png", m_towerType6Config, Vector2u(14, 1), 0.2f }
+			{ "IMGS/Catalog/tower2.png", m_towerType2Config, Vector2u(8, 1), 0.2f },
+			{ "IMGS/Catalog/tower3.png", m_towerType3Config, Vector2u(13, 1), 0.2f },
+			{ "IMGS/Catalog/tower4.png", m_towerType4Config, Vector2u(8, 1), 0.2f },
+			{ "IMGS/Catalog/tower5.png", m_towerType5Config, Vector2u(14, 1), 0.2f },
+			{ "IMGS/Catalog/tower6.png", m_towerType6Config, Vector2u(14, 1), 0.2f }
 		};
 
 		auto bg = m_scenes[AppState::Catalog].addEntity("CatalogBG");
@@ -2337,8 +2337,9 @@ void Game::initStoryScene()
 		towerSprite->cSet->sprite.setScale(2.0f, 2.0f);
 
 		auto leftBtn = m_scenes[AppState::Catalog].addEntity("LeftButton");
-		leftBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		leftBtn->cPosition = make_shared<CPosition>(Vector2f(x - 500, y));
+		leftBtn->cSet = make_shared<CSet>("IMGS/Buttons/left.png");
+		leftBtn->cPosition = make_shared<CPosition>(Vector2f(x - 475, y));
+		leftBtn->cSet->sprite.setScale(1.5f, 1.5f);
 		leftBtn->cInput = make_shared<CInput>([this]()
 			{
 				m_currentCatalog--;
@@ -2356,8 +2357,9 @@ void Game::initStoryScene()
 		);
 
 		auto rightBtn = m_scenes[AppState::Catalog].addEntity("RightButton");
-		rightBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		rightBtn->cPosition = make_shared<CPosition>(Vector2f(x + 500, y));
+		rightBtn->cSet = make_shared<CSet>("IMGS/Buttons/right.png");
+		rightBtn->cPosition = make_shared<CPosition>(Vector2f(x + 400, y));
+		rightBtn->cSet->sprite.setScale(1.5f, 1.5f);
 		rightBtn->cInput = make_shared<CInput>([this]()
 			{
 				m_currentCatalog = (m_currentCatalog + 1) % m_catalog.size();
