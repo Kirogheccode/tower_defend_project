@@ -1495,7 +1495,7 @@ void Game::initUIFlow()
 		);
 
 		auto catalogButton = m_scenes[AppState::PlayMenu].addEntity("Catalog");
-		catalogButton->cSet = make_shared<CSet>("IMGS/GUI/dark2.jpg");
+		catalogButton->cSet = make_shared<CSet>("IMGS/GUI/dark3.jpg");
 		catalogButton->cPosition = make_shared<CPosition>(Vector2f(906, 631));
 		catalogButton->cInput = make_shared<CInput>([this]()
 			{
@@ -1534,7 +1534,8 @@ void Game::initUIFlow()
 
 		auto back = m_scenes[AppState::PlayMenu].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		back->cSet->sprite.setScale(0.2f, 0.2f);
+		back->cPosition = make_shared<CPosition>(Vector2f(3, 990));
 		back->cInput = make_shared<CInput>([this]()
 			{
 				m_state = AppState::MainMenu;
@@ -1559,7 +1560,8 @@ void Game::initUIFlow()
 
 		auto back = m_scenes[AppState::LoadGame].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		back->cSet->sprite.setScale(0.2f, 0.2f);
+		back->cPosition = make_shared<CPosition>(Vector2f(3, 990));
 		back->cInput = make_shared<CInput>([this]()
 			{
 				m_state = AppState::PlayMenu;
@@ -1754,6 +1756,7 @@ void Game::initUIFlow()
 
 		auto back = m_scenes[AppState::SettingsMenu].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		back->cSet->sprite.setScale(0.2f, 0.2f);
 		back->cPosition = make_shared<CPosition>(Vector2f(panelCenter.x, panelCenter.y + 155.f));
 		back->cSet->sprite.setOrigin(back->cSet->sprite.getLocalBounds().width / 2.f, back->cSet->sprite.getLocalBounds().height / 2.f);
 		back->cInput = make_shared<CInput>([this]()
@@ -1817,6 +1820,7 @@ void Game::initUIFlow()
 
 		auto backBtn = m_scenes[AppState::AboutUs].addEntity("BackAbout");
 		backBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		backBtn->cSet->sprite.setScale(0.2f, 0.2f);
 		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 350.f));
 		backBtn->cInput = make_shared<CInput>([this]()
 			{
@@ -1844,6 +1848,7 @@ void Game::initUIFlow()
 
 		auto backBtn = m_scenes[AppState::Rules].addEntity("BackRules");
 		backBtn->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
+		backBtn->cSet->sprite.setScale(0.2f, 0.2f);
 		backBtn->cPosition = make_shared<CPosition>(Vector2f(m_windowConfig.width / 2.f, m_windowConfig.height / 2.f + 300.f));
 		backBtn->cInput = make_shared<CInput>([this]()
 			{
@@ -2108,7 +2113,8 @@ void Game::initUIFlow()
 
 		auto back = m_scenes[AppState::MapSelect].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
-		back->cPosition = make_shared<CPosition>(Vector2f(20, 1010));
+		back->cSet->sprite.setScale(0.2f, 0.2f);
+		back->cPosition = make_shared<CPosition>(Vector2f(3, 990));
 		back->cInput = make_shared<CInput>([this]()
 			{
 				m_state = AppState::PlayMenu;
