@@ -647,12 +647,12 @@ void Game::sUserInput()
 						if (e->tag() == "MusicSlider" && m_musicMuted)
 						{
 							m_musicMuted = false;
-							m_scenes[m_state].getEntities("MusicIcon").front()->cSet->texture.loadFromFile("IMGS/music_on.png");
+							m_scenes[m_state1].getEntities("MusicIcon").front()->cSet->texture.loadFromFile("IMGS/Buttons/music_on.png");
 						}
 						else if (e->tag() == "SfxSlider" && m_sfxMuted)
 						{
 							m_sfxMuted = false;
-							m_scenes[m_state].getEntities("SfxIcon").front()->cSet->texture.loadFromFile("IMGS/sfx_on.png");
+							m_scenes[m_state1].getEntities("SfxIcon").front()->cSet->texture.loadFromFile("IMGS/Buttons/sfx_on.png");
 						}
 
 						e->cSlider->updateValueFromHandle(mousePos.x);

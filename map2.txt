@@ -1,0 +1,43 @@
+# Information of game save: 
+12/08/2025 17:23:08
+
+# Current wave index: 
+2
+
+# Remaining health: 
+4 5 6 7 8 
+
+# Money: 
+4170
+
+# Spawning timer: 
+5.84696 0.28865
+
+# Spanwed enemies: 
+5 0 0
+
+# Spawning stage
+Type1
+
+# Enemies position
+-218.207 500 1.2 1.2 0 0 -281.915 500 1.2 1.2 0 0 -346.362 500 1.2 1.2 0 0 -410 500 1.2 1.2 0 0 -474.022 500 1.2 1.2 0 0 
+
+@
+
+@
+
+# Tower position
+@
+
+@
+
+1167 131.5 0 1400 593.5 0 
+
+783 758.5 0 
+
+936 356.5 3 1195 751.5 0 688 512.5 0 
+
+1428 1005.5 0 576 244.5 0 
+
+# Base in current map
+0 0 0 0 0 0 0 0 
