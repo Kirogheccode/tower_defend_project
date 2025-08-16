@@ -375,8 +375,6 @@ void Game::sCollision()
 	}
 }
 
-
-
 void Game::sAnimation(shared_ptr<Entity>& entity, float& deltaTime)
 {
 	entity->cSet->CurrImg.y = entity->cSet->row;
@@ -2521,7 +2519,6 @@ int rollDice() {
 	return distrib(gen);
 }
 
-
 void Game::sHealthRecover()
 {
 	auto heartvector = m_scenes[AppState::GamePlay].getEntities("Heart");
@@ -2537,7 +2534,6 @@ void Game::sHealthRecover()
 
 	heartvector[index + 1]->active(true);
 }
-
 
 void Game::sGacha()
 {
