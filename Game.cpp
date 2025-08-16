@@ -2214,21 +2214,10 @@ void Game::updateCatalogDisplay()
 
 	auto& tower = towerList.front();
 
-	//if(!tower->cSet)
 	tower->cSet = make_shared<CSet>(entry.config.filepath, entry.imgCount, entry.switchTime, 0);
 	tower->cSet->isDynamic = true;
 	auto& sprite = tower->cSet->sprite;
 	sprite.setScale(entry.config.Sscale, entry.config.Sscale);
-	/*else
-	{
-		tower->cSet->texture.loadFromFile(entry.config.filepath);
-		tower->cSet->sprite.setTexture(tower->cSet->texture, true);
-
-		tower->cSet->ImgCount = entry.imgCount;
-		tower->cSet->switchTime = entry.switchTime;
-		tower->cSet->totalTime = 0.f;
-		tower->cSet->isDynamic = true;
-	}*/
 }
 
 
@@ -2489,15 +2478,12 @@ void Game::UpgradeTower(Entity& tower)
 
 void Game::RemoveTower(Entity& tower)
 {
-	bool remove = false;
 	Vector2f removing;
 
 	m_coin += m_refund * tower.cMoney->money * m_multiplies[tower.cLevel->levelindex];
 
 	removing = tower.cPosition->position;
 	DeactivateTower(tower);
-
-	remove = true;
 
 	for (auto& e : m_scenes[m_state].getEntities("Base"))
 	{
@@ -2531,7 +2517,7 @@ bool Game::isOutOfBounds(const Entity& entity, float margin) {
 int rollDice() {
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> distrib(1, 4);
+	std::uniform_int_distribution<int> distrib(1, 10);
 	return distrib(gen);
 }
 

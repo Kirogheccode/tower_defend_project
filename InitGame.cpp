@@ -576,18 +576,6 @@ void Game::init(const string& path)
 		}
 	}
 
-	//{
-	//	auto entity = m_entities.addEntity("GeneralDice");
-	//	entity->cMovement = make_shared<CMovement>();
-	//	entity->cSet = make_shared<CSet>("IMGS/Effects/DiceSpriteSheet.png", Vector2u(4, 1), 0.05f, 0);
-	//	//entity->cBoundaryScale = make_shared<CBoundaryScale>(100);
-	//	entity->cPosition = make_shared<CPosition>(Vector2f(0, 0));
-
-	//	auto& sprite = entity->cSet->sprite;
-	//	sprite.setScale(0.8f, 0.8f);
-	//	sprite.setOrigin(sprite.getLocalBounds().width / 2.f, sprite.getLocalBounds().height - 60);
-	//}
-
 
 	loadFontText();
 	initUIFlow();
@@ -830,6 +818,13 @@ void Game::loadTowerPirce()
 	Tower6Cost->cText->text.setPosition(Vector2f(1850, 410));
 	Tower6Cost->cText->text.setCharacterSize(20);
 	Tower6Cost->cText->text.setFillColor(Color::Yellow);
+
+	auto GachaCost = m_scenes[AppState::TowerSelect].addEntity("GachaCost");
+	GachaCost->cText = make_shared<CText>(5000);
+	GachaCost->cText->text.setFont(m_font);
+	GachaCost->cText->text.setPosition(Vector2f(1800,615));
+	GachaCost->cText->text.setCharacterSize(20);
+	GachaCost->cText->text.setFillColor(Color::Yellow);
 }
 
 void Game::loadWaveText()
@@ -1381,7 +1376,6 @@ void Game::initUIFlow()
 
 		entity = m_scenes[AppState::TowerSelect].addEntity("DiceButton");
 		entity->cSet = make_shared<CSet>("IMGS/Effects/DiceSpriteSheet2.png", Vector2u(4, 1), 0.25f, 0);
-		entity->cSet->isDynamic = true;
 
 		auto& sprite = entity->cSet->sprite;
 		sprite.setScale(0.8, 0.8);
@@ -1478,10 +1472,6 @@ void Game::initUIFlow()
 		newGameButton->cPosition = make_shared<CPosition>(Vector2f(209, 618));
 		newGameButton->cInput = make_shared<CInput>([this]()
 			{
-				m_playerName.clear();
-				m_inputText.setString("|");
-				m_typingName = true;
-				cout << "File content cleared successfully\n";
 				m_state = AppState::MapSelect;
 			},
 			[newGameButton]()
@@ -1496,10 +1486,9 @@ void Game::initUIFlow()
 
 		auto catalogButton = m_scenes[AppState::PlayMenu].addEntity("Catalog");
 		catalogButton->cSet = make_shared<CSet>("IMGS/GUI/dark3.jpg");
-		catalogButton->cPosition = make_shared<CPosition>(Vector2f(906, 631));
+		catalogButton->cPosition = make_shared<CPosition>(Vector2f(901, 641));
 		catalogButton->cInput = make_shared<CInput>([this]()
 			{
-				m_typingName = false;
 				m_state1 = AppState::Catalog;
 				m_currentCatalog = 0;
 				updateCatalogDisplay();
@@ -1519,7 +1508,6 @@ void Game::initUIFlow()
 		loadGame->cPosition = make_shared<CPosition>(Vector2f(1563, 630));
 		loadGame->cInput = make_shared<CInput>([this]()
 			{
-				m_typingName = false;
 				m_state = AppState::LoadGame;
 			},
 			[loadGame]()
@@ -1535,7 +1523,7 @@ void Game::initUIFlow()
 		auto back = m_scenes[AppState::PlayMenu].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		back->cSet->sprite.setScale(0.2f, 0.2f);
-		back->cPosition = make_shared<CPosition>(Vector2f(3, 990));
+		back->cPosition = make_shared<CPosition>(Vector2f(3, 980));
 		back->cInput = make_shared<CInput>([this]()
 			{
 				m_state = AppState::MainMenu;
@@ -1561,7 +1549,7 @@ void Game::initUIFlow()
 		auto back = m_scenes[AppState::LoadGame].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		back->cSet->sprite.setScale(0.2f, 0.2f);
-		back->cPosition = make_shared<CPosition>(Vector2f(3, 990));
+		back->cPosition = make_shared<CPosition>(Vector2f(3, 980));
 		back->cInput = make_shared<CInput>([this]()
 			{
 				m_state = AppState::PlayMenu;
@@ -1943,7 +1931,7 @@ void Game::initUIFlow()
 				m_state1 = AppState::Dummy;
 				m_paused = false;			
 
-				for (auto& tow : m_scenes[game_state].getEntities("Tower"))
+				for (auto& tow : m_entities.getEntities("Tower"))
 				{
 					if (tow->isActive())
 					{
@@ -2114,7 +2102,7 @@ void Game::initUIFlow()
 		auto back = m_scenes[AppState::MapSelect].addEntity("Back");
 		back->cSet = make_shared<CSet>("IMGS/Buttons/back.png");
 		back->cSet->sprite.setScale(0.2f, 0.2f);
-		back->cPosition = make_shared<CPosition>(Vector2f(3, 990));
+		back->cPosition = make_shared<CPosition>(Vector2f(3, 980));
 		back->cInput = make_shared<CInput>([this]()
 			{
 				m_state = AppState::PlayMenu;
@@ -2358,7 +2346,7 @@ void Game::initStoryScene()
 		auto& sprite = towerSprite->cSet->sprite;
 		sprite.setScale(m_catalog[0].config.Sscale, m_catalog[0].config.Sscale);
 		towerSprite->cSet->isDynamic = true;
-		towerSprite->cPosition = make_shared<CPosition>(Vector2f(x - 128.0f, y));
+		towerSprite->cPosition = make_shared<CPosition>(Vector2f(x - 155.f, y - 20.f));
 		towerSprite->cSet->sprite.setScale(2.0f, 2.0f);
 
 		auto leftBtn = m_scenes[AppState::Catalog].addEntity("LeftButton");

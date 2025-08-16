@@ -99,8 +99,8 @@ class Game {
 	Clock m_waveClock;
 
 	// --- custom cursor ---
-	sf::Image m_cursorImage;
-	sf::Cursor cursor;
+	Image m_cursorImage;
+	Cursor cursor;
 
 	// --- Cấu hình ---
 	WindowConfig m_windowConfig;
@@ -155,11 +155,6 @@ class Game {
 	Font m_font1;
 	Font m_font2;
 	
-	Text m_inputLabel;
-	Text m_inputText;
-	string m_playerName;
-	bool m_typingName = false;
-
 
 	// --- Âm thanh ---
 	Music m_backgroundMusic;
@@ -173,6 +168,7 @@ class Game {
 	bool m_sfxMuted = false;
 	SoundBuffer m_clickBuffer, m_constructTower, m_error, m_collide, m_sell;
 	list<Sound> m_activeSounds;
+	
 
 	// --- Story ---
 	int m_storyIndex = 0;
@@ -180,9 +176,11 @@ class Game {
 	vector<pair<string, string>> m_storyQueue;
 	map<string, vector<pair<string, string>>> m_storyBlocks;
 
+
 	// --- Catalog ---
 	vector<catalogImg> m_catalog;
 	int m_currentCatalog = 0;
+
 
 	// --- Cờ trạng thái ---
 	bool m_setting = false;
