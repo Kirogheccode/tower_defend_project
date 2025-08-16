@@ -1210,9 +1210,9 @@ void Game::sSaveGame()
 		cout << bounds.left << " " << bounds.top << "\n";*/
 
 		Vector2f buttonPos = mapButton->cPosition->position;
-		Vector2f buttonSize(1920.f * 0.25f, 1080.f * 0.25f);
+		Vector2f buttonSize(387,260);
 
-		mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 20.f);
+		mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 50.f);
 
 		writePlayer << "# Information of game save: " << "\n";
 		writePlayer << date << " " << TiMe << "\n";
@@ -1883,9 +1883,9 @@ void Game::setSaveTime(shared_ptr<Entity> mapButton, ifstream& in)
 	mapButton->cText->text.setOrigin(bounds1.left + bounds1.width / 2.f, bounds1.top);
 
 	Vector2f buttonPos = mapButton->cPosition->position;
-	Vector2f buttonSize(1920.f * 0.25f, 1080.f * 0.25f);
+	Vector2f buttonSize(387,260);
 
-	mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 20.f);
+	mapButton->cText->text.setPosition(buttonPos.x + buttonSize.x / 2.f, buttonPos.y + buttonSize.y + 50.f);
 
 }
 

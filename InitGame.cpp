@@ -1543,7 +1543,7 @@ void Game::initUIFlow()
 	// -- LoadGame --
 	{
 		auto bg = m_scenes[AppState::LoadGame].addEntity("BG");
-		bg->cSet = make_shared<CSet>("IMGS/Background/mainmenu.jpg");
+		bg->cSet = make_shared<CSet>("IMGS/Background/LoadGame.jpg");
 		bg->cPosition = make_shared<CPosition>(Vector2f(0, 0));
 
 		auto back = m_scenes[AppState::LoadGame].addEntity("Back");
@@ -1564,10 +1564,13 @@ void Game::initUIFlow()
 			}
 		);
 
+		auto frame = m_scenes[AppState::LoadGame].addEntity("Frame");
+		frame->cSet = make_shared<CSet>("IMGS/GUI/Frame.png");
+		frame->cPosition = make_shared<CPosition>(Vector2f(51, 77));
+
 		auto map1 = m_scenes[AppState::LoadGame].addEntity("Map1");
-		map1->cSet = make_shared<CSet>("IMGS/Maps/map1.png");
-		map1->cPosition = make_shared<CPosition>(Vector2f(358, 267));
-		map1->cSet->sprite.setScale(0.25f, 0.25f);
+		map1->cSet = make_shared<CSet>("IMGS/Maps/Minimap1.png");
+		map1->cPosition = make_shared<CPosition>(Vector2f(107, 117));
 		map1->cInput = make_shared<CInput>([this]()
 			{
 				fileForSave = "map1.txt";
@@ -1598,10 +1601,13 @@ void Game::initUIFlow()
 			readTime1.close();
 		}
 
+		frame = m_scenes[AppState::LoadGame].addEntity("Frame");
+		frame->cSet = make_shared<CSet>("IMGS/GUI/Frame.png");
+		frame->cPosition = make_shared<CPosition>(Vector2f(1372, 77));
+
 		auto map2 = m_scenes[AppState::LoadGame].addEntity("Map2");
-		map2->cSet = make_shared<CSet>("IMGS/Maps/map2.png");
-		map2->cPosition = make_shared<CPosition>(Vector2f(1040, 267));
-		map2->cSet->sprite.setScale(0.25f, 0.25f);
+		map2->cSet = make_shared<CSet>("IMGS/Maps/Minimap2.png");
+		map2->cPosition = make_shared<CPosition>(Vector2f(1427, 117));
 		map2->cInput = make_shared<CInput>([this]()
 			{
 				fileForSave = "map2.txt";
@@ -1631,10 +1637,14 @@ void Game::initUIFlow()
 			}
 			readTime.close();
 		}
+
+		frame = m_scenes[AppState::LoadGame].addEntity("Frame");
+		frame->cSet = make_shared<CSet>("IMGS/GUI/Frame.png");
+		frame->cPosition = make_shared<CPosition>(Vector2f(51, 503));
+
 		auto map3 = m_scenes[AppState::LoadGame].addEntity("Map3");
-		map3->cSet = make_shared<CSet>("IMGS/Maps/map3.png");
-		map3->cPosition = make_shared<CPosition>(Vector2f(358, 651));
-		map3->cSet->sprite.setScale(0.25f, 0.25f);
+		map3->cSet = make_shared<CSet>("IMGS/Maps/Minimap3.png");
+		map3->cPosition = make_shared<CPosition>(Vector2f(107, 543));
 		map3->cInput = make_shared<CInput>([this]()
 			{
 				fileForSave = "map3.txt";
@@ -1664,10 +1674,14 @@ void Game::initUIFlow()
 			}
 			readTime.close();
 		}
+
+		frame = m_scenes[AppState::LoadGame].addEntity("Frame");
+		frame->cSet = make_shared<CSet>("IMGS/GUI/Frame.png");
+		frame->cPosition = make_shared<CPosition>(Vector2f(1372, 503));
+
 		auto map4 = m_scenes[AppState::LoadGame].addEntity("Map4");
-		map4->cSet = make_shared<CSet>("IMGS/Maps/map4.png");
-		map4->cPosition = make_shared<CPosition>(Vector2f(1040, 651));
-		map4->cSet->sprite.setScale(0.25f, 0.25f);
+		map4->cSet = make_shared<CSet>("IMGS/Maps/Minimap4.png");
+		map4->cPosition = make_shared<CPosition>(Vector2f(1427, 543));
 		map4->cInput = make_shared<CInput>([this]()
 			{
 				fileForSave = "map4.txt";
